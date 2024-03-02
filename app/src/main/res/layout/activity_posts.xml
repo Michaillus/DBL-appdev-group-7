@@ -6,4 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".PostsActivity">
 
+    <ImageView
+        android:id="@+id/addPost"
+        android:layout_width="50dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_add_black" />
 </androidx.constraintlayout.widget.ConstraintLayout>
