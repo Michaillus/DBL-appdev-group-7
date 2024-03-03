@@ -1,12 +1,17 @@
 package com.example.connectue;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,8 +35,10 @@ public class AddPostActivity extends AppCompatActivity {
     //views
     EditText postDescription;
     Button publishPostBtn;
-
     ImageView postImage;
+
+    //image picked will be saved in this uri
+    Uri imageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +129,42 @@ public class AddPostActivity extends AppCompatActivity {
     }
 
     private void captureImageFromCamera() {
+        //intent to pick image from camera
+        ContentValues cv = new ContentValues();
+        cv.put(MediaStore.Images.Media.TITLE, "Temp Pick");
+        cv.put(MediaStore.Images.Media.DESCRIPTION, "Temp Descr");
+        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
+
     }
 
     private void pickImageFromGallery() {
+        //intent to pick image from gallery
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == IMAGE_PICK_CAMERA_CODE) {
+                //image picked from camera
+                postImage.setImageURI(imageUri);
+                postImage.setVisibility(View.VISIBLE);
+            }
+            else if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+                //image picked from gallery
+                imageUri = data.getData();
+
+                postImage.setImageURI(imageUri);
+                postImage.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
 }

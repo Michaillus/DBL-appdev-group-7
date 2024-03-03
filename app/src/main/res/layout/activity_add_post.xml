@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="296dp"
         android:layout_height="85dp"
         android:layout_marginTop="28dp"
@@ -31,11 +31,18 @@
         app:layout_constraintTop_toBottomOf="@+id/postDescription">
 
         <ImageView
+            android:id="@+id/postImage"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:visibility="gone"/>
+
+        <ImageView
             android:id="@+id/addPostImageBtn"
             android:layout_width="85dp"
-            android:layout_height="68dp"
+            android:layout_height="85dp"
+            android:layout_alignStart="@id/postImage"
             app:srcCompat="@drawable/ic_add_black" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/publishPostBtn"
