@@ -19,6 +19,15 @@ public class NavigationBar {
             }
         });
 
+        ImageView add_post = activity.findViewById(R.id.add_post);
+        add_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentProfile = new Intent(activity, AddPostActivity.class);
+                activity.startActivity(intentProfile);
+            }
+        });
+
         ImageView posts = activity.findViewById(R.id.posts);
         posts.setOnClickListener(new View.OnClickListener() {
             @Override
