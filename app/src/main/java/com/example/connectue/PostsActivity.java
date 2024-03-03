@@ -22,5 +22,7 @@ public class PostsActivity extends AppCompatActivity {
                 startActivity(intentAddPost);
             }
         });
+
+        NavigationBar.addNavigationBarActivitySwitch(this);
     }
 }
