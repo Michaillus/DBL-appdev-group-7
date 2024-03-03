@@ -40,7 +40,7 @@
             android:id="@+id/addPostImageBtn"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:layout_alignStart="@id/postImage"
+            android:layout_toEndOf="@id/postImage"
             app:srcCompat="@drawable/ic_add_black" />
     </RelativeLayout>
 

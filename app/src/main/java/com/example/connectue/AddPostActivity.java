@@ -35,6 +35,7 @@ public class AddPostActivity extends AppCompatActivity {
     //views
     EditText postDescription;
     Button publishPostBtn;
+    ImageView addImageBtn;
     ImageView postImage;
 
     //image picked will be saved in this uri
@@ -47,9 +48,10 @@ public class AddPostActivity extends AppCompatActivity {
 
         postDescription = findViewById(R.id.postDescription);
         publishPostBtn = findViewById(R.id.publishPostBtn);
-        postImage = findViewById(R.id.addPostImageBtn);
+        addImageBtn = findViewById(R.id.addPostImageBtn);
+        postImage = findViewById(R.id.postImage);
 
-        postImage.setOnClickListener(new View.OnClickListener() {
+        addImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showImagePickDialog();

@@ -23,7 +23,7 @@ public class NavigationBar {
         posts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentPosts = new Intent(activity, PostsActivity.class);
+                Intent intentPosts = new Intent(activity, MainActivity.class);
                 activity.startActivity(intentPosts);
             }
         });
