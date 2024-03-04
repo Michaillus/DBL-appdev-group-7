@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +24,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 
 public class AddPostActivity extends AppCompatActivity {
@@ -38,6 +55,9 @@ public class AddPostActivity extends AppCompatActivity {
     ImageView addImageBtn;
     ImageView postImage;
 
+    //Reference to the Cloud Firestore database
+    FirebaseFirestore db;
+
     //image picked will be saved in this uri
     Uri imageUri = null;
 
@@ -45,6 +65,8 @@ public class AddPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
+
+        db = FirebaseFirestore.getInstance();
 
         postDescription = findViewById(R.id.postDescription);
         publishPostBtn = findViewById(R.id.publishPostBtn);
@@ -63,6 +85,7 @@ public class AddPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String description = postDescription.getText().toString().trim();
+                publishPost(description, imageUri);
             }
         });
     }
@@ -169,4 +192,102 @@ public class AddPostActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uploads image and a post to the database.
+     * Post can be without an image.
+     * @param text text of the post
+     * @param imageUri identifier of the post image on the device or null if the post doesn't
+     *                 have an image.
+     */
+    private void publishPost(String text, Uri imageUri) {
+
+        if (imageUri != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.GERMANY);
+            Date now = new Date();
+            String fileName = formatter.format(now);
+
+            StorageReference filePath = FirebaseStorage.getInstance().getReference("posts")
+                    .child(fileName + "." + getFileExtension(imageUri));
+
+            String imageUrl;
+            filePath.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Log.i("Upload file", "File is successfully uploaded");
+                            filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Log.i("Upload file",
+                                            "url to the file is successfully obtained");
+                                    String imageUrl = uri.toString();
+                                    uploadPostToDatabase(text, imageUrl);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("Upload file",
+                                            "Failed to get image url: " + e.getMessage());
+                                    Toast.makeText(AddPostActivity.this,
+                                            "Failed to upload", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Upload file",
+                                    "Failed to upload image: " + e.getMessage());
+                            Log.e("Upload file", imageUri.toString());
+                            Toast.makeText(AddPostActivity.this,
+                                    "Failed to upload", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            uploadPostToDatabase(text, null);
+        }
+    }
+
+    /**
+     * Uploads post to the database with the given text and link to an image.
+     * Post can be without an image.
+     * @param text text of the post
+     * @param imageUrl link to an image stored in the database or null if the post doesn't have
+     *                 an image
+     */
+    private void uploadPostToDatabase(String text, String imageUrl) {
+        Map<String, Object> postData = new HashMap<>();
+        postData.put("text", text);
+        postData.put("photoULR", imageUrl);
+        postData.put("likes", 0);
+        postData.put("comments", 0);
+        // TODO: uncomment next line when authentication is implemented
+        //postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        postData.put("publisher", null);
+
+        db.collection("posts").add(postData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.i("Upload post", "Post is uploaded successfully");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Upload post", "Failed to upload the post: " + e.getMessage());
+                        Toast.makeText(AddPostActivity.this,
+                                "Failed to upload", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    /**
+     * Get extension of a file from it's path on the device.
+     * @param uri identifier of the file on the device
+     * @return extension of the file
+     */
+    private String getFileExtension(Uri uri) {
+        return MimeTypeMap.getSingleton().getExtensionFromMimeType(this.getContentResolver()
+                .getType(uri));
+    }
 }
