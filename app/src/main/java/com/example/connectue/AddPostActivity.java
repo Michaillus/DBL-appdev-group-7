@@ -200,6 +200,7 @@ public class AddPostActivity extends AppCompatActivity {
      *                 have an image.
      */
     private void publishPost(String text, Uri imageUri) {
+        Log.i("Upload file", "Start uploading the file");
 
         if (imageUri != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.GERMANY);
@@ -270,6 +271,11 @@ public class AddPostActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.i("Upload post", "Post is uploaded successfully");
+                        Toast.makeText(AddPostActivity.this,
+                                "Post is published successfully", Toast.LENGTH_SHORT).show();
+
+                        Intent intentPosts = new Intent(AddPostActivity.this, PostsActivity.class);
+                        startActivity(intentPosts);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
