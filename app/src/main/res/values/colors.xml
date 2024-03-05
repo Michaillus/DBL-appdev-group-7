@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name='Design1' rgb='D95B7D' r='216' g='91' b='124'>#D95B7D</color>
+    <color name='Design2' rgb='F2F0EB' r='242' g='239' b='234'>#F2F0EB</color>
+    <color name='Design3' rgb='73462C' r='114' g='69' b='43'>#73462C</color>
+    <color name='Design4' rgb='D93814' r='216' g='55' b='19'>#D93814</color>
+    <color name='Design5' rgb='F21905' r='242' g='24' b='4'>#F21905</color>
+    <color name='textLightMode' rgb='F21905' r='242' g='24' b='4'>#0B192E</color>
 </resources>

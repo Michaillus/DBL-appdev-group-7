@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">ConnecTue</string>
+    <string name="LoginBtnStr"><b>Login</b></string>
+    <string name="RegisterBtnStr"><b>Register</b></string>
+    <string name="RegisterTextAccQuery">Don\'t have an account?</string>
+    <string name="LoginInfo">Welcome back! Enter your credentials to access your account.</string>
+    <string name="RegInfo">Hey there! Enter the following details to enjoy the app.</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string-array name="programs_array">
+        <item>BAM</item>
+        <item>BAP</item>
+        <item>AUBS</item>
+        <item>BAT</item>
+        <item>BBE</item>
+        <item>BCEC</item>
+        <item>BCSE</item>
+        <item>BDS</item>
+        <item>BEE</item>
+        <item>BID</item>'
+        <item>BIE</item>
+        <item>BME</item>
+        <item>BPT</item>
+        <item>BSI</item>
+    </string-array>
+
 </resources>
