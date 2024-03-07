@@ -18,9 +18,13 @@ output.json
 # IntelliJ
 *.iml
 .idea/
+assetWizardSettings.xml
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
+vcs.xml
+workspace.xml
+
 
 # Keystore files
 *.jks
