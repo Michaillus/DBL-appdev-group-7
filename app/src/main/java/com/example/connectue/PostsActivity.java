@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,7 +32,7 @@ public class PostsActivity extends AppCompatActivity {
         NavigationBar.addNavigationBarActivitySwitch(this);
 
         // !!! Currently the button loads loads new posts
-        ImageView button = findViewById(R.id.button);
+        Button button = findViewById(R.id.button);
         button.setOnClickListener(v -> loadMorePosts());
 
         // Create a query for loading posts from the database.
