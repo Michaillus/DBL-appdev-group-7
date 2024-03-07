@@ -12,10 +12,19 @@
         android:id="@+id/button"
         android:layout_width="147dp"
         android:layout_height="105dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_add_black" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postsRecyclerview"
+        android:layout_width="412dp"
+        android:layout_height="608dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

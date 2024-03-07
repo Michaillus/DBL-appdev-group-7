@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -165,6 +166,7 @@ public class AddPostActivity extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
+    // Update UI after selecting an image.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -257,7 +259,7 @@ public class AddPostActivity extends AppCompatActivity {
         postData.put("comments", 0);
         postData.put("timestamp", new Timestamp(new Date()));
         // TODO: uncomment next line when authentication is implemented
-        //postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        // postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
         postData.put("publisher", null);
 
         posts.add(postData)
