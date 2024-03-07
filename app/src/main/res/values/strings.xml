@@ -2,6 +2,7 @@
     <string name="app_name">ConnecTue</string>
     <string name="LoginBtnStr"><b>Login</b></string>
     <string name="RegisterBtnStr"><b>Register</b></string>
+    <string name="channels"><b>Channels</b></string>
     <string name="RegisterTextAccQuery">Don\'t have an account?</string>
     <string name="LoginInfo">Welcome back! Enter your credentials to access your account.</string>
     <string name="RegInfo">Hey there! Enter the following details to enjoy the app.</string>
@@ -25,5 +26,13 @@
         <item>BPT</item>
         <item>BSI</item>
     </string-array>
+    <string name="title_activity_channels">ChannelsActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="profile">Profile</string>
+    <string name="channelstitle">Channels</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

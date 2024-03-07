@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-         db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         registerBtn = findViewById(R.id.buttonregister);
 
@@ -193,8 +193,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
 
     private void addUserToFirestore(String uid, String email, String password, String firstName, String lastName, String program) {
-        User user = new FullUser(uid, email, password, firstName, lastName, program);
+        User user = new StudentUser(uid, email, password, firstName, lastName, program);
         db.collection("users")
+                .document("users")
+                .collection("studentUsers")
                 .document(uid)
                 .set(user)
                 .addOnCompleteListener(this,new OnCompleteListener<Void>() {
