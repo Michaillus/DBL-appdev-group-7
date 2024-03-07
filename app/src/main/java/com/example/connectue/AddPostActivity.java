@@ -26,12 +26,12 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
@@ -56,7 +56,7 @@ public class AddPostActivity extends AppCompatActivity {
     ImageView postImage;
 
     //Reference to the Cloud Firestore database
-    FirebaseFirestore db;
+    CollectionReference posts;
 
     //image picked will be saved in this uri
     Uri imageUri = null;
@@ -66,27 +66,19 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
-        db = FirebaseFirestore.getInstance();
+        posts = FirebaseFirestore.getInstance().collection("posts");
 
         postDescription = findViewById(R.id.postDescription);
         publishPostBtn = findViewById(R.id.publishPostBtn);
         addImageBtn = findViewById(R.id.addPostImageBtn);
         postImage = findViewById(R.id.postImage);
 
-        addImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showImagePickDialog();
-            }
-        });
+        addImageBtn.setOnClickListener(v -> showImagePickDialog());
 
 
-        publishPostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String description = postDescription.getText().toString().trim();
-                publishPost(description, imageUri);
-            }
+        publishPostBtn.setOnClickListener(v -> {
+            String description = postDescription.getText().toString().trim();
+            publishPost(description, imageUri);
         });
     }
 
@@ -257,16 +249,18 @@ public class AddPostActivity extends AppCompatActivity {
      *                 an image
      */
     private void uploadPostToDatabase(String text, String imageUrl) {
+
         Map<String, Object> postData = new HashMap<>();
         postData.put("text", text);
         postData.put("photoULR", imageUrl);
         postData.put("likes", 0);
         postData.put("comments", 0);
+        postData.put("timestamp", new Timestamp(new Date()));
         // TODO: uncomment next line when authentication is implemented
         //postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
         postData.put("publisher", null);
 
-        db.collection("posts").add(postData)
+        posts.add(postData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
