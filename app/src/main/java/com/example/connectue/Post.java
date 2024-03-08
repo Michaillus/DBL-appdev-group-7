@@ -1,12 +1,21 @@
 package com.example.connectue;
 
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
+
+/**
+ * Class for Post object to store strings that need to be displayed on screen.
+ */
 public class Post {
     //use same name as we given while uploading post
-    // TODO: add user and authentication related variables e.g. uid
-    String uName, pDescription, pImage, pLikes, pComments;
+    public String uName;
+    public String pDescription, pImage, pLikes, pComments;
 
-    public Post() {
-    }
+//    public Post() {
+//    }
 
     public Post(String uName, String pDescription, String pImage, String pLikes, String pComments) {
         this.uName = uName;
@@ -16,43 +25,56 @@ public class Post {
         this.pComments = pComments;
     }
 
-    public String getuName() {
-        return uName;
-    }
-
-    public void setuName(String uName) {
-        this.uName = uName;
-    }
-
-    public String getpDescription() {
-        return pDescription;
-    }
-
-    public void setpDescription(String pDescription) {
-        this.pDescription = pDescription;
-    }
-
-    public String getpImage() {
-        return pImage;
-    }
-
-    public void setpImage(String pImage) {
+//    public String getuName() {
+//        return uName;
+//    }
+//
+//    public void setuName(String uName) {
+//        this.uName = uName;
+//    }
+//
+//    public String getpDescription() {
+//        return pDescription;
+//    }
+//
+//    public void setpDescription(String pDescription) {
+//        this.pDescription = pDescription;
+//    }
+//
+//    public String getpImage() {
+//        return pImage;
+//    }
+//
+    public void setImageUrl(String pImage) {
         this.pImage = pImage;
     }
 
-    public String getpLikes() {
-        return pLikes;
+    @BindingAdapter("imageUrl")
+    public static void loadImage(ImageView view, String imageUrl) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(view.getContext())
+                    .load(imageUrl)
+                    .into(view);
+        } else {
+            // Optionally, load a placeholder image or clear the ImageView
+            // Example: view.setImageResource(R.drawable.placeholder_image);
+            view.setImageDrawable(null); // Clear the ImageView
+        }
     }
-
-    public void setpLikes(String pLikes) {
-        this.pLikes = pLikes;
-    }
-
-    public String getpComments() {
-        return pComments;
-    }
-
-    public void setpComments(String pComments) {
-        this.pComments = pComments;
-    }
+//
+//    public String getpLikes() {
+//        return pLikes;
+//    }
+//
+//    public void setpLikes(String pLikes) {
+//        this.pLikes = pLikes;
+//    }
+//
+//    public String getpComments() {
+//        return pComments;
+//    }
+//
+//    public void setpComments(String pComments) {
+//        this.pComments = pComments;
+//    }
 }

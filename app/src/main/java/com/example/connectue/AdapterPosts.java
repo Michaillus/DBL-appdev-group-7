@@ -1,5 +1,6 @@
 package com.example.connectue;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,14 +16,14 @@ import com.example.connectue.databinding.RowPostsBinding;
 
 import java.util.List;
 
-
+/**
+ * Class for using recyclerView to display posts.
+ */
 public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
-    Context context;
     List<Post> postList;
 
-    public AdapterPosts(Context context, List<Post> postList) {
-        this.context = context;
+    public AdapterPosts(List<Post> postList) {
         this.postList = postList;
     }
 
@@ -30,13 +31,15 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
        //inflate layout row_post.xml
-
-        return null;
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        RowPostsBinding binding = RowPostsBinding.inflate(layoutInflater, parent, false);
+        return new MyHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-
+        Post post = postList.get(position);
+        holder.bind(post);
     }
 
     @Override
@@ -52,6 +55,11 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         public MyHolder(RowPostsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+        }
+
+        public void bind(Post post) {
+            binding.setPost(post);
+            binding.executePendingBindings();
         }
     }
 }

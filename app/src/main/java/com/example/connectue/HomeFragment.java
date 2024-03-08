@@ -10,11 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.connectue.databinding.FragmentHomeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +38,14 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    // Firestore
     private FirebaseFirestore db;
     List<String> programs;
 
+    private FragmentHomeBinding binding;
+    private List<Post> postList = new ArrayList<>();
+    private AdapterPosts postAdapter;
     private String TAG = "HomePageUtil: ";
 
     public HomeFragment() {
@@ -96,6 +105,39 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+        //return inflater.inflate(R.layout.fragment_home, container, false);
+
+        //Initialize ReclerView
+        postAdapter = new AdapterPosts(postList);
+        binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.postsRecyclerView.setAdapter(postAdapter);
+
+        loadPostsFromFirestore();
+
+        return root;
+    }
+
+    private void loadPostsFromFirestore() {
+        db.collection("posts")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Post post = document.toObject(Post.class);
+                            postList.add(post);
+                        }
+                        postAdapter.notifyDataSetChanged();
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

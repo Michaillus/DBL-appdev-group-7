@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<data>
+    <variable
+        name="post"
+        type="com.example.connectue.Post" />
+</data>
+
 <androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
@@ -20,7 +26,8 @@
             android:id="@+id/pImageIv"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="#FFFFFF"/>
+            android:background="#FFFFFF"
+            app:imageUrl="@{post.pImage}"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pLikesTv"
-                android:text="1k likes"
+                android:text="@{post.pLikes}"
                 android:textColor="#000000" />
 
             <ImageButton
@@ -53,14 +60,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pCommentTv"
-                android:text="1k comments"
+                android:text="@{post.pComments}"
                 android:textColor="#000000" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/uNamePost"
-            android:text="Name"
+            android:text="@{post.uName}"
             android:textColor="#000000"
             android:textSize="16sp"
             android:layout_width="match_parent"
@@ -69,7 +76,7 @@
 
         <TextView
             android:id="@+id/pDescriptionTv"
-            android:text="The description of the post"
+            android:text="@{post.pDescription}"
             android:textColor="#000000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -77,3 +84,5 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+
+</layout>
