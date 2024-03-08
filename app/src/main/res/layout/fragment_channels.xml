@@ -8,11 +8,27 @@
     android:background="@color/Design2"
     android:padding="30dp">
     <TextView
+        android:id="@+id/popular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchEditText"
         android:layout_marginTop="35dp"
-        android:text="@string/popular"></TextView>
+        android:textSize="17dp"
+        android:text="@string/popular"/>
+    <TextView
+        android:id="@+id/majors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchEditText"
+        android:layout_marginTop="35dp"
+        android:textSize="17dp"
+        android:text="@string/majors"/>
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_below="@+id/searchEditText"
+        android:layout_marginTop="60dp"
+        android:id="@+id/fragmentContainerViewMajors"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_below="@+id/searchEditText"
@@ -20,6 +36,22 @@
         android:id="@+id/fragmentContainerViewPopCourses"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
+
+    <TextView
+        android:id="@+id/mycourses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragmentContainerViewPopCourses"
+        android:layout_marginTop="20dp"
+        android:textSize="17dp"
+        android:text="@string/my_courses"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerViewMyCourses"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchEditText"
+        android:layout_marginTop="210dp" />
 
     <EditText
         android:id="@+id/searchEditText"
