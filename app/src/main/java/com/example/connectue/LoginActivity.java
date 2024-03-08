@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Boolean checkUserIsVerified() {
         if (user.isEmailVerified()) {
-            db.collection("users").document(user.getUid()).update("isVerified", true);
+            db.collection("users").document("UserTypes").collection("Students").document(user.getUid()).update("isVerified", true);
             return true;
         }
         Toast.makeText(LoginActivity.this, "User not verified",

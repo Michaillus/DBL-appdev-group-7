@@ -79,22 +79,27 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     emailEt.setError("Invalid Email");
                     emailEt.setFocusable(true);
+                    return;
                 }
-                if (!email.split("@")[1].equalsIgnoreCase("student.tue.nl")) {
+                if (!email.split("@")[1].equals("student.tue.nl")) {
                     emailEt.setError("Must use valid TU/e email");
                     emailEt.setFocusable(true);
+                    return;
                 }
                 if (password.length() < 8) {
                     passEt.setError("Password length must be at least 8 characters long");
                     passEt.setFocusable(true);
+                    return;
                 }
                 if (TextUtils.isEmpty(FirstName)) {
                     fNameEt.setError("Please enter your First Name");
                     fNameEt.setFocusable(true);
+                    return;
                 }
                 if (TextUtils.isEmpty(LastName)) {
                     lNameEt.setError("Please enter your First Name");
                     lNameEt.setFocusable(true);
+                    return;
                 }
                 else {
                     registerUser(email, password, FirstName, LastName, selectedProgram);
@@ -193,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
 
     private void addUserToFirestore(String uid, String email, String password, String firstName, String lastName, String program) {
-        User user = new StudentUser(uid, email, password, firstName, lastName, program);
+        User user = new StudentUser(uid, email, password, firstName, false, lastName, program);
         db.collection("users")
                 .document("UserTypes")
                 .collection("Students")

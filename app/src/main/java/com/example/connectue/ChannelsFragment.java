@@ -3,6 +3,8 @@ package com.example.connectue;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,16 +51,21 @@ public class ChannelsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        PopularCoursesScrollingFragment fragment = new PopularCoursesScrollingFragment();
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_channels, container, false);
+        PopularCoursesScrollingFragment horizontalScroller = new PopularCoursesScrollingFragment();
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainerViewPopCourses, horizontalScroller);
+        transaction.commit();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_channels, container, false);
+        return view;
     }
 }

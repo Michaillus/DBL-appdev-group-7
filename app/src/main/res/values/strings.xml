@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ConnecTue</string>
+    <string name="app_name"><b>ConnecTue</b></string>
     <string name="LoginBtnStr"><b>Login</b></string>
     <string name="RegisterBtnStr"><b>Register</b></string>
     <string name="channels"><b>Channels</b></string>
@@ -34,5 +34,9 @@
     <string name="channelstitle">Channels</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="connectue"><![CDATA[<b>ConnecTue</b>]]></string>
+    <string name="popular"><b>Popular</b></string>
+
+    <string name="_2wbb0"><b>2WBB0</b></string>
 
 </resources>
