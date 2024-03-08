@@ -8,8 +8,8 @@
     app:cardCornerRadius="10dip">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         >
 
         <TextView
@@ -17,11 +17,12 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="18dp"
+            android:id="@+id/courseCardText"
             android:textColor="@color/Design2"
             android:text="@string/_2wbb0"
             android:shadowColor ="#A12B2929"
             android:shadowRadius="10"
             android:shadowDx="3"
-            android:shadowDy="3"></TextView>
+            android:shadowDy="3" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
