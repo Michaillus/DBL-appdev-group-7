@@ -3,27 +3,25 @@ package com.example.connectue;
 public class Post {
     //use same name as we given while uploading post
     // TODO: add user and authentication related variables e.g. uid
-    String pId, pDescription, pImage, pTime, pLikes, pComments, uid;
+    String uName, pDescription, pImage, pLikes, pComments;
 
     public Post() {
     }
 
-    public Post(String pId, String pDescription, String pImage, String pTime, String pLikes, String pComments, String uid) {
-        this.pId = pId;
+    public Post(String uName, String pDescription, String pImage, String pLikes, String pComments) {
+        this.uName = uName;
         this.pDescription = pDescription;
         this.pImage = pImage;
-        this.pTime = pTime;
         this.pLikes = pLikes;
         this.pComments = pComments;
-        this.uid = uid;
     }
 
-    public String getpId() {
-        return pId;
+    public String getuName() {
+        return uName;
     }
 
-    public void setpId(String pId) {
-        this.pId = pId;
+    public void setuName(String uName) {
+        this.uName = uName;
     }
 
     public String getpDescription() {
@@ -42,14 +40,6 @@ public class Post {
         this.pImage = pImage;
     }
 
-    public String getpTime() {
-        return pTime;
-    }
-
-    public void setpTime(String pTime) {
-        this.pTime = pTime;
-    }
-
     public String getpLikes() {
         return pLikes;
     }
@@ -64,13 +54,5 @@ public class Post {
 
     public void setpComments(String pComments) {
         this.pComments = pComments;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 }

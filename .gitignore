@@ -19,4 +19,6 @@ local.properties
 /.idea/gradle.xml
 /.idea/misc.xml
 /.idea/vcs.xml
+/.idea/appInsightsSettings.xml
+/.idea/.name
 /.idea/.name

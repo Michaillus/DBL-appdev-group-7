@@ -28,11 +28,12 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/likePostBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/like_icon" />
+                app:srcCompat="@drawable/like_icon"
+                android:background="none"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,11 +42,19 @@
                 android:text="1k likes"
                 android:textColor="#000000" />
 
-            <ImageView
-                android:id="@+id/CommentPostBtn"
+            <ImageButton
+                android:id="@+id/commentPostBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/comment_icon" />
+                app:srcCompat="@drawable/comment_icon"
+                android:background="none"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pCommentTv"
+                android:text="1k comments"
+                android:textColor="#000000" />
 
         </LinearLayout>
 
