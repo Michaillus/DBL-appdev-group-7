@@ -44,9 +44,10 @@ public class HomeFragment extends Fragment {
     List<String> programs;
 
     private FragmentHomeBinding binding;
-    private List<Post> postList = new ArrayList<>();
+    private List<Post> postList;
     private AdapterPosts postAdapter;
     private String TAG = "HomePageUtil: ";
+    private String TAG2 = "AdapterPosts: ";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -70,53 +71,91 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        db = FirebaseFirestore.getInstance();
-
-        programs = new ArrayList<>();
-
-        db.collection("programs")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                programs.add(document.getId());
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-
-                        Log.d(TAG, programs.toString());
-                    }
-                });
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
+//
+//        db = FirebaseFirestore.getInstance();
+//
+//        programs = new ArrayList<>();
+//
+//        db.collection("programs")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                programs.add(document.getId());
+//                                Log.d(TAG, document.getId() + " => " + document.getData());
+//                            }
+//                        } else {
+//                            Log.d(TAG, "Error getting documents: ", task.getException());
+//                        }
+//
+//                        Log.d(TAG, programs.toString());
+//                    }
+//                });
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        db = FirebaseFirestore.getInstance();
+
+//        View view = inflater.inflate(R.layout.fragment_home, container, false);
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         //return inflater.inflate(R.layout.fragment_home, container, false);
 
+        postList = new ArrayList<>();
+        //loadPostsFromFirestore();
+        db.collection("posts")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Post post = new Post(document.getString("publisher"),
+                                    document.getString("text"),
+                                    document.getString("photoULR"),
+                                    document.getLong("likes").intValue(),
+                                    document.getLong("comments").intValue());
+                            postList.add(post);
+                        }
+                        postAdapter.notifyDataSetChanged();
+                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size()-1).pDescription);
+                    } else {
+                        Log.d(TAG2, "Error getting documents: ", task.getException());
+                    }
+                });
         //Initialize ReclerView
-        postAdapter = new AdapterPosts(postList);
-        binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.postsRecyclerView.setAdapter(postAdapter);
 
-        loadPostsFromFirestore();
+        Post post = new Post("I", "text", null, 0, 0);
+        Post post2 = new Post("You", "text", null, 0, 0);
+
+//        postList.add(post);
+//        postList.add(post2);
+
+        Log.d(TAG2, "onCreateView: postList size: " + postList.size());
+
+        postAdapter = new AdapterPosts(postList);
+//        RecyclerView recyclerView = view.findViewById(R.id.postsRecyclerView);
+        binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.postsRecyclerView.setHasFixedSize(true);
+
+        binding.postsRecyclerView.setAdapter(postAdapter);
+        postAdapter.notifyDataSetChanged();
+        Log.d(TAG2, "onCreateView: adapter list size: " + binding.postsRecyclerView.getAdapter().getItemCount());
+
 
         return root;
+//        return view;
     }
 
     private void loadPostsFromFirestore() {
@@ -125,10 +164,15 @@ public class HomeFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Post post = document.toObject(Post.class);
+                            Post post = new Post(document.getString("publisher"),
+                                    document.getString("text"),
+                                    document.getString("photoULR"),
+                                    document.getLong("likes").intValue(),
+                                    document.getLong("comments").intValue());
                             postList.add(post);
                         }
-                        postAdapter.notifyDataSetChanged();
+                        //postAdapter.notifyDataSetChanged();
+                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size()-1).pDescription);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }

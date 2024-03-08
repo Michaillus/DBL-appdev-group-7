@@ -37,30 +37,32 @@
 
             <ImageButton
                 android:id="@+id/likePostBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 app:srcCompat="@drawable/like_icon"
-                android:background="@null"/>
+                android:background="@null"
+                android:contentDescription="Like" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pLikesTv"
-                android:text="@{post.pLikes}"
+                android:text="@{String.valueOf(post.pLikes)}"
                 android:textColor="#000000" />
 
             <ImageButton
                 android:id="@+id/commentPostBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 app:srcCompat="@drawable/comment_icon"
-                android:background="@null"/>
+                android:background="@null"
+                android:contentDescription="Comment" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pCommentTv"
-                android:text="@{post.pComments}"
+                android:text="@{Long.toString(post.pComments)}"
                 android:textColor="#000000" />
 
         </LinearLayout>

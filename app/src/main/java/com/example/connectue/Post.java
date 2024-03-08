@@ -5,19 +5,29 @@ import android.widget.ImageView;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.PropertyName;
 
 /**
  * Class for Post object to store strings that need to be displayed on screen.
  */
 public class Post {
     //use same name as we given while uploading post
+
+    @PropertyName("publisher")
     public String uName;
-    public String pDescription, pImage, pLikes, pComments;
+    @PropertyName("text")
+    public String pDescription;
+    @PropertyName("photoULR")
+    public String pImage;
+    @PropertyName("likes")
+    public int pLikes;
+    @PropertyName("comments")
+    public int pComments;
 
-//    public Post() {
-//    }
+    public Post() {
+    }
 
-    public Post(String uName, String pDescription, String pImage, String pLikes, String pComments) {
+    public Post(String uName, String pDescription, String pImage, int pLikes, int pComments) {
         this.uName = uName;
         this.pDescription = pDescription;
         this.pImage = pImage;
