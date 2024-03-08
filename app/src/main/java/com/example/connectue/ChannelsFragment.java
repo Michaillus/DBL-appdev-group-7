@@ -81,9 +81,11 @@ public class ChannelsFragment extends Fragment {
         majorsText = view.findViewById(R.id.majors);
         navigationView = view.findViewById(R.id.coursemenu);
 
+
         horizontalScroller = new PopularCoursesScrollingFragment();
         majorsVerticalScrollingFragment = new MajorsVerticalScrollingFragment();
         myCoursesVerticalFragment = new MyCoursesVerticalFragment();
+        showCoursesView();
         navigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
