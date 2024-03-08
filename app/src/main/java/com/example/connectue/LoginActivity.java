@@ -49,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
 
+
+
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
