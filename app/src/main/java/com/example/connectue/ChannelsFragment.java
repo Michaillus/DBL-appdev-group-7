@@ -2,13 +2,18 @@ package com.example.connectue;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +27,18 @@ public class ChannelsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private BottomNavigationView navigationView;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private TextView popularText;
+    private TextView myCoursesText;
+    private TextView majorsText;
+    private PopularCoursesScrollingFragment horizontalScroller;
+    private MajorsVerticalScrollingFragment majorsVerticalScrollingFragment;
+    private MyCoursesVerticalFragment myCoursesVerticalFragment;
 
     public ChannelsFragment() {
         // Required empty public constructor
@@ -51,7 +65,8 @@ public class ChannelsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PopularCoursesScrollingFragment fragment = new PopularCoursesScrollingFragment();
+
+
 
 
     }
@@ -60,12 +75,59 @@ public class ChannelsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channels, container, false);
-        PopularCoursesScrollingFragment horizontalScroller = new PopularCoursesScrollingFragment();
+
+        popularText = view.findViewById(R.id.popular);
+        myCoursesText = view.findViewById(R.id.mycourses);
+        majorsText = view.findViewById(R.id.majors);
+        navigationView = view.findViewById(R.id.coursemenu);
+
+
+        horizontalScroller = new PopularCoursesScrollingFragment();
+        majorsVerticalScrollingFragment = new MajorsVerticalScrollingFragment();
+        myCoursesVerticalFragment = new MyCoursesVerticalFragment();
+        showCoursesView();
+        navigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Handle item selection
+                int itemId = item.getItemId();
+                if (itemId == R.id.coursesClick) {
+                    showCoursesView();
+                } else if (itemId == R.id.majorsClick) {
+                    showMajorsView();
+                }
+
+                return true;
+            }
+        });
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainerViewPopCourses, horizontalScroller);
+        transaction.replace(R.id.fragmentContainerViewMyCourses, myCoursesVerticalFragment);
+        transaction.replace(R.id.fragmentContainerViewMajors, majorsVerticalScrollingFragment);
         transaction.commit();
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void showCoursesView() {
+        popularText.setVisibility(View.VISIBLE);
+        myCoursesText.setVisibility(View.VISIBLE);
+        majorsText.setVisibility(View.GONE);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.hide(majorsVerticalScrollingFragment);
+        transaction.show(horizontalScroller);
+        transaction.show(myCoursesVerticalFragment);
+        transaction.commit();
+    }
+    private void showMajorsView() {
+        popularText.setVisibility(View.GONE);
+        myCoursesText.setVisibility(View.GONE);
+        majorsText.setVisibility(View.VISIBLE);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.show(majorsVerticalScrollingFragment);
+        transaction.hide(horizontalScroller);
+        transaction.hide(myCoursesVerticalFragment);
+        transaction.commit();
     }
 }

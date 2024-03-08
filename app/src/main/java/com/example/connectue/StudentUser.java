@@ -1,7 +1,7 @@
 package com.example.connectue;
 
 public class StudentUser extends FullUser {
-    public StudentUser(String uid, String email, String password, String firstName, Boolean status, String lastName, String program) {
+    public StudentUser(String uid, String email, String password, String firstName, Boolean status, String lastName, String program, int role) {
         this.userId = uid;
         this.email = email;
         this.password = password;
@@ -9,6 +9,7 @@ public class StudentUser extends FullUser {
         this.lastName = lastName;
         this.program = program;
         this.isVerified = status;
+        this.role = role;
     }
 
 }

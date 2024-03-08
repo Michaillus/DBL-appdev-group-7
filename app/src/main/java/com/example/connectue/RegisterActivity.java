@@ -76,13 +76,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 String password = passEt.getText().toString().trim();
                 String FirstName = fNameEt.getText().toString().trim();
                 String LastName = lNameEt.getText().toString().trim();
+                int role = 0;
+                //Check registration requirements
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    emailEt.setError("Invalid Email");
-                    emailEt.setFocusable(true);
-                    return;
-                }
-                if (!email.split("@")[1].equals("student.tue.nl")) {
-                    emailEt.setError("Must use valid TU/e email");
+                    emailEt.setError("Must use valid TU/e email or other (for guest)");
                     emailEt.setFocusable(true);
                     return;
                 }
@@ -101,9 +98,15 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     lNameEt.setFocusable(true);
                     return;
                 }
-                else {
-                    registerUser(email, password, FirstName, LastName, selectedProgram);
+                //Determine role of user: 1 = student, 2 = guest
+                if (email.split("@")[1].equals("student.tue.nl")) {
+                    role = 1;
+                } else if (!email.split("@")[1].equals("student.tue.nl")) {
+                    role = 2;
                 }
+
+                registerUser(email, password, FirstName, LastName, selectedProgram, role);
+
 
             }
         });
@@ -122,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     private String TAG = "RegisterUtil: ";
 
-    private void registerUser(String email, String password, String firstName, String lastName, String program) {
+    private void registerUser(String email, String password, String firstName, String lastName, String program, int role) {
         progressDialog.show();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -131,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     Log.d(TAG, "createUserWithEmail:success");
 
                     // Send verification email
-                    sendVerificationEmail(email, password, firstName, lastName, program);
+                    sendVerificationEmail(email, password, firstName, lastName, program, role);
                 } else {
                     Log.d(TAG, "createUserWithEmail:failure", task.getException());
                     progressDialog.dismiss();
@@ -141,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
-    private void sendVerificationEmail(String email, String password, String firstName, String lastName, String program) {
+    private void sendVerificationEmail(String email, String password, String firstName, String lastName, String program, int role) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -150,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     if (task.isSuccessful()) {
                         Log.d(TAG, "Email verification sent.");
                         Toast.makeText(RegisterActivity.this, "Verification email sent", Toast.LENGTH_SHORT).show();
-                        addUserToFirestore(user.getUid(), email, password, firstName, lastName, program);
+                        addUserToFirestore(user.getUid(), email, password, firstName, lastName, program, role);
 
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -197,11 +200,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 //    }
 
 
-    private void addUserToFirestore(String uid, String email, String password, String firstName, String lastName, String program) {
-        User user = new StudentUser(uid, email, password, firstName, false, lastName, program);
+    private void addUserToFirestore(String uid, String email, String password, String firstName, String lastName, String program, int role) {
+        User user = new StudentUser(uid, email, password, firstName, false, lastName, program, role);
         db.collection("users")
-                .document("UserTypes")
-                .collection("Students")
                 .document(uid)
                 .set(user)
                 .addOnCompleteListener(this,new OnCompleteListener<Void>() {

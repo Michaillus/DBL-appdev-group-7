@@ -1,16 +1,22 @@
-#Thu Mar 07 22:48:59 CET 2024
+#Fri Mar 08 16:41:38 CET 2024
 base.0=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
-base.2=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeProjectDexDebug/7/classes.dex
-base.3=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
-base.4=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeExtDexDebug/classes3.dex
+base.2=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeProjectDexDebug/11/classes.dex
+base.3=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeProjectDexDebug/7/classes.dex
+base.4=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeProjectDexDebug/9/classes.dex
+base.5=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
+base.6=/Users/augustinlassus/Documents/CODE/DEVELOPMENT/Android/ConnecTue/app/build/intermediates/dex/debug/mergeExtDexDebug/classes3.dex
 path.0=classes.dex
 path.1=0/classes.dex
-path.2=7/classes.dex
-path.3=classes2.dex
-path.4=classes3.dex
+path.2=11/classes.dex
+path.3=7/classes.dex
+path.4=9/classes.dex
+path.5=classes2.dex
+path.6=classes3.dex
 renamed.0=classes.dex
 renamed.1=classes2.dex
 renamed.2=classes3.dex
 renamed.3=classes4.dex
 renamed.4=classes5.dex
+renamed.5=classes6.dex
+renamed.6=classes7.dex

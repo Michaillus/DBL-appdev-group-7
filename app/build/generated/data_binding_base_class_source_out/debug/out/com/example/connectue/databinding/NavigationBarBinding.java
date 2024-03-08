@@ -21,31 +21,40 @@ public final class NavigationBarBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final ImageView addPost;
+
+  @NonNull
   public final ImageView courses;
 
   @NonNull
-  public final Guideline guideline1;
+  public final Guideline navbarGuideline1;
 
   @NonNull
-  public final Guideline guideline2;
+  public final Guideline navbarGuideline10;
 
   @NonNull
-  public final Guideline guideline3;
+  public final Guideline navbarGuideline2;
 
   @NonNull
-  public final Guideline guideline4;
+  public final Guideline navbarGuideline3;
 
   @NonNull
-  public final Guideline guideline5;
+  public final Guideline navbarGuideline4;
 
   @NonNull
-  public final Guideline guideline6;
+  public final Guideline navbarGuideline5;
 
   @NonNull
-  public final Guideline guideline7;
+  public final Guideline navbarGuideline6;
 
   @NonNull
-  public final Guideline guideline8;
+  public final Guideline navbarGuideline7;
+
+  @NonNull
+  public final Guideline navbarGuideline8;
+
+  @NonNull
+  public final Guideline navbarGuideline9;
 
   @NonNull
   public final ImageView posts;
@@ -53,21 +62,26 @@ public final class NavigationBarBinding implements ViewBinding {
   @NonNull
   public final ImageView profile;
 
-  private NavigationBarBinding(@NonNull ConstraintLayout rootView, @NonNull ImageView courses,
-      @NonNull Guideline guideline1, @NonNull Guideline guideline2, @NonNull Guideline guideline3,
-      @NonNull Guideline guideline4, @NonNull Guideline guideline5, @NonNull Guideline guideline6,
-      @NonNull Guideline guideline7, @NonNull Guideline guideline8, @NonNull ImageView posts,
-      @NonNull ImageView profile) {
+  private NavigationBarBinding(@NonNull ConstraintLayout rootView, @NonNull ImageView addPost,
+      @NonNull ImageView courses, @NonNull Guideline navbarGuideline1,
+      @NonNull Guideline navbarGuideline10, @NonNull Guideline navbarGuideline2,
+      @NonNull Guideline navbarGuideline3, @NonNull Guideline navbarGuideline4,
+      @NonNull Guideline navbarGuideline5, @NonNull Guideline navbarGuideline6,
+      @NonNull Guideline navbarGuideline7, @NonNull Guideline navbarGuideline8,
+      @NonNull Guideline navbarGuideline9, @NonNull ImageView posts, @NonNull ImageView profile) {
     this.rootView = rootView;
+    this.addPost = addPost;
     this.courses = courses;
-    this.guideline1 = guideline1;
-    this.guideline2 = guideline2;
-    this.guideline3 = guideline3;
-    this.guideline4 = guideline4;
-    this.guideline5 = guideline5;
-    this.guideline6 = guideline6;
-    this.guideline7 = guideline7;
-    this.guideline8 = guideline8;
+    this.navbarGuideline1 = navbarGuideline1;
+    this.navbarGuideline10 = navbarGuideline10;
+    this.navbarGuideline2 = navbarGuideline2;
+    this.navbarGuideline3 = navbarGuideline3;
+    this.navbarGuideline4 = navbarGuideline4;
+    this.navbarGuideline5 = navbarGuideline5;
+    this.navbarGuideline6 = navbarGuideline6;
+    this.navbarGuideline7 = navbarGuideline7;
+    this.navbarGuideline8 = navbarGuideline8;
+    this.navbarGuideline9 = navbarGuideline9;
     this.posts = posts;
     this.profile = profile;
   }
@@ -99,57 +113,75 @@ public final class NavigationBarBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.add_post;
+      ImageView addPost = ViewBindings.findChildViewById(rootView, id);
+      if (addPost == null) {
+        break missingId;
+      }
+
       id = R.id.courses;
       ImageView courses = ViewBindings.findChildViewById(rootView, id);
       if (courses == null) {
         break missingId;
       }
 
-      id = R.id.guideline1;
-      Guideline guideline1 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline1 == null) {
+      id = R.id.navbar_guideline1;
+      Guideline navbarGuideline1 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline1 == null) {
         break missingId;
       }
 
-      id = R.id.guideline2;
-      Guideline guideline2 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline2 == null) {
+      id = R.id.navbar_guideline10;
+      Guideline navbarGuideline10 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline10 == null) {
         break missingId;
       }
 
-      id = R.id.guideline3;
-      Guideline guideline3 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline3 == null) {
+      id = R.id.navbar_guideline2;
+      Guideline navbarGuideline2 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline2 == null) {
         break missingId;
       }
 
-      id = R.id.guideline4;
-      Guideline guideline4 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline4 == null) {
+      id = R.id.navbar_guideline3;
+      Guideline navbarGuideline3 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline3 == null) {
         break missingId;
       }
 
-      id = R.id.guideline5;
-      Guideline guideline5 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline5 == null) {
+      id = R.id.navbar_guideline4;
+      Guideline navbarGuideline4 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline4 == null) {
         break missingId;
       }
 
-      id = R.id.guideline6;
-      Guideline guideline6 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline6 == null) {
+      id = R.id.navbar_guideline5;
+      Guideline navbarGuideline5 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline5 == null) {
         break missingId;
       }
 
-      id = R.id.guideline7;
-      Guideline guideline7 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline7 == null) {
+      id = R.id.navbar_guideline6;
+      Guideline navbarGuideline6 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline6 == null) {
         break missingId;
       }
 
-      id = R.id.guideline8;
-      Guideline guideline8 = ViewBindings.findChildViewById(rootView, id);
-      if (guideline8 == null) {
+      id = R.id.navbar_guideline7;
+      Guideline navbarGuideline7 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline7 == null) {
+        break missingId;
+      }
+
+      id = R.id.navbar_guideline8;
+      Guideline navbarGuideline8 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline8 == null) {
+        break missingId;
+      }
+
+      id = R.id.navbar_guideline9;
+      Guideline navbarGuideline9 = ViewBindings.findChildViewById(rootView, id);
+      if (navbarGuideline9 == null) {
         break missingId;
       }
 
@@ -165,8 +197,10 @@ public final class NavigationBarBinding implements ViewBinding {
         break missingId;
       }
 
-      return new NavigationBarBinding((ConstraintLayout) rootView, courses, guideline1, guideline2,
-          guideline3, guideline4, guideline5, guideline6, guideline7, guideline8, posts, profile);
+      return new NavigationBarBinding((ConstraintLayout) rootView, addPost, courses,
+          navbarGuideline1, navbarGuideline10, navbarGuideline2, navbarGuideline3, navbarGuideline4,
+          navbarGuideline5, navbarGuideline6, navbarGuideline7, navbarGuideline8, navbarGuideline9,
+          posts, profile);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

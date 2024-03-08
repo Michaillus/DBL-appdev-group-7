@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,7 +63,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailEt.getText().toString().trim();
                 String password = passEt.getText().toString().trim();
-
+                if (TextUtils.isEmpty(emailEt.getText().toString().trim())) {
+                    emailEt.setError("Must fill in all fields");
+                    emailEt.setFocusable(true);
+                    return;
+                } else if (TextUtils.isEmpty(passEt.getText().toString().trim())) {
+                    passEt.setError("Must fill in all fields");
+                    passEt.setFocusable(true);
+                    return;
+                }
                 loginUser(email, password);
 
             }
@@ -71,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Boolean checkUserIsVerified() {
         if (user.isEmailVerified()) {
-            db.collection("users").document("UserTypes").collection("Students").document(user.getUid()).update("isVerified", true);
+            db.collection("users").document(user.getUid()).update("isVerified", true);
             return true;
         }
         Toast.makeText(LoginActivity.this, "User not verified",
