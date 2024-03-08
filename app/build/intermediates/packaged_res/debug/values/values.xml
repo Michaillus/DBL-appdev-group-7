@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="programs_array">
+        <item>BAM</item>
+        <item>BAP</item>
+        <item>AUBS</item>
+        <item>BAT</item>
+        <item>BBE</item>
+        <item>BCEC</item>
+        <item>BCSE</item>
+        <item>BDS</item>
+        <item>BEE</item>
+        <item>BID</item>'
+        <item>BIE</item>
+        <item>BME</item>
+        <item>BPT</item>
+        <item>BSI</item>
+    </string-array>
+    <color b="124" g="91" name="Design1" r="216" rgb="D95B7D">#D95B7D</color>
+    <color b="234" g="239" name="Design2" r="242" rgb="F2F0EB">#F2F0EB</color>
+    <color b="43" g="69" name="Design3" r="114" rgb="73462C">#73462C</color>
+    <color b="19" g="55" name="Design4" r="216" rgb="D93814">#D93814</color>
+    <color b="4" g="24" name="Design5" r="242" rgb="F21905">#F21905</color>
+    <color b="4" g="24" name="textLightMode" r="242" rgb="F21905">#0B192E</color>
+    <dimen name="text_margin">16dp</dimen>
+    <string name="LoginBtnStr"><b>Login</b></string>
+    <string name="LoginInfo">Welcome back! Enter your credentials to access your account.</string>
+    <string name="RegInfo">Hey there! Enter the following details to enjoy the app.</string>
+    <string name="RegisterBtnStr"><b>Register</b></string>
+    <string name="RegisterTextAccQuery">Don\'t have an account?</string>
+    <string name="_2wbb0"><b>2WBB0</b></string>
+    <string name="app_name"><b>ConnecTue</b></string>
+    <string name="channels"><b>Channels</b></string>
+    <string name="channelstitle">Channels</string>
+    <string name="connectue"><![CDATA[<b>ConnecTue</b>]]></string>
+    <string name="email">Email</string>
+    <string name="first_name">First Name</string>
+    <string name="gcm_defaultSenderId" translatable="false">429182359122</string>
+    <string name="google_api_key" translatable="false">AIzaSyA91wbTOuylNDnG7qBbf9rUcpUmyGbg9Ww</string>
+    <string name="google_app_id" translatable="false">1:429182359122:android:035fbc94a3560005be318b</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyA91wbTOuylNDnG7qBbf9rUcpUmyGbg9Ww</string>
+    <string name="google_storage_bucket" translatable="false">hube-1c5b8.appspot.com</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="last_name">Last Name</string>
+    <string name="password">Password</string>
+    <string name="popular"><b>Popular</b></string>
+    <string name="profile">Profile</string>
+    <string name="project_id" translatable="false">hube-1c5b8</string>
+    <string name="title_activity_channels">ChannelsActivity</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">Home</string>
+    <string name="title_notifications">Notifications</string>
+    <style name="Base.Theme.ConnecTue" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        <item name="android:textColorPrimary">@color/Design4</item>
+        <item name="colorSecondary">@color/Design2</item>
+        <item name="colorPrimary">@color/Design4</item>
+    </style>
+    <style name="Theme.ConnecTue" parent="Base.Theme.ConnecTue">
+    </style>
+</resources>
