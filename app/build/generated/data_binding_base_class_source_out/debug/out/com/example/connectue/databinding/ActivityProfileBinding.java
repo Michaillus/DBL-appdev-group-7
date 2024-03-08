@@ -4,10 +4,12 @@ package com.example.connectue.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Guideline;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.connectue.R;
@@ -20,11 +22,39 @@ public final class ActivityProfileBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
-  public final TextView textView;
+  public final Guideline profileGuideline1;
 
-  private ActivityProfileBinding(@NonNull ConstraintLayout rootView, @NonNull TextView textView) {
+  @NonNull
+  public final Guideline profileGuideline2;
+
+  @NonNull
+  public final Guideline profileGuideline3;
+
+  @NonNull
+  public final Guideline profileGuideline4;
+
+  @NonNull
+  public final Guideline profileGuideline5;
+
+  @NonNull
+  public final TextView profileTextView;
+
+  @NonNull
+  public final ImageView settings;
+
+  private ActivityProfileBinding(@NonNull ConstraintLayout rootView,
+      @NonNull Guideline profileGuideline1, @NonNull Guideline profileGuideline2,
+      @NonNull Guideline profileGuideline3, @NonNull Guideline profileGuideline4,
+      @NonNull Guideline profileGuideline5, @NonNull TextView profileTextView,
+      @NonNull ImageView settings) {
     this.rootView = rootView;
-    this.textView = textView;
+    this.profileGuideline1 = profileGuideline1;
+    this.profileGuideline2 = profileGuideline2;
+    this.profileGuideline3 = profileGuideline3;
+    this.profileGuideline4 = profileGuideline4;
+    this.profileGuideline5 = profileGuideline5;
+    this.profileTextView = profileTextView;
+    this.settings = settings;
   }
 
   @Override
@@ -54,13 +84,51 @@ public final class ActivityProfileBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.textView;
-      TextView textView = ViewBindings.findChildViewById(rootView, id);
-      if (textView == null) {
+      id = R.id.profile_guideline1;
+      Guideline profileGuideline1 = ViewBindings.findChildViewById(rootView, id);
+      if (profileGuideline1 == null) {
         break missingId;
       }
 
-      return new ActivityProfileBinding((ConstraintLayout) rootView, textView);
+      id = R.id.profile_guideline2;
+      Guideline profileGuideline2 = ViewBindings.findChildViewById(rootView, id);
+      if (profileGuideline2 == null) {
+        break missingId;
+      }
+
+      id = R.id.profile_guideline3;
+      Guideline profileGuideline3 = ViewBindings.findChildViewById(rootView, id);
+      if (profileGuideline3 == null) {
+        break missingId;
+      }
+
+      id = R.id.profile_guideline4;
+      Guideline profileGuideline4 = ViewBindings.findChildViewById(rootView, id);
+      if (profileGuideline4 == null) {
+        break missingId;
+      }
+
+      id = R.id.profile_guideline5;
+      Guideline profileGuideline5 = ViewBindings.findChildViewById(rootView, id);
+      if (profileGuideline5 == null) {
+        break missingId;
+      }
+
+      id = R.id.profileTextView;
+      TextView profileTextView = ViewBindings.findChildViewById(rootView, id);
+      if (profileTextView == null) {
+        break missingId;
+      }
+
+      id = R.id.settings;
+      ImageView settings = ViewBindings.findChildViewById(rootView, id);
+      if (settings == null) {
+        break missingId;
+      }
+
+      return new ActivityProfileBinding((ConstraintLayout) rootView, profileGuideline1,
+          profileGuideline2, profileGuideline3, profileGuideline4, profileGuideline5,
+          profileTextView, settings);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -20,11 +20,12 @@ public final class ActivityCoursesBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
-  public final TextView textView;
+  public final TextView profileTextView;
 
-  private ActivityCoursesBinding(@NonNull ConstraintLayout rootView, @NonNull TextView textView) {
+  private ActivityCoursesBinding(@NonNull ConstraintLayout rootView,
+      @NonNull TextView profileTextView) {
     this.rootView = rootView;
-    this.textView = textView;
+    this.profileTextView = profileTextView;
   }
 
   @Override
@@ -54,13 +55,13 @@ public final class ActivityCoursesBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.textView;
-      TextView textView = ViewBindings.findChildViewById(rootView, id);
-      if (textView == null) {
+      id = R.id.profileTextView;
+      TextView profileTextView = ViewBindings.findChildViewById(rootView, id);
+      if (profileTextView == null) {
         break missingId;
       }
 
-      return new ActivityCoursesBinding((ConstraintLayout) rootView, textView);
+      return new ActivityCoursesBinding((ConstraintLayout) rootView, profileTextView);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

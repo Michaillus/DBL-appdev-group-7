@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.connectue.app-mergeDebugResources-51:/values-small-v4/values-small-v4.xml",
+            "outputFile": "com.example.connectue.app-mergeDebugResources-54:/values-small-v4/values-small-v4.xml",
             "map": [
                 {
-                    "source": "/Users/augustinlassus/.gradle/caches/transforms-3/9c4571917658c1cfe2da0b83f2a2fce8/transformed/material-1.11.0/res/values-small-v4/values-small-v4.xml",
+                    "source": "/Users/augustinlassus/.gradle/caches/transforms-3/d465cb73daca51564ea7fa0a76321e70/transformed/material-1.11.0/res/values-small-v4/values-small-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

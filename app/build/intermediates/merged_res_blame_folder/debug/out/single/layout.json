@@ -1,62 +1,66 @@
 [
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/navigation_bar.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/navigation_bar.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_profile.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_profile.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/fragment_profile.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_profile.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_add_post.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_add_post.xml"
     },
     {
-        "merged": "com.example.connectue.app-mergeDebugResources-52:/layout/fragment_popular_courses_scrolling.xml",
-        "source": "com.example.connectue.app-main-55:/layout/fragment_popular_courses_scrolling.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_login.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_login.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/clickable_course.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/clickable_course.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/row_posts.xml",
+        "source": "com.example.connectue.app-main-58:/layout/row_posts.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_courses.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_courses.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_register.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_register.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/fragment_popular_courses_scrolling.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_popular_courses_scrolling.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_loading.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_loading.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_register.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_register.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/fragment_channels.xml",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_channels.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_add_post.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_add_post.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/clickable_course.xml",
+        "source": "com.example.connectue.app-main-58:/layout/clickable_course.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_home_page.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_home_page.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_posts.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_posts.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/fragment_channels.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_channels.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_courses.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_courses.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/fragment_home.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_home.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/fragment_home.xml",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_home.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_login.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_login.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/navigation_bar.xml",
+        "source": "com.example.connectue.app-main-58:/layout/navigation_bar.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_loading.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_loading.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_main.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_main.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_profile.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_profile.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/fragment_profile.xml",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_profile.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-mergeDebugResources-52:/layout/activity_main.xml",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_main.xml"
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/fragment_popular_courses_scrolling.xml",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_popular_courses_scrolling.xml"
+    },
+    {
+        "merged": "com.example.connectue.app-mergeDebugResources-55:/layout/activity_settings.xml",
+        "source": "com.example.connectue.app-main-58:/layout/activity_settings.xml"
     }
 ]

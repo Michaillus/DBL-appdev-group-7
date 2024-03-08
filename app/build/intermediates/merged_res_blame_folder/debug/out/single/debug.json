@@ -1,206 +1,230 @@
 [
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_profile.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_profile.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_comment_icon.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/comment_icon.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_courses_and_majors_icon.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/courses_and_majors_icon.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/menu_courses_major_nav.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/menu/courses_major_nav.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_loading.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_loading.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_button_drawable.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/button_drawable.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_ic_notifications_black_24dp.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/ic_notifications_black_24dp.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_home_page.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_home_page.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/menu_courses_major_nav.xml.flat",
+        "source": "com.example.connectue.app-main-58:/menu/courses_major_nav.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_navigation_bar.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/navigation_bar.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_fragment_popular_courses_scrolling.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_popular_courses_scrolling.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_main.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_main.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable-hdpi_ic_add_black.png.flat",
+        "source": "com.example.connectue.app-main-58:/drawable-hdpi/ic_add_black.png"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/xml_data_extraction_rules.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/xml/data_extraction_rules.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable-anydpi_ic_add_black.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable-anydpi/ic_add_black.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-xxxhdpi/ic_launcher.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_ic_dashboard_black_24dp.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/ic_dashboard_black_24dp.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_home_icon.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/home_icon.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_spinner_drawable.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/spinner_drawable.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_ic_home_black_24dp.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/ic_home_black_24dp.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-xhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_fragment_home.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_home.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_main.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_main.xml"
     },
     {
-        "merged": "com.example.connectue.app-merged_res-53:/layout_fragment_popular_courses_scrolling.xml.flat",
-        "source": "com.example.connectue.app-main-55:/layout/fragment_popular_courses_scrolling.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_clickable_course.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/clickable_course.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_fragment_channels.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_channels.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_courses.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_courses.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable-hdpi_ic_add_black.png.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable-hdpi/ic_add_black.png"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_login.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_login.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_ic_launcher_background.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/ic_launcher_background.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_fragment_channels.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_channels.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_ic_dashboard_black_24dp.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/ic_dashboard_black_24dp.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_row_posts.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/row_posts.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_baseline_library_books_24.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/baseline_library_books_24.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/menu_bottom_nav_bar.xml.flat",
+        "source": "com.example.connectue.app-main-58:/menu/bottom_nav_bar.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-hdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-hdpi/ic_launcher_round.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_button_drawable.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/button_drawable.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-hdpi/ic_launcher.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_baseline_library_books_24.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/baseline_library_books_24.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/menu_bottom_nav_bar.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/menu/bottom_nav_bar.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-xxhdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_profile_icon.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/profile_icon.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-mdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-xxhdpi/ic_launcher.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_settings_icon.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/settings_icon.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-xhdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-xhdpi/ic_launcher_round.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-xxxhdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable-xxhdpi_ic_add_black.png.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable-xxhdpi/ic_add_black.png"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-hdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_baseline_person_24.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/baseline_person_24.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_like_icon.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/like_icon.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_clickable_course.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/clickable_course.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.connectue.app-main-58:/xml/data_extraction_rules.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_add_post.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_add_post.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_ic_home_black_24dp.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/ic_home_black_24dp.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable-xhdpi_ic_add_black.png.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable-xhdpi/ic_add_black.png"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-xhdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_fragment_popular_courses_scrolling.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_popular_courses_scrolling.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_profile_icon.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/profile_icon.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-xxxhdpi/ic_launcher_round.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_profile.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_profile.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-anydpi-v26/ic_launcher_round.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-hdpi/ic_launcher.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_baseline_chat_bubble_24.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/baseline_chat_bubble_24.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_posts.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_posts.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_loading.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_loading.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_back_arrow.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/back_arrow.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_ic_notifications_black_24dp.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/ic_notifications_black_24dp.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_settings.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_settings.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_register.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_register.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_baseline_person_24.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/baseline_person_24.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_baseline_home_24.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/baseline_home_24.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable-xxhdpi_ic_add_black.png.flat",
+        "source": "com.example.connectue.app-main-58:/drawable-xxhdpi/ic_add_black.png"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_login.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_login.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_fragment_home.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_home.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-xhdpi/ic_launcher.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/ic_launcher_background.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_fragment_profile.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/fragment_profile.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_register.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_register.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable-xhdpi_ic_add_black.png.flat",
+        "source": "com.example.connectue.app-main-58:/drawable-xhdpi/ic_add_black.png"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/layout_activity_courses.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/layout/activity_courses.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/xml_backup_rules.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/xml/backup_rules.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_baseline_home_24.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/baseline_home_24.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-xxhdpi/ic_launcher_round.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/ic_launcher_foreground.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable-mdpi_ic_add_black.png.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable-mdpi/ic_add_black.png"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable-mdpi_ic_add_black.png.flat",
+        "source": "com.example.connectue.app-main-58:/drawable-mdpi/ic_add_black.png"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_baseline_book_24.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/baseline_book_24.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_fragment_profile.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/fragment_profile.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/ic_launcher_foreground.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_navigation_bar.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/navigation_bar.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-mdpi_ic_launcher_round.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-mdpi/ic_launcher_round.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_baseline_book_24.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/baseline_book_24.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable_spinner_drawable.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable/spinner_drawable.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/layout_activity_add_post.xml.flat",
+        "source": "com.example.connectue.app-main-58:/layout/activity_add_post.xml"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/mipmap-mdpi_ic_launcher.webp.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/mipmap-mdpi/ic_launcher.webp"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-xxxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-merged_res-53:/drawable-anydpi_ic_add_black.xml.flat",
-        "source": "/Users/augustinlassus/.gradle/daemon/8.2/com.example.connectue.app-main-55:/drawable-anydpi/ic_add_black.xml"
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_courses_icon.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/courses_icon.xml"
+    },
+    {
+        "merged": "com.example.connectue.app-merged_res-56:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.connectue.app-main-58:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_baseline_chat_bubble_24.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/baseline_chat_bubble_24.xml"
+    },
+    {
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_add_post_icon.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/add_post_icon.xml"
+    },
+    {
+        "merged": "com.example.connectue.app-merged_res-56:/xml_backup_rules.xml.flat",
+        "source": "com.example.connectue.app-main-58:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.connectue.app-merged_res-56:/drawable_home_icon.xml.flat",
+        "source": "com.example.connectue.app-main-58:/drawable/home_icon.xml"
     }
 ]

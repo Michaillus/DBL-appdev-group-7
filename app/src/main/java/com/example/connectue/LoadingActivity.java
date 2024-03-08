@@ -30,7 +30,7 @@ public class LoadingActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null) {
-            DocumentReference userDoc = db.collection("users").document("UserTypes").collection("Students").document(user.getUid());
+            DocumentReference userDoc = db.collection("users").document(user.getUid());
             Log.d(TAG, user.getEmail());
             userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 

@@ -30,6 +30,7 @@
     <string name="RegisterTextAccQuery">Don\'t have an account?</string>
     <string name="_2wbb0"><b>2WBB0</b></string>
     <string name="app_name"><b>ConnecTue</b></string>
+    <string name="back_text">Back</string>
     <string name="channels"><b>Channels</b></string>
     <string name="channelstitle">Channels</string>
     <string name="connectue"><![CDATA[<b>ConnecTue</b>]]></string>
@@ -45,6 +46,7 @@
     <string name="password">Password</string>
     <string name="popular"><b>Popular</b></string>
     <string name="profile">Profile</string>
+    <string name="profile_text">Profile</string>
     <string name="project_id" translatable="false">hube-1c5b8</string>
     <string name="title_activity_channels">ChannelsActivity</string>
     <string name="title_dashboard">Dashboard</string>

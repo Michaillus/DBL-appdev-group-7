@@ -310,6 +310,10 @@ attr circularflow_defaultAngle
 attr circularflow_defaultRadius
 attr circularflow_radiusInDP
 attr circularflow_viewCenter
+attr civ_border_color
+attr civ_border_overlay
+attr civ_border_width
+attr civ_circle_background_color
 attr clearTop
 attr clearsTag
 attr clickAction
@@ -3041,8 +3045,10 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable add_post_icon
 drawable avd_hide_password
 drawable avd_show_password
+drawable back_arrow
 drawable baseline_book_24
 drawable baseline_chat_bubble_24
 drawable baseline_home_24
@@ -3057,6 +3063,7 @@ drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
 drawable button_drawable
+drawable comment_icon
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
 drawable common_google_signin_btn_icon_dark_focused
@@ -3076,7 +3083,7 @@ drawable common_google_signin_btn_text_light
 drawable common_google_signin_btn_text_light_focused
 drawable common_google_signin_btn_text_light_normal
 drawable common_google_signin_btn_text_light_normal_background
-drawable courses_and_majors_icon
+drawable courses_icon
 drawable design_fab_background
 drawable design_ic_visibility
 drawable design_ic_visibility_off
@@ -3103,6 +3110,7 @@ drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_notifications_black_24dp
 drawable ic_search_black_24
+drawable like_icon
 drawable m3_avd_hide_password
 drawable m3_avd_show_password
 drawable m3_bottom_sheet_drag_handle
@@ -3175,6 +3183,7 @@ drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable profile_icon
+drawable settings_icon
 drawable spinner_drawable
 drawable test_level_drawable
 drawable tooltip_frame_dark
@@ -3184,6 +3193,7 @@ id BOTTOM_END
 id BOTTOM_START
 id CTRL
 id Channel_title
+id CommentPostBtn
 id FUNCTION
 id FirstNameET
 id FirstNameTIL
@@ -3257,6 +3267,7 @@ id actions
 id activity_chooser_view_content
 id add
 id addPostImageBtn
+id add_post
 id adjust_height
 id adjust_width
 id alertTitle
@@ -3276,6 +3287,9 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id back
+id back_arrow
+id back_text
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -3293,6 +3307,7 @@ id browser_actions_menu_item_icon
 id browser_actions_menu_item_text
 id browser_actions_menu_items
 id browser_actions_menu_view
+id button
 id buttonPanel
 id buttonlgn
 id buttonregister
@@ -3338,6 +3353,7 @@ id custom
 id customPanel
 id cut
 id dark
+id dataBinding
 id date_picker_actions
 id decelerate
 id decelerateAndComplete
@@ -3413,14 +3429,7 @@ id graph_wrap
 id group_divider
 id grouping
 id groups
-id guideline1
-id guideline2
 id guideline3
-id guideline4
-id guideline5
-id guideline6
-id guideline7
-id guideline8
 id header_title
 id hideable
 id home
@@ -3450,6 +3459,7 @@ id left
 id leftToRight
 id legacy
 id light
+id likePostBtn
 id line1
 id line3
 id linear
@@ -3519,6 +3529,16 @@ id mtrl_view_tag_bottom_padding
 id multiply
 id nav_controller_view_tag
 id nav_host_fragment_container
+id navbar_guideline1
+id navbar_guideline10
+id navbar_guideline2
+id navbar_guideline3
+id navbar_guideline4
+id navbar_guideline5
+id navbar_guideline6
+id navbar_guideline7
+id navbar_guideline8
+id navbar_guideline9
 id navigation_bar_item_active_indicator_view
 id navigation_bar_item_icon_container
 id navigation_bar_item_icon_view
@@ -3539,6 +3559,8 @@ id notification_main_column
 id notification_main_column_container
 id off
 id on
+id onAttachStateChangeListener
+id onDateChanged
 id onInterceptTouchReturnSwipe
 id open_search_bar_text_view
 id open_search_view_background
@@ -3557,6 +3579,9 @@ id open_search_view_toolbar_container
 id outline
 id outward
 id overshoot
+id pDescriptionTv
+id pImageIv
+id pLikesTv
 id packed
 id parallax
 id parent
@@ -3577,8 +3602,15 @@ id postDescription
 id postImage
 id postLayout
 id posts
+id postsRecyclerview
 id pressed
 id profile
+id profileTextView
+id profile_guideline1
+id profile_guideline2
+id profile_guideline3
+id profile_guideline4
+id profile_guideline5
 id progress_circular
 id progress_horizontal
 id publishPostBtn
@@ -3620,6 +3652,10 @@ id search_voice_btn
 id select_dialog_listview
 id selected
 id selection_type
+id settings
+id settings_guideline1
+id settings_guideline2
+id settings_guideline3
 id sharedValueSet
 id sharedValueUnset
 id shortcut
@@ -3681,7 +3717,7 @@ id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
 id textTop
-id textView
+id textWatcher
 id text_input_end_icon
 id text_input_error_icon
 id text_input_start_icon
@@ -3707,6 +3743,7 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id uNamePost
 id unchecked
 id uniform
 id unlabeled
@@ -3852,8 +3889,10 @@ layout activity_courses
 layout activity_loading
 layout activity_login
 layout activity_main
+layout activity_posts
 layout activity_profile
 layout activity_register
+layout activity_settings
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
 layout clickable_course
@@ -3935,6 +3974,7 @@ layout notification_template_custom_big
 layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
+layout row_posts
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
@@ -3981,6 +4021,7 @@ string abc_toolbar_collapse_description
 string androidx_startup
 string app_name
 string appbar_scrolling_view_behavior
+string back_text
 string bottom_sheet_behavior
 string bottomsheet_action_collapse
 string bottomsheet_action_expand
@@ -4145,6 +4186,7 @@ string path_password_eye_mask_visible
 string path_password_strike_through
 string popular
 string profile
+string profile_text
 string project_id
 string search_menu_title
 string searchbar_scrolling_view_behavior
@@ -5309,6 +5351,7 @@ styleable Carousel carousel_alignment carousel_backwardTransition carousel_empty
 styleable CheckedTextView android_checkMark checkMarkCompat checkMarkTint checkMarkTintMode
 styleable Chip android_textAppearance android_textSize android_textColor android_ellipsize android_maxWidth android_text android_checkable checkedIcon checkedIconEnabled checkedIconTint checkedIconVisible chipBackgroundColor chipCornerRadius chipEndPadding chipIcon chipIconEnabled chipIconSize chipIconTint chipIconVisible chipMinHeight chipMinTouchTargetSize chipStartPadding chipStrokeColor chipStrokeWidth chipSurfaceColor closeIcon closeIconEnabled closeIconEndPadding closeIconSize closeIconStartPadding closeIconTint closeIconVisible ensureMinTouchTargetSize hideMotionSpec iconEndPadding iconStartPadding rippleColor shapeAppearance shapeAppearanceOverlay showMotionSpec textEndPadding textStartPadding
 styleable ChipGroup checkedChip chipSpacing chipSpacingHorizontal chipSpacingVertical selectionRequired singleLine singleSelection
+styleable CircleImageView civ_border_color civ_border_overlay civ_border_width civ_circle_background_color
 styleable CircularProgressIndicator indicatorDirectionCircular indicatorInset indicatorSize
 styleable ClockFaceView clockFaceBackgroundColor clockNumberTextColor
 styleable ClockHandView clockHandColor materialCircleRadius selectorSize
