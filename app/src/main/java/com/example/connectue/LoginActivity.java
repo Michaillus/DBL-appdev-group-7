@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private String TAG = "Login user: ";
+
+    private Object verifiedObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,8 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
@@ -79,13 +85,47 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private Boolean checkUserIsVerified() {
-        if (user.isEmailVerified()) {
+        DocumentReference userDoc = db.collection("users").document(user.getUid());
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Get the value of isVerified
+                        verifiedObject = document.get("isVerified");
+                        if (verifiedObject != null) {
+                            Log.d(TAG, "Value of field 'isVerified': " + verifiedObject.toString());
+                        } else {
+                            Log.d(TAG, "Field 'isVerified' is null.");
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        if (verifiedObject == null) {
+            Log.d(TAG, "Field 'isVerified' is null.");
+            return false;
+        } else if (verifiedObject.equals(true)) {
+            return true;
+        } else if (user.isEmailVerified()) {
             db.collection("users").document(user.getUid()).update("isVerified", true);
             return true;
+        } else {
+            return false;
         }
-        Toast.makeText(LoginActivity.this, "User not verified",
-                Toast.LENGTH_SHORT).show();
-        return false;
+
+//        if (user.isEmailVerified()) {
+//            db.collection("users").document(user.getUid()).update("isVerified", true);
+//            return true;
+//        }
+//        Toast.makeText(LoginActivity.this, "User not verified",
+//                Toast.LENGTH_SHORT).show();
+//        return false;
     }
 
     private void loginUser(String email, String password) {
