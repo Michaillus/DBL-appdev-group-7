@@ -1,5 +1,6 @@
 package com.example.connectue;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.databinding.BindingAdapter;
@@ -35,33 +36,15 @@ public class Post {
         this.pComments = pComments;
     }
 
-//    public String getuName() {
-//        return uName;
-//    }
-//
-//    public void setuName(String uName) {
-//        this.uName = uName;
-//    }
-//
-//    public String getpDescription() {
-//        return pDescription;
-//    }
-//
-//    public void setpDescription(String pDescription) {
-//        this.pDescription = pDescription;
-//    }
-//
-//    public String getpImage() {
-//        return pImage;
-//    }
-//
-    public void setImageUrl(String pImage) {
-        this.pImage = pImage;
-    }
-
+    /**
+     * Automatically called method for AdapterPosts
+     * @param view placeholder for the post image.
+     * @param imageUrl image URL
+     */
     @BindingAdapter("imageUrl")
     public static void loadImage(ImageView view, String imageUrl) {
         if (imageUrl != null && !imageUrl.isEmpty()) {
+            view.setVisibility(View.VISIBLE);
             Glide.with(view.getContext())
                     .load(imageUrl)
                     .into(view);
@@ -69,6 +52,7 @@ public class Post {
             // Optionally, load a placeholder image or clear the ImageView
             // Example: view.setImageResource(R.drawable.placeholder_image);
             view.setImageDrawable(null); // Clear the ImageView
+            view.setVisibility(View.GONE);
         }
     }
 //

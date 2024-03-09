@@ -1,5 +1,6 @@
 package com.example.connectue;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.connectue.databinding.FragmentHomeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,7 +49,7 @@ public class HomeFragment extends Fragment {
     private List<Post> postList;
     private AdapterPosts postAdapter;
     private String TAG = "HomePageUtil: ";
-    private String TAG2 = "AdapterPosts: ";
+    private String TAG2 = "Test: ";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -108,76 +110,105 @@ public class HomeFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-//        View view = inflater.inflate(R.layout.fragment_home, container, false);
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        //return inflater.inflate(R.layout.fragment_home, container, false);
 
         postList = new ArrayList<>();
-        //loadPostsFromFirestore();
-        db.collection("posts")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Post post = new Post(document.getString("publisher"),
-                                    document.getString("text"),
-                                    document.getString("photoULR"),
-                                    document.getLong("likes").intValue(),
-                                    document.getLong("comments").intValue());
-                            postList.add(post);
-                        }
-                        postAdapter.notifyDataSetChanged();
-                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size()-1).pDescription);
-                    } else {
-                        Log.d(TAG2, "Error getting documents: ", task.getException());
-                    }
-                });
+        loadPostsFromFirestore();
+        Log.d(TAG2, "onCreateView: first log");
+
         //Initialize ReclerView
-
-        Post post = new Post("I", "text", null, 0, 0);
-        Post post2 = new Post("You", "text", null, 0, 0);
-
-//        postList.add(post);
-//        postList.add(post2);
-
-        Log.d(TAG2, "onCreateView: postList size: " + postList.size());
+        Log.d(TAG2, "Third log onCreateView: postList size: " + postList.size());
 
         postAdapter = new AdapterPosts(postList);
-//        RecyclerView recyclerView = view.findViewById(R.id.postsRecyclerView);
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecyclerView.setHasFixedSize(true);
-
         binding.postsRecyclerView.setAdapter(postAdapter);
         postAdapter.notifyDataSetChanged();
-        Log.d(TAG2, "onCreateView: adapter list size: " + binding.postsRecyclerView.getAdapter().getItemCount());
+        Log.d(TAG2, "Fourth log onCreateView: adapter list size: " + binding.postsRecyclerView.getAdapter().getItemCount());
 
+        binding.createPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddPostActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return root;
-//        return view;
     }
 
+    // Display posts in fireStore
     private void loadPostsFromFirestore() {
         db.collection("posts")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Post post = new Post(document.getString("publisher"),
-                                    document.getString("text"),
-                                    document.getString("photoULR"),
-                                    document.getLong("likes").intValue(),
-                                    document.getLong("comments").intValue());
-                            postList.add(post);
+                            String userId = document.getString("publisher");
+                            if (userId != null) {
+                                fetchUserName(document, new UserNameCallback() {
+                                    @Override
+                                    public void onUserNameFetched(String userName) {
+                                        Post post = new Post(userName,
+                                                document.getString("text"),
+                                                document.getString("photoULR"),
+                                                document.getLong("likes").intValue(),
+                                                document.getLong("comments").intValue());
+                                        postList.add(post);
+                                        postAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            } else {
+                                // Handle the case where userId is null
+                                Post post = new Post("User",
+                                        document.getString("text"),
+                                        document.getString("photoULR"),
+                                        document.getLong("likes").intValue(),
+                                        document.getLong("comments").intValue());
+                                postList.add(post);
+                                postAdapter.notifyDataSetChanged();
+                            }
                         }
-                        //postAdapter.notifyDataSetChanged();
-                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size()-1).pDescription);
+                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size() - 1).pDescription);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
     }
+
+    /**
+     * Get userName of a post from firestore.
+     * @param document ref to a post
+     * @param callback not important
+     */
+    private void fetchUserName(QueryDocumentSnapshot document, UserNameCallback callback) {
+        String uid = document.getString("publisher");
+        if (uid != null) {
+            DocumentReference userRef = db.collection("users").document(uid);
+            userRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    // Retrieve the user name from the document snapshot
+                    String userName = documentSnapshot.getString("firstName") + " " + documentSnapshot.getString("lastName");
+                    Log.d("User Name", "User name: " + userName);
+                    // Invoke the callback with the retrieved username
+                    callback.onUserNameFetched(userName);
+                } else {
+                    Log.d("User Name", "User document does not exist.");
+                }
+            }).addOnFailureListener(e -> {
+                Log.e("User Name", "Error retrieving user document: " + e.getMessage());
+                // If there's an error, invoke the callback with null username
+                callback.onUserNameFetched(null);
+            });
+        } else {
+            // If uid is null, invoke the callback with null username
+            callback.onUserNameFetched(null);
+        }
+    }
+
+
 
     @Override
     public void onDestroyView() {

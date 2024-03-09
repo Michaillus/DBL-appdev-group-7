@@ -9,7 +9,7 @@
 
 <!--    </data>-->
 
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,13 +17,30 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
+    <ImageButton
+        android:id="@+id/createPostBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:src="@drawable/add_white"
+        android:background="@drawable/rounded_corners"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/postsRecyclerView"
         android:padding="8dp"
+        android:layout_below="@+id/createPostBtn"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -31,5 +48,5 @@
 
 
 
-</FrameLayout>
+</RelativeLayout>
 <!--</layout>-->
