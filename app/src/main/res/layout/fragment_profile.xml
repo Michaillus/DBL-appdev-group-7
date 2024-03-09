@@ -11,41 +11,41 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profilePic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_person_24" />
 
-    <TextView
+    <EditText
         android:id="@+id/text_firstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:text="First name" />
 
-    <TextView
+    <EditText
         android:id="@+id/text_lastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation = "horizontal"
         android:text="Last name" />
 
-    <TextView
-        android:id="@+id/major"
+    <EditText
+        android:id="@+id/text_major"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation = "horizontal"
         android:text="major"/>
 
-    <TextView
-        android:id="@+id/email"
+    <EditText
+        android:id="@+id/text_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation = "horizontal"
         android:text="email"/>
 
-    <TextView
-        android:id="@+id/phone"
+    <EditText
+        android:id="@+id/text_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation = "horizontal"
