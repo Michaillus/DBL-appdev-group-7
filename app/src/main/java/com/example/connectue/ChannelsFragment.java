@@ -1,5 +1,6 @@
 package com.example.connectue;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,6 +42,9 @@ public class ChannelsFragment extends Fragment {
     private PopularCoursesScrollingFragment horizontalScroller;
     private MajorsVerticalScrollingFragment majorsVerticalScrollingFragment;
     private MyCoursesVerticalFragment myCoursesVerticalFragment;
+
+    private Button searchBtn;
+    private EditText searchEt;
 
     public ChannelsFragment() {
         // Required empty public constructor
@@ -81,6 +87,21 @@ public class ChannelsFragment extends Fragment {
         majorsText = view.findViewById(R.id.majors);
         navigationView = view.findViewById(R.id.coursemenu);
 
+        searchBtn = view.findViewById(R.id.search_button);
+        searchEt = view.findViewById(R.id.searchEditText);
+
+        // Button to trigger to search activity
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get user input
+                String searchText = searchEt.getText().toString();
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("searchText", searchText);
+                getActivity().startActivity(intent);
+            }
+        });
+
 
         horizontalScroller = new PopularCoursesScrollingFragment();
         majorsVerticalScrollingFragment = new MajorsVerticalScrollingFragment();
@@ -111,6 +132,8 @@ public class ChannelsFragment extends Fragment {
     }
 
     private void showCoursesView() {
+        searchEt.setVisibility(View.VISIBLE);
+        searchBtn.setVisibility(View.VISIBLE);
         popularText.setVisibility(View.VISIBLE);
         myCoursesText.setVisibility(View.VISIBLE);
         majorsText.setVisibility(View.GONE);
@@ -121,6 +144,8 @@ public class ChannelsFragment extends Fragment {
         transaction.commit();
     }
     private void showMajorsView() {
+        searchEt.setVisibility(View.INVISIBLE);
+        searchBtn.setVisibility(View.INVISIBLE);
         popularText.setVisibility(View.GONE);
         myCoursesText.setVisibility(View.GONE);
         majorsText.setVisibility(View.VISIBLE);

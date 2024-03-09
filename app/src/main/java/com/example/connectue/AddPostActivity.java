@@ -258,9 +258,7 @@ public class AddPostActivity extends AppCompatActivity {
         postData.put("likes", 0);
         postData.put("comments", 0);
         postData.put("timestamp", new Timestamp(new Date()));
-        // TODO: uncomment next line when authentication is implemented
-        // postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
-        postData.put("publisher", null);
+        postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         posts.add(postData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
