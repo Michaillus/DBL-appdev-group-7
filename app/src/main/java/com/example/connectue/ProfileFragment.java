@@ -1,10 +1,12 @@
 package com.example.connectue;
 
+import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ public class ProfileFragment extends Fragment {
     private static final String TAG = "Profile";
     private static final String EDITON = "Save";
     private static final String EDITOFF = "Edit";
+    private static final String LOGOUT = "Logout";
 
     private FirebaseUser user;
     private FirebaseFirestore db;
@@ -135,19 +138,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void parseDocument() {
-        if (document.get(General.FIRSTNAME) != null) {
-            Log.i(TAG, "document-first name not null");
-            Log.i(TAG, "before: " + firstNameStr);
-            firstNameStr = (String) document.get(General.FIRSTNAME);
-            Log.i(TAG,"after: " + firstNameStr);
-        }
-        if (document.get(General.LASTNAME) != null) {  lastNameStr = (String) document.get(General.LASTNAME);}
-        if (document.get(General.EMAIL) != null) { emailStr = (String) document.get(General.EMAIL);}
-        if (document.get(General.PROGRAM) != null) { majorStr = (String) document.get(General.PROGRAM);}
-        if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
-    }
-
     private void initComponents(View view) {
         firstName_fld = view.findViewById(R.id.text_firstName);
         lastName_fld = view.findViewById(R.id.text_lastName);
@@ -164,6 +154,7 @@ public class ProfileFragment extends Fragment {
 
         initTextSection(view);
         initEditButton();
+        initSignoutButton();
     }
 
     private void initTextSection(View view) {
@@ -224,5 +215,32 @@ public class ProfileFragment extends Fragment {
         db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.PROGRAM, majorStr);
         db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.EMAIL, emailStr);
         db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.PHONE, phoneStr);
+    }
+
+    private void initSignoutButton() {
+        logoutBtn.setText(LOGOUT);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+//                startActivity(new Intent(getActivity(), LoadingActivity.class));
+                Intent loading = new Intent(getActivity(), LoadingActivity.class);
+                getActivity().startActivity(loading);
+                getActivity().finish();
+            }
+        });
+    }
+
+    private void parseDocument() {
+        if (document.get(General.FIRSTNAME) != null) {
+            Log.i(TAG, "document-first name not null");
+            Log.i(TAG, "before: " + firstNameStr);
+            firstNameStr = (String) document.get(General.FIRSTNAME);
+            Log.i(TAG,"after: " + firstNameStr);
+        }
+        if (document.get(General.LASTNAME) != null) {  lastNameStr = (String) document.get(General.LASTNAME);}
+        if (document.get(General.EMAIL) != null) { emailStr = (String) document.get(General.EMAIL);}
+        if (document.get(General.PROGRAM) != null) { majorStr = (String) document.get(General.PROGRAM);}
+        if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
     }
 }
