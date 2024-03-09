@@ -27,7 +27,6 @@
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/postsRecyclerview"
         android:layout_width="412dp"
         android:layout_height="608dp"
         android:layout_marginTop="20dp"

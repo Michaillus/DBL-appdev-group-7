@@ -34,7 +34,7 @@
             android:id="@+id/postImage"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/addPostImageBtn"

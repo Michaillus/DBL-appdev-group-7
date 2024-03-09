@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<data>
+    <variable
+        name="post"
+        type="com.example.connectue.Post" />
+</data>
+
 <androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
@@ -10,61 +16,77 @@
     app:cardUseCompatPadding="true"
     app:cardBackgroundColor="#FFFFFF">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"> <!-- Adjust padding as needed -->
-
-        <ImageView
-            android:id="@+id/pImageIv"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#FFFFFF"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:padding="16dp"> <!-- Adjust padding as needed -->
 
             <ImageView
-                android:id="@+id/likePostBtn"
+                android:id="@+id/pImageIv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/like_icon" />
+                android:adjustViewBounds="true"
+                android:background="#FFFFFF"
+                app:imageUrl="@{post.pImage}" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/uNamePost"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/pLikesTv"
-                android:text="1k likes"
+                android:text="@{post.uName}"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/pDescriptionTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{post.pDescription}"
                 android:textColor="#000000" />
 
-            <ImageView
-                android:id="@+id/CommentPostBtn"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/comment_icon" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/likePostBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@null"
+                    android:contentDescription="Like"
+                    app:srcCompat="@drawable/like_icon" />
+
+                <TextView
+                    android:id="@+id/pLikesTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.valueOf(post.pLikes)}"
+                    android:textColor="#000000" />
+
+                <ImageButton
+                    android:id="@+id/commentPostBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@null"
+                    android:contentDescription="Comment"
+                    app:srcCompat="@drawable/comment_icon" />
+
+                <TextView
+                    android:id="@+id/pCommentTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{Long.toString(post.pComments)}"
+                    android:textColor="#000000" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/uNamePost"
-            android:text="Name"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/pDescriptionTv"
-            android:text="The description of the post"
-            android:textColor="#000000"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+</layout>
