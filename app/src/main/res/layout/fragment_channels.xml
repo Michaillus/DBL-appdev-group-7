@@ -32,7 +32,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_below="@+id/searchEditText"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         android:id="@+id/fragmentContainerViewPopCourses"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/searchEditText"
-        android:layout_marginTop="210dp" />
+        android:layout_marginTop="220dp" />
 
     <EditText
         android:id="@+id/searchEditText"
