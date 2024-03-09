@@ -38,6 +38,8 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private static final String TAG = "Profile";
+    private static final String EDITON = "Save";
+    private static final String EDITOFF = "Edit";
 
     private FirebaseUser user;
     private FirebaseFirestore db;
@@ -47,7 +49,7 @@ public class ProfileFragment extends Fragment {
     private String emailStr = "";
     private String phoneStr = "";
     private String majorStr = "";
-    private boolean isEditing;
+    private boolean isEditing = false;
     private boolean isAdmin;
     Button editBtn;
     Button logoutBtn;
@@ -161,19 +163,15 @@ public class ProfileFragment extends Fragment {
         adminBtn  = view.findViewById(R.id.btn_admmin);
 
         initTextSection(view);
+        initEditButton();
     }
 
     private void initTextSection(View view) {
-        setTest();
-
-        firstName_fld.setEnabled(false);
-        lastName_fld.setEnabled(false);
-        major_fld.setEnabled(false);
-        email_fld.setEnabled(false);
-        phone_fld.setEnabled(false);
+        setTestFields();
+        switchTextFields(isEditing);
     }
 
-    private void setTest() {
+    private void setTestFields() {
         firstName_fld.setText(firstNameStr);
         lastName_fld.setText(lastNameStr);
         major_fld.setText(majorStr);
@@ -181,9 +179,50 @@ public class ProfileFragment extends Fragment {
         phone_fld.setText(phoneStr);
     }
 
+    private void switchTextFields(boolean onOff) {
+        firstName_fld.setEnabled(onOff);
+        lastName_fld.setEnabled(onOff);
+        major_fld.setEnabled(onOff);
+        email_fld.setEnabled(onOff);
+        phone_fld.setEnabled(onOff);
+    }
+
     private void updateUIComponents() {
         if (getContext() != null) {
-            setTest();
+            setTestFields();
         }
+    }
+
+    private void initEditButton() {
+        editBtn.setText(EDITOFF);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isEditing) {
+                    editBtn.setText(EDITOFF);
+                    updateInfo();
+                } else {
+                    editBtn.setText(EDITON);
+                }
+
+                isEditing = !isEditing;
+                switchTextFields(isEditing);
+                setTestFields();
+            }
+        });
+    }
+
+    private void updateInfo() {
+        firstNameStr = firstName_fld.getText().toString().trim();
+        lastNameStr = lastName_fld.getText().toString().trim();
+        majorStr = major_fld.getText().toString().trim();
+        emailStr = email_fld.getText().toString().trim();
+        phoneStr = phone_fld.getText().toString().trim();
+
+        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.FIRSTNAME, firstNameStr);
+        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.LASTNAME, lastNameStr);
+        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.PROGRAM, majorStr);
+        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.EMAIL, emailStr);
+        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.PHONE, phoneStr);
     }
 }
