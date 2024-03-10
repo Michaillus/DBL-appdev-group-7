@@ -56,7 +56,7 @@ public class ProfileFragment extends Fragment {
     private String phoneStr = "";
     private String majorStr = "";
     private boolean isEditing = false;
-    private boolean isAdmin;
+    private boolean isAdmin = false;
     Button editBtn;
     Button logoutBtn;
     Button deleteBtn;
@@ -108,24 +108,24 @@ public class ProfileFragment extends Fragment {
         Log.i(TAG, user.getUid());
         DocumentReference documentReference = db.collection(General.USERCOLLECTION).document(user.getUid());
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    document = task.getResult();
+                                                          @Override
+                                                          public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                              if (task.isSuccessful()) {
+                                                                  document = task.getResult();
 
-                    if (document.exists()) {
-                        Log.i(TAG,"document fetched");
-                        Log.i(TAG, document.toString());
-                        parseDocument();
-                        updateUIComponents();
-                    } else {
-                        Log.d(TAG, "No such user document");
-                    }
-                } else {
-                    Log.d(TAG, "get task failed with ", task.getException());
-                }
-            }
-        }
+                                                                  if (document.exists()) {
+                                                                      Log.i(TAG,"document fetched");
+                                                                      Log.i(TAG, document.toString());
+                                                                      parseDocument();
+                                                                      updateUIComponents();
+                                                                  } else {
+                                                                      Log.d(TAG, "No such user document");
+                                                                  }
+                                                              } else {
+                                                                  Log.d(TAG, "get task failed with ", task.getException());
+                                                              }
+                                                          }
+                                                      }
         );
         Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
@@ -160,6 +160,7 @@ public class ProfileFragment extends Fragment {
         initSignoutButton();
         initDeleteButton();
         initPostHisButton();
+        initAdminButton();
     }
 
     private void initTextSection(View view) {
@@ -186,6 +187,10 @@ public class ProfileFragment extends Fragment {
     private void updateUIComponents() {
         if (getContext() != null) {
             setTestFields();
+            if (!isAdmin) {
+                adminBtn.setEnabled(false);
+                adminBtn.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -282,6 +287,11 @@ public class ProfileFragment extends Fragment {
         if (document.get(General.EMAIL) != null) { emailStr = (String) document.get(General.EMAIL);}
         if (document.get(General.PROGRAM) != null) { majorStr = (String) document.get(General.PROGRAM);}
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
+        if (document.get(General.ROLE) != null) {
+
+            isAdmin = General.isAdmin((long) document.get(General.ROLE));
+            Log.i(TAG, "" + isAdmin);
+        }
     }
 
     private void initPostHisButton() {
@@ -292,5 +302,26 @@ public class ProfileFragment extends Fragment {
                 toOtherActivity(PostHistoryActivity.class);
             }
         });
+    }
+
+    private void initAdminButton() {
+        adminBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toOtherActivity(AdminActivity.class);
+            }
+        });
+
+//        Log.i(TAG, "init admin button, is admin? " + isAdmin);
+//        if (isAdmin) {
+//            adminBtn.setEnabled(true);
+//            adminBtn.setVisibility(View.VISIBLE);
+//
+//        } else {
+//            adminBtn.setEnabled(false);
+//            adminBtn.setVisibility(View.INVISIBLE);
+//        }
+
+
     }
 }
