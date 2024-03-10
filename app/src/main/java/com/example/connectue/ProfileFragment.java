@@ -155,6 +155,7 @@ public class ProfileFragment extends Fragment {
         initTextSection(view);
         initEditButton();
         initSignoutButton();
+        initDeleteButton();
     }
 
     private void initTextSection(View view) {
@@ -203,6 +204,22 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    private void initDeleteButton() {
+        deleteBtn.setText("DELETE ACCOUNT");
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        FirebaseAuth.getInstance().signOut();
+                        backToLoading();
+                    }
+                });
+            }
+        });
+    }
     private void updateInfo() {
         firstNameStr = firstName_fld.getText().toString().trim();
         lastNameStr = lastName_fld.getText().toString().trim();
@@ -224,11 +241,15 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
 //                startActivity(new Intent(getActivity(), LoadingActivity.class));
-                Intent loading = new Intent(getActivity(), LoadingActivity.class);
-                getActivity().startActivity(loading);
-                getActivity().finish();
+                backToLoading();
             }
         });
+    }
+
+    private void backToLoading() {
+        Intent loading = new Intent(getActivity(), LoadingActivity.class);
+        getActivity().startActivity(loading);
+        getActivity().finish();
     }
 
     private void parseDocument() {
