@@ -22,6 +22,8 @@ public class General {
     public static final String COURSE = "userCourses";
     public static final String USERID = "userId";
     public static final String PHONE = "phone";
+    public static final String POSTCOLLECTION = "posts";
+    public static final String PUBLISHER = "publisher";
 
     public static boolean isAdmin(long role) {
         return role == ADMIN;
