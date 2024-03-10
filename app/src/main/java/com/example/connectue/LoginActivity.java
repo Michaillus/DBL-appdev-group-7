@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     Button mRegisterBtn, mLoginBtn;
     private boolean isVerified;
     private FirebaseAuth mAuth;
-    FirebaseUser user;
+//    FirebaseUser user;
     private FirebaseFirestore db;
 
     private String TAG = "Login user: ";
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+//        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
 
@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean checkUserIsVerified() {
+    private Boolean checkUserIsVerified(FirebaseUser user) {
         DocumentReference userDoc = db.collection("users").document(user.getUid());
         userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -134,8 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        checkUserIsVerified();
-                        isVerified = checkUserIsVerified();
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                        isVerified = checkUserIsVerified(user);
                         if(!isVerified) {
                             return;
                         }
