@@ -16,8 +16,6 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <!-- Add your horizontally scrollable content here -->
-
         </LinearLayout>
     </HorizontalScrollView>
 
