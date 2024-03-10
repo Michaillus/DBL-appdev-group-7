@@ -159,6 +159,7 @@ public class ProfileFragment extends Fragment {
         initEditButton();
         initSignoutButton();
         initDeleteButton();
+        initPostHisButton();
     }
 
     private void initTextSection(View view) {
@@ -222,7 +223,7 @@ public class ProfileFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         FirebaseAuth.getInstance().signOut();
-                                        backToLoading();
+                                        toOtherActivity(LoadingActivity.class);
                                     }
                                 });
                             }
@@ -258,13 +259,14 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
 //                startActivity(new Intent(getActivity(), LoadingActivity.class));
-                backToLoading();
+                toOtherActivity(LoadingActivity.class);
+
             }
         });
     }
 
-    private void backToLoading() {
-        Intent loading = new Intent(getActivity(), LoadingActivity.class);
+    private void toOtherActivity(Class activity) {
+        Intent loading = new Intent(getActivity(), activity);
         getActivity().startActivity(loading);
         getActivity().finish();
     }
@@ -280,5 +282,15 @@ public class ProfileFragment extends Fragment {
         if (document.get(General.EMAIL) != null) { emailStr = (String) document.get(General.EMAIL);}
         if (document.get(General.PROGRAM) != null) { majorStr = (String) document.get(General.PROGRAM);}
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
+    }
+
+    private void initPostHisButton() {
+        postHisBtn.setText("Post History");
+        postHisBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toOtherActivity(PostHistoryActivity.class);
+            }
+        });
     }
 }
