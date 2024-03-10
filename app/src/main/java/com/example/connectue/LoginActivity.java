@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     Button mRegisterBtn, mLoginBtn;
     private boolean isVerified;
     private FirebaseAuth mAuth;
-//    FirebaseUser user;
+    FirebaseUser user;
     private FirebaseFirestore db;
 
     private String TAG = "Login user: ";
@@ -142,7 +142,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
-                        user = mAuth.getCurrentUser();
                         Toast.makeText(LoginActivity.this, "Login Success",
                                 Toast.LENGTH_SHORT).show();
                         Intent login = new Intent(LoginActivity.this, MainActivity.class);
