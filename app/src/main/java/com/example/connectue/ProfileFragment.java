@@ -108,25 +108,24 @@ public class ProfileFragment extends Fragment {
         Log.i(TAG, user.getUid());
         DocumentReference documentReference = db.collection(General.USERCOLLECTION).document(user.getUid());
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                          @Override
-                                                          public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                              if (task.isSuccessful()) {
-                                                                  document = task.getResult();
+              @Override
+              public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                  if (task.isSuccessful()) {
+                      document = task.getResult();
 
-                                                                  if (document.exists()) {
-                                                                      Log.i(TAG,"document fetched");
-                                                                      Log.i(TAG, document.toString());
-                                                                      parseDocument();
-                                                                      updateUIComponents();
-                                                                  } else {
-                                                                      Log.d(TAG, "No such user document");
-                                                                  }
-                                                              } else {
-                                                                  Log.d(TAG, "get task failed with ", task.getException());
-                                                              }
-                                                          }
-                                                      }
-        );
+                      if (document.exists()) {
+                          Log.i(TAG,"document fetched");
+                          Log.i(TAG, document.toString());
+                          parseDocument();
+                          updateUIComponents();
+                      } else {
+                          Log.d(TAG, "No such user document");
+                      }
+                  } else {
+                      Log.d(TAG, "get task failed with ", task.getException());
+                  }
+              }
+        });
         Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
 
@@ -289,7 +288,7 @@ public class ProfileFragment extends Fragment {
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
         if (document.get(General.ROLE) != null) {
 
-            isAdmin = General.isAdmin((long) document.get(General.ROLE));
+            isAdmin = General.isAdmin(document.getLong(General.ROLE));
             Log.i(TAG, "" + isAdmin);
         }
     }
@@ -300,6 +299,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 toOtherActivity(PostHistoryActivity.class);
+//                Intent loading = new Intent(getActivity(), PostHistoryActivity.class);
+//                getActivity().startActivity(loading);
+//                getActivity().finish();
             }
         });
     }
