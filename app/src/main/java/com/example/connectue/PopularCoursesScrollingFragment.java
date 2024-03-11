@@ -1,5 +1,7 @@
 package com.example.connectue;
 
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,7 +65,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
                                 courseName = document.get("courseName");
                                 courseCode = document.get("courseCode");
                                 ratingObject = document.get("courseRating");
-                                Course course = new Course(courseName.toString(), courseCode.toString());
+                                Course course = new Course(courseName.toString(), courseCode.toString(), document.getId());
                                 if (ratingObject instanceof List<?>) {
                                     //Number value from json is converted into Long through unbounded wild card "?"
                                     List<Long> ratingList = (List<Long>) ratingObject;
@@ -78,10 +80,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
                                     // Handle the case where the rating is not a list
                                 }
 
-
-                                Log.d(TAG, document.getId() + " => " + document.getData());
                                 courses.add(course);
-                                Log.d(TAG, courses.toString() + "HAHA");
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -97,13 +96,23 @@ public class PopularCoursesScrollingFragment extends Fragment {
 
                             //give layout parameters to each course card.
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    250,
                                     LinearLayout.LayoutParams.MATCH_PARENT
                             );
-                            layoutParams.rightMargin = 25;
-                            
+                            layoutParams.rightMargin = 35;
+                            textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                             textView.setText(course.getCourseCode());
                             cardView.setLayoutParams(layoutParams);
+
+                            cardView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Start new activity and pass course id
+                                    Intent intent = new Intent(getActivity(), CourseViewActivity.class);
+                                    intent.putExtra("courseId", course.getCourseId()); // Assuming getId() returns the id of the course
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     }
                 });

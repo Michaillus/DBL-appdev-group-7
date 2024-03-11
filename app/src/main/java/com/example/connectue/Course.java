@@ -5,14 +5,16 @@ import java.util.List;
 
 public class Course {
     public String courseName;
+    private String courseId;
     public String courseCode;
 
     public List<Integer> rating;
 
-    public Course(String courseName, String courseCode) {
+    public Course(String courseName, String courseCode, String courseId) {
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.rating = new ArrayList<>();
+        this.courseId = courseId;
     }
 
     /**
@@ -30,6 +32,14 @@ public class Course {
      */
     public String getCourseName() {
         return courseName;
+    }
+
+    /**
+     * Returns the id of the course.
+     * @return courseId.
+     */
+    public String getCourseId() {
+        return courseId;
     }
 
     /**
