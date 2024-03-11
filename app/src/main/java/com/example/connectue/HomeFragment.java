@@ -15,7 +15,9 @@ import com.example.connectue.databinding.FragmentHomeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -48,6 +50,14 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private List<Post> postList;
     private AdapterPosts postAdapter;
+
+    // Number of posts loaded at once to the feed.
+    final int postsPerChunk = 4;
+    // Query for loading posts from the database.
+    Query postsQuery;
+    // Last post that was loaded from the database.
+    DocumentSnapshot lastVisiblePost;
+
     private String TAG = "HomePageUtil: ";
     private String TAG2 = "Test: ";
 
@@ -115,6 +125,9 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         postList = new ArrayList<>();
+
+        postsQuery = db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING);
+
         loadPostsFromFirestore();
         Log.d(TAG2, "onCreateView: first log");
 
@@ -123,7 +136,7 @@ public class HomeFragment extends Fragment {
 
         postAdapter = new AdapterPosts(postList);
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.postsRecyclerView.setHasFixedSize(true);
+        binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
         postAdapter.notifyDataSetChanged();
         Log.d(TAG2, "Fourth log onCreateView: adapter list size: " + binding.postsRecyclerView.getAdapter().getItemCount());
@@ -136,47 +149,85 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        binding.loadMorePostsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMorePosts();
+            }
+        });
+
         return root;
     }
 
-    // Display posts in fireStore
+    /**
+     * Load first postsPerChunk number of posts from database.
+     */
     private void loadPostsFromFirestore() {
-        db.collection("posts")
-                .get()
+        postsQuery.limit(postsPerChunk).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String userId = document.getString("publisher");
-                            if (userId != null) {
-                                fetchUserName(document, new UserNameCallback() {
-                                    @Override
-                                    public void onUserNameFetched(String userName) {
-                                        Post post = new Post(userName,
-                                                document.getString("text"),
-                                                document.getString("photoULR"),
-                                                document.getLong("likes").intValue(),
-                                                document.getLong("comments").intValue());
-                                        postList.add(post);
-                                        postAdapter.notifyDataSetChanged();
-                                    }
-                                });
-                            } else {
-                                // Handle the case where userId is null
-                                Post post = new Post("User",
-                                        document.getString("text"),
-                                        document.getString("photoULR"),
-                                        document.getLong("likes").intValue(),
-                                        document.getLong("comments").intValue());
-                                postList.add(post);
-                                postAdapter.notifyDataSetChanged();
-                            }
-                        }
-                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size() - 1).pDescription);
+                        lastVisiblePost = task.getResult().getDocuments().get(task.getResult().size() - 1);
+                        displayPosts(task);
+                        //Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size() - 1).pDescription);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
     }
+
+
+
+    /**
+     * Load next postsPerChunk number of posts from database.
+     */
+    private void loadMorePosts() {
+        Query nextQuery = postsQuery.startAfter(lastVisiblePost).limit(postsPerChunk);
+        nextQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                lastVisiblePost = task.getResult().getDocuments().get(task.getResult().size() - 1);
+                displayPosts(task);
+            }
+        });
+    }
+
+    // TODO: make a function to display posts in UI
+    // !!! for now it just outputs post description logs.
+    /**
+     * Displays posts that were loaded from the database to the post feed in UI.
+     * @param task object containing all the posts that were loaded from database.
+     */
+    private void displayPosts(Task<QuerySnapshot> task) {
+        for (QueryDocumentSnapshot document : task.getResult()) {
+            String userId = document.getString("publisher");
+            if (userId != null) {
+                fetchUserName(document, new UserNameCallback() {
+                    @Override
+                    public void onUserNameFetched(String userName) {
+                        Post post = new Post(userName,
+                                document.getString("text"),
+                                document.getString("photoULR"),
+                                document.getLong("likes").intValue(),
+                                document.getLong("comments").intValue());
+                        postList.add(post);
+                        postAdapter.notifyDataSetChanged();
+                    }
+                });
+            } else {
+                // Handle the case where userId is null
+                Post post = new Post("User",
+                        document.getString("text"),
+                        document.getString("photoULR"),
+                        document.getLong("likes").intValue(),
+                        document.getLong("comments").intValue());
+                postList.add(post);
+                postAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+
+
+
 
     /**
      * Get userName of a post from firestore.
