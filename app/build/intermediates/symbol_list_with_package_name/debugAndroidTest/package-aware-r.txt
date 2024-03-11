@@ -1,3 +1,0 @@
-com.example.connectue.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
