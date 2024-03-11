@@ -3,7 +3,6 @@ package com.example.connectue;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.databinding.FragmentHomeBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,7 +19,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +49,14 @@ public class HomeFragment extends Fragment {
 
     // Number of posts loaded at once to the feed.
     final int postsPerChunk = 4;
+
     // Query for loading posts from the database.
     Query postsQuery;
+
     // Last post that was loaded from the database.
     DocumentSnapshot lastVisiblePost;
 
     private String TAG = "HomePageUtil: ";
-    private String TAG2 = "Test: ";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -83,37 +80,6 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//
-//        db = FirebaseFirestore.getInstance();
-//
-//        programs = new ArrayList<>();
-//
-//        db.collection("programs")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                programs.add(document.getId());
-//                                Log.d(TAG, document.getId() + " => " + document.getData());
-//                            }
-//                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-//                        }
-//
-//                        Log.d(TAG, programs.toString());
-//                    }
-//                });
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -126,20 +92,16 @@ public class HomeFragment extends Fragment {
 
         postList = new ArrayList<>();
 
+        // Initialize database query for post retrieval and load first chunk of posts to the feed.
         postsQuery = db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING);
-
-        loadPostsFromFirestore();
-        Log.d(TAG2, "onCreateView: first log");
+        loadChunkOfPosts();
 
         //Initialize ReclerView
-        Log.d(TAG2, "Third log onCreateView: postList size: " + postList.size());
-
         postAdapter = new AdapterPosts(postList);
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
         postAdapter.notifyDataSetChanged();
-        Log.d(TAG2, "Fourth log onCreateView: adapter list size: " + binding.postsRecyclerView.getAdapter().getItemCount());
 
         binding.createPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,7 +114,7 @@ public class HomeFragment extends Fragment {
         binding.loadMorePostsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadMorePosts();
+                loadChunkOfPosts();
             }
         });
 
@@ -160,74 +122,62 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Load first postsPerChunk number of posts from database.
+     * Load chunk of postsPerChunk posts from database and display to the feed.
      */
-    private void loadPostsFromFirestore() {
-        postsQuery.limit(postsPerChunk).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        lastVisiblePost = task.getResult().getDocuments().get(task.getResult().size() - 1);
-                        displayPosts(task);
-                        //Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size() - 1).pDescription);
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
-                    }
-                });
-    }
-
-
-
-    /**
-     * Load next postsPerChunk number of posts from database.
-     */
-    private void loadMorePosts() {
-        Query nextQuery = postsQuery.startAfter(lastVisiblePost).limit(postsPerChunk);
-        nextQuery.get().addOnCompleteListener(task -> {
+    private void loadChunkOfPosts() {
+        Query currentQuery;
+        if (lastVisiblePost == null) {
+            currentQuery = postsQuery.limit(postsPerChunk);
+        } else {
+            currentQuery = postsQuery.startAfter(lastVisiblePost).limit(postsPerChunk);
+        }
+        currentQuery.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                lastVisiblePost = task.getResult().getDocuments().get(task.getResult().size() - 1);
-                displayPosts(task);
+                QuerySnapshot snapshot = task.getResult();
+                if (!snapshot.isEmpty()) {
+                    lastVisiblePost = snapshot.getDocuments().get(task.getResult().size() - 1);
+                    displayPosts(task.getResult());
+                }
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
             }
         });
     }
 
-    // TODO: make a function to display posts in UI
-    // !!! for now it just outputs post description logs.
     /**
      * Displays posts that were loaded from the database to the post feed in UI.
-     * @param task object containing all the posts that were loaded from database.
+     * @param snapshot object containing all the posts that were loaded from database.
      */
-    private void displayPosts(Task<QuerySnapshot> task) {
-        for (QueryDocumentSnapshot document : task.getResult()) {
+    private void displayPosts(QuerySnapshot snapshot) {
+        for (QueryDocumentSnapshot document : snapshot) {
             String userId = document.getString("publisher");
-            if (userId != null) {
+            String text = document.getString("text");
+            String imageURL = document.getString("photoURL");
+
+            if (userId == null) {
+                Log.e(TAG, "Post publisher should not be null");
+            } else if (text == null) {
+                Log.e(TAG, "Post text should not be null");
+            } else if (document.getLong("likes") == null) {
+                Log.e(TAG, "Number of post likes should not be null");
+            } else if (document.getLong("comments") == null) {
+                Log.e(TAG, "Number of post comments should not be null");
+            } else {
                 fetchUserName(document, new UserNameCallback() {
                     @Override
                     public void onUserNameFetched(String userName) {
                         Post post = new Post(userName,
-                                document.getString("text"),
-                                document.getString("photoULR"),
+                                text,
+                                imageURL,
                                 document.getLong("likes").intValue(),
                                 document.getLong("comments").intValue());
                         postList.add(post);
                         postAdapter.notifyDataSetChanged();
                     }
                 });
-            } else {
-                // Handle the case where userId is null
-                Post post = new Post("User",
-                        document.getString("text"),
-                        document.getString("photoULR"),
-                        document.getLong("likes").intValue(),
-                        document.getLong("comments").intValue());
-                postList.add(post);
-                postAdapter.notifyDataSetChanged();
             }
         }
     }
-
-
-
-
 
     /**
      * Get userName of a post from firestore.
