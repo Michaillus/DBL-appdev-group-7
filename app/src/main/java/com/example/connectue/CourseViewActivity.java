@@ -2,6 +2,8 @@ package com.example.connectue;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -40,6 +42,14 @@ public class CourseViewActivity extends AppCompatActivity {
     FirebaseUser user;
     Float averageRating = 0f;
     Course course;
+
+    ArrayList<Review> reviewModels = new ArrayList<>();
+
+    // not useful since OutOfBundle so yetian changes to traverse them one by on
+    int[] likeImages = {R.drawable.like_icon};
+    int[] dislikeImages = {R.drawable.dislike};
+    int[] starsImages = {R.drawable.star};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +62,14 @@ public class CourseViewActivity extends AppCompatActivity {
         title = findViewById(R.id.titleCourse);
 
         ImageView followIcon = findViewById(R.id.followIcon);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView_review);
+
+        setUpCourseReviewFragmentModels();
+
+        AdapterReviews adapter = new AdapterReviews(this, reviewModels);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -180,5 +198,23 @@ public class CourseViewActivity extends AppCompatActivity {
                 title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             }
         });
+    }
+    private void setUpCourseReviewFragmentModels() {
+        String [] uName = getResources().getStringArray(R.array.reviewerName);
+        String [] uText = getResources().getStringArray(R.array.reviews);
+        String [] likeNum = getResources().getStringArray(R.array.likeNum);
+        String [] dislikeNum = getResources().getStringArray(R.array.dislikeNum);
+
+        for (int i = 0; i<uName.length; i++) {
+            reviewModels.add(new Review(uName[i],
+                    uText[i],
+                    R.drawable.like_icon,
+                    R.drawable.dislike,
+                    R.drawable.star,
+                    likeNum[i],
+                    dislikeNum[i]));
+        }
+
+
     }
 }
