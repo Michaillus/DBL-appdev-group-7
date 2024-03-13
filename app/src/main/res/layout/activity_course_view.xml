@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CourseViewActivity"
+    android:padding="30dp">
+
+    <TextView
+        android:id="@+id/titleCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="course_code"
+
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/followButton"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/titleCourse"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/follow"
+            android:layout_below="@+id/textView4"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/followIcon"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="5dp"
+            android:scaleX=".8"
+
+
+            android:scaleY=".8"
+            android:src="@drawable/baseline_add_circle_outline_24" />
+    </LinearLayout>
+
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="53dp"
+        android:foregroundGravity="center"
+        android:progressBackgroundTint="#CACACA"
+        android:progressTint="@color/Design4"
+        android:scaleX=".6"
+        android:scaleY=".6"
+        android:layout_marginEnd="-50dp"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating 0/5"
+        android:layout_below="@+id/ratingBar"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

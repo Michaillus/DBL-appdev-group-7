@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/foundCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="no text" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/courseCard"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/foundCourse"
+        app:cardBackgroundColor="#F6886F"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="10dip">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            >
+
+            <TextView
+                android:id="@+id/courseCardText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textColor="@color/Design2"
+                android:text="@string/_2wbb0"
+                android:shadowColor ="#A12B2929"
+                android:shadowRadius="10"
+                android:shadowDx="3"
+                android:shadowDy="3" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

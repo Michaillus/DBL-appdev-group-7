@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+//        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
 
@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean checkUserIsVerified() {
+    private Boolean checkUserIsVerified(FirebaseUser user) {
         DocumentReference userDoc = db.collection("users").document(user.getUid());
         userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -134,14 +134,14 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        checkUserIsVerified();
-                        isVerified = checkUserIsVerified();
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                        isVerified = checkUserIsVerified(user);
                         if(!isVerified) {
                             return;
                         }
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
-                        user = mAuth.getCurrentUser();
                         Toast.makeText(LoginActivity.this, "Login Success",
                                 Toast.LENGTH_SHORT).show();
                         Intent login = new Intent(LoginActivity.this, MainActivity.class);
