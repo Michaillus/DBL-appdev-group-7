@@ -15,7 +15,7 @@ public class Post {
     //use same name as we given while uploading post
 
     @PropertyName("publisher")
-    public String uName;
+    public String uid;
     @PropertyName("text")
     public String pDescription;
     @PropertyName("photoULR")
@@ -25,15 +25,18 @@ public class Post {
     @PropertyName("comments")
     public int pComments;
 
+    public String postID;
+
     public Post() {
     }
 
-    public Post(String uName, String pDescription, String pImage, int pLikes, int pComments) {
-        this.uName = uName;
+    public Post(String uid, String pDescription, String pImage, int pLikes, int pComments, String postID) {
+        this.uid = uid;
         this.pDescription = pDescription;
         this.pImage = pImage;
         this.pLikes = pLikes;
         this.pComments = pComments;
+        this.postID = postID;
     }
 
     /**
