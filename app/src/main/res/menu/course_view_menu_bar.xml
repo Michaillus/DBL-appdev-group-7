@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/reviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_reviews_24"
+        android:title="Reviews" />
+    <item
+        android:id="@+id/questions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_question_answer_24"
+        android:title="Questions" />
+    <item
+        android:id="@+id/materials"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_menu_book_24"
+        android:title="Materials" />
+</menu>
