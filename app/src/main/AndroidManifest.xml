@@ -20,6 +20,9 @@
         android:theme="@style/Theme.ConnecTue"
         tools:targetApi="31">
         <activity
+            android:name=".CourseViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminActivity"
             android:exported="false" />
         <activity

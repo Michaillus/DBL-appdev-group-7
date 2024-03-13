@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CourseViewActivity"
+    android:background="@color/Design2"
+    android:padding="30dp">
+
+    <FrameLayout
+        android:id="@id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/coursemenu"
+        >
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/titleCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="course_code"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_arrow_back_ios_new_24"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_alignParentBottom="true"
+        app:tint="@color/Design2"
+        android:padding="10dp"
+        android:background="@drawable/button_drawable"
+
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/followButton"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/titleCourse"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/follow"
+            android:textSize="17dp"
+            android:layout_below="@+id/textView4"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/followIcon"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="5dp"
+            android:scaleX=".8"
+
+
+            android:scaleY=".8"
+            android:src="@drawable/baseline_add_circle_outline_24" />
+    </LinearLayout>
+
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="53dp"
+        android:foregroundGravity="center"
+        android:progressBackgroundTint="#CACACA"
+        android:progressTint="@color/Design4"
+        android:scaleX=".6"
+        android:scaleY=".6"
+        android:layout_marginEnd="-50dp"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating 0/5"
+        android:layout_below="@+id/ratingBar"
+        android:layout_alignParentEnd="true"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/coursemenu"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_marginTop="80dp"
+        android:background="@color/Design2"
+        android:layout_alignParentRight="true"
+        app:menu="@menu/course_view_menu_bar" />
+
+</RelativeLayout>

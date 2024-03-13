@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -254,11 +255,12 @@ public class AddPostActivity extends AppCompatActivity {
 
         Map<String, Object> postData = new HashMap<>();
         postData.put("text", text);
-        postData.put("photoULR", imageUrl);
+        postData.put("photoURL", imageUrl);
         postData.put("likes", 0);
         postData.put("comments", 0);
         postData.put("timestamp", new Timestamp(new Date()));
         postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        postData.put("likedByUsers", new ArrayList<String>());
 
         posts.add(postData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -268,7 +270,7 @@ public class AddPostActivity extends AppCompatActivity {
                         Toast.makeText(AddPostActivity.this,
                                 "Post is published successfully", Toast.LENGTH_SHORT).show();
 
-                        Intent intentPosts = new Intent(AddPostActivity.this, PostsActivity.class);
+                        Intent intentPosts = new Intent(AddPostActivity.this, MainActivity.class);
                         startActivity(intentPosts);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
