@@ -14,17 +14,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.content.Context;
 
 import com.bumptech.glide.Glide;
 import com.example.connectue.databinding.RowPostsBinding;
-import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -80,7 +77,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
             // Retrieve the post document
             db = FirebaseFirestore.getInstance();
-            DocumentReference postRef = db.collection("posts").document(post.postID);
+            DocumentReference postRef = db.collection("posts").document(post.getPostID());
             postRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     DocumentSnapshot postDocument = task.getResult();
@@ -116,16 +113,16 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                                 if (!likedByUsers.contains(currentUid)) {
                                     likedByUsers.add(currentUid);
                                     binding.likePostBtn.setImageResource(R.drawable.liked_icon);
-                                    post.pLikes++;
-                                    binding.pLikesTv.setText(String.valueOf(post.pLikes));
+                                    post.incrementLikeNumber();
+                                    binding.pLikesTv.setText(String.valueOf(post.getLikeNumber()));
                                 } else {
                                     binding.likePostBtn.setImageResource(R.drawable.like_icon);
                                     likedByUsers.remove(currentUid);
-                                    post.pLikes--;
-                                    binding.pLikesTv.setText(String.valueOf(post.pLikes));
+                                    post.decrementLikeNumber();
+                                    binding.pLikesTv.setText(String.valueOf(post.getLikeNumber()));
                                 }
                                 postRef.update("likedByUsers", likedByUsers);
-                                postRef.update("likes", post.pLikes);
+                                postRef.update("likes", post.getLikeNumber());
                             }
                         });
                     }

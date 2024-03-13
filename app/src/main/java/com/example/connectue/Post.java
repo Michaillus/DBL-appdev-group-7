@@ -9,7 +9,6 @@ import android.widget.PopupWindow;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.PropertyName;
 
 /**
  * Class for Post object to store strings that need to be displayed on screen.
@@ -17,28 +16,27 @@ import com.google.firebase.firestore.PropertyName;
 public class Post {
     //use same name as we given while uploading post
 
-    @PropertyName("publisher")
-    public String uid;
-    @PropertyName("text")
-    public String pDescription;
-    @PropertyName("photoULR")
-    public String pImage;
-    @PropertyName("likes")
-    public int pLikes;
-    @PropertyName("comments")
-    public int pComments;
+    private String uid;
 
-    public String postID;
+    private String description;
+
+    private String imageUrl;
+
+    private int likeNumber;
+
+    private int commentNumber;
+
+    private String postID;
 
     public Post() {
     }
 
-    public Post(String uid, String pDescription, String pImage, int pLikes, int pComments, String postID) {
+    public Post(String uid, String description, String imageUrl, int likeNumber, int commentNumber, String postID) {
         this.uid = uid;
-        this.pDescription = pDescription;
-        this.pImage = pImage;
-        this.pLikes = pLikes;
-        this.pComments = pComments;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.likeNumber = likeNumber;
+        this.commentNumber = commentNumber;
         this.postID = postID;
     }
 
@@ -88,20 +86,66 @@ public class Post {
             view.setVisibility(View.GONE);
         }
     }
-//
-//    public String getpLikes() {
-//        return pLikes;
-//    }
-//
-//    public void setpLikes(String pLikes) {
-//        this.pLikes = pLikes;
-//    }
-//
-//    public String getpComments() {
-//        return pComments;
-//    }
-//
-//    public void setpComments(String pComments) {
-//        this.pComments = pComments;
-//    }
+
+    // Getters and setters for post ID.
+    public String getPostID() {
+        return postID;
+    }
+
+    public void setPostID(String postID) {
+        this.postID = postID;
+    }
+
+    // Getters and setters for user ID.
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    // Getters and setters for post description.
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    // Getters and setters for post image URL.
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String pImage) {
+        this.imageUrl = pImage;
+    }
+
+    // Getters and setters for number of likes on the post.
+    public int getLikeNumber() {
+        return likeNumber;
+    }
+
+    public void incrementLikeNumber() {
+        this.likeNumber++;
+    }
+
+    public void decrementLikeNumber() {
+        this.likeNumber--;
+    }
+
+    // Getters and setters for number of comments on the post.
+    public int getCommentNumber() {
+        return commentNumber;
+    }
+
+    public void incrementCommentNumber() {
+        this.commentNumber++;
+    }
+
+    public void decrementCommentNumber() {
+        this.commentNumber--;
+    }
 }
