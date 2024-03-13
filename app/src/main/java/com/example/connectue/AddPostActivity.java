@@ -79,6 +79,9 @@ public class AddPostActivity extends AppCompatActivity {
 
 
         publishPostBtn.setOnClickListener(v -> {
+            publishPostBtn.setEnabled(false);
+            postDescription.setEnabled(false);
+            addImageBtn.setEnabled(false);
             String description = postDescription.getText().toString().trim();
             publishPost(description, imageUri);
         });
@@ -205,7 +208,6 @@ public class AddPostActivity extends AppCompatActivity {
             StorageReference filePath = FirebaseStorage.getInstance().getReference("posts")
                     .child(fileName + "." + getFileExtension(imageUri));
 
-            String imageUrl;
             filePath.putFile(imageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -219,25 +221,19 @@ public class AddPostActivity extends AppCompatActivity {
                                     String imageUrl = uri.toString();
                                     uploadPostToDatabase(text, imageUrl);
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e("Upload file",
-                                            "Failed to get image url: " + e.getMessage());
-                                    Toast.makeText(AddPostActivity.this,
-                                            "Failed to upload", Toast.LENGTH_SHORT).show();
-                                }
+                            }).addOnFailureListener(e -> {
+                                Log.e("Upload file",
+                                        "Failed to get image url: " + e.getMessage());
+                                Toast.makeText(AddPostActivity.this,
+                                        "Failed to upload", Toast.LENGTH_SHORT).show();
                             });
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("Upload file",
-                                    "Failed to upload image: " + e.getMessage());
-                            Log.e("Upload file", imageUri.toString());
-                            Toast.makeText(AddPostActivity.this,
-                                    "Failed to upload", Toast.LENGTH_SHORT).show();
-                        }
+                    }).addOnFailureListener(e -> {
+                        Log.e("Upload file",
+                                "Failed to upload image: " + e.getMessage());
+                        Log.e("Upload file", imageUri.toString());
+                        Toast.makeText(AddPostActivity.this,
+                                "Failed to upload", Toast.LENGTH_SHORT).show();
                     });
         } else {
             uploadPostToDatabase(text, null);
