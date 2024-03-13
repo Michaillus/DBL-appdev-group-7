@@ -24,10 +24,13 @@
 
             <ImageView
                 android:id="@+id/pImageIv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:adjustViewBounds="true"
                 android:background="#FFFFFF"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="centerCrop"
                 app:imageUrl="@{post.pImage}" />
 
             <TextView
