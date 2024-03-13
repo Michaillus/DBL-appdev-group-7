@@ -60,6 +60,18 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         public void bind(Post post) {
             binding.setPost(post);
             binding.executePendingBindings();
+            binding.likePostBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (post.isLiked()) {
+                        binding.likePostBtn.setImageResource(R.drawable.liked_icon);
+
+                    } else {
+                        binding.likePostBtn.setImageResource(R.drawable.like_icon);
+                    }
+                }
+            });
         }
+
     }
 }

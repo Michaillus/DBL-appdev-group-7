@@ -55,6 +55,11 @@ public class Post {
             view.setVisibility(View.GONE);
         }
     }
+
+    public boolean isLiked() {
+
+        return false;
+    }
 //
 //    public String getpLikes() {
 //        return pLikes;
