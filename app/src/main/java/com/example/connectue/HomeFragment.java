@@ -171,7 +171,7 @@ public class HomeFragment extends Fragment {
                                 postAdapter.notifyDataSetChanged();
                             }
                         }
-                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size() - 1).pDescription);
+//                        Log.d(TAG2, "loadPostsFromFirestore: " + postList.get(postList.size() - 1).pDescription);
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
