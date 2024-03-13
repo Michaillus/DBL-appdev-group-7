@@ -31,7 +31,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{post.pImage}" />
                 app:imageUrl="@{post.getImageUrl()}" />
 
             <TextView
