@@ -1,10 +1,16 @@
 package com.example.connectue;
 
+import static android.app.PendingIntent.getActivity;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +21,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.connectue.databinding.ActivityCourseViewBinding;
+import com.example.connectue.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,21 +47,41 @@ public class CourseViewActivity extends AppCompatActivity {
     RatingBar ratingBar;
     TextView ratingIndicator;
     LinearLayout followButton;
+    ImageView backbtn;
     FirebaseUser user;
     Float averageRating = 0f;
     Course course;
 
-    ArrayList<Review> reviewModels = new ArrayList<>();
 
-    // not useful since OutOfBundle so yetian changes to traverse them one by on
-    int[] likeImages = {R.drawable.like_icon};
-    int[] dislikeImages = {R.drawable.dislike};
-    int[] starsImages = {R.drawable.star};
+
+
+
+    ActivityCourseViewBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_view);
+
+        binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        replaceFragment(new ReviewsFragment());
+
+        binding.coursemenu.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            Log.d(TAG, String.valueOf(itemId));
+            if (itemId == R.id.reviews) {
+                replaceFragment(new ReviewsFragment());
+            } else if (itemId == R.id.questions) {
+                replaceFragment(new QuestionsFragment());
+            } else if (itemId == R.id.materials) {
+                replaceFragment(new MaterialsFragment());
+            }
+
+            return true;
+        });
+
+//        setContentView(R.layout.activity_course_view);
         ratingBar = findViewById(R.id.ratingBar);
         ratingIndicator = findViewById(R.id.rating);
         followButton = findViewById(R.id.followButton);
@@ -62,14 +90,9 @@ public class CourseViewActivity extends AppCompatActivity {
         title = findViewById(R.id.titleCourse);
 
         ImageView followIcon = findViewById(R.id.followIcon);
+        backbtn = findViewById(R.id.back_btn);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView_review);
 
-        setUpCourseReviewFragmentModels();
-
-        AdapterReviews adapter = new AdapterReviews(this, reviewModels);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -153,6 +176,14 @@ public class CourseViewActivity extends AppCompatActivity {
             }
         });
 
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CourseViewActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Log.d(TAG, courseId);
         loadCourseDetails();
 
@@ -199,22 +230,12 @@ public class CourseViewActivity extends AppCompatActivity {
             }
         });
     }
-    private void setUpCourseReviewFragmentModels() {
-        String [] uName = getResources().getStringArray(R.array.reviewerName);
-        String [] uText = getResources().getStringArray(R.array.reviews);
-        String [] likeNum = getResources().getStringArray(R.array.likeNum);
-        String [] dislikeNum = getResources().getStringArray(R.array.dislikeNum);
-
-        for (int i = 0; i<uName.length; i++) {
-            reviewModels.add(new Review(uName[i],
-                    uText[i],
-                    R.drawable.like_icon,
-                    R.drawable.dislike,
-                    R.drawable.star,
-                    likeNum[i],
-                    dislikeNum[i]));
-        }
 
 
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
