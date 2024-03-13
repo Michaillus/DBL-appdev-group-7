@@ -1,10 +1,14 @@
 package com.example.connectue;
 
+import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
+
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +61,11 @@ public class HomeFragment extends Fragment {
     // Last post that was loaded from the database.
     DocumentSnapshot lastVisiblePost;
 
+    private Boolean isLoading = false;
+
     private String TAG = "HomePageUtil: ";
+    private String TAG2 = "Test: ";
+    private int counter = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -111,10 +120,27 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.loadMorePostsBtn.setOnClickListener(new View.OnClickListener() {
+
+        // Add a scroll listener to the RecyclerView
+        binding.postsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View v) {
-                loadChunkOfPosts();
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) binding.postsRecyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                // Check if end of the list is reached
+                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= PAGE_SIZE) { // Assuming PAGE_SIZE is the number of items to load per page
+                    // Load more items
+
+                    isLoading = true;
+                    loadChunkOfPosts();
+                    counter++;
+                }
             }
         });
 
@@ -174,6 +200,7 @@ public class HomeFragment extends Fragment {
                                 document.getId());
                         postList.add(post);
                         postAdapter.notifyDataSetChanged();
+                        isLoading = false;
                     }
                 });
             }
