@@ -1,31 +1,55 @@
 package com.example.connectue;
 
+import static com.example.connectue.General.PROFILEPICTURE;
+import static com.example.connectue.General.afterPictureOperation;
+import static com.example.connectue.General.pictureOperation;
+import static com.example.connectue.General.requestPicturePermission;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,9 +67,15 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private static final String TAG = "Profile";
+    private static final String TAG_Profile = "ProfilePic";
     private static final String EDITON = "Save";
     private static final String EDITOFF = "Edit";
     private static final String LOGOUT = "Logout";
+    private static final int REQUEST_CAMERA = 100;
+    private static final int REQUEST_STORAGE = 200;
+
+    private static final int IMAGE_PICK_CAMERA_CODE = 300;
+    private static final int IMAGE_PICK_GALLERY_CODE = 400;
 
     private FirebaseUser user;
     private FirebaseFirestore db;
@@ -55,8 +85,11 @@ public class ProfileFragment extends Fragment {
     private String emailStr = "";
     private String phoneStr = "";
     private String majorStr = "";
+    private String imageURL = "";
+    private Uri imageUri = null;
     private boolean isEditing = false;
     private boolean isAdmin = false;
+    private long role = 2;
     Button editBtn;
     Button logoutBtn;
     Button deleteBtn;
@@ -68,7 +101,7 @@ public class ProfileFragment extends Fragment {
     EditText major_fld;
     EditText email_fld;
     EditText phone_fld;
-
+    ImageView profileIV;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -103,30 +136,30 @@ public class ProfileFragment extends Fragment {
         }
 
         Log.i(TAG, "start executing onCreate");
-        db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        Log.i(TAG, user.getUid());
-        DocumentReference documentReference = db.collection(General.USERCOLLECTION).document(user.getUid());
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-              @Override
-              public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                  if (task.isSuccessful()) {
-                      document = task.getResult();
-
-                      if (document.exists()) {
-                          Log.i(TAG,"document fetched");
-                          Log.i(TAG, document.toString());
-                          parseDocument();
-                          updateUIComponents();
-                      } else {
-                          Log.d(TAG, "No such user document");
-                      }
-                  } else {
-                      Log.d(TAG, "get task failed with ", task.getException());
-                  }
-              }
-        });
-        Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
+//        db = FirebaseFirestore.getInstance();
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        Log.i(TAG, user.getUid());
+//        DocumentReference documentReference = db.collection(General.USERCOLLECTION).document(user.getUid());
+//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//              @Override
+//              public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                  if (task.isSuccessful()) {
+//                      document = task.getResult();
+//
+//                      if (document.exists()) {
+//                          Log.i(TAG,"document fetched");
+//                          Log.i(TAG, document.toString());
+//                          parseDocument();
+//                          updateUIComponents();
+//                      } else {
+//                          Log.d(TAG, "No such user document");
+//                      }
+//                  } else {
+//                      Log.d(TAG, "get task failed with ", task.getException());
+//                  }
+//              }
+//        });
+//        Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
 
     @Override
@@ -136,8 +169,36 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         Log.i(TAG, "start executing crete view");
         Log.i(TAG, "before: " + firstNameStr);
-        initComponents(view);
+        initData(view);
+//        initComponents(view);
         return view;
+    }
+
+    private void initData(View view) {
+        Log.i(TAG, "start executing onCreate");
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        DocumentReference documentReference = db.collection(General.USERCOLLECTION).document(user.getUid());
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    document = task.getResult();
+
+                    if (document.exists()) {
+                        Log.i(TAG,"document fetched");
+                        Log.i(TAG, document.toString());
+                        parseDocument();
+                        initComponents(view);
+                    } else {
+                        Log.d(TAG, "No such user document");
+                    }
+                } else {
+                    Log.d(TAG, "get task failed with ", task.getException());
+                }
+            }
+        });
+        Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
 
     private void initComponents(View view) {
@@ -153,6 +214,7 @@ public class ProfileFragment extends Fragment {
         postHisBtn = view.findViewById(R.id.btn_postHistory);
         reviewHisBtn  = view.findViewById(R.id.btn_reviewHistory);
         adminBtn  = view.findViewById(R.id.btn_admmin);
+        profileIV = view.findViewById(R.id.profilePic);
 
         initTextSection(view);
         initEditButton();
@@ -160,6 +222,7 @@ public class ProfileFragment extends Fragment {
         initDeleteButton();
         initPostHisButton();
         initAdminButton();
+        initProfileImageView();
     }
 
     private void initTextSection(View view) {
@@ -262,9 +325,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-//                startActivity(new Intent(getActivity(), LoadingActivity.class));
                 toOtherActivity(LoadingActivity.class);
-
             }
         });
     }
@@ -272,7 +333,6 @@ public class ProfileFragment extends Fragment {
     private void toOtherActivity(Class activity) {
         Intent loading = new Intent(getActivity(), activity);
         getActivity().startActivity(loading);
-        getActivity().finish();
     }
 
     private void parseDocument() {
@@ -287,9 +347,12 @@ public class ProfileFragment extends Fragment {
         if (document.get(General.PROGRAM) != null) { majorStr = (String) document.get(General.PROGRAM);}
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
         if (document.get(General.ROLE) != null) {
-
-            isAdmin = General.isAdmin(document.getLong(General.ROLE));
-            Log.i(TAG, "" + isAdmin);
+            role = document.getLong(General.ROLE);
+//            isAdmin = General.isAdmin(document.getLong(General.ROLE));
+//            Log.i(TAG, "" + isAdmin);
+        }
+        if (document.get(PROFILEPICTURE) != null) {
+            imageURL = (String) document.get(PROFILEPICTURE);
         }
     }
 
@@ -299,31 +362,183 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 toOtherActivity(PostHistoryActivity.class);
-//                Intent loading = new Intent(getActivity(), PostHistoryActivity.class);
-//                getActivity().startActivity(loading);
-//                getActivity().finish();
             }
         });
     }
 
     private void initAdminButton() {
+        if (!General.isAdmin(role)) {
+            adminBtn.setEnabled(false);
+            adminBtn.setVisibility(View.INVISIBLE);
+            return;
+        }
         adminBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toOtherActivity(AdminActivity.class);
             }
         });
+    }
 
-//        Log.i(TAG, "init admin button, is admin? " + isAdmin);
-//        if (isAdmin) {
-//            adminBtn.setEnabled(true);
-//            adminBtn.setVisibility(View.VISIBLE);
-//
-//        } else {
-//            adminBtn.setEnabled(false);
-//            adminBtn.setVisibility(View.INVISIBLE);
-//        }
+    private void initProfileImageView() {
 
+        if (General.isGuest(role)||imageURL == null || imageURL.equals("")) {
+            return;
+        }
+
+        if (imageURL != null && !imageURL.equals("")) {
+            Glide.with(getContext()).load(imageURL).into(profileIV);
+        }
+
+        profileIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pictureOperation();
+            }
+        });
+    }
+
+    private void pictureOperation(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add Image");
+        builder.setItems(new CharSequence[]{"Pick from Gallery", "Capture from Camera"}, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    chooseLocalPicture();
+                    break;
+                case 1:
+                    takePicture();
+                    break;
+            }
+        });
+        builder.show();
+    }
+
+    private void chooseLocalPicture() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_STORAGE);
+        } else {
+            // Permission already granted, proceed with gallery operation
+            pickImageFromGallery();
+        }
+    }
+
+    private void pickImageFromGallery() {
+        //intent to pick image from gallery
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
+    }
+
+    private void takePicture() {
+        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        } else {
+            // Permission already granted, proceed with camera operation
+            captureImageFromCamera();
+        }
+    }
+
+    private void captureImageFromCamera() {
+        //intent to pick image from camera
+        ContentValues cv = new ContentValues();
+        cv.put(MediaStore.Images.Media.TITLE, "Temp Pick");
+        cv.put(MediaStore.Images.Media.DESCRIPTION, "Temp Descr");
+        imageUri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Camera permission granted, proceed with camera operation
+                captureImageFromCamera();
+            } else {
+                // Camera permission denied, handle accordingly (e.g., show explanation, disable camera feature)
+                Toast.makeText(getContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == REQUEST_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Storage permission granted, proceed with gallery operation
+                pickImageFromGallery();
+            } else {
+                // Storage permission denied, handle accordingly (e.g., show explanation, disable gallery feature)
+                Toast.makeText(getContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+                //image picked from gallery
+                imageUri = data.getData();
+            }
+            profileIV.setImageURI(imageUri);
+            profileIV.setVisibility(View.VISIBLE);
+            updateProfilePicture();
+        }
+    }
+
+    private void updateProfilePicture() {
+
+        if (imageUri == null) {
+            return;
+        }
+
+        StorageReference filePath = FirebaseStorage.getInstance().getReference("posts")
+                .child(emailStr + "." + General.getFileExtension(getContext(), imageUri));
+
+        if (imageURL != null || !imageURL.equals("")) {
+            StorageReference currentPicture = FirebaseStorage.getInstance().
+                    getReferenceFromUrl(imageURL);
+            currentPicture.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.i(TAG_Profile, "delete success");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i(TAG_Profile, "delete fail");
+                        }
+                    });
+        }
+
+        filePath.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        //        TODO: update the profile URL in user data
+                                        String downLoadURL = uri.toString();
+                                        db.collection(General.USERCOLLECTION).document(user.getUid()).update(PROFILEPICTURE, downLoadURL);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getActivity(),
+                                                "Failed to upload", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                });
 
     }
+
 }
