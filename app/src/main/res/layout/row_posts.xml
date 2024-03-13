@@ -28,13 +28,13 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="#FFFFFF"
-                app:imageUrl="@{post.pImage}" />
+                app:imageUrl="@{post.getImageUrl()}" />
 
             <TextView
                 android:id="@+id/uNamePost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{post.uid}"
+                android:text="@{post.getUid()}"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -43,7 +43,7 @@
                 android:id="@+id/pDescriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{post.pDescription}"
+                android:text="@{post.getDescription()}"
                 android:textColor="#000000" />
 
             <LinearLayout
@@ -64,7 +64,7 @@
                     android:id="@+id/pLikesTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(post.pLikes)}"
+                    android:text="@{String.valueOf(post.getLikeNumber())}"
                     android:textColor="#000000" />
 
                 <ImageButton
@@ -79,7 +79,7 @@
                     android:id="@+id/pCommentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{Long.toString(post.pComments)}"
+                    android:text="@{Long.toString(post.getCommentNumber())}"
                     android:textColor="#000000" />
 
             </LinearLayout>
