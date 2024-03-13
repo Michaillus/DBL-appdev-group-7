@@ -1,5 +1,6 @@
 package com.example.connectue;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 
 import com.example.connectue.databinding.RowPostsBinding;
+import com.google.common.reflect.TypeToken;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class for using recyclerView to display posts.
@@ -22,6 +31,10 @@ import java.util.List;
 public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
     List<Post> postList;
+
+    private FirebaseFirestore db;
+
+    private String currentUid;
 
     public AdapterPosts(List<Post> postList) {
         this.postList = postList;
@@ -60,17 +73,71 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         public void bind(Post post) {
             binding.setPost(post);
             binding.executePendingBindings();
-            binding.likePostBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (post.isLiked()) {
-                        binding.likePostBtn.setImageResource(R.drawable.liked_icon);
 
-                    } else {
-                        binding.likePostBtn.setImageResource(R.drawable.like_icon);
+            // Retrieve the post document
+            db = FirebaseFirestore.getInstance();
+            DocumentReference postRef = db.collection("posts").document(post.postID);
+            postRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot postDocument = task.getResult();
+
+                    // Check whether the post has "likedByUsers" field
+                    if (!postDocument.contains("likedByUsers")) {
+                        postRef.update("likedByUsers", new ArrayList<String>())
+                                .addOnSuccessListener(aVoid -> {
+                                    // Field "likedByUsers" added successfully
+
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Error adding field "likedByUsers"
+                                });
                     }
+
+                    // If likedByUsers exists, check whether this post is liked by current user
+                    if (postDocument.contains("likedByUsers")) {
+                        List<String> likedByUsers = (List<String>) postDocument.get("likedByUsers");
+                        currentUid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+                        // Display like states of the like button
+                        if (!likedByUsers.contains(currentUid)) {
+                            binding.likePostBtn.setImageResource(R.drawable.like_icon);
+                        } else {
+                            binding.likePostBtn.setImageResource(R.drawable.liked_icon);
+                        }
+
+                        // If the user presses the like button, the post is liked or disliked
+                        binding.likePostBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (!likedByUsers.contains(currentUid)) {
+                                    likedByUsers.add(currentUid);
+                                    binding.likePostBtn.setImageResource(R.drawable.liked_icon);
+                                    post.pLikes++;
+                                    binding.pLikesTv.setText(String.valueOf(post.pLikes));
+                                } else {
+                                    binding.likePostBtn.setImageResource(R.drawable.like_icon);
+                                    likedByUsers.remove(currentUid);
+                                    post.pLikes--;
+                                    binding.pLikesTv.setText(String.valueOf(post.pLikes));
+                                }
+                                postRef.update("likedByUsers", likedByUsers);
+                                postRef.update("likes", post.pLikes);
+                            }
+                        });
+                    }
+
+                } else {
+                    // Document not exist
                 }
             });
+
+
+
+
+
+
+
+
         }
 
     }

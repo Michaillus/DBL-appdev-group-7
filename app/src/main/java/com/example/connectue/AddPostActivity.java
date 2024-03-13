@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -259,6 +260,7 @@ public class AddPostActivity extends AppCompatActivity {
         postData.put("comments", 0);
         postData.put("timestamp", new Timestamp(new Date()));
         postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        postData.put("likedByUsers", new ArrayList<String>());
 
         posts.add(postData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

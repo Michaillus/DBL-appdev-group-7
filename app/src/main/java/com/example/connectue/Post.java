@@ -25,15 +25,18 @@ public class Post {
     @PropertyName("comments")
     public int pComments;
 
+    public String postID;
+
     public Post() {
     }
 
-    public Post(String uid, String pDescription, String pImage, int pLikes, int pComments) {
+    public Post(String uid, String pDescription, String pImage, int pLikes, int pComments, String postID) {
         this.uid = uid;
         this.pDescription = pDescription;
         this.pImage = pImage;
         this.pLikes = pLikes;
         this.pComments = pComments;
+        this.postID = postID;
     }
 
     /**
@@ -54,11 +57,6 @@ public class Post {
             view.setImageDrawable(null); // Clear the ImageView
             view.setVisibility(View.GONE);
         }
-    }
-
-    public boolean isLiked() {
-
-        return false;
     }
 //
 //    public String getpLikes() {

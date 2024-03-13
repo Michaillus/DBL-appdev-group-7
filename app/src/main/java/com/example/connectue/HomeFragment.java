@@ -170,7 +170,8 @@ public class HomeFragment extends Fragment {
                                 text,
                                 imageURL,
                                 document.getLong("likes").intValue(),
-                                document.getLong("comments").intValue());
+                                document.getLong("comments").intValue(),
+                                document.getId());
                         postList.add(post);
                         postAdapter.notifyDataSetChanged();
                     }
