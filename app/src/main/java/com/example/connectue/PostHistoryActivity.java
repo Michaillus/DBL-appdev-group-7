@@ -56,7 +56,8 @@ public class PostHistoryActivity extends AppCompatActivity {
                                         document.getString("text"),
                                         document.getString("photoULR"),
                                         document.getLong("likes").intValue(),
-                                        document.getLong("comments").intValue()
+                                        document.getLong("comments").intValue(),
+                                        ""
                                         );
                                 postList.add(post);
                             }
