@@ -46,13 +46,6 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 <!--        android:adapter="@{postAdapter}"/>-->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load more"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/postsRecyclerView"
-        android:id="@+id/loadMorePostsBtn"/>
 
 </RelativeLayout>
 <!--</layout>-->
