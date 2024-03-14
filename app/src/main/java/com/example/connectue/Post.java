@@ -10,6 +10,7 @@ import android.widget.PopupWindow;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
@@ -38,7 +39,7 @@ public class Post {
         this.postID = postID;
     }
 
-    public static void createPost(QueryDocumentSnapshot document, PostCreateCallback callback) {
+    public static void createPost(DocumentSnapshot document, PostCreateCallback callback) {
         // Handling documents with a null field
         if (document.getString("publisher") == null) {
             String m = "Post publisher should not be null";

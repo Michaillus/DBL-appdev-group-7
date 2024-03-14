@@ -21,12 +21,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new HomeFragment());
+        replaceFragment(new HomeFragment(getSupportFragmentManager()));
 
         binding.bottomNavigationView3.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                replaceFragment(new HomeFragment());
+                replaceFragment(new HomeFragment(getSupportFragmentManager()));
             } else if (itemId == R.id.channels) {
                 replaceFragment(new ChannelsFragment());
             } else if (itemId == R.id.profile) {
