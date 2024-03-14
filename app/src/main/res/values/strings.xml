@@ -41,5 +41,6 @@
     <string name="my_courses"><b>My Courses</b></string>
     <string name="majors"><b>Majors</b></string>
     <string name="follow"><b>follow</b></string>
+    <string name="report">Report</string>
 
 </resources>

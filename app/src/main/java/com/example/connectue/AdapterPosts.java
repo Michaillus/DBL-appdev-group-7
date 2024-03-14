@@ -124,6 +124,13 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                                 postRef.update("likes", post.pLikes);
                             }
                         });
+
+                        binding.reportBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.postID);
+                            }
+                        });
                     }
 
                 } else {

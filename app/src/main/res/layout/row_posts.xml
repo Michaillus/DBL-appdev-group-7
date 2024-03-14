@@ -82,6 +82,13 @@
                     android:text="@{Long.toString(post.pComments)}"
                     android:textColor="#000000" />
 
+                <Button
+                    android:id="@+id/report_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/report" />
+
             </LinearLayout>
 
 

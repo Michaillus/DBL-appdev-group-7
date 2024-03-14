@@ -4,12 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class General {
@@ -31,6 +40,8 @@ public class General {
 
     //    the name of user collection, and the field names within
     public static final String USERCOLLECTION = "users";
+    public static final String POSTCOLLECTION = "posts";
+    public static final String REPORTEDCOLLECTION = "reported";
     public static final String EMAIL = "email";
     public static final String FIRSTNAME = "firstName";
     public static final String VERIFY = "isVerified";
@@ -44,7 +55,6 @@ public class General {
     public static final String COURSE = "userCourses";
     public static final String USERID = "userId";
     public static final String PHONE = "phone";
-    public static final String POSTCOLLECTION = "posts";
     public static final String PUBLISHER = "publisher";
     public static final String PROFILECOLLECTION = "profilePicture";
     public static final String STORAGE_PROFILE_PICTURE = "profilePicture";
@@ -69,6 +79,47 @@ public class General {
     public static String getFileExtension(android.content.Context context, Uri uri) {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver()
                 .getType(uri));
+    }
+
+    public static String getUid() {
+        return FirebaseAuth.getInstance().getCurrentUser()
+                == null ? "":FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    public static void reportOperation(@NonNull android.content.Context context,
+                                       String collectionName, String contentId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Report");
+        builder.setMessage("Do you want to report inappropriate content?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                createReportItem(collectionName, contentId);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private static void createReportItem(String collectionName, String contentId){
+        CollectionReference reportCollection = FirebaseFirestore.getInstance().collection(REPORTEDCOLLECTION);
+        String uId = getUid();
+        List<String> reportedUsers = new ArrayList<>();
+        reportedUsers.add(uId);
+
+        Map<String,Object> reportItem = new HashMap<>();
+        reportItem.put("collectionName", collectionName);
+        reportItem.put("contentId", contentId);
+        reportItem.put("count", (long) 1);
+        reportItem.put("reportedBy", reportedUsers);
+
+        reportCollection.add(reportItem);
     }
 
     public static void pictureOperation(@NonNull android.content.Context context,
