@@ -1,12 +1,19 @@
 package com.example.connectue;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.connectue.AdapterReviews;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,10 @@ public class ReviewsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    
+
+    ArrayList<Review> reviewModels = new ArrayList<>();
+    //private Context ReviewsFragment;
 
     public ReviewsFragment() {
         // Required empty public constructor
@@ -53,12 +64,43 @@ public class ReviewsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_reviews, container, false);
+        setUpCourseReviewFragmentModels();
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_review);
+
+        AdapterReviews adapter = new AdapterReviews(getContext(), reviewModels);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reviews, container, false);
+        return view;
+
+    }
+
+    private void setUpCourseReviewFragmentModels() {
+        String[] uName = getResources().getStringArray(R.array.reviewerName);
+        String[] uText = getResources().getStringArray(R.array.reviews);
+        String[] likeNum = getResources().getStringArray(R.array.likeNum);
+        String[] dislikeNum = getResources().getStringArray(R.array.dislikeNum);
+
+        for (int i = 0; i < uName.length; i++) {
+            reviewModels.add(new Review(uName[i],
+                    uText[i],
+                    R.drawable.like_icon,
+                    R.drawable.dislike,
+                    R.drawable.star,
+                    likeNum[i],
+                    dislikeNum[i]));
+        }
     }
 }

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CourseViewActivity"
     android:background="@color/Design2"
+    tools:context=".CourseViewActivity"
     android:padding="30dp">
 
     <FrameLayout
@@ -87,6 +87,12 @@
         android:text="Rating 0/5"
         android:layout_below="@+id/ratingBar"
         android:layout_alignParentEnd="true"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_review"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="160dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/coursemenu"
