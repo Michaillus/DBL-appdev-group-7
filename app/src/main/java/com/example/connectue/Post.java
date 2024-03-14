@@ -1,5 +1,6 @@
 package com.example.connectue;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,30 +10,27 @@ import android.widget.PopupWindow;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
  * Class for Post object to store strings that need to be displayed on screen.
  */
 public class Post {
-    //use same name as we given while uploading post
 
-    private String uid;
+    private static final String TAG = "Post class: ";
 
+    private String publisherName;
     private String description;
-
     private String imageUrl;
-
     private int likeNumber;
-
     private int commentNumber;
-
     private String postID;
 
     public Post() {
     }
 
-    public Post(String uid, String description, String imageUrl, int likeNumber, int commentNumber, String postID) {
-        this.uid = uid;
+    public Post(String publisherName, String description, String imageUrl, int likeNumber, int commentNumber, String postID) {
+        this.publisherName = publisherName;
         this.description = description;
         this.imageUrl = imageUrl;
         this.likeNumber = likeNumber;
@@ -40,8 +38,45 @@ public class Post {
         this.postID = postID;
     }
 
+    public static void createPost(QueryDocumentSnapshot document, PostCreateCallback callback) {
+        // Handling documents with a null field
+        if (document.getString("publisher") == null) {
+            String m = "Post publisher should not be null";
+            Log.e(TAG, m);
+            throw new IllegalArgumentException(m);
+        }
+        if (document.getString("text") == null) {
+            String m = "Post text should not be null";
+            Log.e(TAG, m);
+            throw new IllegalArgumentException(m);
+        }
+        if (document.getLong("likes") == null) {
+            String m = "Number of post likes should not be null";
+            Log.e(TAG, m);
+            throw new IllegalArgumentException(m);
+        }
+        if (document.getLong("comments") == null) {
+            String m = "Number of post comments should not be null";
+            Log.e(TAG, m);
+            throw new IllegalArgumentException(m);
+        }
+        User.fetchUserName(document.getString("publisher"), new UserNameCallback() {
+            @Override
+            public void onUserNameFetched(String userName) {
+                Post post = new Post(userName,
+                        document.getString("text"),
+                        document.getString("photoURL"),
+                        document.getLong("likes").intValue(),
+                        document.getLong("comments").intValue(),
+                        document.getId());
+                callback.onPostCreated(post);
+            }
+        });
+    }
+
     /**
      * Automatically called method for AdapterPosts
+     * (DESCRIBE WHAT THE METHOD IS DOING)
      * @param view placeholder for the post image.
      * @param imageUrl image URL
      */
@@ -97,12 +132,12 @@ public class Post {
     }
 
     // Getters and setters for user ID.
-    public String getUid() {
-        return uid;
+    public String getPublisherName() {
+        return publisherName;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
     }
 
     // Getters and setters for post description.
