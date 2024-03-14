@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
 
-    <ImageView
+    <ImageButton
         android:id="@+id/backIcon"
         android:layout_width="35dp"
         android:layout_height="37dp"
@@ -15,6 +15,7 @@
         app:layout_constraintEnd_toStartOf="@+id/courseName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@android:color/transparent"
         app:srcCompat="@drawable/back_arrow" />
 
     <TextView
@@ -31,8 +32,8 @@
         android:id="@+id/ratingBar"
         android:layout_width="242dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,7 +117,7 @@
         app:layout_constraintStart_toEndOf="@+id/spinner2"
         app:layout_constraintTop_toBottomOf="@+id/Material_btn" />
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scrollView1"
         android:layout_width="409dp"
         android:layout_height="542dp"
@@ -125,25 +126,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/reviews1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_margin="8dp">
-
-                <!-- review content goes here -->
-
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
-
-
-    </ScrollView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -166,6 +150,8 @@
 
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

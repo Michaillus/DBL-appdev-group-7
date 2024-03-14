@@ -4,9 +4,11 @@ import static android.app.PendingIntent.getActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -50,13 +52,20 @@ public class CourseViewActivity extends AppCompatActivity {
     Float averageRating = 0f;
     Course course;
 
+
+
+
+
     ActivityCourseViewBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        replaceFragment(new ReviewsFragment());
 
         binding.coursemenu.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -72,7 +81,7 @@ public class CourseViewActivity extends AppCompatActivity {
             return true;
         });
 
-        setContentView(R.layout.activity_course_view);
+//        setContentView(R.layout.activity_course_view);
         ratingBar = findViewById(R.id.ratingBar);
         ratingIndicator = findViewById(R.id.rating);
         followButton = findViewById(R.id.followButton);
@@ -82,6 +91,8 @@ public class CourseViewActivity extends AppCompatActivity {
 
         ImageView followIcon = findViewById(R.id.followIcon);
         backbtn = findViewById(R.id.back_btn);
+
+
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -219,6 +230,7 @@ public class CourseViewActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
