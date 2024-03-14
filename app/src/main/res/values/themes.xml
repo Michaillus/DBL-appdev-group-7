@@ -9,5 +9,9 @@
 
     <style name="Theme.ConnecTue" parent="Base.Theme.ConnecTue">
     </style>
-
+    <style name="background"><item name="android:background">#FFFAF1</item></style>
+    <style name="cardBackground">
+        <item name="strokeColor">@color/Design4</item>
+        <item name="cardBackgroundColor">@color/Design4</item>
+    </style>
 </resources>
