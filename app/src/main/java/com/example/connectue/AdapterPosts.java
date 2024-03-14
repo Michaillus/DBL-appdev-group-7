@@ -66,6 +66,8 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
             binding.setPost(post);
             binding.executePendingBindings();
 
+
+
             // Retrieve the post document
             db = FirebaseFirestore.getInstance();
             DocumentReference postRef = db.collection("posts").document(post.getPostID());

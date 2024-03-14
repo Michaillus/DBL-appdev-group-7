@@ -75,8 +75,8 @@ public class Post {
     }
 
     /**
-     * Automatically called method for AdapterPosts
-     * (DESCRIBE WHAT THE METHOD IS DOING)
+     * Automatically called method for AdapterPosts to load the imageURL into the imageView.
+     * When the imageView is clicked, the full size image is popup.
      * @param view placeholder for the post image.
      * @param imageUrl image URL
      */
