@@ -85,12 +85,18 @@
                     android:text="@{Long.toString(post.getCommentNumber())}"
                     android:textColor="#000000" />
 
-                <Button
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
                     android:id="@+id/report_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="end"
-                    android:text="@string/report" />
+                    android:background="@null"
+                    app:srcCompat="@drawable/outline_report_24"/>
 
             </LinearLayout>
 
