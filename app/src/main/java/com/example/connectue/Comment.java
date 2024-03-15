@@ -5,24 +5,27 @@ import android.util.Log;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Comment {
     private String userId;
     private String content;
     private String parentId;
-    private Timestamp timeStamp;
+    private Date timestamp;
     private String commentId;
+    private String publisherName;
 
     private static final String TAG = "Comment class: ";
 
+    public Comment() {
+        // Default
+    }
 
-
-    protected Comment(String userId, String content, String parentId, Timestamp timeStamp, String commentId) {
+    protected Comment(String userId, String content, String parentId, Date timestamp) {
         this.userId = userId;
         this.content = content;
         this.parentId = parentId;
-        this.timeStamp = timeStamp;
-        this.commentId = commentId;
+        this.timestamp = timestamp;
     }
 
     public static void createComment(DocumentSnapshot document, CommentCreateCallback callback) {
@@ -61,12 +64,16 @@ public class Comment {
         return parentId;
     }
 
-    public Timestamp getTimeStamp() {
-        return timeStamp;
+    public Date gettimestamp() {
+        return timestamp;
     }
 
     public String getCommentId() {
         return commentId;
+    }
+
+    public String getPublisherName() {
+        return publisherName;
     }
 
     public void setUserId(String userId) {
@@ -81,11 +88,15 @@ public class Comment {
         this.parentId = parentId;
     }
 
-    public void setTimeStamp(Timestamp timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void setCommentId(String commentId) {
         this.commentId = commentId;
+    }
+
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
     }
 }

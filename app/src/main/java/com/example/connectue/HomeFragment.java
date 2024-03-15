@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link HomeFragment} factory method to
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
@@ -66,6 +66,10 @@ public class HomeFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     private String TAG = "HomePageUtil: ";
+
+    public HomeFragment() {
+        // Default constructor
+    }
 
     public HomeFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;

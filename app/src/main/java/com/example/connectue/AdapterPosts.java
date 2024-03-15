@@ -33,7 +33,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     private String currentUid;
     private FragmentManager fragmentManager;
 
-    private String TAG = "Test";
+    private String TAG = "TestAdapterPosts";
 
     public AdapterPosts(List<Post> postList, FragmentManager fragmentManager) {
         this.postList = postList;

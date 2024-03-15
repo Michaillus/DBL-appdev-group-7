@@ -13,11 +13,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for the post details page.
@@ -43,7 +50,13 @@ public class PostFragment extends Fragment {
     private EditText addComment;
     private ImageButton sendCommentBtn;
 
+    private RecyclerView commentsRecyclerView;
+    private AdapterComments adapterComments;
+    private List<Comment> commentList;
+
+
     private FirebaseFirestore db;
+    DocumentReference postRef;
 
     private String TAG = "Test";
 
@@ -56,11 +69,11 @@ public class PostFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ChannelsFragment.
+     * @return A new instance of fragment PostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChannelsFragment newInstance(String param1, String param2) {
-        ChannelsFragment fragment = new ChannelsFragment();
+    public static PostFragment newInstance(String param1, String param2) {
+        PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -78,6 +91,29 @@ public class PostFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
+        // Setup views
+        initView(view);
+
+        // Get current postId
+        Bundle bundle = getArguments();
+        assert bundle != null;
+        String postId = bundle.getString("postId");
+
+        commentList = new ArrayList<>();
+        adapterComments = new AdapterComments(getContext(), commentList);
+        db = FirebaseFirestore.getInstance();
+
+        // Initialize comments RecyclerView
+        initCommentRecyclerView(view);
+
+        // Load contents from Firestore
+        loadContentsFromFirestore(postId);
+
+
+        return view;
+    }
+
+    private void initView(View view) {
         publisherName = view.findViewById(R.id.publisherNameTextView);
         publisherTime = view.findViewById(R.id.publishTimePostTextView);
         postImage = view.findViewById(R.id.postImageInPostImageView);
@@ -87,12 +123,17 @@ public class PostFragment extends Fragment {
         addComment = view.findViewById(R.id.addPostCommentET);
         sendCommentBtn = view.findViewById(R.id.sendPostCommentBtn);
 
-        Bundle bundle = getArguments();
-        assert bundle != null;
-        String postId = bundle.getString("postId");
+    }
 
-        db = FirebaseFirestore.getInstance();
-        DocumentReference postRef = db.collection("posts").document(postId);
+    private void initCommentRecyclerView(View view) {
+        commentsRecyclerView = view.findViewById(R.id.commentsRecyclerView);
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        commentsRecyclerView.setAdapter(adapterComments);
+    }
+
+    private void loadContentsFromFirestore(String postId) {
+        // Load current post
+        postRef = db.collection("posts").document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // Document exists, you can retrieve its data
@@ -105,7 +146,8 @@ public class PostFragment extends Fragment {
                         numOfLikes.setText(String.valueOf(post.getLikeNumber()));
                     }
                 });
-                // Do something with the post object
+                // Load comments of this post
+                loadCommentsFromFirestore(postId);
             } else {
                 // Document doesn't exist
                 Log.d(TAG, "No such document");
@@ -114,8 +156,34 @@ public class PostFragment extends Fragment {
             // Error handling
             Log.e(TAG, "Error getting document", e);
         });
-        return view;
     }
 
+    private void loadCommentsFromFirestore(String postId) {
+        // Query for retrieving comments for the current post
+        // Newest comments are shown first
+        Query commentQuery = db.collection("comments")
+                .whereEqualTo("parentId", postId)
+                .orderBy("timestamp", Query.Direction.DESCENDING);
+        commentQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Convert each comment document to a Comment object
+                    Comment comment = document.toObject(Comment.class);
+                    User.fetchUserName(document.getString("userId"), new UserNameCallback() {
+                        @Override
+                        public void onUserNameFetched(String userName) {
+                            comment.setPublisherName(userName);
+                            commentList.add(comment);
+                            adapterComments.notifyDataSetChanged();
+                        }
+                    });
+
+                }
+
+            } else {
+                Log.d(TAG, "Error getting comments: ", task.getException());
+            }
+        });
+    }
 
 }
