@@ -122,7 +122,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                         binding.reportBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.postID);
+                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getPostID());
                             }
                         });
                     }

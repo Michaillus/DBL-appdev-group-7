@@ -34,7 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.postTxt.setText(postList.get(position).pDescription);
+        holder.postTxt.setText(postList.get(position).getDescription());
 
         String index = String.valueOf(position);
         holder.deletBtn.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        Glide.with(this.context).load(postList.get(position).pImage).into(holder.postPic);
+        Glide.with(this.context).load(postList.get(position).getImageUrl()).into(holder.postPic);
     }
 
     @Override
