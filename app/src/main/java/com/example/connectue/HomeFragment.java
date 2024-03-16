@@ -1,8 +1,11 @@
 package com.example.connectue;
 
+import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
+
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +60,8 @@ public class HomeFragment extends Fragment {
     // Last post that was loaded from the database.
     DocumentSnapshot lastVisiblePost;
 
+    private Boolean isLoading = false;
+
     private String TAG = "HomePageUtil: ";
 
     public HomeFragment() {
@@ -92,16 +98,15 @@ public class HomeFragment extends Fragment {
 
         postList = new ArrayList<>();
 
-        // Initialize database query for post retrieval and load first chunk of posts to the feed.
-        postsQuery = db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING);
-        loadChunkOfPosts();
-
         //Initialize ReclerView
         postAdapter = new AdapterPosts(postList);
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
-        postAdapter.notifyDataSetChanged();
+
+        // Initialize database query for post retrieval and load first chunk of posts to the feed.
+        postsQuery = db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING);
+        loadChunkOfPosts();
 
         binding.createPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,10 +116,26 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.loadMorePostsBtn.setOnClickListener(new View.OnClickListener() {
+
+        // Add a scroll listener to the RecyclerView
+        binding.postsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onClick(View v) {
-                loadChunkOfPosts();
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) binding.postsRecyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                // Check if end of the list is reached
+                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= PAGE_SIZE) { // Assuming PAGE_SIZE is the number of items to load per page
+                    // Load more items
+
+                    isLoading = true;
+                    loadChunkOfPosts();
+                }
             }
         });
 
@@ -150,67 +171,16 @@ public class HomeFragment extends Fragment {
      */
     private void displayPosts(QuerySnapshot snapshot) {
         for (QueryDocumentSnapshot document : snapshot) {
-            String userId = document.getString("publisher");
-            String text = document.getString("text");
-            String imageURL = document.getString("photoURL");
-
-            if (userId == null) {
-                Log.e(TAG, "Post publisher should not be null");
-            } else if (text == null) {
-                Log.e(TAG, "Post text should not be null");
-            } else if (document.getLong("likes") == null) {
-                Log.e(TAG, "Number of post likes should not be null");
-            } else if (document.getLong("comments") == null) {
-                Log.e(TAG, "Number of post comments should not be null");
-            } else {
-                fetchUserName(document, new UserNameCallback() {
-                    @Override
-                    public void onUserNameFetched(String userName) {
-                        Post post = new Post(userName,
-                                text,
-                                imageURL,
-                                document.getLong("likes").intValue(),
-                                document.getLong("comments").intValue(),
-                                document.getId());
-                        postList.add(post);
-                        postAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        }
-    }
-
-    /**
-     * Get userName of a post from firestore.
-     * @param document ref to a post
-     * @param callback not important
-     */
-    private void fetchUserName(QueryDocumentSnapshot document, UserNameCallback callback) {
-        String uid = document.getString("publisher");
-        if (uid != null) {
-            DocumentReference userRef = db.collection("users").document(uid);
-            userRef.get().addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    // Retrieve the user name from the document snapshot
-                    String userName = documentSnapshot.getString("firstName") + " " + documentSnapshot.getString("lastName");
-                    Log.d("User Name", "User name: " + userName);
-                    // Invoke the callback with the retrieved username
-                    callback.onUserNameFetched(userName);
-                } else {
-                    Log.d("User Name", "User document does not exist.");
+            Post.createPost(document, new PostCreateCallback() {
+                @Override
+                public void onPostCreated(Post post) {
+                    postList.add(post);
+                    postAdapter.notifyDataSetChanged();
+                    isLoading = false;
                 }
-            }).addOnFailureListener(e -> {
-                Log.e("User Name", "Error retrieving user document: " + e.getMessage());
-                // If there's an error, invoke the callback with null username
-                callback.onUserNameFetched(null);
             });
-        } else {
-            // If uid is null, invoke the callback with null username
-            callback.onUserNameFetched(null);
         }
     }
-
-
 
     @Override
     public void onDestroyView() {
