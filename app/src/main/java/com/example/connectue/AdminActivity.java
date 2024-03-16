@@ -1,21 +1,28 @@
 package com.example.connectue;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+
+import com.example.connectue.databinding.ActivityMainBinding;
 
 public class AdminActivity extends AppCompatActivity {
-
-    private Button backBtn;
+    ActivityMainBinding binding;
+    private ImageButton backBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_admin);
 
-        backBtn = findViewById(R.id.back_btn);
+        backBtn = findViewById(R.id.admin_back_btn);
 
         initBackButton();
     }
@@ -35,4 +42,10 @@ public class AdminActivity extends AppCompatActivity {
         AdminActivity.this.finish();
     }
 
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
+    }
 }

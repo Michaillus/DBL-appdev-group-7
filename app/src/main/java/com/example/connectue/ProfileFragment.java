@@ -334,6 +334,7 @@ public class ProfileFragment extends Fragment {
     private void toOtherActivity(Class activity) {
         Intent loading = new Intent(getActivity(), activity);
         getActivity().startActivity(loading);
+//        getActivity().finish();
     }
 
     private void parseDocument() {
@@ -383,7 +384,7 @@ public class ProfileFragment extends Fragment {
 
     private void initProfileImageView() {
 
-        if (General.isGuest(role)||imageURL == null || imageURL.equals("")) {
+        if (General.isGuest(role)) {
             return;
         }
 
