@@ -5,26 +5,121 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Design2"
-    tools:context=".CourseViewActivity"
-    android:padding="30dp">
+    tools:context=".CourseViewActivity">
 
     <FrameLayout
         android:id="@id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/coursemenu"
+        android:layout_below="@id/pageHeader"
         >
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/titleCourse"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/pageHeader"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="course_code"
-        android:textSize="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentTop="true"
+        android:background="@color/Design4"
+        android:paddingTop="30dp">
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="53dp"
+            android:layout_marginEnd="-20dp"
+            android:progressBackgroundTint="#FF8181"
+            android:progressTint="@color/Design2"
+            android:scaleX=".6"
+            android:scaleY=".6"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_marginRight="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating 0/5"
+            android:layout_below="@+id/ratingBar"
+            android:textColor="@color/Design2"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:id="@+id/titleCourse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="course_code"
+            android:textSize="30dp"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/Design2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/followButton"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/titleCourse"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/follow"
+                android:textColor="@color/Design2"
+                android:textSize="17dp"
+                android:layout_below="@+id/textView4"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/followIcon"
+                app:tint="@color/Design2"
+                android:layout_below="@+id/textView"
+                android:layout_marginLeft="5dp"
+                android:scaleX=".8"
+
+
+                android:scaleY=".8"
+                android:src="@drawable/baseline_add_circle_outline_24" />
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout_course_menu"
+            android:layout_below="@+id/followButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Design4"
+            app:tabTextColor="@color/Design2"
+            app:tabSelectedTextColor="@color/Design2"
+            app:tabIndicatorColor="@color/Design2"
+            app:tabMode="fixed"
+            app:tabGravity="fill">
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reviews"
+
+                />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Questions"
+
+                />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Material"
+
+                />
+        </com.google.android.material.tabs.TabLayout>
+
+    </RelativeLayout>
+
+
     <ImageView
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
@@ -39,54 +134,10 @@
         />
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/followButton"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/titleCourse"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/follow"
-            android:textSize="17dp"
-            android:layout_below="@+id/textView4"
-            />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/followIcon"
-            android:layout_below="@+id/textView"
-            android:layout_marginLeft="5dp"
-            android:scaleX=".8"
 
 
-            android:scaleY=".8"
-            android:src="@drawable/baseline_add_circle_outline_24" />
-    </LinearLayout>
 
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="53dp"
-        android:foregroundGravity="center"
-        android:progressBackgroundTint="#CACACA"
-        android:progressTint="@color/Design4"
-        android:scaleX=".6"
-        android:scaleY=".6"
-        android:layout_marginEnd="-50dp"
-        android:layout_alignParentEnd="true"/>
-
-    <TextView
-        android:id="@+id/rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rating 0/5"
-        android:layout_below="@+id/ratingBar"
-        android:layout_alignParentEnd="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_review"
@@ -94,13 +145,15 @@
         android:layout_height="500dp"
         android:layout_marginTop="160dp" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/coursemenu"
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/coursemenu2"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:layout_marginTop="80dp"
         android:background="@color/Design2"
         android:layout_alignParentRight="true"
-        app:menu="@menu/course_view_menu_bar" />
+        app:menu="@menu/course_view_menu_bar" />-->
+
+
 
 </RelativeLayout>
