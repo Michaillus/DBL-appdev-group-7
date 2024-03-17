@@ -11,10 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,17 +46,26 @@ public class ManageReportHistoryFragment extends Fragment {
     private String mParam2;
     private FirebaseFirestore db;
 //    TODO: once other button is clicked, remember to clear/reinit reportIds
-    private List<String> reportIds;
+    private List<QueryDocumentSnapshot> reports;
 //    TODO: ODO: once other button is clicked, remember to switch channel names
     private String currentChannel = General.POSTCOLLECTION;
+    private Button postChannelBtn;
+    private Button commentChannelBtn;
+    private Button courseReviewChannelBtn;
+    private Button deleteBtn;
+    private Button keepBtn;
+    private ImageView contentIV;
+    private TextView contentTV;
+    private TextView contentInfoTV;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private static final String TAG_Load = "reportLoad";
+    private static final String TAG_load_content = "loadContent";
+    private static final String TAG_Load_report = "reportLoad";
 
     public ManageReportHistoryFragment() {
         // Required empty public constructor
-        reportIds = new ArrayList<>();
+        reports = new ArrayList<>();
     }
 
     /**
@@ -85,6 +100,7 @@ public class ManageReportHistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_manage_report_history, container, false);
+        initComponents(view);
         initRecyclerReview(view);
 
         loadReportedContents(currentChannel);
@@ -96,7 +112,12 @@ public class ManageReportHistoryFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ReportedContentsRecyclerAdapter(reportIds, getContext());
+        mAdapter = new ReportedContentsRecyclerAdapter(reports, new ReportItemCallback() {
+            @Override
+            public void itemClicked(QueryDocumentSnapshot content) {
+                loadContentToWorkBench(content);
+            }
+        });
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -111,22 +132,66 @@ public class ManageReportHistoryFragment extends Fragment {
                 if (task.isSuccessful()) {
                     QuerySnapshot result = task.getResult();
                     if (result != null) {
-                        Log.i(TAG_Load, "" + result.size());
+                        Log.i(TAG_Load_report, "" + result.size());
                         for (QueryDocumentSnapshot document: result) {
-                            Log.i(TAG_Load, "" + document.getLong(General.REPORTCOUNTER));
-                            reportIds.add(document.getString(General.REPORTCONTENTID));
+                            Log.i(TAG_Load_report, "" + document.getLong(General.REPORTCOUNTER));
+                            reports.add(document);
                         }
-                        Log.i(TAG_Load, "reportIds size: " + reportIds.size());
+                        Log.i(TAG_Load_report, "reportIds size: " + reports.size());
                         mAdapter.notifyDataSetChanged();
                     } else {
-                        Log.i(TAG_Load, "null querySnapShot");
+                        Log.i(TAG_Load_report, "null querySnapShot");
                     }
                 } else {
-                    Log.i(TAG_Load, "query failed.");
+                    Log.i(TAG_Load_report, "query failed.");
                 }
             }
         });
     }
 
-//    private void set
+    private void loadContentToWorkBench(QueryDocumentSnapshot content) {
+        String contentId = content.getString(General.REPORTCONTENTID);
+        if (contentId == null || contentId.equals("")) {
+            Log.i(TAG_load_content, "contentId is null ");
+            return;
+        }
+        String count = content.getLong(General.REPORTCOUNTER) != null
+                ? content.getLong(General.REPORTCOUNTER).toString() : "";
+        DocumentReference documentReference = db.collection(currentChannel).document(contentId);
+
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        String imageURL = documentSnapshot.getString(General.POSTIMAGEURL) != null
+                                ? documentSnapshot.getString(General.POSTIMAGEURL) : "";
+                        String textContent = documentSnapshot.getString(General.POSTCONTENT) != null
+                                ? documentSnapshot.getString(General.POSTCONTENT) : "";
+                        Glide.with(getContext()).load(imageURL).into(contentIV);
+                        contentTV.setText(textContent);
+                        contentInfoTV.setText("Number of reports:" + count);
+                    } else {
+                        Log.i(TAG_load_content
+                                , "the reported content dose not exist in the related collection");
+                    }
+                } else {
+                    Log.i(TAG_load_content, "fetch reported content failed");
+                }
+            }
+        });
+    }
+
+    private void initComponents(View view) {
+        db = FirebaseFirestore.getInstance();
+        postChannelBtn = view.findViewById(R.id.report_load_post_btn);
+        commentChannelBtn = view.findViewById(R.id.report_load_comment_btn);
+        courseReviewChannelBtn = view.findViewById(R.id.report_load_course_review_btn);
+        deleteBtn = view.findViewById(R.id.report_delete_btn);
+        keepBtn = view.findViewById(R.id.report_keep_btn);
+        contentIV = view.findViewById(R.id.report_picture_IV);
+        contentTV = view.findViewById(R.id.report_text_content_tv);
+        contentInfoTV = view.findViewById(R.id.report_basic_info_tv);
+    }
 }

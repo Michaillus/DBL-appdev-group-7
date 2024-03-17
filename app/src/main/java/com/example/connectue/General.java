@@ -69,7 +69,9 @@ public class General {
     public static final String USERID = "userId";
     public static final String PHONE = "phone";
 //    field names in post
+    public static final String POSTIMAGEURL = "photoURL";
     public static final String PUBLISHER = "publisher";
+    public static final String POSTCONTENT = "text";
 //    field name in reported
     public static final String REPORTFROMCOLLECTION = "collectionName";
     public static final String REPORTCONTENTID = "contentId";

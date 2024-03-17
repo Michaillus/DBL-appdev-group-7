@@ -68,7 +68,7 @@
             android:id="@+id/report_basic_info_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Author:\nReported times:"
+            android:text="Number of reports"
             android:layout_gravity="center"/>
 
         <Button

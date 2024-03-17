@@ -304,20 +304,20 @@ public class ProfileFragment extends Fragment {
         });
     }
     private void updateInfo() {
-        Map<String, Object> updateInfo = new HashMap<>();
+        Map<String, Object> uploadInfo = new HashMap<>();
         firstNameStr = firstName_fld.getText().toString().trim();
         lastNameStr = lastName_fld.getText().toString().trim();
         majorStr = major_fld.getText().toString().trim();
         emailStr = email_fld.getText().toString().trim();
         phoneStr = phone_fld.getText().toString().trim();
 
-        updateInfo.put(General.FIRSTNAME, firstNameStr);
-        updateInfo.put(General.LASTNAME, lastNameStr);
-        updateInfo.put(General.PROGRAM, majorStr);
-        updateInfo.put(General.EMAIL, emailStr);
-        updateInfo.put(General.PHONE, phoneStr);
+        uploadInfo.put(General.FIRSTNAME, firstNameStr);
+        uploadInfo.put(General.LASTNAME, lastNameStr);
+        uploadInfo.put(General.PROGRAM, majorStr);
+        uploadInfo.put(General.EMAIL, emailStr);
+        uploadInfo.put(General.PHONE, phoneStr);
 
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(updateInfo);
+        db.collection(General.USERCOLLECTION).document(user.getUid()).update(uploadInfo);
     }
 
     private void initSignoutButton() {
