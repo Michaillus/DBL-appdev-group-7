@@ -18,6 +18,38 @@
         android:layout_marginStart="10dp"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/report_load_post_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Post"/>
+
+            <Button
+                android:id="@+id/report_load_comment_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/report_load_course_review_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="course review"/>
+
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/report_picture_IV"
             android:layout_width="wrap_content"

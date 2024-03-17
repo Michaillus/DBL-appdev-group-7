@@ -71,8 +71,12 @@ public class General {
 //    field names in post
     public static final String PUBLISHER = "publisher";
 //    field name in reported
-    public static final String REPORTEDBYUSERS = "reportedBy";
+    public static final String REPORTFROMCOLLECTION = "collectionName";
+    public static final String REPORTCONTENTID = "contentId";
     public static final String REPORTCOUNTER = "count";
+    public static final String REPORTEDBYUSERS = "reportedBy";
+
+
 
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_STORAGE = 200;
@@ -121,15 +125,15 @@ public class General {
 //                         isUserReported = reportedList.contains(uId);
                         String docId = lastDocument.getId();
                          if (reportedList.contains(uId)) {
-//                            TODO: show exist popup window
+//                             show exist popup window
                              createAlreadyReportedWindow(context);
                          } else {
-//                             todo: update count and add users.
+//                              update count and add users.
                              createReportWindow(context, uId, collectionName, contentId
                                      , true, collectionReference, reportedList, lastDocument);
                          }
                     } else {
-//                        todo: add item directly
+//                         add item directly
                         createReportWindow(context, uId, collectionName, contentId
                                 , false, collectionReference, null, null);
                     }
