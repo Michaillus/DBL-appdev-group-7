@@ -1,8 +1,10 @@
 package com.example.connectue;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,9 +16,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -25,6 +34,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +60,14 @@ public class ManageReportHistoryFragment extends Fragment {
     private List<QueryDocumentSnapshot> reports;
 //    TODO: ODO: once other button is clicked, remember to switch channel names
     private String currentChannel = General.POSTCOLLECTION;
+//    todo: set to null once it is deleted or released, fetchable false, picture not clickbale, delete keep to unclickable
+    private DocumentSnapshot currentDocument = null;
+    private DocumentReference currentContentReference = null;
+    private DocumentReference currentRequestReference = null;
+    private boolean isImageFetchable = false;
+    private String imageURL = "";
+    private static final String DEFAULT_CONTENT = "Content Here";
+    private static final String DEFAULT_COUNT = "Number of reports: ";
     private Button postChannelBtn;
     private Button commentChannelBtn;
     private Button courseReviewChannelBtn;
@@ -62,6 +81,7 @@ public class ManageReportHistoryFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private static final String TAG_load_content = "loadContent";
     private static final String TAG_Load_report = "reportLoad";
+    private static final String TAG_delete = "delete";
 
     public ManageReportHistoryFragment() {
         // Required empty public constructor
@@ -155,23 +175,27 @@ public class ManageReportHistoryFragment extends Fragment {
             Log.i(TAG_load_content, "contentId is null ");
             return;
         }
+
         String count = content.getLong(General.REPORTCOUNTER) != null
                 ? content.getLong(General.REPORTCOUNTER).toString() : "";
-        DocumentReference documentReference = db.collection(currentChannel).document(contentId);
+        currentRequestReference = db.collection(General.REPORTEDCOLLECTION)
+                .document(content.getId());
+        currentContentReference = db.collection(currentChannel).document(contentId);
 
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        currentContentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot.exists()) {
-                        String imageURL = documentSnapshot.getString(General.POSTIMAGEURL) != null
-                                ? documentSnapshot.getString(General.POSTIMAGEURL) : "";
-                        String textContent = documentSnapshot.getString(General.POSTCONTENT) != null
-                                ? documentSnapshot.getString(General.POSTCONTENT) : "";
-                        Glide.with(getContext()).load(imageURL).into(contentIV);
+                    currentDocument = task.getResult();
+                    if (currentDocument.exists()) {
+                        imageURL = currentDocument.getString(General.POSTIMAGEURL) != null
+                                ? currentDocument.getString(General.POSTIMAGEURL) : "";
+                        String textContent = currentDocument.getString(General.POSTCONTENT) != null
+                                ? currentDocument.getString(General.POSTCONTENT) : "";
+                        setContentIV(imageURL);
                         contentTV.setText(textContent);
-                        contentInfoTV.setText("Number of reports:" + count);
+                        contentInfoTV.setText(DEFAULT_COUNT + count);
+                        setDeleteKeepButton();
                     } else {
                         Log.i(TAG_load_content
                                 , "the reported content dose not exist in the related collection");
@@ -193,5 +217,161 @@ public class ManageReportHistoryFragment extends Fragment {
         contentIV = view.findViewById(R.id.report_picture_IV);
         contentTV = view.findViewById(R.id.report_text_content_tv);
         contentInfoTV = view.findViewById(R.id.report_basic_info_tv);
+
+        contentTV.setText(DEFAULT_CONTENT);
+        contentTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contentTextZoomIn();
+            }
+        });
+        contentInfoTV.setText(DEFAULT_COUNT);
+
+        setDefaultContentIV();
     }
+
+    private void setDefaultContentIV() {
+        contentIV.setImageResource(R.drawable.baseline_person_24);
+        contentIV.setOnClickListener(null);
+    }
+
+    private void setContentIV(String url) {
+        Glide.with(getContext()).load(url).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                setDefaultContentIV();
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                isImageFetchable = true;
+                contentIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(), "Can click",
+                            Toast.LENGTH_SHORT).show();
+                        contentImageZoomIn();
+                    }
+                });
+                Log.i(TAG_delete
+                        , "after fetch picture, : isImageFetchable: " + isImageFetchable);
+                return false;
+            }
+        }).into(contentIV);
+    }
+
+    private void setDeleteKeepButton() {
+        if (currentDocument == null || !currentDocument.exists()) {
+            disableDeleteKeepButton();
+            return;
+        }
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteContent();
+            }
+        });
+        keepBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                keepContent();
+            }
+        });
+    }
+
+    private void disableDeleteKeepButton() {
+        deleteBtn.setOnClickListener(null);
+        keepBtn.setOnClickListener(null);
+    }
+
+
+    private void deleteContent() {
+        Log.i(TAG_delete, "before delete picture, picture fetchable: " + isImageFetchable);
+        if (isImageFetchable) {
+            StorageReference reportedPicture = FirebaseStorage.getInstance().
+                    getReferenceFromUrl(imageURL);
+            reportedPicture.delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.i(TAG_delete, "successful deleted picture ");
+                            deleteFromCollection();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext()
+                                    , "Remove picture failed, check log"
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            deleteFromCollection();
+        }
+    }
+
+    private void deleteFromCollection() {
+        currentContentReference.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        removeRequest();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext()
+                                , "Remove content from it collection failed, check log"
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void keepContent() {
+        removeRequest();
+    }
+
+    private void removeRequest() {
+        currentRequestReference.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        resetAfterDeleteKeep();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "Remove request failed, check log",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void resetAfterDeleteKeep() {
+        currentDocument = null;
+        currentRequestReference = null;
+        currentContentReference = null;
+        isImageFetchable = false;
+        imageURL = "";
+        setDefaultContentIV();
+        contentTV.setText(DEFAULT_CONTENT);
+        contentInfoTV.setText(DEFAULT_COUNT);
+        disableDeleteKeepButton();
+        reports.clear();
+        loadReportedContents(currentChannel);
+    }
+
+    private void contentImageZoomIn() {
+
+    }
+
+    private void contentTextZoomIn() {
+
+    }
+
+
 }
