@@ -1,6 +1,7 @@
 package com.example.connectue;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,15 +18,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * Class for the post details page.
@@ -57,6 +69,13 @@ public class PostFragment extends Fragment {
 
     private FirebaseFirestore db;
     DocumentReference postRef;
+    private Post currentPost;
+    private Boolean isPostLiked;
+
+    private String postId;
+
+    private CollectionReference commentsRef;
+    private String userId;
 
     private String TAG = "Test";
 
@@ -97,18 +116,21 @@ public class PostFragment extends Fragment {
         // Get current postId
         Bundle bundle = getArguments();
         assert bundle != null;
-        String postId = bundle.getString("postId");
+        postId = bundle.getString("postId");
 
         commentList = new ArrayList<>();
         adapterComments = new AdapterComments(getContext(), commentList);
         db = FirebaseFirestore.getInstance();
+        commentsRef = FirebaseFirestore.getInstance().collection("comments");
 
         // Initialize comments RecyclerView
         initCommentRecyclerView(view);
 
         // Load contents from Firestore
-        loadContentsFromFirestore(postId);
+        loadContentsFromFirestore();
 
+        // Upload comment function
+        initCreateComment();
 
         return view;
     }
@@ -123,6 +145,7 @@ public class PostFragment extends Fragment {
         addComment = view.findViewById(R.id.addPostCommentET);
         sendCommentBtn = view.findViewById(R.id.sendPostCommentBtn);
 
+
     }
 
     private void initCommentRecyclerView(View view) {
@@ -131,12 +154,14 @@ public class PostFragment extends Fragment {
         commentsRecyclerView.setAdapter(adapterComments);
     }
 
-    private void loadContentsFromFirestore(String postId) {
+    private void loadContentsFromFirestore() {
         // Load current post
         postRef = db.collection("posts").document(postId);
         postRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // Document exists, you can retrieve its data
+                List<String> likedByUsers = (List<String>) documentSnapshot.get("likedByUsers");
+                isPostLiked = likedByUsers.contains(userId);
                 Post.createPost(documentSnapshot, new PostCreateCallback() {
                     @Override
                     public void onPostCreated(Post post) {
@@ -144,6 +169,7 @@ public class PostFragment extends Fragment {
                         Post.loadImage(postImage, post.getImageUrl());
                         postDescription.setText(post.getDescription());
                         numOfLikes.setText(String.valueOf(post.getLikeNumber()));
+                        currentPost = post;
                     }
                 });
                 // Load comments of this post
@@ -156,6 +182,16 @@ public class PostFragment extends Fragment {
             // Error handling
             Log.e(TAG, "Error getting document", e);
         });
+
+        likePostBtn
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!isPostLiked) {
+                        //Todo: like a post
+                        }
+                    }
+                });
     }
 
     private void loadCommentsFromFirestore(String postId) {
@@ -184,6 +220,67 @@ public class PostFragment extends Fragment {
                 Log.d(TAG, "Error getting comments: ", task.getException());
             }
         });
+    }
+
+    private void initCreateComment() {
+        sendCommentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String commentText = addComment.getText().toString();
+                // Check if the comment is not empty
+                if (!TextUtils.isEmpty(commentText)) {
+                    // Call a method to upload the comment to Firestore
+                    uploadCommentToFirestore(commentText);
+                    // Clear the EditText after submitting the comment
+                    addComment.setText("");
+                } else {
+                    // Show an error message or toast if the comment is empty
+                    Toast.makeText(getContext(), "Please enter a comment", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+    private void uploadCommentToFirestore(String commentText) {
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Date date = new Date();
+        Comment comment = new Comment(userId, commentText, postId, date);
+        Timestamp timestamp = new Timestamp(date);
+        Map<String, Object> commentData = new HashMap<>();
+        commentData.put("content", commentText);
+        commentData.put("parentId", postId);
+        commentData.put("timestamp", timestamp);
+        commentData.put("userId", userId);
+        commentsRef.add(commentData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Comment added with ID: " + documentReference.getId());
+                        // Update the UI to reflect the new comment
+                        User.fetchUserName(userId, new UserNameCallback() {
+                            @Override
+                            public void onUserNameFetched(String userName) {
+                                comment.setPublisherName(userName);
+                                commentList.add(0, comment);
+                                // Notify the RecyclerView adapter about the dataset change
+                                adapterComments.notifyItemInserted(0);
+
+                                // Update comment number of current post.
+                                currentPost.incrementCommentNumber();
+                                postRef.update("comments", currentPost.getCommentNumber());
+                            }
+                        });
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding comment", e);
+                        // Handle the error
+                    }
+                });
     }
 
 }
