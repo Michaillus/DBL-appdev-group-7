@@ -56,7 +56,7 @@ public class PostHistoryActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String userId = document.getString(General.PUBLISHER);
-                                Post post = new Post("User abc",
+                                Post post = new Post(document.getId(),
                                         document.getString("publisher"),
                                         document.getString("text"),
                                         document.getString("photoULR"),

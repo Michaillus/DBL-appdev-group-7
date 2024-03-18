@@ -1,6 +1,7 @@
 package com.example.connectue.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.connectue.R;
 import com.example.connectue.model.Post;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
+
+import javax.security.auth.callback.Callback;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     List<Post> postList;
     Context context;
 
+    private FirebaseFirestore db;
+
     public RecyclerViewAdapter(List<Post> postList, Context context) {
         this.postList = postList;
         this.context = context;
+        db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -36,14 +45,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.postTxt.setText(postList.get(position).getText());
+        Post post = postList.get(position);
+        holder.postTxt.setText(post.getText());
 
         String index = String.valueOf(position);
         holder.deletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "delete test success" + index,
-                        Toast.LENGTH_SHORT).show();
+                Log.i("delete", "post ID: " + post.getId());
+                db.collection("posts").document(post.getId())
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("delete", "DocumentSnapshot successfully deleted!");
+                                postList.remove(post);
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("delete", "Error deleting document", e);
+                            }
+                        });
             }
         });
 
