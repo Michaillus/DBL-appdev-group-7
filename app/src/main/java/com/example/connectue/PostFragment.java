@@ -216,15 +216,19 @@ public class PostFragment extends Fragment {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     // Convert each comment document to a Comment object
                     Comment comment = document.toObject(Comment.class);
-                    User.fetchUserName(document.getString("userId"), new UserNameCallback() {
+                    userManager.downloadOne(document.getString("userId"), new FireStoreDownloadCallback<User2>() {
                         @Override
-                        public void onUserNameFetched(String userName) {
-                            comment.setPublisherName(userName);
+                        public void onSuccess(User2 user) {
+                            comment.setPublisherName(user.getFullName());
                             commentList.add(comment);
                             adapterComments.notifyDataSetChanged();
                         }
-                    });
 
+                        @Override
+                        public void onFailure(Exception e) {
+                            Log.e(TAG, "Failed to get comment publisher", e);
+                        }
+                    });
                 }
 
             } else {
