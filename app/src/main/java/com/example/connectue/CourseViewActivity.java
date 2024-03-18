@@ -57,35 +57,35 @@ public class CourseViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        TabLayout tabLayout = findViewById(R.id.tablayout_course_menu);
         replaceFragment(new ReviewsFragment());
+        TabLayout tabLayout = findViewById(R.id.tablayout_course_menu);
         Log.d(TAG, tabLayout.toString());
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText() == "Reviews") {
-                    Log.d(TAG, "reviews");
-                    replaceFragment(new ReviewsFragment());
-                } else if (tab.getText() == "Questions") {
-                    Log.d(TAG, "questions");
-                    replaceFragment(new QuestionsFragment());
-                } else if (tab.getText() == "Materials"){
-                    Log.d(TAG, "materials");
-                    replaceFragment(new MaterialsFragment());
-                }
-            }
+               @Override
+               public void onTabSelected(TabLayout.Tab tab) {
+                   String tabText = tab.getText().toString();
+                   if (tabText.equals("Reviews")) {
+                       Log.d(TAG, "reviews");
+                       replaceFragment(new ReviewsFragment());
+                   } else if (tabText.equals("Questions")) {
+                       Log.d(TAG, "questions");
+                       replaceFragment(new QuestionsFragment());
+                   } else if (tabText.equals("Material")) {
+                       Log.d(TAG, "materials");
+                       replaceFragment(new MaterialsFragment());
+                   }
+               }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+               @Override
+               public void onTabUnselected(TabLayout.Tab tab) {
 
-            }
+               }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+               @Override
+               public void onTabReselected(TabLayout.Tab tab) {
 
-            }
-        });
+               }
+           });
 
         ratingBar = findViewById(R.id.ratingBar);
         ratingIndicator = findViewById(R.id.rating);
