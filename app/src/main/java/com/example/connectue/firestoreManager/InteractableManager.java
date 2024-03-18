@@ -2,7 +2,8 @@ package com.example.connectue.firestoreManager;
 
 import android.util.Log;
 
-import com.example.connectue.Interactable;
+import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.model.Interactable;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public abstract class InteractableManager<T extends Interactable> extends EntityManager<T> {

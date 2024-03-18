@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ChannelsFragment"
+    tools:context=".fragmets.ChannelsFragment"
     style="@style/background"
     android:padding="30dp">
     <TextView
@@ -80,11 +80,12 @@
 
     <ListView
         android:id="@+id/searchListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/searchEditText"
         android:labelFor="@+id/searchEditText"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:background="@color/Design2"/>
 
 
     <TextView
