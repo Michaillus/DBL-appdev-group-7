@@ -18,13 +18,10 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
     Context context; // for inflation
     ArrayList<Review> reviewModels;
 
-
     public AdapterReviews(Context context, ArrayList<Review> reviewModels) {
         this.context = context;
         this.reviewModels = reviewModels;
     }
-
-
 
     @NonNull
     @Override
@@ -59,7 +56,6 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         // grab the views from course_review_row file
-        // kinda like the OnCreate() method.
 
         ImageView star, like, dislike;
         TextView uName, review;
