@@ -419,7 +419,7 @@ public class ProfileFragment extends Fragment {
             String programString = (String) document.get(General.PROGRAM);
             String[] majors = programString.split(" ");
 
-            Log.i("print", majors[0] + majors[1]);
+//            Log.i("print", majors[0] + majors[1]);
             if(majors == null || majors.length == 0) {
                 spinnerStr = " ";
                 spinnerStr2 = " ";
