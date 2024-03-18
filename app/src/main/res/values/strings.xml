@@ -11,6 +11,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string-array name="programs_array">
+        <item> </item>
         <item>BAM</item>
         <item>BAP</item>
         <item>AUBS</item>
@@ -20,7 +21,7 @@
         <item>BCSE</item>
         <item>BDS</item>
         <item>BEE</item>
-        <item>BID</item>'
+        <item>BID</item>
         <item>BIE</item>
         <item>BME</item>
         <item>BPT</item>

@@ -37,7 +37,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="290dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/round_profile_card">
 
@@ -45,6 +45,7 @@
             android:id="@+id/profilePic"
             android:layout_width="135dp"
             android:layout_height="135dp"
+            android:layout_marginTop="30dp"
             android:contentDescription="@string/profile"
             android:src="@drawable/baseline_person_24" />
 
@@ -52,7 +53,7 @@
             android:id="@+id/text_firstName"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="10dp"
             android:layout_below="@id/btn_edit"
             android:layout_toEndOf="@id/profilePic"
             android:autofillHints="name"
@@ -76,25 +77,14 @@
         <TextView
             android:id="@+id/major_title"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_below="@id/text_firstName"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/profilePic"
             android:gravity="center"
             android:text="@string/major_text"
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/text_major"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_below="@id/text_firstName"
-            android:layout_toEndOf="@+id/major_title"
-            android:hint="@string/majors"
-            android:autofillHints=""
-            android:inputType=""
-            android:textColor="@color/textLightMode"
-            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/email_title"
@@ -161,6 +151,23 @@
             android:textSize="13sp"
             android:textColor="@color/textLightMode" />
 
+        <Spinner
+            android:id="@+id/majorSpinner"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:textAlignment="textStart"
+            android:layout_below="@id/text_firstName"
+            android:layout_toEndOf="@+id/major_title" />
+
+        <Spinner
+            android:id="@+id/majorSpinner2"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:textAlignment="textStart"
+            android:layout_below="@id/majorSpinner"
+            android:layout_toEndOf="@+id/major_title"
+            />
+
     </RelativeLayout>
 
     <Button
@@ -192,7 +199,6 @@
         android:id="@+id/btn_deleteAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:text="@string/delete_account" />
 
     <Button
