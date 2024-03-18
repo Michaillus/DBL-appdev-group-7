@@ -108,19 +108,6 @@ public class ReviewsFragment extends Fragment {
         reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), "reviews",
                 "review-likes", "review-dislikes");
 
-        // Uploading posts for test.
-        // TODO delete
-        Review newReview = new Review(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                "This course sucks", 2L);
-        reviewManager.upload(newReview, new FireStoreUploadCallback() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "post uploaded successfully");
-            }
-        });
-        // TODO end
-
-
         // Initializing list of reviews
         reviewList = new ArrayList<>();
 
