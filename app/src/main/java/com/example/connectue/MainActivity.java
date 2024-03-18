@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         if (pageIntent == "channels") {
             replaceFragment(new ChannelsFragment());
         } else {
-            replaceFragment(new HomeFragment());
+            replaceFragment(new HomeFragment(getSupportFragmentManager()));
         }
 
 
