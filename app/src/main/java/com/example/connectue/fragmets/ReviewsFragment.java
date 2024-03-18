@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.model.Review;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +25,8 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class ReviewsFragment extends Fragment {
+
+    private static final String TAG = "ReviewFragment class: ";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,18 +97,13 @@ public class ReviewsFragment extends Fragment {
         String[] uName = getResources().getStringArray(R.array.reviewerName);
         String[] date = getResources().getStringArray(R.array.date);
         String[] uText = getResources().getStringArray(R.array.reviews);
-        String[] likeNum = getResources().getStringArray(R.array.likeNum);
-        String[] dislikeNum = getResources().getStringArray(R.array.dislikeNum);
+        int[] likeNum = getResources().getIntArray(R.array.likeNum);
+        int[] dislikeNum = getResources().getIntArray(R.array.dislikeNum);
 
         for (int i = 0; i < uName.length; i++) {
-            reviewModels.add(new Review(uName[i],
-                    date[i],
-                    uText[i],
-                    R.drawable.like_icon,
-                    R.drawable.dislike,
-                    R.drawable.star,
-                    likeNum[i],
-                    dislikeNum[i]));
+            reviewModels.add(new Review("dummy id", uName[i], uText[i],
+                    4L, (long) likeNum[i], (long) dislikeNum[i],
+                    2L, new Date()));
         }
     }
 }

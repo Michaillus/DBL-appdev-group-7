@@ -40,14 +40,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         // assign values to the views we created in the course_review_row file
         // based on the position of the recycler view
 
-        holder.uName.setText(reviewModels.get(position).getuName());
-        holder.review.setText(reviewModels.get(position).getuText());
-        holder.date.setText(reviewModels.get(position).getDate());
-        holder.star.setImageResource(reviewModels.get(position).getStars());
-        holder.like.setImageResource(reviewModels.get(position).getpLikes());
-        holder.dislike.setImageResource(reviewModels.get(position).getpDislikes());
-        holder.likeNum.setText(reviewModels.get(position).getLikeNum());
-        holder.dislikeNum.setText(reviewModels.get(position).getDislikeNum());
+        holder.uName.setText(reviewModels.get(position).getPublisherId());
+        holder.review.setText(reviewModels.get(position).getText());
+        holder.date.setText(reviewModels.get(position).getDatetime().toString());
+        holder.star.setImageResource(R.drawable.star);
+        holder.like.setImageResource(R.drawable.like_icon);
+        holder.dislike.setImageResource(R.drawable.dislike);
+        holder.likeNum.setText(String.valueOf(reviewModels.get(position).getLikeNumber()));
+        holder.dislikeNum.setText(String.valueOf(reviewModels.get(position).getDislikeNumber()));
     }
 
     @Override

@@ -19,7 +19,7 @@
         <item>I love eating shit</item>
         <item>I love Jay Chou</item>
         <item>I love Barcelona</item>
-        <item>I love Latvia</item>
+        <item>I love your mom</item>
     </string-array>
 
     <string-array name="date">
@@ -32,17 +32,17 @@
         <item>16/03/2024</item>
     </string-array>
 
-    <string-array name="likeNum">
-        <item>-100</item>
+    <integer-array name="likeNum">
+        <item>100</item>
         <item>999</item>
         <item>666</item>
         <item>888</item>
         <item>886</item>
         <item>996</item>
         <item>665</item>
-    </string-array>
+    </integer-array>
 
-    <string-array name="dislikeNum">
+    <integer-array name="dislikeNum">
         <item>0</item>
         <item>0</item>
         <item>0</item>
@@ -50,7 +50,7 @@
         <item>0</item>
         <item>0</item>
         <item>0</item>
-    </string-array>
+    </integer-array>
 
 
 

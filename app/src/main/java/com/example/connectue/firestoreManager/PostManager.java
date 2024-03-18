@@ -25,21 +25,21 @@ public class PostManager extends InteractableManager<Post> {
                 document.getString("text"),
                 document.getString("photoURL"),
                 document.getLong("likes"),
-                document.getLong("comments"));
+                document.getLong("comments"),
+                document.getTimestamp("timestamp").toDate());
     }
 
     @Override
     protected Map<String, Object> serialize(Post post) {
         Map<String, Object> postData = new HashMap<>();
 
-
-        postData.put("timestamp", new Timestamp(new Date()));
         postData.put("text", post.getText());
         postData.put("photoURL", post.getImageUrl());
         postData.put("likes", post.getLikeNumber());
         postData.put("comments", post.getCommentNumber());
         postData.put("publisher", post.getPublisherId());
         postData.put("likedByUsers", new ArrayList<String>());
+        postData.put("timestamp", new Timestamp(post.getDatetime()));
 
         return postData;
     }
