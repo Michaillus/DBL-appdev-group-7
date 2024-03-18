@@ -39,8 +39,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public void onBindViewHolder(@NonNull ReviewAdapter.MyViewHolder holder, int position) {
         // assign values to the views we created in the course_review_row file
         // based on the position of the recycler view
+        Review review = reviewModels.get(position);
 
-        holder.uName.setText(reviewModels.get(position).getPublisherId());
+
+        holder.uName.setText(review.getText());
         holder.review.setText(reviewModels.get(position).getText());
         holder.date.setText(reviewModels.get(position).getDatetime().toString());
         holder.star.setImageResource(R.drawable.star);
