@@ -53,11 +53,11 @@ public class PostHistoryActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String userId = document.getString(General.PUBLISHER);
                                 Post post = new Post("User abc",
+                                        document.getString("publisher"),
                                         document.getString("text"),
                                         document.getString("photoULR"),
-                                        document.getLong("likes").intValue(),
-                                        document.getLong("comments").intValue(),
-                                        ""
+                                        document.getLong("likes"),
+                                        document.getLong("comments")
                                         );
                                 postList.add(post);
                             }

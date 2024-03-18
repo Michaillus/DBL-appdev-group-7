@@ -1,13 +1,20 @@
 package com.example.connectue;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.example.connectue.databinding.RowPostsBinding;
+import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
+import com.example.connectue.firestoreManager.UserManager;
+import com.example.connectue.model.User2;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -22,6 +29,8 @@ import java.util.Objects;
  */
 public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
+    private static final String TAG = "AdapterPosts class: ";
+
     List<Post> postList;
 
     private FirebaseFirestore db;
@@ -35,7 +44,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       //inflate layout row_post.xml
+        //inflate layout row_post.xml
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         RowPostsBinding binding = RowPostsBinding.inflate(layoutInflater, parent, false);
         return new MyHolder(binding);
@@ -44,6 +53,21 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         Post post = postList.get(position);
+
+        holder.userManager.downloadOne(post.publisherId,
+                new FireStoreDownloadCallback<User2>() {
+            @Override
+            public void onSuccess(User2 user) {
+                holder.publisherName.setText(user.getFullName());
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Error getting the user", e);
+            }});
+        holder.description.setText(post.getText());
+        holder.likeNumber.setText(String.valueOf(post.getLikeNumber()));
+        holder.commentNumber.setText(String.valueOf(post.getCommentNumber()));
         holder.bind(post);
     }
 
@@ -57,9 +81,23 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
         private RowPostsBinding binding;
 
+        ImageView pImage;
+
+        TextView publisherName, description, likeNumber, commentNumber;
+
+        UserManager userManager;
+
         public MyHolder(RowPostsBinding binding) {
             super(binding.getRoot());
+
             this.binding = binding;
+
+            publisherName = itemView.findViewById(R.id.uNamePost);
+            description = itemView.findViewById(R.id.pDescriptionTv);
+            likeNumber = itemView.findViewById(R.id.pLikesTv);
+            commentNumber = itemView.findViewById(R.id.pCommentTv);
+
+            userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         }
 
         public void bind(Post post) {
@@ -68,7 +106,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
             // Retrieve the post document
             db = FirebaseFirestore.getInstance();
-            DocumentReference postRef = db.collection("posts").document(post.getPostID());
+            DocumentReference postRef = db.collection("posts").document(post.getId());
             postRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     DocumentSnapshot postDocument = task.getResult();
@@ -88,7 +126,8 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                     // If likedByUsers exists, check whether this post is liked by current user
                     if (postDocument.contains("likedByUsers")) {
                         List<String> likedByUsers = (List<String>) postDocument.get("likedByUsers");
-                        currentUid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+                        currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
+                                .getCurrentUser()).getUid();
 
                         // Display like states of the like button
                         if (!likedByUsers.contains(currentUid)) {
@@ -122,8 +161,6 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                     // Document not exist
                 }
             });
-
         }
-
     }
 }

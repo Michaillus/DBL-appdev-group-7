@@ -37,7 +37,6 @@
                 android:id="@+id/uNamePost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{post.getPublisherName()}"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -46,7 +45,6 @@
                 android:id="@+id/pDescriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{post.getDescription()}"
                 android:textColor="#000000" />
 
             <LinearLayout
@@ -67,7 +65,6 @@
                     android:id="@+id/pLikesTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(post.getLikeNumber())}"
                     android:textColor="#000000" />
 
                 <ImageButton
@@ -82,7 +79,6 @@
                     android:id="@+id/pCommentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{Long.toString(post.getCommentNumber())}"
                     android:textColor="#000000" />
 
             </LinearLayout>
