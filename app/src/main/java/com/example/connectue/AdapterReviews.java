@@ -40,6 +40,7 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
 
         holder.uName.setText(reviewModels.get(position).getuName());
         holder.review.setText(reviewModels.get(position).getuText());
+        holder.date.setText(reviewModels.get(position).getDate());
         holder.star.setImageResource(reviewModels.get(position).getStars());
         holder.like.setImageResource(reviewModels.get(position).getpLikes());
         holder.dislike.setImageResource(reviewModels.get(position).getpDislikes());
@@ -58,12 +59,13 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
         // grab the views from course_review_row file
 
         ImageView star, like, dislike;
-        TextView uName, review;
+        TextView uName, review, date;
         TextView likeNum, dislikeNum;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             star = itemView.findViewById(R.id.star);
+            date = itemView.findViewById(R.id.date);
             like = itemView.findViewById(R.id.likePostBtn);
             dislike = itemView.findViewById(R.id.dislikeReview);
             uName = itemView.findViewById(R.id.uName);

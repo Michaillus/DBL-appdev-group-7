@@ -89,12 +89,14 @@ public class ReviewsFragment extends Fragment {
 
     private void setUpCourseReviewFragmentModels() {
         String[] uName = getResources().getStringArray(R.array.reviewerName);
+        String[] date = getResources().getStringArray(R.array.date);
         String[] uText = getResources().getStringArray(R.array.reviews);
         String[] likeNum = getResources().getStringArray(R.array.likeNum);
         String[] dislikeNum = getResources().getStringArray(R.array.dislikeNum);
 
         for (int i = 0; i < uName.length; i++) {
             reviewModels.add(new Review(uName[i],
+                    date[i],
                     uText[i],
                     R.drawable.like_icon,
                     R.drawable.dislike,

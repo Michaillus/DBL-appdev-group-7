@@ -32,11 +32,12 @@ public class CourseReviewFragment extends AppCompatActivity {
     private void setUpCourseReviewFragmentModels() {
         String [] uName = getResources().getStringArray(R.array.reviewerName);
         String [] uText = getResources().getStringArray(R.array.reviews);
+        String [] date = getResources().getStringArray(R.array.date);
         String [] likeNums = getResources().getStringArray(R.array.likeNum);
         String [] dislikeNums = getResources().getStringArray(R.array.dislikeNum);
 
         for (int i = 0; i<uName.length; i++) {
-            reviewModels.add(new Review(uName[i], uText[i], likeImages[i], dislikeImages[i], starsImages[i], likeNums[i], dislikeNums[i]));
+            reviewModels.add(new Review(uName[i], uText[i], date[i], likeImages[i], dislikeImages[i], starsImages[i], likeNums[i], dislikeNums[i]));
         }
     }
 }

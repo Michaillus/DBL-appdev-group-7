@@ -22,6 +22,16 @@
         <item>I love Latvia</item>
     </string-array>
 
+    <string-array name="date">
+        <item>16/03/2024</item>
+        <item>16/03/2024</item>
+        <item>16/03/2024</item>
+        <item>16/03/2024</item>
+        <item>16/03/2024</item>
+        <item>16/03/2024</item>
+        <item>16/03/2024</item>
+    </string-array>
+
     <string-array name="likeNum">
         <item>-100</item>
         <item>999</item>
