@@ -36,13 +36,7 @@ public class CourseReviewFragment extends AppCompatActivity {
         String [] dislikeNums = getResources().getStringArray(R.array.dislikeNum);
 
         for (int i = 0; i<uName.length; i++) {
-            reviewModels.add(new Review(uName[i],
-                    uText[i],
-                    likeImages[i],
-                    dislikeImages[i],
-                    starsImages[i],
-                    likeNums[i],
-                    dislikeNums[i]));
+            reviewModels.add(new Review(uName[i], uText[i], likeImages[i], dislikeImages[i], starsImages[i], likeNums[i], dislikeNums[i]));
         }
     }
 }

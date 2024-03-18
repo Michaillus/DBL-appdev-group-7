@@ -4,11 +4,9 @@ import static android.app.PendingIntent.getActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -26,6 +24,7 @@ import com.example.connectue.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -52,36 +51,42 @@ public class CourseViewActivity extends AppCompatActivity {
     Float averageRating = 0f;
     Course course;
 
-
-
-
-
     ActivityCourseViewBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         replaceFragment(new ReviewsFragment());
+        TabLayout tabLayout = findViewById(R.id.tablayout_course_menu);
+        Log.d(TAG, tabLayout.toString());
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+               @Override
+               public void onTabSelected(TabLayout.Tab tab) {
+                   String tabText = tab.getText().toString();
+                   if (tabText.equals("Reviews")) {
+                       Log.d(TAG, "reviews");
+                       replaceFragment(new ReviewsFragment());
+                   } else if (tabText.equals("Questions")) {
+                       Log.d(TAG, "questions");
+                       replaceFragment(new QuestionsFragment());
+                   } else if (tabText.equals("Material")) {
+                       Log.d(TAG, "materials");
+                       replaceFragment(new MaterialsFragment());
+                   }
+               }
 
-        binding.coursemenu.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            Log.d(TAG, String.valueOf(itemId));
-            if (itemId == R.id.reviews) {
-                replaceFragment(new ReviewsFragment());
-            } else if (itemId == R.id.questions) {
-                replaceFragment(new QuestionsFragment());
-            } else if (itemId == R.id.materials) {
-                replaceFragment(new MaterialsFragment());
-            }
+               @Override
+               public void onTabUnselected(TabLayout.Tab tab) {
 
-            return true;
-        });
+               }
 
-//        setContentView(R.layout.activity_course_view);
+               @Override
+               public void onTabReselected(TabLayout.Tab tab) {
+
+               }
+           });
+
         ratingBar = findViewById(R.id.ratingBar);
         ratingIndicator = findViewById(R.id.rating);
         followButton = findViewById(R.id.followButton);
@@ -91,8 +96,6 @@ public class CourseViewActivity extends AppCompatActivity {
 
         ImageView followIcon = findViewById(R.id.followIcon);
         backbtn = findViewById(R.id.back_btn);
-
-
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -180,6 +183,7 @@ public class CourseViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CourseViewActivity.this, MainActivity.class);
+                intent.putExtra("pageIntent", "channels");
                 startActivity(intent);
             }
         });
@@ -230,7 +234,6 @@ public class CourseViewActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

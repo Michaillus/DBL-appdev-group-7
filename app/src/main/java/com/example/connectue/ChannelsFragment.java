@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -132,8 +133,21 @@ public class ChannelsFragment extends Fragment {
     }
 
     private void showCoursesView() {
-        searchEt.setVisibility(View.VISIBLE);
-        searchBtn.setVisibility(View.VISIBLE);
+        // Set height of search bar to 50dp
+        int searchEtHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()
+        );
+        ViewGroup.LayoutParams searchEtLayoutParams = searchEt.getLayoutParams();
+        searchEtLayoutParams.height = searchEtHeight;
+        searchEt.setLayoutParams(searchEtLayoutParams);
+
+        // Set height of search button to 40dp
+        int searchBtnHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics()
+        );
+        ViewGroup.LayoutParams searchBtnLayoutParams = searchBtn.getLayoutParams();
+        searchBtnLayoutParams.height = searchBtnHeight;
+        searchBtn.setLayoutParams(searchBtnLayoutParams);
         popularText.setVisibility(View.VISIBLE);
         myCoursesText.setVisibility(View.VISIBLE);
         majorsText.setVisibility(View.GONE);
@@ -144,8 +158,15 @@ public class ChannelsFragment extends Fragment {
         transaction.commit();
     }
     private void showMajorsView() {
-        searchEt.setVisibility(View.INVISIBLE);
-        searchBtn.setVisibility(View.INVISIBLE);
+        // Set height of search bar to 0
+        ViewGroup.LayoutParams searchEtLayoutParams = searchEt.getLayoutParams();
+        searchEtLayoutParams.height = 0;
+        searchEt.setLayoutParams(searchEtLayoutParams);
+
+        // Set height of search button to 0
+        ViewGroup.LayoutParams searchBtnLayoutParams = searchBtn.getLayoutParams();
+        searchBtnLayoutParams.height = 0;
+        searchBtn.setLayoutParams(searchBtnLayoutParams);
         popularText.setVisibility(View.GONE);
         myCoursesText.setVisibility(View.GONE);
         majorsText.setVisibility(View.VISIBLE);
