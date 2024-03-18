@@ -9,35 +9,43 @@
         android:id="@+id/foundCourse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="no text" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="no text"
+        android:textSize="20sp"
+        android:typeface="serif" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/courseCard"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_below="@id/foundCourse"
-        app:cardBackgroundColor="#F6886F"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:cardBackgroundColor="@color/Design4"
         app:cardElevation="4dp"
         app:cardCornerRadius="10dip">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="100dp"
             android:layout_centerInParent="true"
-            >
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/courseCardText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="18dp"
-                android:textColor="@color/Design2"
-                android:text="@string/_2wbb0"
-                android:shadowColor ="#A12B2929"
-                android:shadowRadius="10"
+                android:shadowColor="#A12B2929"
                 android:shadowDx="3"
-                android:shadowDy="3" />
+                android:shadowDy="3"
+                android:shadowRadius="10"
+                android:text="@string/_2wbb0"
+                android:textColor="@color/Design2"
+                android:textSize="25sp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
