@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.connectue.model.Review;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.activities.AdminActivity;
@@ -103,7 +104,7 @@ public class ProfileFragment extends Fragment {
     Button adminBtn;
     EditText firstName_fld;
     EditText lastName_fld;
-    EditText major_fld;
+    TextView majorTextView;
     EditText email_fld;
     EditText phone_fld;
     ImageView profileIV;
@@ -223,9 +224,18 @@ public class ProfileFragment extends Fragment {
         profileIV = view.findViewById(R.id.profilePic);
         majorSpinner = view.findViewById(R.id.majorSpinner);
         majorSpinner2 = view.findViewById(R.id.majorSpinner2);
+        majorTextView = view.findViewById(R.id.major_title);
 
         majorSpinner.setEnabled(false);
         majorSpinner2.setEnabled(false);
+
+        if (General.isGuest(role)) {
+            postHisBtn.setVisibility(View.GONE);
+            reviewHisBtn.setVisibility(View.INVISIBLE);
+            majorTextView.setVisibility(View.INVISIBLE);
+            majorSpinner.setVisibility(View.INVISIBLE);
+            majorSpinner2.setVisibility(View.INVISIBLE);
+        }
 
         initSpinner();
         initTextSection(view);
