@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +29,7 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link HomeFragment} factory method to
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
@@ -57,29 +58,35 @@ public class HomeFragment extends Fragment {
 
     private Boolean isLoading = false;
 
+    private FragmentManager fragmentManager;
+
     private String TAG = "HomePageUtil: ";
 
     public HomeFragment() {
-        // Required empty public constructor
+        // Default constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public HomeFragment(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
+
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @param param1 Parameter 1.
+//     * @param param2 Parameter 2.
+//     * @return A new instance of fragment HomeFragment.
+//     */
+//    // TODO: Rename and change types and number of parameters
+//    public static HomeFragment newInstance(String param1, String param2) {
+//        HomeFragment fragment = new HomeFragment(this.fragmentManager);
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,7 +104,7 @@ public class HomeFragment extends Fragment {
         postList = new ArrayList<>();
 
         //Initialize ReclerView
-        postAdapter = new AdapterPosts(postList);
+        postAdapter = new AdapterPosts(postList, fragmentManager);
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
@@ -136,6 +143,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        binding.postsRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return root;
     }
 

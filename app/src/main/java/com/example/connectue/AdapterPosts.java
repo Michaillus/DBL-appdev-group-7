@@ -1,10 +1,14 @@
 package com.example.connectue;
 
+import android.os.Bundle;
+import android.util.Log;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.ViewGroup;
@@ -36,9 +40,11 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     private FirebaseFirestore db;
 
     private String currentUid;
+    private FragmentManager fragmentManager;
 
     public AdapterPosts(List<Post> postList) {
         this.postList = postList;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -77,7 +83,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     }
 
     //view holder class
-    class MyHolder extends RecyclerView.ViewHolder {
+    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private RowPostsBinding binding;
 
@@ -91,6 +97,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
             super(binding.getRoot());
 
             this.binding = binding;
+            binding.postCardView.setOnClickListener(this);
 
             publisherName = itemView.findViewById(R.id.uNamePost);
             description = itemView.findViewById(R.id.pDescriptionTv);
@@ -103,6 +110,8 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         public void bind(Post post) {
             binding.setPost(post);
             binding.executePendingBindings();
+
+
 
             // Retrieve the post document
             db = FirebaseFirestore.getInstance();
@@ -155,12 +164,42 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                                 postRef.update("likes", post.getLikeNumber());
                             }
                         });
+
+                        binding.reportBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getPostID());
+                            }
+                        });
                     }
 
                 } else {
                     // Document not exist
                 }
             });
+        }
+
+        // Click a post card to jump to post details page
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "onClick: card clicked");
+            int position = getBindingAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                String postId = postList.get(position).getPostID();
+                navigateToPostFragment(postId);
+            }
+        }
+
+        private void navigateToPostFragment(String postId) {
+            PostFragment postFragment = new PostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", postId);
+            postFragment.setArguments(bundle);
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.frame_layout, postFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
     }
 }

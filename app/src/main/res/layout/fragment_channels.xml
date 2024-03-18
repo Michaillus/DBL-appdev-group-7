@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ChannelsFragment"
-    android:background="@color/Design2"
+    style="@style/background"
     android:padding="30dp">
     <TextView
         android:id="@+id/popular"
@@ -24,18 +24,18 @@
         android:textSize="17dp"
         android:text="@string/majors"/>
     <androidx.fragment.app.FragmentContainerView
-        android:layout_below="@+id/searchEditText"
-        android:layout_marginTop="60dp"
+        android:layout_below="@+id/majors"
+        android:layout_marginTop="10dp"
         android:id="@+id/fragmentContainerViewMajors"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:layout_below="@+id/searchEditText"
-        android:layout_marginTop="70dp"
+        android:layout_below="@+id/popular"
         android:id="@+id/fragmentContainerViewPopCourses"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_marginTop="10dp"
+        android:layout_height="100dp"/>
 
     <TextView
         android:id="@+id/mycourses"
@@ -50,8 +50,8 @@
         android:id="@+id/fragmentContainerViewMyCourses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchEditText"
-        android:layout_marginTop="220dp" />
+        android:layout_below="@+id/mycourses"
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:id="@+id/searchEditText"
@@ -74,6 +74,7 @@
         android:layout_above="@+id/searchEditText"
         android:layout_marginLeft="0dp"
         android:layout_marginBottom="-62dp"
+        android:textColor="@android:color/background_light"
         android:layout_toRightOf="@id/searchEditText"
         android:text="Search"/>
 
@@ -99,8 +100,8 @@
         android:id="@+id/coursemenu"
         android:layout_width="160dp"
         android:layout_height="70dp"
-        android:layout_marginTop="125dp"
-        android:background="@color/Design2"
+        android:layout_alignParentTop="true"
+        style="@style/background"
         android:layout_alignParentRight="true"
         app:menu="@menu/courses_major_nav" >
 

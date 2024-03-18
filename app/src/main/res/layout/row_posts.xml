@@ -8,13 +8,16 @@
 </data>
 
 <androidx.cardview.widget.CardView
+    android:id="@+id/postCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
     app:contentPadding="5dp"
     app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardBackgroundColor="#FFFFFF"
+    android:clickable="true"
+    android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,6 +83,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#000000" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/report_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    app:srcCompat="@drawable/outline_report_24"/>
 
             </LinearLayout>
 

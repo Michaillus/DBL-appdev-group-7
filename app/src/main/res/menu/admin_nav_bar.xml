@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/post_fragment"
+        android:title="Post"
+        android:icon="@drawable/baseline_library_books_24"/>
+
+    <item
+        android:id="@+id/course_fragment"
+        android:title="Course"
+        android:icon="@drawable/courses_icon"/>
+
+    <item
+        android:id="@+id/create_course_fragment"
+        android:title="New Course"
+        android:icon="@drawable/baseline_book_24"/>
+
+</menu>

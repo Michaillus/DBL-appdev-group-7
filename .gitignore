@@ -23,3 +23,5 @@ local.properties
 /.idea/appInsightsSettings.xml
 /.idea/.name
 /.idea/.name
+.idea/misc.xml
+

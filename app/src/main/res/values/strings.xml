@@ -49,9 +49,11 @@
     <string name="email_hint"><b>Email </b></string>
     <string name="phone_hint"><b>Phone number </b></string>
     <string name="profile_title"><b>Profile </b></string>
-    <string name="post_history"><b>Post History </b></string>
-    <string name="review_history"><b>Review History </b></string>
+    <string name="post_history">Post History</string>
+    <string name="review_history">Review History</string>
     <string name="delete_account"><b>DELETE ACCOUNT </b></string>
     <string name="Edit_button"><b>Edit </b></string>
     <string name="Log_out"><b>Logout </b></string>
+    <string name="report">Report</string>
+
 </resources>

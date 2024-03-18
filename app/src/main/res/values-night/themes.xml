@@ -1,6 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ConnecTue" parent="Theme.Material3.Dark.NoActionBar">
-
+        <item name="colorPrimary">#0E375A</item>
+        
+    </style>
+    
+    <style name="background"><item name="android:background">#222222</item></style>
+    <style name="cardBackground">
+        <item name="strokeColor">#113F67</item>
+        <item name="cardBackgroundColor">#113F67</item>
     </style>
 </resources>

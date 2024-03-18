@@ -10,6 +10,8 @@ import android.widget.PopupWindow;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
  * Class for Post object to store strings that need to be displayed on screen.
@@ -30,8 +32,8 @@ public class Post extends Interactable {
     }
 
     /**
-     * Automatically called method for AdapterPosts
-     * (DESCRIBE WHAT THE METHOD IS DOING)
+     * Automatically called method for AdapterPosts to load the imageURL into the imageView.
+     * When the imageView is clicked, the full size image is popup.
      * @param view placeholder for the post image.
      * @param imageUrl image URL
      */

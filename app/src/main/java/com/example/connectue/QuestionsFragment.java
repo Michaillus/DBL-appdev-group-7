@@ -3,10 +3,14 @@ package com.example.connectue;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +28,7 @@ public class QuestionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    ArrayList<Question> questionModels = new ArrayList<>();
     public QuestionsFragment() {
         // Required empty public constructor
     }
@@ -59,6 +64,32 @@ public class QuestionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_questions, container, false);
+        View view = inflater.inflate(R.layout.fragment_questions, container, false);
+        setUpCourseQuestionsFragmentModels();
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_question);
+
+        AdapterQuestions adapter = new AdapterQuestions(getContext(), questionModels);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+
+    private void setUpCourseQuestionsFragmentModels() {
+        String[] uName = getResources().getStringArray(R.array.reviewerName);
+        String[] date = getResources().getStringArray(R.array.date);
+        String[] uText = getResources().getStringArray(R.array.reviews);
+        String[] likeNum = getResources().getStringArray(R.array.likeNum);
+
+        for (int i = 0; i < uName.length; i++) {
+            questionModels.add(new Question(uName[i],
+                    date[i],
+                    uText[i],
+                    R.drawable.like_icon,
+                    likeNum[i]));
+        }
     }
 }
