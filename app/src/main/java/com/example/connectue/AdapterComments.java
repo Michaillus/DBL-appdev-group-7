@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -67,18 +68,27 @@ public class AdapterComments extends RecyclerView.Adapter<AdapterComments.Commen
         private TextView publisherName;
         private TextView commentDescription;
         private TextView publishTime;
+        private ImageButton reportBtn;
 
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
             publisherName = itemView.findViewById(R.id.publisherNameCommentTv);
             publishTime = itemView.findViewById(R.id.publishTimeCommentTv);
             commentDescription = itemView.findViewById(R.id.commentDescriptionTv);
+            reportBtn = itemView.findViewById(R.id.reportCommentBtn);
         }
 
         public void bind(Comment comment) {
             publisherName.setText(comment.getPublisherName());
             publishTime.setText(TimeUtils.getTimeAgo(comment.gettimestamp()));
             commentDescription.setText(comment.getContent());
+
+            reportBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, comment.getParentId());
+                }
+            });
 
         }
     }

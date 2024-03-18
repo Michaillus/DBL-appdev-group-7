@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.databinding.FragmentHomeBinding;
+import com.example.connectue.firestoreManager.EntityManager;
 import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
 import com.example.connectue.firestoreManager.PostManager;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -172,6 +173,6 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        lastVisiblePost = null;
+        postManager.resetLastRetrieved();
     }
 }

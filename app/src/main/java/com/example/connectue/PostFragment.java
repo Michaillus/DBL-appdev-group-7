@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
+import com.example.connectue.firestoreManager.FireStoreLikeCallback;
+import com.example.connectue.firestoreManager.LikeManager;
 import com.example.connectue.firestoreManager.PostManager;
 import com.example.connectue.firestoreManager.UserManager;
 import com.example.connectue.model.User2;
@@ -74,7 +76,6 @@ public class PostFragment extends Fragment {
     private FirebaseFirestore db;
     DocumentReference postRef;
     private Post currentPost;
-    private Boolean isPostLiked;
 
     private String postId;
 
@@ -194,15 +195,41 @@ public class PostFragment extends Fragment {
         // Load comments of this post
         loadCommentsFromFirestore(postId);
 
-        likePostBtn
-                .setOnClickListener(new View.OnClickListener() {
+        String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        postManager.isLiked(postId, currentUid, new FireStoreLikeCallback() {
+            @Override
+            public void onSuccess(Boolean isLiked) {
+                if (!isLiked) {
+                    likePostBtn.setImageResource(R.drawable.like_icon);
+                } else {
+                    likePostBtn.setImageResource(R.drawable.liked_icon);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {}
+        });
+
+        // When the user click the like button
+        likePostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postManager.likeOrUnlike(currentPost, currentUid, new FireStoreLikeCallback() {
                     @Override
-                    public void onClick(View v) {
-                        if (!isPostLiked) {
-                        //Todo: like a post
+                    public void onSuccess(Boolean isLiked) {
+                        if (!isLiked) {
+                            likePostBtn.setImageResource(R.drawable.like_icon);
+                        } else {
+                            likePostBtn.setImageResource(R.drawable.liked_icon);
                         }
+                        numOfLikes.setText(String.valueOf(currentPost.getLikeNumber()));
                     }
+
+                    @Override
+                    public void onFailure(Exception e) {}
                 });
+            }
+        });
     }
 
     private void loadCommentsFromFirestore(String postId) {

@@ -41,5 +41,14 @@
         android:layout_marginTop="13dp"
         android:text="Comment content" />
 
+    <ImageButton
+        android:id="@+id/reportCommentBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:background="@null"
+        app:srcCompat="@drawable/outline_report_24" />
+
+
 </RelativeLayout>
 

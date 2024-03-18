@@ -1,5 +1,8 @@
 package com.example.connectue.firestoreManager;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LikeManager<T> {
+
+    private String TAG = "likeManager";
     CollectionReference likeCollection;
 
     public LikeManager(FirebaseFirestore db, String collection) {
@@ -23,8 +28,8 @@ public class LikeManager<T> {
     public void likeOrUnlike(String documentId, String userId, FireStoreLikeCallback callback) {
         obtainLike(documentId, userId, new FireStoreDownloadCallback<String>() {
             @Override
-            public void onSuccess(String documentId) {
-                if (documentId == null) {
+            public void onSuccess(String likeId) {
+                if (likeId == null) {
                     // Document is not liked by the user.
                     Map<String,Object> likeData = new HashMap<>();
                     likeData.put("parentId", documentId);
@@ -38,7 +43,7 @@ public class LikeManager<T> {
                     }).addOnFailureListener(e -> callback.onFailure(e));
                 } else {
                     // Document is liked by the user.
-                    likeCollection.document(documentId).delete()
+                    likeCollection.document(likeId).delete()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
@@ -61,9 +66,9 @@ public class LikeManager<T> {
             @Override
             public void onSuccess(String data) {
                 if (data == null) {
-                    callback.onSuccess(true);
-                } else {
                     callback.onSuccess(false);
+                } else {
+                    callback.onSuccess(true);
                 }
             }
 
@@ -77,12 +82,13 @@ public class LikeManager<T> {
     private void obtainLike(String documentId, String userId,
                             FireStoreDownloadCallback<String> callback) {
         Query query = likeCollection.whereEqualTo("parentId", documentId)
-                .whereEqualTo("publisherId", userId);
+                .whereEqualTo("userId", userId);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot snapshot) {
                 if (snapshot.isEmpty()) {
                     callback.onSuccess(null);
+                    Log.d(TAG, "obtainLike onSuccess: " + documentId + " not liked by " + userId);
                 } else {
                     callback.onSuccess(snapshot.getDocuments().get(0).getId());
                 }

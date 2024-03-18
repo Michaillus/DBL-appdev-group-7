@@ -103,6 +103,10 @@ public abstract class EntityManager<T> {
                 .addOnFailureListener(e -> callback.onFailure(e));
     }
 
+    public void resetLastRetrieved() {
+        lastRetrieved = null;
+    }
+
     protected abstract T deserialize(DocumentSnapshot document);
 
     protected abstract Map<String, Object> serialize(T object);
