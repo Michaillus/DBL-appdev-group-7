@@ -14,14 +14,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.connectue.interfaces.FireStoreLikeCallback;
 import com.example.connectue.utils.General;
 import com.example.connectue.fragmets.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
-import com.example.connectue.firestoreManager.FireStoreLikeCallback;
-import com.example.connectue.firestoreManager.LikeManager;
 import com.example.connectue.firestoreManager.PostManager;
 import com.example.connectue.firestoreManager.UserManager;
 import com.example.connectue.model.Post;

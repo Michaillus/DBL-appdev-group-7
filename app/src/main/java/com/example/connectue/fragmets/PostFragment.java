@@ -18,10 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
-import com.example.connectue.firestoreManager.FireStoreLikeCallback;
-import com.example.connectue.firestoreManager.LikeManager;
 import com.example.connectue.R;
+import com.example.connectue.interfaces.FireStoreLikeCallback;
 import com.example.connectue.interfaces.UserNameCallback;
 import com.example.connectue.adapters.CommentAdapter;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;

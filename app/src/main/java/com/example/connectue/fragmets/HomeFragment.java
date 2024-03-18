@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import com.example.connectue.activities.AddPostActivity;
 import com.example.connectue.adapters.PostAdapter;
 import com.example.connectue.databinding.FragmentHomeBinding;
-import com.example.connectue.firestoreManager.EntityManager;
-import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.firestoreManager.PostManager;
 import com.example.connectue.model.Post;

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
+import com.example.connectue.utils.General;
 import com.example.connectue.utils.TimeUtils;
 import com.example.connectue.model.Comment;
 import com.google.firebase.firestore.FirebaseFirestore;
