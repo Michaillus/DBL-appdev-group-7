@@ -1,10 +1,14 @@
 package com.example.connectue;
 
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.databinding.RowPostsBinding;
@@ -27,9 +31,13 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     private FirebaseFirestore db;
 
     private String currentUid;
+    private FragmentManager fragmentManager;
 
-    public AdapterPosts(List<Post> postList) {
+    private String TAG = "TestAdapterPosts";
+
+    public AdapterPosts(List<Post> postList, FragmentManager fragmentManager) {
         this.postList = postList;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -53,13 +61,14 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     }
 
     //view holder class
-    class MyHolder extends RecyclerView.ViewHolder {
+    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private RowPostsBinding binding;
 
         public MyHolder(RowPostsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.postCardView.setOnClickListener(this);
         }
 
         public void bind(Post post) {
@@ -134,5 +143,27 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
         }
 
+        // Click a post card to jump to post details page
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "onClick: card clicked");
+            int position = getBindingAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                String postId = postList.get(position).getPostID();
+                navigateToPostFragment(postId);
+            }
+        }
+
+        private void navigateToPostFragment(String postId) {
+            PostFragment postFragment = new PostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", postId);
+            postFragment.setArguments(bundle);
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.frame_layout, postFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 }
