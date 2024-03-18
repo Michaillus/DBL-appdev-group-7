@@ -18,6 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
+import com.example.connectue.firestoreManager.PostManager;
+import com.example.connectue.firestoreManager.UserManager;
+import com.example.connectue.model.User2;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -77,6 +81,9 @@ public class PostFragment extends Fragment {
     private CollectionReference commentsRef;
     private String userId;
 
+    private PostManager postManager;
+    private UserManager userManager;
+
     private String TAG = "Test";
 
     public PostFragment() {
@@ -103,6 +110,9 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        postManager = new PostManager(FirebaseFirestore.getInstance(),
+                "posts", "posts-likes", "posts-dislikes");
+        userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
     }
 
     @Nullable
@@ -155,33 +165,34 @@ public class PostFragment extends Fragment {
     }
 
     private void loadContentsFromFirestore() {
-        // Load current post
-        postRef = db.collection("posts").document(postId);
-        postRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                // Document exists, you can retrieve its data
-                List<String> likedByUsers = (List<String>) documentSnapshot.get("likedByUsers");
-                isPostLiked = likedByUsers.contains(userId);
-                Post.createPost(documentSnapshot, new PostCreateCallback() {
+        postManager.downloadOne(postId, new FireStoreDownloadCallback<Post>() {
+            @Override
+            public void onSuccess(Post post) {
+                Post.loadImage(postImage, post.getImageUrl());
+                postDescription.setText(post.getText());
+                numOfLikes.setText(String.valueOf(post.getLikeNumber()));
+                currentPost = post;
+
+                userManager.downloadOne(post.getPublisherId(), new FireStoreDownloadCallback<User2>() {
                     @Override
-                    public void onPostCreated(Post post) {
-                        publisherName.setText(post.getPublisherName());
-                        Post.loadImage(postImage, post.getImageUrl());
-                        postDescription.setText(post.getDescription());
-                        numOfLikes.setText(String.valueOf(post.getLikeNumber()));
-                        currentPost = post;
+                    public void onSuccess(User2 publisher) {
+                        publisherName.setText(publisher.getFullName());
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(TAG, "Error getting user", e);
                     }
                 });
-                // Load comments of this post
-                loadCommentsFromFirestore(postId);
-            } else {
-                // Document doesn't exist
-                Log.d(TAG, "No such document");
             }
-        }).addOnFailureListener(e -> {
-            // Error handling
-            Log.e(TAG, "Error getting document", e);
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Error getting post", e);
+            }
         });
+        // Load comments of this post
+        loadCommentsFromFirestore(postId);
 
         likePostBtn
                 .setOnClickListener(new View.OnClickListener() {
@@ -243,6 +254,7 @@ public class PostFragment extends Fragment {
     }
 
     private void uploadCommentToFirestore(String commentText) {
+        postRef = db.collection("posts").document(postId);
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Date date = new Date();
         Comment comment = new Comment(userId, commentText, postId, date);
@@ -256,12 +268,11 @@ public class PostFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Comment added with ID: " + documentReference.getId());
                         // Update the UI to reflect the new comment
-                        User.fetchUserName(userId, new UserNameCallback() {
+                        userManager.downloadOne(userId, new FireStoreDownloadCallback<User2>() {
                             @Override
-                            public void onUserNameFetched(String userName) {
-                                comment.setPublisherName(userName);
+                            public void onSuccess(User2 user) {
+                                comment.setPublisherName(user.getFullName());
                                 commentList.add(0, comment);
                                 // Notify the RecyclerView adapter about the dataset change
                                 adapterComments.notifyItemInserted(0);
@@ -270,14 +281,18 @@ public class PostFragment extends Fragment {
                                 currentPost.incrementCommentNumber();
                                 postRef.update("comments", currentPost.getCommentNumber());
                             }
-                        });
 
+                            @Override
+                            public void onFailure(Exception e) {
+                                Log.e(TAG, "Error getting user document", e);
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding comment", e);
+                        Log.e(TAG, "Error adding comment", e);
                         // Handle the error
                     }
                 });

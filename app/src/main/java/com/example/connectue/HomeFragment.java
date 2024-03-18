@@ -14,12 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.databinding.FragmentHomeBinding;
-import com.google.firebase.firestore.DocumentReference;
+import com.example.connectue.firestoreManager.FireStoreDownloadCallback;
+import com.example.connectue.firestoreManager.PostManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -53,13 +52,9 @@ public class HomeFragment extends Fragment {
     private AdapterPosts postAdapter;
 
     // Number of posts loaded at once to the feed.
-    final int postsPerChunk = 4;
+    private final int postsPerChunk = 4;
 
-    // Query for loading posts from the database.
-    Query postsQuery;
-
-    // Last post that was loaded from the database.
-    DocumentSnapshot lastVisiblePost;
+    private PostManager postManager;
 
     private Boolean isLoading = false;
 
@@ -97,12 +92,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        db = FirebaseFirestore.getInstance();
-
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Initialize database post manager.
+        postManager = new PostManager(FirebaseFirestore.getInstance(), "posts",
+                "post-likes", "post-dislikes");
+
+        //Initializing the list of posts
         postList = new ArrayList<>();
 
         //Initialize ReclerView
@@ -111,9 +109,8 @@ public class HomeFragment extends Fragment {
         binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
 
-        // Initialize database query for post retrieval and load first chunk of posts to the feed.
-        postsQuery = db.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING);
-        loadChunkOfPosts();
+        //Upload from database and display first chunk of posts
+        loadPosts();
 
         binding.createPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,11 +134,11 @@ public class HomeFragment extends Fragment {
                 // Check if end of the list is reached
                 if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0
-                        && totalItemCount >= PAGE_SIZE) { // Assuming PAGE_SIZE is the number of items to load per page
+                        && totalItemCount >= PAGE_SIZE) {
+                    // Assuming PAGE_SIZE is the number of items to load per page
                     // Load more items
-
                     isLoading = true;
-                    loadChunkOfPosts();
+                    loadPosts();
                 }
             }
         });
@@ -155,44 +152,20 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    /**
-     * Load chunk of postsPerChunk posts from database and display to the feed.
-     */
-    private void loadChunkOfPosts() {
-        Query currentQuery;
-        if (lastVisiblePost == null) {
-            currentQuery = postsQuery.limit(postsPerChunk);
-        } else {
-            currentQuery = postsQuery.startAfter(lastVisiblePost).limit(postsPerChunk);
-        }
-        currentQuery.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot snapshot = task.getResult();
-                if (!snapshot.isEmpty()) {
-                    lastVisiblePost = snapshot.getDocuments().get(task.getResult().size() - 1);
-                    displayPosts(task.getResult());
-                }
-            } else {
-                Log.d(TAG, "Error getting documents: ", task.getException());
+    public void loadPosts() {
+        postManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Post>>() {
+            @Override
+            public void onSuccess(List<Post> data) {
+                postList.addAll(data);
+                postAdapter.notifyDataSetChanged();
+                isLoading = false;
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Error while downloading posts", e);
             }
         });
-    }
-
-    /**
-     * Displays posts that were loaded from the database to the post feed in UI.
-     * @param snapshot object containing all the posts that were loaded from database.
-     */
-    private void displayPosts(QuerySnapshot snapshot) {
-        for (QueryDocumentSnapshot document : snapshot) {
-            Post.createPost(document, new PostCreateCallback() {
-                @Override
-                public void onPostCreated(Post post) {
-                    postList.add(post);
-                    postAdapter.notifyDataSetChanged();
-                    isLoading = false;
-                }
-            });
-        }
     }
 
     @Override
