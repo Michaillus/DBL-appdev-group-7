@@ -8,15 +8,30 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +60,7 @@ public class ChannelsFragment extends Fragment {
 
     private Button searchBtn;
     private EditText searchEt;
+    private ListView searchListView;
 
     public ChannelsFragment() {
         // Required empty public constructor
@@ -89,6 +105,7 @@ public class ChannelsFragment extends Fragment {
 
         searchBtn = view.findViewById(R.id.search_button);
         searchEt = view.findViewById(R.id.searchEditText);
+        searchListView = view.findViewById(R.id.searchListView);
 
         // Button to trigger to search activity
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +119,7 @@ public class ChannelsFragment extends Fragment {
             }
         });
 
+        showSearchListView(); // each time change the search EditText, the list view will update
 
         horizontalScroller = new PopularCoursesScrollingFragment();
         majorsVerticalScrollingFragment = new MajorsVerticalScrollingFragment();
@@ -131,6 +149,7 @@ public class ChannelsFragment extends Fragment {
         return view;
     }
 
+
     private void showCoursesView() {
         searchEt.setVisibility(View.VISIBLE);
         searchBtn.setVisibility(View.VISIBLE);
@@ -155,4 +174,72 @@ public class ChannelsFragment extends Fragment {
         transaction.hide(myCoursesVerticalFragment);
         transaction.commit();
     }
+
+    private void showSearchListView() {
+        searchEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // get the text content from search edit text
+                Log.i("query", "text change detected" + s);
+                String searchText = s.toString().trim();
+                searchText = searchText.toUpperCase();
+
+                if (searchText.isEmpty()) {
+                    searchListView.setAdapter(null);
+                    Log.i("query", "without following query");
+                    return;
+                }
+                Log.i("query", "go on query");
+
+                searchListView.setVisibility(View.VISIBLE);
+
+                Query query = FirebaseFirestore.getInstance()
+                        .collection("courses")
+                        .whereGreaterThanOrEqualTo("courseCode", searchText)
+                        .whereLessThan("courseCode", searchText + "\uf8ff");
+
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<String> courseCodes = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // get course code and add it into the list
+                                String courseCode = document.getString("courseCode");
+                                courseCodes.add(courseCode);
+                            }
+
+                            // renew list view
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, courseCodes);
+                            searchListView.setAdapter(adapter);
+
+                            searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    String selectedItemText = (String) parent.getItemAtPosition(position);
+                                    // give the item clicked to search bar
+                                    searchEt.setText(selectedItemText);
+                                    searchListView.setVisibility(View.GONE);
+                                }
+
+                            });
+
+                        } else {
+                            // deal with the situation that it fails to search
+                            Log.e("Fail to search.", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+        });
+    }
+
 }

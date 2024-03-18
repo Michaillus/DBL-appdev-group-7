@@ -8,6 +8,8 @@ public class Review {
     public String uName;
     @PropertyName("text")
     public String uText;
+    @PropertyName("date")
+    public String date;
     @PropertyName("likes")
     public int pLikes;
     @PropertyName("dislikes")
@@ -20,8 +22,9 @@ public class Review {
     public String dislikeNum;
 
     // Constructor
-    public Review(String uName, String uText, int pLikes, int pDislikes, int stars, String likeNum, String dislikeNum) {
+    public Review(String uName, String date, String uText, int pLikes, int pDislikes, int stars, String likeNum, String dislikeNum) {
         this.uName = uName;
+        this.date = date;
         this.uText = uText;
         this.pLikes = pLikes;
         this.pDislikes = pDislikes;
@@ -46,6 +49,10 @@ public class Review {
     public void setuText(String uText) {
         this.uText = uText;
     }
+
+    public String getDate() { return date; }
+
+    public void setDate(String date) { this.date = date; }
 
     public int getpLikes() {
         return pLikes;
@@ -80,4 +87,3 @@ public class Review {
 
     public void setDislikeNum(String dislikeNum) { this.dislikeNum = dislikeNum; }
 }
-

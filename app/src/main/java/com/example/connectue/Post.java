@@ -10,68 +10,25 @@ import android.widget.PopupWindow;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
  * Class for Post object to store strings that need to be displayed on screen.
  */
-public class Post {
+public class Post extends Interactable {
 
     private static final String TAG = "Post class: ";
 
-    private String publisherName;
-    private String description;
     private String imageUrl;
-    private int likeNumber;
-    private int commentNumber;
-    private String postID;
 
-    public Post() {
-    }
+    public Post(String postId, String publisherId, String text, String imageUrl,
+                Long likeNumber, Long commentNumber) throws IllegalArgumentException {
 
-    public Post(String publisherName, String description, String imageUrl, int likeNumber, int commentNumber, String postID) {
-        this.publisherName = publisherName;
-        this.description = description;
-        this.imageUrl = imageUrl;
-        this.likeNumber = likeNumber;
-        this.commentNumber = commentNumber;
-        this.postID = postID;
-    }
+        super(postId, publisherId, text, likeNumber, 0L, commentNumber);
 
-    public static void createPost(QueryDocumentSnapshot document, PostCreateCallback callback) {
-        // Handling documents with a null field
-        if (document.getString("publisher") == null) {
-            String m = "Post publisher should not be null";
-            Log.e(TAG, m);
-            throw new IllegalArgumentException(m);
-        }
-        if (document.getString("text") == null) {
-            String m = "Post text should not be null";
-            Log.e(TAG, m);
-            throw new IllegalArgumentException(m);
-        }
-        if (document.getLong("likes") == null) {
-            String m = "Number of post likes should not be null";
-            Log.e(TAG, m);
-            throw new IllegalArgumentException(m);
-        }
-        if (document.getLong("comments") == null) {
-            String m = "Number of post comments should not be null";
-            Log.e(TAG, m);
-            throw new IllegalArgumentException(m);
-        }
-        User.fetchUserName(document.getString("publisher"), new UserNameCallback() {
-            @Override
-            public void onUserNameFetched(String userName) {
-                Post post = new Post(userName,
-                        document.getString("text"),
-                        document.getString("photoURL"),
-                        document.getLong("likes").intValue(),
-                        document.getLong("comments").intValue(),
-                        document.getId());
-                callback.onPostCreated(post);
-            }
-        });
+        this.setImageUrl(imageUrl);
+
     }
 
     /**
@@ -122,65 +79,11 @@ public class Post {
         }
     }
 
-    // Getters and setters for post ID.
-    public String getPostID() {
-        return postID;
-    }
-
-    public void setPostID(String postID) {
-        this.postID = postID;
-    }
-
-    // Getters and setters for user ID.
-    public String getPublisherName() {
-        return publisherName;
-    }
-
-    public void setPublisherName(String publisherName) {
-        this.publisherName = publisherName;
-    }
-
-    // Getters and setters for post description.
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     // Getters and setters for post image URL.
     public String getImageUrl() {
         return imageUrl;
     }
-
     public void setImageUrl(String pImage) {
         this.imageUrl = pImage;
-    }
-
-    // Getters and setters for number of likes on the post.
-    public int getLikeNumber() {
-        return likeNumber;
-    }
-
-    public void incrementLikeNumber() {
-        this.likeNumber++;
-    }
-
-    public void decrementLikeNumber() {
-        this.likeNumber--;
-    }
-
-    // Getters and setters for number of comments on the post.
-    public int getCommentNumber() {
-        return commentNumber;
-    }
-
-    public void incrementCommentNumber() {
-        this.commentNumber++;
-    }
-
-    public void decrementCommentNumber() {
-        this.commentNumber--;
     }
 }

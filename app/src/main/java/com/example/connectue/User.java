@@ -12,12 +12,19 @@ public abstract class User {
     private static final String TAG = "User class ";
 
     public String userId;
+
     public String email;
+
     public Boolean isVerified;
+
     public String password;
+
     public String firstName;
+
     public String lastName;
+
     public int role;
+
     public String phone;
 
     public static void fetchUserName(String uid, UserNameCallback callback)

@@ -18,13 +18,10 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
     Context context; // for inflation
     ArrayList<Review> reviewModels;
 
-
     public AdapterReviews(Context context, ArrayList<Review> reviewModels) {
         this.context = context;
         this.reviewModels = reviewModels;
     }
-
-
 
     @NonNull
     @Override
@@ -43,6 +40,7 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
 
         holder.uName.setText(reviewModels.get(position).getuName());
         holder.review.setText(reviewModels.get(position).getuText());
+        holder.date.setText(reviewModels.get(position).getDate());
         holder.star.setImageResource(reviewModels.get(position).getStars());
         holder.like.setImageResource(reviewModels.get(position).getpLikes());
         holder.dislike.setImageResource(reviewModels.get(position).getpDislikes());
@@ -59,15 +57,15 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         // grab the views from course_review_row file
-        // kinda like the OnCreate() method.
 
         ImageView star, like, dislike;
-        TextView uName, review;
-        EditText likeNum, dislikeNum;
+        TextView uName, review, date;
+        TextView likeNum, dislikeNum;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             star = itemView.findViewById(R.id.star);
+            date = itemView.findViewById(R.id.date);
             like = itemView.findViewById(R.id.likePostBtn);
             dislike = itemView.findViewById(R.id.dislikeReview);
             uName = itemView.findViewById(R.id.uName);
