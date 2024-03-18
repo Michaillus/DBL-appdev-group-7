@@ -22,11 +22,17 @@ public class Post extends Interactable {
 
     private String imageUrl;
 
+    public Post(String publisherId, String text, String imageUrl) {
+        super(publisherId, text);
+
+        this.setImageUrl(imageUrl);
+    }
+
     // Constructor
     public Post(String postId, String publisherId, String text, String imageUrl,
-                Long likeNumber, Long commentNumber, Date datetime) throws IllegalArgumentException {
+                Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime) throws IllegalArgumentException {
 
-        super(postId, publisherId, text, likeNumber, 0L, commentNumber, datetime);
+        super(postId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
 
         this.setImageUrl(imageUrl);
 

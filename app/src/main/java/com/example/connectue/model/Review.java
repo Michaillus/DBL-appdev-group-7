@@ -10,6 +10,12 @@ public class Review extends Interactable{
 
     protected long stars;
 
+    public Review(String publisherId, String text, Long stars) {
+        super(publisherId, text);
+
+        this.setStars(stars);
+    }
+
     public Review(String reviewId, String publisherId, String text, Long stars,
                 Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime)
             throws IllegalArgumentException {
@@ -19,18 +25,6 @@ public class Review extends Interactable{
         this.setStars(stars);
 
     }
-
-//    // Constructor
-//    public Review(String uName, String date, String uText, int pLikes, int pDislikes, int stars, String likeNum, String dislikeNum) {
-//        this.uName = uName;
-//        this.date = date;
-//        this.uText = uText;
-//        this.pLikes = pLikes;
-//        this.pDislikes = pDislikes;
-//        this.stars = stars;
-//        this.likeNum = likeNum;
-//        this.dislikeNum = dislikeNum;
-//    }
 
     // Getters and setters for stars.
     public long getStars() {

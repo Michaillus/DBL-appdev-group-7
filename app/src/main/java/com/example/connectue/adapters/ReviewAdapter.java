@@ -14,13 +14,14 @@ import com.example.connectue.R;
 import com.example.connectue.model.Review;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHolder> {
 
     Context context; // for inflation
-    ArrayList<Review> reviewModels;
+    List<Review> reviewModels;
 
-    public ReviewAdapter(Context context, ArrayList<Review> reviewModels) {
+    public ReviewAdapter(Context context, List<Review> reviewModels) {
         this.context = context;
         this.reviewModels = reviewModels;
     }

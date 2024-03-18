@@ -8,6 +8,10 @@ public class Question extends Interactable{
 
     private static final String TAG = "Question class: ";
 
+    public Question(String publisherId, String text) {
+        super(publisherId, text);
+    }
+
     public Question(String reviewId, String publisherId, String text,
                   Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime)
             throws IllegalArgumentException {

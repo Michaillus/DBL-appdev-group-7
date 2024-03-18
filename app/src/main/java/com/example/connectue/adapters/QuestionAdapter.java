@@ -37,11 +37,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull QuestionAdapter.MyViewHolder holder, int position) {
-        holder.uName.setText(questionModels.get(position).getuName());
-        holder.date.setText(questionModels.get(position).getDate());
-        holder.review.setText(questionModels.get(position).getuText());
-        holder.like.setImageResource(questionModels.get(position).getqLikes());
-        holder.likeNum.setText(questionModels.get(position).getqLikeNum());
+        Question question = questionModels.get(position);
+
+        holder.uName.setText(question.getPublisherId());
+        holder.date.setText(question.getDatetime().toString());
+        holder.review.setText(question.getText());
+        holder.like.setImageResource(R.drawable.like_icon);
+        holder.likeNum.setText(String.valueOf(question.getLikeNumber()));
 
     }
 

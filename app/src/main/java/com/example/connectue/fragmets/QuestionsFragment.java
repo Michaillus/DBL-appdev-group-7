@@ -15,6 +15,7 @@ import com.example.connectue.adapters.QuestionAdapter;
 import com.example.connectue.model.Question;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +83,8 @@ public class QuestionsFragment extends Fragment {
     }
 
 
+    // Generating dummy questions for testing.
+    // TODO: write question retrieval from database
     private void setUpCourseQuestionsFragmentModels() {
         String[] uName = getResources().getStringArray(R.array.reviewerName);
         String[] date = getResources().getStringArray(R.array.date);
@@ -89,11 +92,13 @@ public class QuestionsFragment extends Fragment {
         String[] likeNum = getResources().getStringArray(R.array.likeNum);
 
         for (int i = 0; i < uName.length; i++) {
-            questionModels.add(new Question(uName[i],
-                    date[i],
-                    uText[i],
-                    R.drawable.like_icon,
-                    likeNum[i]));
+//            questionModels.add(new Question(uName[i],
+//                    date[i],
+//                    uText[i],
+//                    R.drawable.like_icon,
+//                    likeNum[i]));
+            questionModels.add(new Question("id", uText[i], uText[i],
+                    3L, 2L, 1L, new Date()));
         }
     }
 }

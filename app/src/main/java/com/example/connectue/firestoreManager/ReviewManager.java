@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ReviewManager extends InteractableManager<Review> {
+public class ReviewManager extends InteractableManager<Review> {
 
     public ReviewManager(FirebaseFirestore db, String collectionName,
                        String likeCollectionName, String dislikeCollectionName) {
@@ -33,12 +33,13 @@ public abstract class ReviewManager extends InteractableManager<Review> {
     protected Map<String, Object> serialize(Review review) {
         Map<String, Object> postData = new HashMap<>();
 
-        postData.put("text", review.getText());
-        postData.put("photoURL", review.getStars());
-        postData.put("likes", review.getLikeNumber());
-        postData.put("comments", review.getCommentNumber());
+
         postData.put("publisher", review.getPublisherId());
-        postData.put("likedByUsers", new ArrayList<String>());
+        postData.put("text", review.getText());
+        postData.put("stars", review.getStars());
+        postData.put("likes", review.getLikeNumber());
+        postData.put("dislikes", review.getLikeNumber());
+        postData.put("comments", review.getCommentNumber());
         postData.put("timestamp", new Timestamp(review.getDatetime()));
 
         return postData;

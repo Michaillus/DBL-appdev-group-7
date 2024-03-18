@@ -25,6 +25,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.connectue.R;
+import com.example.connectue.firestoreManager.PostManager;
+import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.model.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -46,11 +49,16 @@ import java.util.Map;
 
 public class AddPostActivity extends AppCompatActivity {
 
+    private static final String TAG = "AddPostActivity class: ";
+
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_STORAGE = 200;
 
     private static final int IMAGE_PICK_CAMERA_CODE = 300;
     private static final int IMAGE_PICK_GALLERY_CODE = 400;
+
+    // FireBase posts collection manager.
+    PostManager postManager;
 
     //views
     EditText postDescription;
@@ -70,6 +78,10 @@ public class AddPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_post);
 
         posts = FirebaseFirestore.getInstance().collection("posts");
+
+        // Initializing post manager
+        postManager = new PostManager(FirebaseFirestore.getInstance(), "posts",
+                "post-likes", "post-dislikes");
 
         postDescription = findViewById(R.id.postDescription);
         publishPostBtn = findViewById(R.id.publishPostBtn);
@@ -249,35 +261,26 @@ public class AddPostActivity extends AppCompatActivity {
      *                 an image
      */
     private void uploadPostToDatabase(String text, String imageUrl) {
+        String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Post post = new Post(publisherId, text, imageUrl);
+        postManager.upload(post, new FireStoreUploadCallback() {
+            @Override
+            public void onSuccess() {
+                Log.i("Upload post", "Post is uploaded successfully");
+                Toast.makeText(AddPostActivity.this,
+                        "Post is published successfully", Toast.LENGTH_SHORT).show();
 
-        Map<String, Object> postData = new HashMap<>();
-        postData.put("text", text);
-        postData.put("photoURL", imageUrl);
-        postData.put("likes", 0);
-        postData.put("comments", 0);
-        postData.put("timestamp", new Timestamp(new Date()));
-        postData.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
-        postData.put("likedByUsers", new ArrayList<String>());
+                Intent intentPosts = new Intent(AddPostActivity.this, MainActivity.class);
+                startActivity(intentPosts);
+            }
 
-        posts.add(postData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.i("Upload post", "Post is uploaded successfully");
-                        Toast.makeText(AddPostActivity.this,
-                                "Post is published successfully", Toast.LENGTH_SHORT).show();
-
-                        Intent intentPosts = new Intent(AddPostActivity.this, MainActivity.class);
-                        startActivity(intentPosts);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Upload post", "Failed to upload the post: " + e.getMessage());
-                        Toast.makeText(AddPostActivity.this,
-                                "Failed to upload", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("Upload post", "Failed to upload the post: " + e.getMessage());
+                Toast.makeText(AddPostActivity.this,
+                        "Failed to upload", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**

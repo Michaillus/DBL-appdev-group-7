@@ -24,6 +24,10 @@ public abstract class Interactable {
 
     protected Date datetime;
 
+    public Interactable(String publisherId, String text) {
+        this("id", publisherId, text, 0L, 0L, 0L, new Date());
+    }
+
     public Interactable(String interactableId, String publisherId, String text,
                         Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime) {
 

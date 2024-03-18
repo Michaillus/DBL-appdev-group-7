@@ -35,33 +35,26 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    // Firestore
-    private FirebaseFirestore db;
-    List<String> programs;
+    private static final String TAG = "HomePageUtil: ";
 
     private FragmentHomeBinding binding;
+
+    // List of posts to output in feed
     private List<Post> postList;
+
+    // Adapter that is responsible for outputting posts to UI
     private PostAdapter postAdapter;
 
-    // Number of posts loaded at once to the feed.
+    // Number of posts loaded at once to the feed
     private final int postsPerChunk = 4;
 
+    // Manager for database requests for posts collection
     private PostManager postManager;
 
+    // Indicates if posts are currently loading from database
     private Boolean isLoading = false;
 
     private FragmentManager fragmentManager;
-
-    private String TAG = "HomePageUtil: ";
 
     public HomeFragment() {
         // Default constructor
@@ -70,24 +63,6 @@ public class HomeFragment extends Fragment {
     public HomeFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
-
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment HomeFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static HomeFragment newInstance(String param1, String param2) {
-//        HomeFragment fragment = new HomeFragment(this.fragmentManager);
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,7 +85,7 @@ public class HomeFragment extends Fragment {
         binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
 
-        //Upload from database and display first chunk of posts
+        // Upload from database and display first chunk of posts
         loadPosts();
 
         binding.createPostBtn.setOnClickListener(new View.OnClickListener() {
@@ -144,12 +119,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.postsRecyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         return root;
     }
 

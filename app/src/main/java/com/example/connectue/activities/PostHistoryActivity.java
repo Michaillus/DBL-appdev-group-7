@@ -60,6 +60,7 @@ public class PostHistoryActivity extends AppCompatActivity {
                                         document.getString("publisher"),
                                         document.getString("text"),
                                         document.getString("photoULR"),
+                                        0L,
                                         document.getLong("likes"),
                                         document.getLong("comments"),
                                         document.getTimestamp("timestamp").toDate());
