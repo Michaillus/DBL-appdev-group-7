@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/background"
     tools:context=".LoginActivity"
-    android:background="@color/Design2"
     android:padding="30dp">
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailTILL"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="200dp"
-        android:background="@drawable/button_drawable"
+        android:textColor="@android:color/background_light"
         android:text="@string/LoginBtnStr"/>
     <Button
         android:id="@+id/buttonregister"
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/button_drawable"
+        android:textColor="@android:color/background_light"
         android:text="@string/RegisterBtnStr"/>
 
     <TextView

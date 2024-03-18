@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-
+    private String pageIntent = "home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +22,24 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment(getSupportFragmentManager()));
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                pageIntent= "home";
+            } else {
+                pageIntent= extras.getString("pageIntent");
+            }
+        } else {
+            pageIntent= (String) savedInstanceState.getSerializable("pageIntent");
+        }
+
+        if (pageIntent == "channels") {
+            replaceFragment(new ChannelsFragment());
+        } else {
+            replaceFragment(new HomeFragment());
+        }
+
 
         binding.bottomNavigationView3.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();

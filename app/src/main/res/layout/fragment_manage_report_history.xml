@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".ManageReportHistoryFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="146dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:id="@+id/admin_reported_RV"/>
+
+    <LinearLayout
+        android:layout_width="244dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/report_load_post_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Post"/>
+
+            <Button
+                android:id="@+id/report_load_comment_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/report_load_course_review_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="course review"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/report_picture_IV"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:src="@drawable/baseline_person_24" />
+
+        <TextView
+            android:id="@+id/report_text_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading content"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/report_basic_info_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of reports"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/report_delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Delete" />
+
+        <Button
+            android:id="@+id/report_keep_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keep"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>
