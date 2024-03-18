@@ -42,7 +42,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     private String currentUid;
     private FragmentManager fragmentManager;
 
-    public AdapterPosts(List<Post> postList) {
+    public AdapterPosts(List<Post> postList, FragmentManager fragmentManager) {
         this.postList = postList;
         this.fragmentManager = fragmentManager;
     }
@@ -168,7 +168,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                         binding.reportBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getPostID());
+                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
                             }
                         });
                     }
@@ -185,7 +185,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
             Log.d(TAG, "onClick: card clicked");
             int position = getBindingAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                String postId = postList.get(position).getPostID();
+                String postId = postList.get(position).getId();
                 navigateToPostFragment(postId);
             }
         }

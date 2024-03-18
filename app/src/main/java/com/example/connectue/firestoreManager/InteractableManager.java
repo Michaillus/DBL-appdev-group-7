@@ -37,7 +37,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         });
     }
 
-    public void isLiked(T interactable, String userId, FireStoreLikeCallback callback) {
-        likeManager.isLiked(interactable.getId(), userId, callback);
+    public void isLiked(String interactableId, String userId, FireStoreLikeCallback callback) {
+        likeManager.isLiked(interactableId, userId, callback);
     }
 }
