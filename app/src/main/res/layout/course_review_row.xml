@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp">
 
 
     <androidx.cardview.widget.CardView
@@ -55,8 +57,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ImageButton
                     android:id="@+id/likePostBtn"
@@ -66,14 +68,15 @@
                     android:contentDescription="Like"
                     app:srcCompat="@drawable/like_icon" />
 
-                <EditText
+                <TextView
+                    android:layout_gravity="center"
                     android:id="@+id/likeNum"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="12">
 
-                </EditText>
+                </TextView>
 
                 <ImageButton
                     android:id="@+id/dislikeReview"
@@ -82,15 +85,19 @@
                     android:background="@null"
                     app:srcCompat="@drawable/dislike" />
 
-                <EditText
+                <TextView
+                    android:layout_gravity="center"
                     android:id="@+id/dislikeNum"
-                    android:layout_width="54dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="0">
 
-                </EditText>
+                </TextView>
             </LinearLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 

@@ -1,9 +1,7 @@
 package com.example.connectue;
 
 import static com.example.connectue.General.PROFILEPICTURE;
-import static com.example.connectue.General.afterPictureOperation;
-import static com.example.connectue.General.pictureOperation;
-import static com.example.connectue.General.requestPicturePermission;
+
 
 import android.Manifest;
 import android.app.Activity;
@@ -306,17 +304,20 @@ public class ProfileFragment extends Fragment {
         });
     }
     private void updateInfo() {
+        Map<String, Object> uploadInfo = new HashMap<>();
         firstNameStr = firstName_fld.getText().toString().trim();
         lastNameStr = lastName_fld.getText().toString().trim();
         majorStr = major_fld.getText().toString().trim();
         emailStr = email_fld.getText().toString().trim();
         phoneStr = phone_fld.getText().toString().trim();
 
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.FIRSTNAME, firstNameStr);
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.LASTNAME, lastNameStr);
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.PROGRAM, majorStr);
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.EMAIL, emailStr);
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(General.PHONE, phoneStr);
+        uploadInfo.put(General.FIRSTNAME, firstNameStr);
+        uploadInfo.put(General.LASTNAME, lastNameStr);
+        uploadInfo.put(General.PROGRAM, majorStr);
+        uploadInfo.put(General.EMAIL, emailStr);
+        uploadInfo.put(General.PHONE, phoneStr);
+
+        db.collection(General.USERCOLLECTION).document(user.getUid()).update(uploadInfo);
     }
 
     private void initSignoutButton() {
@@ -333,6 +334,7 @@ public class ProfileFragment extends Fragment {
     private void toOtherActivity(Class activity) {
         Intent loading = new Intent(getActivity(), activity);
         getActivity().startActivity(loading);
+//        getActivity().finish();
     }
 
     private void parseDocument() {
@@ -382,7 +384,7 @@ public class ProfileFragment extends Fragment {
 
     private void initProfileImageView() {
 
-        if (General.isGuest(role)||imageURL == null || imageURL.equals("")) {
+        if (General.isGuest(role)) {
             return;
         }
 

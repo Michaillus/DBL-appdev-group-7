@@ -54,4 +54,6 @@
     <string name="delete_account"><b>DELETE ACCOUNT </b></string>
     <string name="Edit_button"><b>Edit </b></string>
     <string name="Log_out"><b>Logout </b></string>
+    <string name="report">Report</string>
+
 </resources>

@@ -24,17 +24,20 @@
 
             <ImageView
                 android:id="@+id/pImageIv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:adjustViewBounds="true"
                 android:background="#FFFFFF"
-                app:imageUrl="@{post.pImage}" />
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{post.getImageUrl()}" />
 
             <TextView
                 android:id="@+id/uNamePost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{post.uid}"
+                android:text="@{post.getPublisherName()}"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -43,7 +46,7 @@
                 android:id="@+id/pDescriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{post.pDescription}"
+                android:text="@{post.getDescription()}"
                 android:textColor="#000000" />
 
             <LinearLayout
@@ -64,7 +67,7 @@
                     android:id="@+id/pLikesTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(post.pLikes)}"
+                    android:text="@{String.valueOf(post.getLikeNumber())}"
                     android:textColor="#000000" />
 
                 <ImageButton
@@ -79,8 +82,21 @@
                     android:id="@+id/pCommentTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{Long.toString(post.pComments)}"
+                    android:text="@{Long.toString(post.getCommentNumber())}"
                     android:textColor="#000000" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/report_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    app:srcCompat="@drawable/outline_report_24"/>
 
             </LinearLayout>
 

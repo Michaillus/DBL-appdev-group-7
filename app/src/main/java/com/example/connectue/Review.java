@@ -80,4 +80,3 @@ public class Review {
 
     public void setDislikeNum(String dislikeNum) { this.dislikeNum = dislikeNum; }
 }
-

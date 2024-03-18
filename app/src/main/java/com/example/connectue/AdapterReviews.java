@@ -59,7 +59,7 @@ public class AdapterReviews extends RecyclerView.Adapter<AdapterReviews.MyViewHo
 
         ImageView star, like, dislike;
         TextView uName, review;
-        EditText likeNum, dislikeNum;
+        TextView likeNum, dislikeNum;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
