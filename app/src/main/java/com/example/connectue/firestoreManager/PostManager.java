@@ -1,6 +1,6 @@
 package com.example.connectue.firestoreManager;
 
-import com.example.connectue.Post;
+import com.example.connectue.model.Post;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
