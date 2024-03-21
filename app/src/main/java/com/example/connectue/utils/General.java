@@ -10,10 +10,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -142,6 +146,35 @@ public class General {
                 } else {
                     Log.i(TAG, "Query failed");
                 }
+            }
+        });
+    }
+
+    /**
+     * Show the full size image. Use for e.g. image of a post, comment.
+     * @param v imageView of the image
+     */
+    public static void showPopupWindow(View v, String imageUrl) {
+        ImageView fullImageView = new ImageView(v.getContext());
+        fullImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fullImageView.setPadding(8,0,8,0);
+        fullImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        fullImageView.setFocusable(true);
+
+        // Load the full-size image into the ImageView
+        Glide.with(v.getContext())
+                .load(imageUrl) // Load the same image URL
+                .into(fullImageView);
+
+        // Create a popup window to display the full-size image
+        PopupWindow popupWindow = new PopupWindow(fullImageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+        // Close the popup window if the full imageview is clicked.
+        fullImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
             }
         });
     }

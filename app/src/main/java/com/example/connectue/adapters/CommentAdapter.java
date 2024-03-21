@@ -1,15 +1,19 @@
 package com.example.connectue.adapters;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.connectue.R;
 import com.example.connectue.utils.General;
 import com.example.connectue.utils.TimeUtils;
@@ -59,6 +63,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     public class CommentHolder extends RecyclerView.ViewHolder {
 
         private TextView publisherName;
+        private ImageView profilePic;
         private TextView commentDescription;
         private TextView publishTime;
         private ImageButton reportBtn;
@@ -66,6 +71,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
             publisherName = itemView.findViewById(R.id.publisherNameCommentTv);
+            profilePic = itemView.findViewById(R.id.profilePicCommentIv);
             publishTime = itemView.findViewById(R.id.publishTimeCommentTv);
             commentDescription = itemView.findViewById(R.id.commentDescriptionTv);
             reportBtn = itemView.findViewById(R.id.reportCommentBtn);
@@ -73,6 +79,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
         public void bind(Comment comment) {
             publisherName.setText(comment.getPublisherName());
+
+            // Load profile picture
+            String imageUrl = comment.getUserProfilePicUrl();
+            if (imageUrl != null && !imageUrl.equals("")) {
+                Glide.with(profilePic.getContext()).load(imageUrl).into(profilePic);
+                profilePic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        General.showPopupWindow(profilePic, imageUrl);
+                    }
+                });
+            }
+
             publishTime.setText(TimeUtils.getTimeAgo(comment.gettimestamp()));
             commentDescription.setText(comment.getContent());
 

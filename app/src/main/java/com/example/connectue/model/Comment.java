@@ -14,6 +14,7 @@ public class Comment {
     private Date timestamp;
     private String commentId;
     private String publisherName;
+    private String userProfilePicUrl;
 
     private static final String TAG = "Comment class: ";
 
@@ -76,6 +77,8 @@ public class Comment {
         return publisherName;
     }
 
+    public String getUserProfilePicUrl() {return userProfilePicUrl;}
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -99,4 +102,6 @@ public class Comment {
     public void setPublisherName(String publisherName) {
         this.publisherName = publisherName;
     }
+
+    public void setUserProfilePicUrl(String userProfilePicUrl) {this.userProfilePicUrl = userProfilePicUrl;}
 }

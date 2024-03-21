@@ -181,7 +181,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         }
 
         private void navigateToPostFragment(String postId) {
-            PostFragment postFragment = new PostFragment(fragmentManager);
+            PostFragment postFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putString("postId", postId);
             postFragment.setArguments(bundle);

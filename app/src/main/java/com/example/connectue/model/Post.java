@@ -59,6 +59,7 @@ public class Post extends Interactable {
                     ImageView fullImageView = new ImageView(v.getContext());
                     fullImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     fullImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    fullImageView.setPadding(8,0,8,0);
 
                     // Load the full-size image into the ImageView
                     Glide.with(v.getContext())

@@ -24,7 +24,7 @@ public class UserManager extends EntityManager<User2> {
                 document.getBoolean("isVerified"),
                 document.getString("password"),
                 document.getString("phone"),
-                document.getString("profilePicUrl"),
+                document.getString("profilePicURL"),
                 document.getString("program"),
                 document.getLong("role").intValue()
         );
