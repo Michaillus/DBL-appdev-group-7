@@ -1,4 +1,4 @@
-package com.example.connectue.firestoreManager;
+package com.example.connectue.managers;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +15,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LikeManager<T> {
+public class LikeManager {
+
+    /**
+     * Class tag for logs.
+     */
+    protected String TAG = "LikeManager class: ";
+
+    /**
+     * Reference to the firebase collection, that is assigned to the manager.
+     */
     CollectionReference likeCollection;
 
     public LikeManager(FirebaseFirestore db, String collection) {

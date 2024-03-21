@@ -16,19 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.R;
-import com.example.connectue.adapters.PostAdapter;
 import com.example.connectue.adapters.ReviewAdapter;
-import com.example.connectue.firestoreManager.PostManager;
-import com.example.connectue.firestoreManager.ReviewManager;
+import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
-import com.example.connectue.model.Post;
 import com.example.connectue.model.Review;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -105,8 +99,9 @@ public class ReviewsFragment extends Fragment {
         RecyclerView reviewRecyclerView = view.findViewById(R.id.recyclerView_review);
 
         // Initialize database post manager.
-        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), "reviews",
-                "review-likes", "review-dislikes");
+        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
+                Review.REVIEW_COLLECTION_NAME, Review.REVIEW_LIKE_COLLECTION_NAME,
+                Review.REVIEW_DISLIKE_COLLECTION_NAME, Review.REVIEW_COMMENT_COLLECTION_NAME);
 
         // Initializing list of reviews
         reviewList = new ArrayList<>();

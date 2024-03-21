@@ -19,7 +19,7 @@ import com.example.connectue.fragmets.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.firestoreManager.UserManager;
+import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
 import com.google.firebase.auth.FirebaseAuth;

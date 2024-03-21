@@ -1,4 +1,4 @@
-package com.example.connectue.firestoreManager;
+package com.example.connectue.managers;
 
 import com.example.connectue.model.User2;
 import com.google.firebase.Timestamp;
@@ -13,6 +13,8 @@ public class UserManager extends EntityManager<User2> {
 
     public UserManager(FirebaseFirestore db, String collectionName) {
         super(db, collectionName);
+
+        TAG = "UserManager class: ";
     }
 
     @Override

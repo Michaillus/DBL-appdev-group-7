@@ -9,7 +9,6 @@ import android.widget.PopupWindow;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
-import com.example.connectue.model.Interactable;
 
 import java.util.Date;
 
@@ -18,7 +17,30 @@ import java.util.Date;
  */
 public class Post extends Interactable {
 
+    /**
+     * Class tag for logs.
+     */
     private static final String TAG = "Post class: ";
+
+    /**
+     * Name of post collection in the database.
+     */
+    public static final String POST_COLLECTION_NAME = "posts";
+
+    /**
+     * Name of post likes collection in the database.
+     */
+    public static final String POST_LIKE_COLLECTION_NAME = "post-likes";
+
+    /**
+     * Name of post dislikes collection in the database.
+     */
+    public static final String POST_DISLIKE_COLLECTION_NAME = "post-dislikes";
+
+    /**
+     * Name of post comments collection in the database.
+     */
+    public static final String POST_COMMENT_COLLECTION_NAME = "post-comments";
 
     private String imageUrl;
 

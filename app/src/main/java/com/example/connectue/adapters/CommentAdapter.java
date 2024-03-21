@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
+import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
 import com.example.connectue.model.Comment;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,22 +59,29 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     //view holder class
     public class CommentHolder extends RecyclerView.ViewHolder {
 
+        UserManager userManager;
+
         private TextView publisherName;
         private TextView commentDescription;
         private TextView publishTime;
 
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
+
             publisherName = itemView.findViewById(R.id.publisherNameCommentTv);
             publishTime = itemView.findViewById(R.id.publishTimeCommentTv);
             commentDescription = itemView.findViewById(R.id.commentDescriptionTv);
+
+            userManager = new UserManager(FirebaseFirestore.getInstance(),
+                    User2.USER_COLLECTION_NAME);
         }
 
         public void bind(Comment comment) {
-            publisherName.setText(comment.getPublisherName());
-            publishTime.setText(TimeUtils.getTimeAgo(comment.gettimestamp()));
-            commentDescription.setText(comment.getContent());
+            publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
+            commentDescription.setText(comment.getText());
 
+            userManager.downloadOne(comment.getPublisherId(),
+                    user -> publisherName.setText(user.getFullName()));
         }
     }
 }
