@@ -38,8 +38,10 @@ public abstract class EntityManager<T> {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.i(TAG, "Document is downloaded successfully");
-                callback.onSuccess(deserialize(documentSnapshot));
+                Log.i(TAG, "Document is downloaded successfully ");
+                if (documentSnapshot.exists()) {
+                    callback.onSuccess(deserialize(documentSnapshot));
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

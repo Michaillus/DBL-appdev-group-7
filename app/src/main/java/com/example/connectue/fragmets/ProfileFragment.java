@@ -503,7 +503,7 @@ public class ProfileFragment extends Fragment {
         StorageReference filePath = FirebaseStorage.getInstance().getReference("posts")
                 .child(emailStr + "." + General.getFileExtension(getContext(), imageUri));
 
-        if (imageURL != null || !imageURL.equals("")) {
+        if (imageURL != null && !imageURL.equals("")) {
             StorageReference currentPicture = FirebaseStorage.getInstance().
                     getReferenceFromUrl(imageURL);
             currentPicture.delete().addOnSuccessListener(new OnSuccessListener<Void>() {

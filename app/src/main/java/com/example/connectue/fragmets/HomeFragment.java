@@ -12,13 +12,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
+import com.example.connectue.R;
 import com.example.connectue.activities.AddPostActivity;
 import com.example.connectue.adapters.PostAdapter;
 import com.example.connectue.databinding.FragmentHomeBinding;
+import com.example.connectue.firestoreManager.UserManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.firestoreManager.PostManager;
 import com.example.connectue.model.Post;
+import com.example.connectue.model.User2;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.fragment.app.FragmentManager;
@@ -60,6 +65,9 @@ public class HomeFragment extends Fragment {
     private Boolean isLoading = false;
 
     private FragmentManager fragmentManager;
+
+    private UserManager userManager;
+    private ImageButton createPostBtn;
 
     private String TAG = "HomePageUtil: ";
 
@@ -109,18 +117,35 @@ public class HomeFragment extends Fragment {
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
-
         //Upload from database and display first chunk of posts
         loadPosts();
 
-        binding.createPostBtn.setOnClickListener(new View.OnClickListener() {
+        // Display the createPostBtn only for verified users
+        db = FirebaseFirestore.getInstance();
+        userManager = new UserManager(db, "users");
+        String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        createPostBtn = root.findViewById(R.id.createPostBtn);
+        userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddPostActivity.class);
-                startActivity(intent);
+            public void onSuccess(User2 data) {
+                if (data.isVerified()) {
+                    createPostBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), AddPostActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    createPostBtn.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
             }
         });
-
 
         // Add a scroll listener to the RecyclerView
         binding.postsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
