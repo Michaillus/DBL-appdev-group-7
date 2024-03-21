@@ -14,7 +14,11 @@ import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.adapters.RecyclerViewAdapter;
 import com.example.connectue.model.Post;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -24,6 +28,8 @@ public class PostHistoryActivity extends AppCompatActivity {
     private final static String TAG = "postHis";
     Button backBtn;
     private FirebaseFirestore db;
+    private CollectionReference postRef;
+    private FirebaseUser user;
 //    TODO: the following is the text version
     private List<Post> postList;
     private RecyclerView recyclerView;
@@ -36,6 +42,7 @@ public class PostHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_history);
 
         db = FirebaseFirestore.getInstance();
+        postRef = db.collection("posts");
         postList = new ArrayList<>();
         loadUserPost();
 
@@ -51,18 +58,23 @@ public class PostHistoryActivity extends AppCompatActivity {
 
     //TODO: test version
     private void loadUserPost() {
-            db.collection(General.POSTCOLLECTION).get()
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Query query = postRef.whereEqualTo("publisher", user.getUid());
+
+            query.get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String userId = document.getString(General.PUBLISHER);
-                                Post post = new Post("User abc",
+                                Post post = new Post(document.getId(),
                                         document.getString("publisher"),
                                         document.getString("text"),
                                         document.getString("photoULR"),
+                                        0L,
                                         document.getLong("likes"),
-                                        document.getLong("comments")
-                                        );
+                                        document.getLong("comments"),
+                                        document.getTimestamp("timestamp").toDate());
                                 postList.add(post);
                             }
                         } else {

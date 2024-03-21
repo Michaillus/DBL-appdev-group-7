@@ -6,6 +6,7 @@ import com.example.connectue.R;
 import com.example.connectue.model.Review;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CourseReviewFragment extends AppCompatActivity {
     ArrayList<Review> reviewModels = new ArrayList<>();
@@ -35,7 +36,9 @@ public class CourseReviewFragment extends AppCompatActivity {
         String [] dislikeNums = getResources().getStringArray(R.array.dislikeNum);
 
         for (int i = 0; i<uName.length; i++) {
-            reviewModels.add(new Review(uName[i], uText[i], date[i], likeImages[i], dislikeImages[i], starsImages[i], likeNums[i], dislikeNums[i]));
+            reviewModels.add(new Review("dummy id", uName[i], uText[i],
+                    4L, Long.getLong(likeNums[i]), Long.getLong(dislikeNums[i]),
+                    2L, new Date()));
         }
     }
 }

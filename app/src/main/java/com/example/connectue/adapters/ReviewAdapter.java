@@ -14,13 +14,14 @@ import com.example.connectue.R;
 import com.example.connectue.model.Review;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHolder> {
 
     Context context; // for inflation
-    ArrayList<Review> reviewModels;
+    List<Review> reviewModels;
 
-    public ReviewAdapter(Context context, ArrayList<Review> reviewModels) {
+    public ReviewAdapter(Context context, List<Review> reviewModels) {
         this.context = context;
         this.reviewModels = reviewModels;
     }
@@ -39,15 +40,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public void onBindViewHolder(@NonNull ReviewAdapter.MyViewHolder holder, int position) {
         // assign values to the views we created in the course_review_row file
         // based on the position of the recycler view
+        Review review = reviewModels.get(position);
 
-        holder.uName.setText(reviewModels.get(position).getuName());
-        holder.review.setText(reviewModels.get(position).getuText());
-        holder.date.setText(reviewModels.get(position).getDate());
-        holder.star.setImageResource(reviewModels.get(position).getStars());
-        holder.like.setImageResource(reviewModels.get(position).getpLikes());
-        holder.dislike.setImageResource(reviewModels.get(position).getpDislikes());
-        holder.likeNum.setText(reviewModels.get(position).getLikeNum());
-        holder.dislikeNum.setText(reviewModels.get(position).getDislikeNum());
+
+        holder.uName.setText(review.getText());
+        holder.review.setText(reviewModels.get(position).getText());
+        holder.date.setText(reviewModels.get(position).getDatetime().toString());
+        holder.star.setImageResource(R.drawable.star);
+        holder.like.setImageResource(R.drawable.like_icon);
+        holder.dislike.setImageResource(R.drawable.dislike);
+        holder.likeNum.setText(String.valueOf(reviewModels.get(position).getLikeNumber()));
+        holder.dislikeNum.setText(String.valueOf(reviewModels.get(position).getDislikeNumber()));
     }
 
     @Override

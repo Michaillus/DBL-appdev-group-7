@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 
+import java.util.Date;
+
 public abstract class Interactable {
 
     protected String TAG = "Interactable class: ";
@@ -20,8 +22,14 @@ public abstract class Interactable {
 
     protected long commentNumber;
 
+    protected Date datetime;
+
+    public Interactable(String publisherId, String text) {
+        this("id", publisherId, text, 0L, 0L, 0L, new Date());
+    }
+
     public Interactable(String interactableId, String publisherId, String text,
-                        Long likeNumber, Long dislikeNumber, Long commentNumber) {
+                        Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime) {
 
         // Handling null parameters
         if (interactableId == null) {
@@ -61,6 +69,7 @@ public abstract class Interactable {
         this.setLikeNumber(likeNumber);
         this.setDislikeNumber(dislikeNumber);
         this.setCommentNumber(commentNumber);
+        this.setDatetime(datetime);
     }
 
     public static CollectionReference getCollection() {
@@ -122,6 +131,15 @@ public abstract class Interactable {
     }
     public void decrementCommentNumber() {
         this.commentNumber--;
+    }
+
+    // Getters and setters for datetime.
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
 
 }

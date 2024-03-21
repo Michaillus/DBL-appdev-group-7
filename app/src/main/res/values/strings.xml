@@ -11,6 +11,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string-array name="programs_array">
+        <item> </item>
         <item>BAM</item>
         <item>BAP</item>
         <item>AUBS</item>
@@ -20,7 +21,7 @@
         <item>BCSE</item>
         <item>BDS</item>
         <item>BEE</item>
-        <item>BID</item>'
+        <item>BID</item>
         <item>BIE</item>
         <item>BME</item>
         <item>BPT</item>
@@ -55,5 +56,6 @@
     <string name="Edit_button"><b>Edit </b></string>
     <string name="Log_out"><b>Logout </b></string>
     <string name="report">Report</string>
+    <string name="home"><b>Home</b></string>
 
 </resources>

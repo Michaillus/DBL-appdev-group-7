@@ -11,6 +11,8 @@ import androidx.databinding.BindingAdapter;
 import com.bumptech.glide.Glide;
 import com.example.connectue.model.Interactable;
 
+import java.util.Date;
+
 /**
  * Class for Post object to store strings that need to be displayed on screen.
  */
@@ -20,10 +22,17 @@ public class Post extends Interactable {
 
     private String imageUrl;
 
-    public Post(String postId, String publisherId, String text, String imageUrl,
-                Long likeNumber, Long commentNumber) throws IllegalArgumentException {
+    public Post(String publisherId, String text, String imageUrl) {
+        super(publisherId, text);
 
-        super(postId, publisherId, text, likeNumber, 0L, commentNumber);
+        this.setImageUrl(imageUrl);
+    }
+
+    // Constructor
+    public Post(String postId, String publisherId, String text, String imageUrl,
+                Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime) throws IllegalArgumentException {
+
+        super(postId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
 
         this.setImageUrl(imageUrl);
 

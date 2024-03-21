@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -23,12 +24,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.connectue.model.Review;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.activities.AdminActivity;
@@ -83,7 +89,8 @@ public class ProfileFragment extends Fragment {
     private String lastNameStr = "";
     private String emailStr = "";
     private String phoneStr = "";
-    private String majorStr = "";
+    private String spinnerStr = "";
+    private String spinnerStr2 = "";
     private String imageURL = "";
     private Uri imageUri = null;
     private boolean isEditing = false;
@@ -97,10 +104,12 @@ public class ProfileFragment extends Fragment {
     Button adminBtn;
     EditText firstName_fld;
     EditText lastName_fld;
-    EditText major_fld;
+    TextView majorTextView;
     EditText email_fld;
     EditText phone_fld;
     ImageView profileIV;
+    Spinner majorSpinner;
+    Spinner majorSpinner2;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -203,7 +212,6 @@ public class ProfileFragment extends Fragment {
     private void initComponents(View view) {
         firstName_fld = view.findViewById(R.id.text_firstName);
         lastName_fld = view.findViewById(R.id.text_lastName);
-        major_fld = view.findViewById(R.id.text_major);
         email_fld = view.findViewById(R.id.text_email);
         phone_fld = view.findViewById(R.id.text_phone);
 
@@ -214,7 +222,22 @@ public class ProfileFragment extends Fragment {
         reviewHisBtn  = view.findViewById(R.id.btn_reviewHistory);
         adminBtn  = view.findViewById(R.id.btn_admmin);
         profileIV = view.findViewById(R.id.profilePic);
+        majorSpinner = view.findViewById(R.id.majorSpinner);
+        majorSpinner2 = view.findViewById(R.id.majorSpinner2);
+        majorTextView = view.findViewById(R.id.major_title);
 
+        majorSpinner.setEnabled(false);
+        majorSpinner2.setEnabled(false);
+
+        if (General.isGuest(role)) {
+            postHisBtn.setVisibility(View.GONE);
+            reviewHisBtn.setVisibility(View.INVISIBLE);
+            majorTextView.setVisibility(View.INVISIBLE);
+            majorSpinner.setVisibility(View.INVISIBLE);
+            majorSpinner2.setVisibility(View.INVISIBLE);
+        }
+
+        initSpinner();
         initTextSection(view);
         initEditButton();
         initSignoutButton();
@@ -222,6 +245,39 @@ public class ProfileFragment extends Fragment {
         initPostHisButton();
         initAdminButton();
         initProfileImageView();
+    }
+
+    private void initSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getContext(),
+                R.array.programs_array,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        majorSpinner.setAdapter(adapter);
+        majorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        majorSpinner2.setAdapter(adapter);
+        majorSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+
     }
 
     private void initTextSection(View view) {
@@ -232,15 +288,31 @@ public class ProfileFragment extends Fragment {
     private void setTestFields() {
         firstName_fld.setText(firstNameStr);
         lastName_fld.setText(lastNameStr);
-        major_fld.setText(majorStr);
         email_fld.setText(emailStr);
         phone_fld.setText(phoneStr);
+
+        String[] items = getResources().getStringArray(R.array.programs_array);
+        setSpinner(items, spinnerStr, majorSpinner);
+        setSpinner(items, spinnerStr2, majorSpinner2);
+    }
+
+    private void setSpinner(String[] items, String spinnerString, Spinner spinner) {
+        int position = -1;
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].equals(spinnerString)) {
+                position = i;
+                break;
+            }
+        }
+
+        if (position != -1) {
+            spinner.setSelection(position);
+        } else {}
     }
 
     private void switchTextFields(boolean onOff) {
         firstName_fld.setEnabled(onOff);
         lastName_fld.setEnabled(onOff);
-        major_fld.setEnabled(onOff);
         email_fld.setEnabled(onOff);
         phone_fld.setEnabled(onOff);
     }
@@ -270,8 +342,12 @@ public class ProfileFragment extends Fragment {
                 isEditing = !isEditing;
                 switchTextFields(isEditing);
                 setTestFields();
+
+                majorSpinner.setEnabled(!majorSpinner.isEnabled());
+                majorSpinner2.setEnabled(!majorSpinner2.isEnabled());
             }
         });
+
     }
 
     private void initDeleteButton() {
@@ -308,13 +384,14 @@ public class ProfileFragment extends Fragment {
         Map<String, Object> uploadInfo = new HashMap<>();
         firstNameStr = firstName_fld.getText().toString().trim();
         lastNameStr = lastName_fld.getText().toString().trim();
-        majorStr = major_fld.getText().toString().trim();
         emailStr = email_fld.getText().toString().trim();
         phoneStr = phone_fld.getText().toString().trim();
+        spinnerStr = (String) majorSpinner.getSelectedItem();
+        spinnerStr2 = (String) majorSpinner2.getSelectedItem();
 
         uploadInfo.put(General.FIRSTNAME, firstNameStr);
         uploadInfo.put(General.LASTNAME, lastNameStr);
-        uploadInfo.put(General.PROGRAM, majorStr);
+        uploadInfo.put(General.PROGRAM, spinnerStr + " " + spinnerStr2);
         uploadInfo.put(General.EMAIL, emailStr);
         uploadInfo.put(General.PHONE, phoneStr);
 
@@ -347,7 +424,24 @@ public class ProfileFragment extends Fragment {
         }
         if (document.get(General.LASTNAME) != null) {  lastNameStr = (String) document.get(General.LASTNAME);}
         if (document.get(General.EMAIL) != null) { emailStr = (String) document.get(General.EMAIL);}
-        if (document.get(General.PROGRAM) != null) { majorStr = (String) document.get(General.PROGRAM);}
+
+        if (document.get(General.PROGRAM) != null) {
+            String programString = (String) document.get(General.PROGRAM);
+            String[] majors = programString.split(" ");
+
+//            Log.i("print", majors[0] + majors[1]);
+            if(majors == null || majors.length == 0) {
+                spinnerStr = " ";
+                spinnerStr2 = " ";
+            } else if (majors.length == 1) {
+                spinnerStr = majors[0];
+                spinnerStr2 = " ";
+            } else {
+                spinnerStr = majors[0];
+                spinnerStr2 = majors[1];
+            }
+        }
+
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
         if (document.get(General.ROLE) != null) {
             role = document.getLong(General.ROLE);

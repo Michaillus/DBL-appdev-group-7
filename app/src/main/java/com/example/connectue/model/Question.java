@@ -2,44 +2,22 @@ package com.example.connectue.model;
 
 import com.google.firebase.firestore.PropertyName;
 
-public class Question {
-    @PropertyName("reviewer")
-    public String uName;
-    @PropertyName("date")
-    public String date;
-    @PropertyName("text")
-    public String uText;
-    @PropertyName("question-likes")
-    public int qLikes;
-    @PropertyName("question-likeNum")
-    public String qLikeNum;
+import java.util.Date;
 
+public class Question extends Interactable{
 
-    public Question(String uName, String date, String uText, int qLikes, String qLikeNum) {
-        this.uName = uName;
-        this.date = date;
-        this.uText = uText;
-        this.qLikes = qLikes;
-        this.qLikeNum = qLikeNum;
+    private static final String TAG = "Question class: ";
+
+    public Question(String publisherId, String text) {
+        super(publisherId, text);
     }
 
-    public String getuName() { return uName; }
+    public Question(String reviewId, String publisherId, String text,
+                  Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime)
+            throws IllegalArgumentException {
 
-    public void setuName(String uName) { this.uName = uName; }
+        super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
 
-    public String getuText() { return uText; }
+    }
 
-    public void setuText(String uText) { this.uText = uText; }
-
-    public int getqLikes() { return qLikes; }
-
-    public void setqLikes(int qLikes) { this.qLikes = qLikes; }
-
-    public String getqLikeNum() { return qLikeNum; }
-
-    public void setqLikeNum(String qLikeNum) { this.qLikeNum = qLikeNum; }
-
-    public String getDate() { return date; }
-
-    public void setDate(String date) { this.date = date; }
 }
