@@ -20,10 +20,10 @@
         android:theme="@style/Theme.ConnecTue"
         tools:targetApi="31">
         <activity
-            android:name=".CourseViewActivity"
+            android:name=".activities.CourseViewActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminActivity"
+            android:name=".activities.AdminActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
@@ -32,28 +32,28 @@
             android:name=".CoursesActivity"
             android:exported="false" />
         <activity
-            android:name=".AddPostActivity"
+            android:name=".activities.AddPostActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".PostHistoryActivity"
+            android:name=".activities.PostHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".activities.SearchActivity"
             android:exported="true" />
         <activity
-            android:name=".LoadingActivity"
+            android:name=".activities.LoadingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

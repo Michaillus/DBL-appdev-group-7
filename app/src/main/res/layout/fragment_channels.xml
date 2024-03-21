@@ -131,13 +131,14 @@
             android:layout_toRightOf="@id/searchEditText"
             android:text="Search"/>
 
-        <ListView
-            android:id="@+id/searchListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/searchEditText"
-            android:labelFor="@+id/searchEditText"
-            android:visibility="gone" />
+    <ListView
+        android:id="@+id/searchListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchEditText"
+        android:labelFor="@+id/searchEditText"
+        android:visibility="gone"
+        android:background="@color/Design2"/>
 
 
 
