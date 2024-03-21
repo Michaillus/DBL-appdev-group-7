@@ -67,8 +67,6 @@ public class HomeFragment extends Fragment {
     private UserManager userManager;
     private ImageButton createPostBtn;
 
-    private String TAG = "HomePageUtil: ";
-
     public HomeFragment() {
         // Default constructor
     }
