@@ -44,6 +44,9 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+    // Firebase instance
+    private FirebaseFirestore db;
+
     // List of posts to output in feed
     private List<Post> postList;
 
