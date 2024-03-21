@@ -5,107 +5,156 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ChannelsFragment"
-    style="@style/background"
-    android:padding="30dp">
-    <TextView
-        android:id="@+id/popular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchEditText"
-        android:layout_marginTop="35dp"
-        android:textSize="17dp"
-        android:text="@string/popular"/>
-    <TextView
-        android:id="@+id/majors"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchEditText"
-        android:layout_marginTop="35dp"
-        android:textSize="17dp"
-        android:text="@string/majors"/>
-    <androidx.fragment.app.FragmentContainerView
-        android:layout_below="@+id/majors"
-        android:layout_marginTop="10dp"
-        android:id="@+id/fragmentContainerViewMajors"
+    style="@style/background">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:layout_below="@+id/popular"
-        android:id="@+id/fragmentContainerViewPopCourses"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="100dp"/>
-
-    <TextView
-        android:id="@+id/mycourses"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fragmentContainerViewPopCourses"
-        android:layout_marginTop="20dp"
-        android:textSize="17dp"
-        android:text="@string/my_courses"/>
+        android:id="@+id/pageHeader"
+        android:layout_alignParentTop="true"
+        android:background="@color/Design4"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+        >
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerViewMyCourses"
+        <TextView
+            android:id="@+id/Channel_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/Design2"
+            android:text="@string/channels"
+            android:textSize="32sp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="20dp" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout_channel_menu"
+            android:layout_below="@+id/Channel_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Design4"
+            app:tabTextColor="@color/Design2"
+            app:tabSelectedTextColor="@color/Design2"
+            app:tabIndicatorColor="@color/Design2"
+            app:tabMode="fixed"
+            app:tabGravity="fill">
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Courses"
+
+                />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Majors"
+
+                />
+        </com.google.android.material.tabs.TabLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/mycourses"
-        android:layout_marginTop="10dp" />
+        android:layout_below="@id/pageHeader"
+        android:padding="30dp">
 
-    <EditText
-        android:id="@+id/searchEditText"
-        style="@android:style/Widget.AutoCompleteTextView"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/Channel_title"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:hint="Search..."
-        android:inputType="text" />
+        <TextView
+            android:id="@+id/popular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchEditText"
+            android:layout_marginTop="35dp"
+            android:textSize="17dp"
+            android:text="@string/popular"/>
+        <TextView
+            android:id="@+id/majors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchEditText"
+            android:layout_marginTop="35dp"
+            android:textSize="17dp"
+            android:text="@string/majors"/>
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_below="@+id/majors"
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragmentContainerViewMajors"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_below="@+id/popular"
+            android:id="@+id/fragmentContainerViewPopCourses"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="100dp"/>
+
+        <TextView
+            android:id="@+id/mycourses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fragmentContainerViewPopCourses"
+            android:layout_marginTop="20dp"
+            android:textSize="17dp"
+            android:text="@string/my_courses"/>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerViewMyCourses"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/mycourses"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/searchEditText"
+            style="@android:style/Widget.AutoCompleteTextView"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:hint="Search..."
+            android:inputType="text" />
 
 
-    <Button
-        android:id="@+id/search_button"
-        android:layout_width="95dp"
-        android:layout_height="40dp"
-        android:layout_above="@+id/searchEditText"
-        android:layout_marginLeft="0dp"
-        android:layout_marginBottom="-62dp"
-        android:textColor="@android:color/background_light"
-        android:layout_toRightOf="@id/searchEditText"
-        android:text="Search"/>
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="95dp"
+            android:layout_height="40dp"
+            style="@style/buttonColor"
+            android:layout_above="@+id/searchEditText"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="-62dp"
+            android:textColor="@android:color/background_light"
+            android:layout_toRightOf="@id/searchEditText"
+            android:text="Search"/>
 
-    <ListView
-        android:id="@+id/searchListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/searchEditText"
-        android:labelFor="@+id/searchEditText"
-        android:visibility="gone" />
+        <ListView
+            android:id="@+id/searchListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchEditText"
+            android:labelFor="@+id/searchEditText"
+            android:visibility="gone" />
 
 
-    <TextView
-        android:id="@+id/Channel_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="@string/channels"
-        android:textSize="32sp"
-        android:layout_marginTop="20dp" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/coursemenu"
-        android:layout_width="160dp"
-        android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        style="@style/background"
-        android:layout_alignParentRight="true"
-        app:menu="@menu/courses_major_nav" >
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--            android:id="@+id/coursemenu"-->
+<!--            android:layout_width="160dp"-->
+<!--            android:layout_height="70dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            style="@style/background"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            app:menu="@menu/courses_major_nav" >-->
+
+<!--        </com.google.android.material.bottomnavigation.BottomNavigationView>-->
+    </RelativeLayout>
+
+
 
 
 </RelativeLayout>
