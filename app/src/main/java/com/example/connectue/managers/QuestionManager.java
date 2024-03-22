@@ -30,6 +30,7 @@ public class QuestionManager extends InteractableManager<Question> {
     @Override
     protected Question deserialize(DocumentSnapshot document) {
         return new Question(
+                document.getString("publisherName"),
                 document.getId(),
                 document.getString("publisher"),
                 document.getString("text"),

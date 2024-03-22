@@ -1,4 +1,4 @@
-package com.example.connectue.firestoreManager;
+package com.example.connectue.managers;
 
 import com.example.connectue.model.Material;
 import com.example.connectue.model.Review;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class MaterialsManager extends InteractableManager<Material>{
     public MaterialsManager(FirebaseFirestore db, String collectionName,
-                         String likeCollectionName, String dislikeCollectionName) {
-        super(db, collectionName, likeCollectionName, dislikeCollectionName);
+                         String likeCollectionName, String dislikeCollectionName, String commentCollectionName) {
+        super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
     }
 
     @Override

@@ -16,7 +16,7 @@ import android.content.Context;
 import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.activities.MaterialPDFActivity;
-import com.example.connectue.firestoreManager.UserManager;
+import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Material;
 import com.example.connectue.model.Post;

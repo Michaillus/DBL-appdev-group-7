@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
-import com.example.connectue.firestoreManager.ReviewManager;
+import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Course;

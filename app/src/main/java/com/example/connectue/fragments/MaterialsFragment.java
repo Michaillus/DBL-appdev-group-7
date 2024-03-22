@@ -15,8 +15,8 @@ import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.MaterialAdapter;
 import com.example.connectue.adapters.ReviewAdapter;
-import com.example.connectue.firestoreManager.MaterialsManager;
-import com.example.connectue.firestoreManager.ReviewManager;
+import com.example.connectue.managers.MaterialsManager;
+import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Material;
 import com.example.connectue.model.Review;
@@ -95,7 +95,9 @@ public class MaterialsFragment extends Fragment {
         materialsManager = new MaterialsManager(FirebaseFirestore.getInstance(),
                 "materials",
                 "material-likes",
-                "material-dislikes");
+                "material-dislikes",
+                "material-comments"
+                );
 
         materialList = new ArrayList<>();
         materialAdapter = new MaterialAdapter(getContext(), materialList);

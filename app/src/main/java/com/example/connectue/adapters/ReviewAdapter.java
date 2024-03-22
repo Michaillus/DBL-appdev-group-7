@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 
 import com.example.connectue.R;
-import com.example.connectue.firestoreManager.UserManager;
+import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Review;
 import com.example.connectue.model.User2;
