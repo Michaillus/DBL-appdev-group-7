@@ -1,21 +1,35 @@
 package com.example.connectue.fragmets;
 
+import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.R;
 import com.example.connectue.adapters.QuestionAdapter;
+import com.example.connectue.adapters.ReviewAdapter;
+import com.example.connectue.managers.QuestionManager;
+import com.example.connectue.managers.ReviewManager;
+import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.FireStoreUploadCallback;
 import com.example.connectue.model.Question;
+import com.example.connectue.model.Review;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +40,8 @@ public class QuestionsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    private static final String TAG = "QuestionsFragment class: ";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -33,7 +49,25 @@ public class QuestionsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    ArrayList<Question> questionModels = new ArrayList<>();
+    // List of posts to output in feed.
+    private List<Question> questionList;
+
+    // Adapter that is responsible for outputting posts to UI.
+    private QuestionAdapter questionAdapter;
+
+    // Number of posts loaded at once to the feed.
+    private final int postsPerChunk = 1;
+
+    // Manager for database requests for posts collection.
+    private QuestionManager questionManager;
+
+    // Indicates if posts are currently loading from database
+    private Boolean isLoading = false;
+    private String questionerId;
+    private FirebaseFirestore db;
+    DocumentReference questionRef;
+    private String questionId;
+
     public QuestionsFragment() {
         // Required empty public constructor
     }
@@ -70,13 +104,48 @@ public class QuestionsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_questions, container, false);
-        setUpCourseQuestionsFragmentModels();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_question);
+        RecyclerView questionRecyclerView = view.findViewById(R.id.recyclerView_question);
 
-        QuestionAdapter adapter = new QuestionAdapter(getContext(), questionModels);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Initialize database post manager.
+        questionManager = new QuestionManager(FirebaseFirestore.getInstance(), "questions", "questions-likes", "questions-dislikes", "comments");
+
+        // Initializing list of reviews
+        questionList = new ArrayList<>();
+
+        questionAdapter = new QuestionAdapter(getContext(), questionList);
+        questionRecyclerView.setAdapter(questionAdapter);
+        questionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        db = FirebaseFirestore.getInstance();
+
+
+        // Upload from database and display first chunk of posts
+        loadPosts();
+
+        // Add a scroll listener to the RecyclerView
+        questionRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) questionRecyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                // Check if end of the list is reached
+                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= PAGE_SIZE) {
+                    // Assuming PAGE_SIZE is the number of items to load per page
+                    // Load more items
+                    isLoading = true;
+                    loadPosts();
+                }
+            }
+        });
+
+
 
         // Inflate the layout for this fragment
         return view;
@@ -85,20 +154,24 @@ public class QuestionsFragment extends Fragment {
 
     // Generating dummy questions for testing.
     // TODO: write question retrieval from database
-    private void setUpCourseQuestionsFragmentModels() {
-        String[] uName = getResources().getStringArray(R.array.reviewerName);
-        String[] date = getResources().getStringArray(R.array.date);
-        String[] uText = getResources().getStringArray(R.array.reviews);
-        String[] likeNum = getResources().getStringArray(R.array.likeNum);
 
-        for (int i = 0; i < uName.length; i++) {
-//            questionModels.add(new Question(uName[i],
-//                    date[i],
-//                    uText[i],
-//                    R.drawable.like_icon,
-//                    likeNum[i]));
-            questionModels.add(new Question("id", uText[i], uText[i],
-                    3L, 2L, 1L, new Date()));
-        }
+    public void loadPosts() {
+
+        questionManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Question>>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onSuccess(List<Question> data) {
+                questionList.addAll(data);
+                questionAdapter.notifyDataSetChanged();
+                isLoading = false;
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Error while downloading questions", e);
+            }
+        });
     }
+
+
 }

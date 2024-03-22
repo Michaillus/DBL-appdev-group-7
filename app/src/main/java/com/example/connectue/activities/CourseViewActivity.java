@@ -49,6 +49,7 @@ public class CourseViewActivity extends AppCompatActivity {
     TextView ratingIndicator;
     LinearLayout followButton;
     ImageView backbtn;
+    ImageView reviewButton;
     FirebaseUser user;
     Float averageRating = 0f;
     Course course;
@@ -92,6 +93,7 @@ public class CourseViewActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.ratingBar);
         ratingIndicator = findViewById(R.id.rating);
         followButton = findViewById(R.id.followButton);
+        reviewButton = findViewById(R.id.review_btn);
         db = FirebaseFirestore.getInstance();
 
         title = findViewById(R.id.titleCourse);
@@ -186,6 +188,14 @@ public class CourseViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(CourseViewActivity.this, MainActivity.class);
                 intent.putExtra("pageIntent", "channels");
+                startActivity(intent);
+            }
+        });
+
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CourseViewActivity.this, AddReviewActivity.class);
                 startActivity(intent);
             }
         });
