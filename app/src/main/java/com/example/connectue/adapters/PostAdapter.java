@@ -14,17 +14,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.managers.PostManager;
 import com.example.connectue.utils.General;
 import com.example.connectue.fragments.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.firestoreManager.UserManager;
+import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -95,6 +95,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         TextView publisherName, description, likeNumber, commentNumber;
 
         UserManager userManager;
+        PostManager postManager;
 
         public MyHolder(RowPostsBinding binding) {
             super(binding.getRoot());
@@ -108,76 +109,62 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             commentNumber = itemView.findViewById(R.id.pCommentTv);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
+            db = FirebaseFirestore.getInstance();
+            postManager = new PostManager(FirebaseFirestore.getInstance(),
+                    Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
+                    Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
         }
 
         public void bind(Post post) {
             binding.setPost(post);
             binding.executePendingBindings();
 
+            currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
+                    .getCurrentUser()).getUid();
 
-
-            // Retrieve the post document
-            db = FirebaseFirestore.getInstance();
-            DocumentReference postRef = db.collection("posts").document(post.getId());
-            postRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot postDocument = task.getResult();
-
-                    // Check whether the post has "likedByUsers" field
-                    if (!postDocument.contains("likedByUsers")) {
-                        postRef.update("likedByUsers", new ArrayList<String>())
-                                .addOnSuccessListener(aVoid -> {
-                                    // Field "likedByUsers" added successfully
-
-                                })
-                                .addOnFailureListener(e -> {
-                                    // Error adding field "likedByUsers"
-                                });
+            // Display like button depending on whether the post is liked
+            postManager.isLiked(post.getId(), currentUid, new FireStoreLikeCallback() {
+                @Override
+                public void onSuccess(Boolean isLiked) {
+                    if (!isLiked) {
+                        binding.likePostBtn.setImageResource(R.drawable.like_icon);
+                    } else {
+                        binding.likePostBtn.setImageResource(R.drawable.liked_icon);
                     }
+                }
 
-                    // If likedByUsers exists, check whether this post is liked by current user
-                    if (postDocument.contains("likedByUsers")) {
-                        List<String> likedByUsers = (List<String>) postDocument.get("likedByUsers");
-                        currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
-                                .getCurrentUser()).getUid();
+                @Override
+                public void onFailure(Exception e) {
+                }
+            });
 
-                        // Display like states of the like button
-                        if (!likedByUsers.contains(currentUid)) {
-                            binding.likePostBtn.setImageResource(R.drawable.like_icon);
-                        } else {
-                            binding.likePostBtn.setImageResource(R.drawable.liked_icon);
+            // When the user click the like button
+            binding.likePostBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    postManager.likeOrUnlike(post, currentUid, new FireStoreLikeCallback() {
+                        @Override
+                        public void onSuccess(Boolean isLiked) {
+                            if (!isLiked) {
+                                binding.likePostBtn.setImageResource(R.drawable.like_icon);
+                            } else {
+                                binding.likePostBtn.setImageResource(R.drawable.liked_icon);
+                            }
+                            binding.pLikesTv.setText(String.valueOf(post.getLikeNumber()));
                         }
 
-                        // If the user presses the like button, the post is liked or disliked
-                        binding.likePostBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (!likedByUsers.contains(currentUid)) {
-                                    likedByUsers.add(currentUid);
-                                    binding.likePostBtn.setImageResource(R.drawable.liked_icon);
-                                    post.incrementLikeNumber();
-                                    binding.pLikesTv.setText(String.valueOf(post.getLikeNumber()));
-                                } else {
-                                    binding.likePostBtn.setImageResource(R.drawable.like_icon);
-                                    likedByUsers.remove(currentUid);
-                                    post.decrementLikeNumber();
-                                    binding.pLikesTv.setText(String.valueOf(post.getLikeNumber()));
-                                }
-                                postRef.update("likedByUsers", likedByUsers);
-                                postRef.update("likes", post.getLikeNumber());
-                            }
-                        });
+                        @Override
+                        public void onFailure(Exception e) {}
+                    });
+                }
+            });
 
-                        binding.reportBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
-                            }
-                        });
-                    }
 
-                } else {
-                    // Document not exist
+
+            binding.reportBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
                 }
             });
         }
@@ -194,7 +181,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         }
 
         private void navigateToPostFragment(String postId) {
-            PostFragment postFragment = new PostFragment();
+            PostFragment postFragment = new PostFragment(fragmentManager);
             Bundle bundle = new Bundle();
             bundle.putString("postId", postId);
             postFragment.setArguments(bundle);

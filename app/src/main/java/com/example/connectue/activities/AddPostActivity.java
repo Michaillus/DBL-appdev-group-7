@@ -17,6 +17,7 @@ import android.webkit.MimeTypeMap;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import android.Manifest;
@@ -25,26 +26,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.connectue.R;
-import com.example.connectue.firestoreManager.PostManager;
+import com.example.connectue.managers.PostManager;
 import com.example.connectue.interfaces.FireStoreUploadCallback;
 import com.example.connectue.model.Post;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 
 public class AddPostActivity extends AppCompatActivity {
@@ -65,6 +60,7 @@ public class AddPostActivity extends AppCompatActivity {
     Button publishPostBtn;
     ImageView addImageBtn;
     ImageView postImage;
+    ImageButton backBtn;
 
     //Reference to the Cloud Firestore database
     CollectionReference posts;
@@ -80,13 +76,15 @@ public class AddPostActivity extends AppCompatActivity {
         posts = FirebaseFirestore.getInstance().collection("posts");
 
         // Initializing post manager
-        postManager = new PostManager(FirebaseFirestore.getInstance(), "posts",
-                "post-likes", "post-dislikes");
+        postManager = new PostManager(FirebaseFirestore.getInstance(),
+                Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
+                Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
 
         postDescription = findViewById(R.id.postDescription);
         publishPostBtn = findViewById(R.id.publishPostBtn);
         addImageBtn = findViewById(R.id.addPostImageBtn);
         postImage = findViewById(R.id.postImage);
+        backBtn = findViewById(R.id.backBtn);
 
         addImageBtn.setOnClickListener(v -> showImagePickDialog());
 
@@ -97,6 +95,14 @@ public class AddPostActivity extends AppCompatActivity {
             addImageBtn.setEnabled(false);
             String description = postDescription.getText().toString().trim();
             publishPost(description, imageUri);
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         });
     }
 

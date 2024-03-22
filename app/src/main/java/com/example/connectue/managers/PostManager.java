@@ -1,4 +1,4 @@
-package com.example.connectue.firestoreManager;
+package com.example.connectue.managers;
 
 import android.util.Log;
 
@@ -7,18 +7,26 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PostManager extends InteractableManager<Post> {
 
-    private static final String TAG = "PostManager class: ";
-
+    /**
+     * Constructor for manager of posts.
+     *
+     * @param db             Instance of a FireStore database.
+     * @param collectionName Name of collection that stores posts in the database.
+     * @param likeCollectionName Name of collection that stores post likes in the database.
+     * @param dislikeCollectionName Name of collection that stores post dislikes in the database.
+     * @param commentCollectionName Name of collection that stores post comments in the database.
+     */
     public PostManager(FirebaseFirestore db, String collectionName,
-                       String likeCollectionName, String dislikeCollectionName) {
-        super(db, collectionName, likeCollectionName, dislikeCollectionName);
+                       String likeCollectionName, String dislikeCollectionName,
+                       String commentCollectionName) {
+        super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
+
+        TAG = "PostManager class: ";
     }
 
     @Override
@@ -46,7 +54,6 @@ public class PostManager extends InteractableManager<Post> {
         postData.put("dislikes", post.getDislikeNumber());
         postData.put("comments", post.getCommentNumber());
         postData.put("publisher", post.getPublisherId());
-        postData.put("likedByUsers", new ArrayList<String>());
         postData.put("timestamp", new Timestamp(post.getDatetime()));
 
         return postData;

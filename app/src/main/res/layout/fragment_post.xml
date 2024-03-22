@@ -43,6 +43,19 @@
             android:layout_alignStart="@id/profilePicPostImageView"
             android:text="Publish Time"/>
 
+
+        <!-- Back button -->
+        <ImageButton
+            android:id="@+id/backFromPostBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignTop="@+id/profilePicPostImageView"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:src="@drawable/baseline_close_24"
+            app:maxImageSize="45dp"
+            app:fabCustomSize="80dp"/>
+
         <!-- Post Image -->
         <ImageView
             android:id="@+id/postImageInPostImageView"

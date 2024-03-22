@@ -4,12 +4,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
+import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.User2;
+import com.example.connectue.utils.General;
 import com.example.connectue.utils.TimeUtils;
 import com.example.connectue.model.Comment;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,21 +60,37 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     //view holder class
     public class CommentHolder extends RecyclerView.ViewHolder {
 
+        UserManager userManager;
+
         private TextView publisherName;
         private TextView commentDescription;
         private TextView publishTime;
+        private ImageButton reportBtn;
 
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
+
             publisherName = itemView.findViewById(R.id.publisherNameCommentTv);
             publishTime = itemView.findViewById(R.id.publishTimeCommentTv);
             commentDescription = itemView.findViewById(R.id.commentDescriptionTv);
+            reportBtn = itemView.findViewById(R.id.reportCommentBtn);
+
+            userManager = new UserManager(FirebaseFirestore.getInstance(),
+                    User2.USER_COLLECTION_NAME);
         }
 
         public void bind(Comment comment) {
-            publisherName.setText(comment.getPublisherName());
-            publishTime.setText(TimeUtils.getTimeAgo(comment.gettimestamp()));
-            commentDescription.setText(comment.getContent());
+            publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
+            commentDescription.setText(comment.getText());
+
+            userManager.downloadOne(comment.getPublisherId(),
+                    user -> publisherName.setText(user.getFullName()));
+            reportBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, comment.getParentId());
+                }
+            });
 
         }
     }

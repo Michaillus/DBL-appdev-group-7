@@ -6,8 +6,36 @@ import java.util.Date;
 
 public class Review extends Interactable{
 
+    /**
+     * Class tag for logs.
+     */
     private static final String TAG = "Review class: ";
 
+    
+    /**
+     * Name of review collection in the database.
+     */
+    public static final String REVIEW_COLLECTION_NAME = "reviews";
+
+    /**
+     * Name of review likes collection in the database.
+     */
+    public static final String REVIEW_LIKE_COLLECTION_NAME = "review-likes";
+
+    /**
+     * Name of review dislikes collection in the database.
+     */
+    public static final String REVIEW_DISLIKE_COLLECTION_NAME = "review-dislikes";
+
+    /**
+     * Name of review comments collection in the database.
+     */
+    public static final String REVIEW_COMMENT_COLLECTION_NAME = "review-comments";
+
+    
+    /**
+     * Rating in terms of number of stars from 1 to 5, that was given in the review.
+     */
     protected long stars;
 
     protected String parentCourseId;
@@ -29,7 +57,9 @@ public class Review extends Interactable{
 
     }
 
-    // Getters and setters for stars.
+    /**
+     * Getters and setters for the stars.
+     */
     public long getStars() {
         return stars;
     }

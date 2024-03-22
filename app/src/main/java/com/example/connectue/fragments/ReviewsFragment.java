@@ -19,6 +19,7 @@ import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.firestoreManager.ReviewManager;
+import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Course;
 import com.example.connectue.model.Review;
@@ -105,8 +106,9 @@ public class ReviewsFragment extends Fragment {
         RecyclerView reviewRecyclerView = view.findViewById(R.id.recyclerView_review);
 
         // Initialize database post manager.
-        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), "reviews",
-                "review-likes", "review-dislikes");
+        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
+                Review.REVIEW_COLLECTION_NAME, Review.REVIEW_LIKE_COLLECTION_NAME,
+                Review.REVIEW_DISLIKE_COLLECTION_NAME, Review.REVIEW_COMMENT_COLLECTION_NAME);
 
         // Initializing list of reviews
         reviewList = new ArrayList<>();

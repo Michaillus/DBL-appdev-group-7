@@ -8,9 +8,13 @@ import java.util.Date;
 
 public abstract class Interactable {
 
+    /**
+     * Class tag for logs.
+     */
     protected String TAG = "Interactable class: ";
 
     protected String interactableId;
+
     protected String publisherId;
 
     protected String text;
@@ -24,17 +28,13 @@ public abstract class Interactable {
     protected Date datetime;
 
     public Interactable(String publisherId, String text) {
-        this("id", publisherId, text, 0L, 0L, 0L, new Date());
+        this(null, publisherId, text, 0L, 0L, 0L, new Date());
     }
 
     public Interactable(String interactableId, String publisherId, String text,
                         Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime) {
 
-        if (interactableId == null) {
-            String m = "ID of the interactable should not be null";
-            Log.e(TAG, m);
-            throw new IllegalArgumentException(m);
-        }
+        // Handling null parameters
         if (publisherId == null) {
             String m = "ID of the publisher should not be null";
             Log.e(TAG, m);
@@ -87,8 +87,7 @@ public abstract class Interactable {
     public String getPublisherId() { return publisherId; }
     public void setPublisherId(String publisherId) { this.publisherId = publisherId; }
 
-
-
+    // Getters and setters for interactable text.
     public String getText() {
         return text;
     }
