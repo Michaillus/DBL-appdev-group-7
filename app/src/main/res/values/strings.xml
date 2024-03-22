@@ -56,5 +56,6 @@
     <string name="Edit_button"><b>Edit </b></string>
     <string name="Log_out"><b>Logout </b></string>
     <string name="report">Report</string>
+    <string name="home"><b>Home</b></string>
 
 </resources>

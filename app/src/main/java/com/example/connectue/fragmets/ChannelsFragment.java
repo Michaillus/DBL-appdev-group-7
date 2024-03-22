@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
+import android.util.TypedValue;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,6 +35,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.android.material.tabs.TabLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +65,8 @@ public class ChannelsFragment extends Fragment {
     private Button searchBtn;
     private EditText searchEt;
     private ListView searchListView;
+
+    private String TAG = "ChannelsFragUtil: ";
 
     public ChannelsFragment() {
         // Required empty public constructor
@@ -102,7 +107,7 @@ public class ChannelsFragment extends Fragment {
         popularText = view.findViewById(R.id.popular);
         myCoursesText = view.findViewById(R.id.mycourses);
         majorsText = view.findViewById(R.id.majors);
-        navigationView = view.findViewById(R.id.coursemenu);
+//        navigationView = view.findViewById(R.id.coursemenu);
 
         searchBtn = view.findViewById(R.id.search_button);
         searchEt = view.findViewById(R.id.searchEditText);
@@ -126,18 +131,44 @@ public class ChannelsFragment extends Fragment {
         majorsVerticalScrollingFragment = new MajorsVerticalScrollingFragment();
         myCoursesVerticalFragment = new MyCoursesVerticalFragment();
         showCoursesView();
-        navigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+//        navigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                // Handle item selection
+//                int itemId = item.getItemId();
+//                if (itemId == R.id.coursesClick) {
+//                    showCoursesView();
+//                } else if (itemId == R.id.majorsClick) {
+//                    showMajorsView();
+//                }
+//
+//                return true;
+//            }
+//        });
+
+        TabLayout tabLayout = view.findViewById(R.id.tablayout_channel_menu);
+        Log.d(TAG, tabLayout.toString());
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // Handle item selection
-                int itemId = item.getItemId();
-                if (itemId == R.id.coursesClick) {
+            public void onTabSelected(TabLayout.Tab tab) {
+                String tabText = tab.getText().toString();
+                if (tabText.equals("Courses")) {
+                    Log.d(TAG, "courses");
                     showCoursesView();
-                } else if (itemId == R.id.majorsClick) {
+                } else if (tabText.equals("Majors")) {
+                    Log.d(TAG, "majors");
                     showMajorsView();
                 }
+            }
 
-                return true;
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
@@ -150,10 +181,22 @@ public class ChannelsFragment extends Fragment {
         return view;
     }
 
-
     private void showCoursesView() {
-        searchEt.setVisibility(View.VISIBLE);
-        searchBtn.setVisibility(View.VISIBLE);
+        // Set height of search bar to 50dp
+        int searchEtHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics()
+        );
+        ViewGroup.LayoutParams searchEtLayoutParams = searchEt.getLayoutParams();
+        searchEtLayoutParams.height = searchEtHeight;
+        searchEt.setLayoutParams(searchEtLayoutParams);
+
+        // Set height of search button to 40dp
+        int searchBtnHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics()
+        );
+        ViewGroup.LayoutParams searchBtnLayoutParams = searchBtn.getLayoutParams();
+        searchBtnLayoutParams.height = searchBtnHeight;
+        searchBtn.setLayoutParams(searchBtnLayoutParams);
         popularText.setVisibility(View.VISIBLE);
         myCoursesText.setVisibility(View.VISIBLE);
         majorsText.setVisibility(View.GONE);
@@ -164,8 +207,15 @@ public class ChannelsFragment extends Fragment {
         transaction.commit();
     }
     private void showMajorsView() {
-        searchEt.setVisibility(View.INVISIBLE);
-        searchBtn.setVisibility(View.INVISIBLE);
+        // Set height of search bar to 0
+        ViewGroup.LayoutParams searchEtLayoutParams = searchEt.getLayoutParams();
+        searchEtLayoutParams.height = 0;
+        searchEt.setLayoutParams(searchEtLayoutParams);
+
+        // Set height of search button to 0
+        ViewGroup.LayoutParams searchBtnLayoutParams = searchBtn.getLayoutParams();
+        searchBtnLayoutParams.height = 0;
+        searchBtn.setLayoutParams(searchBtnLayoutParams);
         popularText.setVisibility(View.GONE);
         myCoursesText.setVisibility(View.GONE);
         majorsText.setVisibility(View.VISIBLE);

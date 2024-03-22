@@ -17,6 +17,7 @@ import android.webkit.MimeTypeMap;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import android.Manifest;
@@ -59,6 +60,7 @@ public class AddPostActivity extends AppCompatActivity {
     Button publishPostBtn;
     ImageView addImageBtn;
     ImageView postImage;
+    ImageButton backBtn;
 
     //Reference to the Cloud Firestore database
     CollectionReference posts;
@@ -82,6 +84,7 @@ public class AddPostActivity extends AppCompatActivity {
         publishPostBtn = findViewById(R.id.publishPostBtn);
         addImageBtn = findViewById(R.id.addPostImageBtn);
         postImage = findViewById(R.id.postImage);
+        backBtn = findViewById(R.id.backBtn);
 
         addImageBtn.setOnClickListener(v -> showImagePickDialog());
 
@@ -92,6 +95,14 @@ public class AddPostActivity extends AppCompatActivity {
             addImageBtn.setEnabled(false);
             String description = postDescription.getText().toString().trim();
             publishPost(description, imageUri);
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         });
     }
 

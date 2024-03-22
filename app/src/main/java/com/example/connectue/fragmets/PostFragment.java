@@ -1,5 +1,6 @@
 package com.example.connectue.fragmets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,10 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
+import com.example.connectue.activities.AddPostActivity;
+import com.example.connectue.activities.MainActivity;
+import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.interfaces.UserNameCallback;
 import com.example.connectue.adapters.CommentAdapter;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.managers.PostManager;
@@ -64,6 +71,7 @@ public class PostFragment extends Fragment {
     private TextView numOfLikes;
     private EditText addComment;
     private ImageButton sendCommentBtn;
+    private ImageButton backBtn;
 
     private RecyclerView commentsRecyclerView;
     private CommentAdapter commentAdapter;
@@ -73,7 +81,6 @@ public class PostFragment extends Fragment {
     private FirebaseFirestore db;
     DocumentReference postRef;
     private Post currentPost;
-    private Boolean isPostLiked;
 
     private String postId;
 
@@ -83,6 +90,9 @@ public class PostFragment extends Fragment {
     private PostManager postManager;
     private UserManager userManager;
 
+    private FragmentManager fragmentManager;
+
+    private String TAG = "Test";
     /**
      * Class tag for logs.
      */
@@ -94,26 +104,29 @@ public class PostFragment extends Fragment {
      */
     int commentsPerChunk = 4;
 
-    public PostFragment() {
+    public PostFragment(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PostFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(String param1, String param2) {
-        PostFragment fragment = new PostFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @param param1 Parameter 1.
+//     * @param param2 Parameter 2.
+//     * @return A new instance of fragment PostFragment.
+//     */
+//    // TODO: Rename and change types and number of parameters
+//    public static PostFragment newInstance(String param1, String param2) {
+//
+//        PostFragment fragment = new PostFragment(new FragmentManager() {
+//        });
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -163,7 +176,7 @@ public class PostFragment extends Fragment {
         numOfLikes = view.findViewById(R.id.numOfLikesPostTv);
         addComment = view.findViewById(R.id.addPostCommentET);
         sendCommentBtn = view.findViewById(R.id.sendPostCommentBtn);
-
+        backBtn = view.findViewById(R.id.backFromPostBtn);
 
     }
 
@@ -203,15 +216,51 @@ public class PostFragment extends Fragment {
         // Load comments of this post
         loadComments(postId);
 
-        likePostBtn
-                .setOnClickListener(new View.OnClickListener() {
+        String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        postManager.isLiked(postId, currentUid, new FireStoreLikeCallback() {
+            @Override
+            public void onSuccess(Boolean isLiked) {
+                if (!isLiked) {
+                    likePostBtn.setImageResource(R.drawable.like_icon);
+                } else {
+                    likePostBtn.setImageResource(R.drawable.liked_icon);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {}
+        });
+
+        // When the user click the like button
+        likePostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postManager.likeOrUnlike(currentPost, currentUid, new FireStoreLikeCallback() {
                     @Override
-                    public void onClick(View v) {
-                        if (!isPostLiked) {
-                        //Todo: like a post
+                    public void onSuccess(Boolean isLiked) {
+                        if (!isLiked) {
+                            likePostBtn.setImageResource(R.drawable.like_icon);
+                        } else {
+                            likePostBtn.setImageResource(R.drawable.liked_icon);
                         }
+                        numOfLikes.setText(String.valueOf(currentPost.getLikeNumber()));
                     }
+
+                    @Override
+                    public void onFailure(Exception e) {}
                 });
+            }
+        });
+
+        // Back to homeFragment
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout, new HomeFragment(fragmentManager));
+                fragmentTransaction.commit();
+            }
+        });
     }
 
 //    private void loadCommentsFromFirestore(String postId) {
