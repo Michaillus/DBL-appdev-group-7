@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.connectue.utils.General;
-import com.example.connectue.fragmets.PostFragment;
+import com.example.connectue.fragments.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;

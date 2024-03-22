@@ -11,7 +11,6 @@ public abstract class Interactable {
     protected String TAG = "Interactable class: ";
 
     protected String interactableId;
-
     protected String publisherId;
 
     protected String text;
@@ -31,7 +30,6 @@ public abstract class Interactable {
     public Interactable(String interactableId, String publisherId, String text,
                         Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime) {
 
-        // Handling null parameters
         if (interactableId == null) {
             String m = "ID of the interactable should not be null";
             Log.e(TAG, m);
@@ -89,7 +87,8 @@ public abstract class Interactable {
     public String getPublisherId() { return publisherId; }
     public void setPublisherId(String publisherId) { this.publisherId = publisherId; }
 
-    // Getters and setters for interactable text.
+
+
     public String getText() {
         return text;
     }

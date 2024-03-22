@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,7 +38,7 @@ public class CourseReviewFragment extends AppCompatActivity {
         for (int i = 0; i<uName.length; i++) {
             reviewModels.add(new Review("dummy id", uName[i], uText[i],
                     4L, Long.getLong(likeNums[i]), Long.getLong(dislikeNums[i]),
-                    2L, new Date()));
+                    2L, new Date(), "dummy"));
         }
     }
 }

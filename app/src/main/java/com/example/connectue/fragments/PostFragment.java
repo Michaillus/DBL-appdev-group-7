@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,14 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.UserNameCallback;
 import com.example.connectue.adapters.CommentAdapter;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.firestoreManager.PostManager;
 import com.example.connectue.firestoreManager.UserManager;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Post;
-import com.example.connectue.model.User;
 import com.example.connectue.model.User2;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

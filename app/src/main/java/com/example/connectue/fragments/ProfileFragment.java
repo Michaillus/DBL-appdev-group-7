@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import static com.example.connectue.utils.General.PROFILEPICTURE;
 
@@ -34,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.connectue.model.Review;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.activities.AdminActivity;
