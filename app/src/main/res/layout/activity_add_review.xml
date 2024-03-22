@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.AddReviewActivity">
+
+    <EditText
+        android:id="@+id/reviewDescription"
+        android:layout_width="296dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="132dp"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="start"
+        android:hint="Type here..."
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:layout_width="296dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="28dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reviewDescription">
+
+        <ImageButton
+            android:id="@+id/star1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:contentDescription="Star"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            app:srcCompat="@drawable/star_empty" />
+
+        <ImageButton
+            android:id="@+id/star2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:contentDescription="Star"
+            android:layout_toEndOf="@id/star1"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            app:srcCompat="@drawable/star_empty" />
+
+        <ImageButton
+            android:id="@+id/star3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:contentDescription="Star"
+            android:layout_toEndOf="@id/star2"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            app:srcCompat="@drawable/star_empty" />
+
+        <ImageButton
+            android:id="@+id/star4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:contentDescription="Star"
+            android:layout_toEndOf="@id/star3"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            app:srcCompat="@drawable/star_empty" />
+
+        <ImageButton
+            android:id="@+id/star5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@null"
+            android:contentDescription="Star"
+            android:layout_toEndOf="@id/star4"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            app:srcCompat="@drawable/star_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@null"
+            android:layout_marginLeft="7dp"
+            android:hint="Rate here...">
+        </TextView>
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/publishReviewBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:text="Publish"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

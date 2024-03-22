@@ -37,11 +37,11 @@ public class Question extends Interactable{
         super(publisherId, text);
     }
 
-    public Question(String reviewId, String publisherId, String text,
+    public Question(String questionId, String publisherId, String text,
                   Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime)
             throws IllegalArgumentException {
 
-        super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
+        super(questionId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
 
     }
 

@@ -24,6 +24,7 @@
         android:background="@color/Design4"
         android:paddingTop="15dp">
 
+
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
@@ -66,14 +67,14 @@
                 android:textColor="@color/Design2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/follow"-->
-<!--                android:textColor="@color/Design2"-->
-<!--                android:textSize="17dp"-->
-<!--                android:layout_below="@+id/textView4"-->
-<!--                />-->
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="@string/follow"-->
+            <!--                android:textColor="@color/Design2"-->
+            <!--                android:textSize="17dp"-->
+            <!--                android:layout_below="@+id/textView4"-->
+            <!--                />-->
 
             <ImageView
                 android:id="@+id/followIcon"
@@ -128,9 +129,23 @@
         app:srcCompat="@drawable/baseline_arrow_back_ios_new_24"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_alignParentBottom="true"
-        style="@style/buttonColor"
+        android:backgroundTint="@color/Design4"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
+        app:tint="@color/Design2"
+
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/review_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/add_post_icon"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/Design4"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        app:tint="@color/Design2"
 
         />
 

@@ -5,6 +5,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +50,8 @@ public class QuestionManager extends InteractableManager<Question> {
         questionData.put("dislikes", question.getDislikeNumber());
         questionData.put("comments", question.getCommentNumber());
         questionData.put("timestamp", new Timestamp(question.getDatetime()));
+
+        questionData.put("likedByUsers", new ArrayList<String>());
 
         return questionData;
     }
