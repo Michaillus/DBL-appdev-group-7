@@ -30,12 +30,12 @@ public class Post extends Interactable {
     /**
      * Name of post likes collection in the database.
      */
-    public static final String POST_LIKE_COLLECTION_NAME = "post-likes";
+    public static final String POST_LIKE_COLLECTION_NAME = "posts-likes";
 
     /**
      * Name of post dislikes collection in the database.
      */
-    public static final String POST_DISLIKE_COLLECTION_NAME = "post-dislikes";
+    public static final String POST_DISLIKE_COLLECTION_NAME = "posts-dislikes";
 
     /**
      * Name of post comments collection in the database.

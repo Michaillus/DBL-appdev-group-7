@@ -67,14 +67,16 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param interactable Interactable to like or unlike.
      * @param userId Id of the user who likes or unlikes the interactable.
      */
-    public void likeOrUnlike(T interactable, String userId) {
+    public void likeOrUnlike(T interactable, String userId, FireStoreLikeCallback callback) {
         likeManager.likeOrUnlike(interactable.getId(), userId, new FireStoreLikeCallback() {
             @Override
             public void onSuccess(Boolean isLiked) {
                 if (isLiked) {
                     interactable.incrementLikeNumber();
+                    callback.onSuccess(true);
                 } else {
                     interactable.decrementLikeNumber();
+                    callback.onSuccess(false);
                 }
                 update(interactable.getId(), "likeNumber", interactable.getLikeNumber(), () -> {});
             }

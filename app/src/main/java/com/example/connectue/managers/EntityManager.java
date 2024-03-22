@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * Database request manager for the documents of model class {@code T}. Responsible for converting
@@ -66,8 +67,15 @@ public abstract class EntityManager<T> {
     public void downloadOne(String documentId, FireStoreDownloadCallback<T> callback) {
         collection.document(documentId).get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    Log.i(TAG, "Document is downloaded successfully");
-                    callback.onSuccess(deserialize(documentSnapshot));
+                    if (documentSnapshot.exists()) {
+                        Log.i(TAG, "Document is downloaded successfully");
+                        callback.onSuccess(deserialize(documentSnapshot));
+                    } else {
+                        Exception e = new NoSuchElementException("Document does not exit");
+                        Log.e(TAG, "Document does not exits",
+                                e);
+                        callback.onFailure(e);
+                    }
                 }).addOnFailureListener(e -> {
                     Log.e(TAG, "Error getting the document", e);
                     callback.onFailure(e);
@@ -111,6 +119,14 @@ public abstract class EntityManager<T> {
     }
 
     /**
+     * Resets the last retrieved post to the initial state. Recent post retrieval will start from
+     * the beginning.
+     */
+    public void resetLastRetrieved() {
+        lastRetrieved = null;
+    }
+
+    /**
      * Converts list of FireBase document snapshot to a list of corresponding objects
      * of model {@code T}.
      * @param snapshot list of FireBase document snapshots.
@@ -135,18 +151,12 @@ public abstract class EntityManager<T> {
     public void upload(T object, FireStoreUploadCallback callback) {
         Map<String, Object> data = serialize(object);
         collection.add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.i(TAG, "Document is successfully uploaded to FireStore");
-                        callback.onSuccess();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Failed to upload to FireStore", e);
-                        callback.onFailure(e);
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Log.i(TAG, "Document is successfully uploaded to FireStore");
+                    callback.onSuccess();
+                }).addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to upload to FireStore", e);
+                    callback.onFailure(e);
                 });
     }
 

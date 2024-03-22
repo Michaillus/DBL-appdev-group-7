@@ -92,7 +92,6 @@ public class PostFragment extends Fragment {
 
     private FragmentManager fragmentManager;
 
-    private String TAG = "Test";
     /**
      * Class tag for logs.
      */
