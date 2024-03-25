@@ -1,10 +1,13 @@
 package com.example.connectue.fragments;
 
+import static android.app.Activity.RESULT_OK;
 import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.R;
+import com.example.connectue.activities.AddReviewActivity;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.managers.ReviewManager;
@@ -23,10 +27,12 @@ import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Course;
 import com.example.connectue.model.Review;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.connectue.activities.AddReviewActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -113,6 +119,8 @@ public class ReviewsFragment extends Fragment {
         // Initializing list of reviews
         reviewList = new ArrayList<>();
 
+        ExtendedFloatingActionButton uploadReviewBtn = view.findViewById(R.id.uploadReviewBtn);
+
         reviewAdapter = new ReviewAdapter(getContext(), reviewList);
         reviewRecyclerView.setAdapter(reviewAdapter);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -139,6 +147,15 @@ public class ReviewsFragment extends Fragment {
                     isLoading = true;
                     loadReviews();
                 }
+            }
+        });
+
+        uploadReviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                intent.putExtra("courseId", courseId);
+                startActivity(intent);
             }
         });
 

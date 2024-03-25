@@ -83,13 +83,13 @@
                 android:contentDescription="Like"
                 app:srcCompat="@drawable/like_icon" />
 
-            <TextView
-                android:layout_gravity="center"
-                android:id="@+id/reviewLikeNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="12">
+                <TextView
+                    android:layout_gravity="center"
+                    android:id="@+id/reviewLikeNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="0">
 
             </TextView>
 

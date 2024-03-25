@@ -1,5 +1,6 @@
 package com.example.connectue.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.Manifest;
 import android.widget.Toast;
@@ -38,9 +40,13 @@ public class AddReviewActivity extends AppCompatActivity {
     Button publishReviewBtn;
     FloatingActionButton backBtn;
     ImageButton star_1, star_2, star_3, star_4, star_5;
+    ImageView rowStar1, rowStar2, rowStar3, rowStar4, rowStar5;
     Long stars;
     String text;
 
+    private String courseId;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +67,19 @@ public class AddReviewActivity extends AppCompatActivity {
         star_4 = findViewById(R.id.star4);
         star_5 = findViewById(R.id.star5);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                courseId= "";
+            } else {
+                courseId= extras.getString("courseId");
+            }
+        } else {
+            courseId= (String) savedInstanceState.getSerializable("courseId");
+        }
+
+
+
         // Set listeners for star rating buttons
         star_1.setOnClickListener(v -> selectStarRating(1));
         star_2.setOnClickListener(v -> selectStarRating(2));
@@ -72,8 +91,7 @@ public class AddReviewActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddReviewActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -83,6 +101,45 @@ public class AddReviewActivity extends AppCompatActivity {
     private void selectStarRating(int rating) {
         stars = (long) rating;
         // Update UI to reflect the selected star rating
+        // Reset all star buttons to default state
+        star_1.setImageResource(R.drawable.star_empty);
+        star_2.setImageResource(R.drawable.star_empty);
+        star_3.setImageResource(R.drawable.star_empty);
+        star_4.setImageResource(R.drawable.star_empty);
+        star_5.setImageResource(R.drawable.star_empty);
+
+
+        // Set selected star buttons based on the rating
+        switch (rating) {
+            case 1:
+                star_1.setImageResource(R.drawable.star_filled);
+                break;
+            case 2:
+                star_1.setImageResource(R.drawable.star_filled);
+                star_2.setImageResource(R.drawable.star_filled);
+                break;
+            case 3:
+                star_1.setImageResource(R.drawable.star_filled);
+                star_2.setImageResource(R.drawable.star_filled);
+                star_3.setImageResource(R.drawable.star_filled);
+                break;
+            case 4:
+                star_1.setImageResource(R.drawable.star_filled);
+                star_2.setImageResource(R.drawable.star_filled);
+                star_3.setImageResource(R.drawable.star_filled);
+                star_4.setImageResource(R.drawable.star_filled);
+                break;
+            case 5:
+                star_1.setImageResource(R.drawable.star_filled);
+                star_2.setImageResource(R.drawable.star_filled);
+                star_3.setImageResource(R.drawable.star_filled);
+                star_4.setImageResource(R.drawable.star_filled);
+                star_5.setImageResource(R.drawable.star_filled);
+                break;
+        }
+
+        //update the ratings for each course review
+
     }
 
     private void publishReview() {
@@ -93,6 +150,8 @@ public class AddReviewActivity extends AppCompatActivity {
         if (stars != null) {
             // Upload the review to Firestore
             uploadToFirestore(text, stars);
+            // Pass the selected star rating back to ReviewsFragment
+
         } else {
             // Inform the user to select a star rating
             Toast.makeText(this, "Please select a star rating", Toast.LENGTH_SHORT).show();
@@ -104,7 +163,7 @@ public class AddReviewActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text, Long stars) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Review review = new Review(publisherId, text, stars);
+        Review review = new Review(FirebaseFirestore.getInstance().collection("reviews").getId(), publisherId, text, stars, Long.parseLong("0"), Long.parseLong("0"), Long.parseLong("0"), new Date(), courseId);
 
         reviewManager.upload(review, new FireStoreUploadCallback() {
             @Override
@@ -113,8 +172,7 @@ public class AddReviewActivity extends AppCompatActivity {
                 Toast.makeText(AddReviewActivity.this,
                         "Review is published successfully", Toast.LENGTH_SHORT).show();
 
-                Intent intentReviews = new Intent(AddReviewActivity.this, MainActivity.class);
-                startActivity(intentReviews);
+                finish();
             }
 
             @Override

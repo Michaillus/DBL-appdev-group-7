@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/background"
-    tools:context=".fragments.CourseReviewFragment">
+    tools:context=".fragments.ReviewsFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -17,7 +17,7 @@
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/uploadMaterialBtn"
+        android:id="@+id/uploadReviewBtn"
         app:icon="@drawable/add_post_icon"
         style="@style/buttonColor"
         android:text="Review"
