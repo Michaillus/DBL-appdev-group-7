@@ -131,7 +131,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
                         reportBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, comment.getParentId());
+                                General.reportOperation(itemView.getContext(), General.COMMENTCOLLECTION, comment.getParentId());
                             }
                         });
                     }

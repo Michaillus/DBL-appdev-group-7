@@ -23,7 +23,7 @@ public class Comment {
     /**
      * Name of content field in comment collection.
      */
-    public static final String CONTENT = "content";
+    public static final String CONTENT = "text";
 
     /**
      * Name of parent interactable id field in comment collection.
