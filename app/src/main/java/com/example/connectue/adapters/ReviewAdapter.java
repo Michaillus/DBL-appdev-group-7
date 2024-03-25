@@ -100,7 +100,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewerName = itemView.findViewById(R.id.reviewerName);
             reviewDate = itemView.findViewById(R.id.reviewDate);
             ratingBar = itemView.findViewById(R.id.star);
-            reviewDescription = itemView.findViewById(R.id.questionDescription);
+            reviewDescription = itemView.findViewById(R.id.reviewDescription);
             reviewLike = itemView.findViewById(R.id.reviewLikeBtn);
             reviewLikeNum = itemView.findViewById(R.id.reviewLikeNum);
             reviewDislike = itemView.findViewById(R.id.reviewDislikeBtn);

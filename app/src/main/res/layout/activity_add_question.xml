@@ -7,7 +7,7 @@
     tools:context=".activities.AddReviewActivity">
 
     <EditText
-        android:id="@+id/questionDescription"
+        android:id="@+id/reviewDescription"
         android:layout_width="296dp"
         android:layout_height="64dp"
         android:layout_marginTop="132dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/publishQuestionBtn"
+        android:id="@+id/publishReviewBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"

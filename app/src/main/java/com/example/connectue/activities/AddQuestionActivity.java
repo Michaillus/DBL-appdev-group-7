@@ -46,8 +46,8 @@ public class AddQuestionActivity extends AppCompatActivity {
                 Question.QUESTION_DISLIKE_COLLECTION_NAME,
                 Question.QUESTION_COMMENT_COLLECTION_NAME);
 
-        questionDescription = findViewById(R.id.questionDescription);
-        publishQuestionBtn = findViewById(R.id.publishQuestionBtn);
+        questionDescription = findViewById(R.id.reviewDescription);
+        publishQuestionBtn = findViewById(R.id.publishReviewBtn);
         backBtn = findViewById(R.id.back_Btn);
 
         if (savedInstanceState == null) {
