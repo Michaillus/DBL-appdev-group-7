@@ -136,15 +136,25 @@ public class AddPostActivity extends AppCompatActivity {
 
     // Method to check and request storage permission
     private void requestStoragePermission() {
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_STORAGE);
-            Log.d(TAG, "requestStoragePermission: requestStoragePermission");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO}, REQUEST_STORAGE);
+            } else {
+                // Permission already granted, proceed with gallery operation
+                pickImageFromGallery();
+            }
         } else {
-            // Permission already granted, proceed with gallery operation
-            pickImageFromGallery();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_STORAGE);
+                Log.d(TAG, "requestStoragePermission: requestStoragePermission");
+            } else {
+                // Permission already granted, proceed with gallery operation
+                pickImageFromGallery();
+            }
         }
     }
 
@@ -161,8 +171,7 @@ public class AddPostActivity extends AppCompatActivity {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == REQUEST_STORAGE) {
-            if ((grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) ||
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Storage permission granted, proceed with gallery operation
                 pickImageFromGallery();
             } else {
