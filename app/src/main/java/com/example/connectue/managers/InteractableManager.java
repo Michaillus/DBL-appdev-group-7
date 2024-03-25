@@ -112,15 +112,15 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
     public void dislikeOrUndislike(T interactable, String userId, FireStoreLikeCallback callback) {
         dislikeManager.likeOrUnlike(interactable.getId(), userId, new FireStoreLikeCallback() {
             @Override
-            public void onSuccess(Boolean isLiked) {
-                if (isLiked) {
-                    interactable.incrementLikeNumber();
-                    update(interactable.getId(), "dislikes", interactable.getLikeNumber(), () -> {
+            public void onSuccess(Boolean isDisiked) {
+                if (isDisiked) {
+                    interactable.incrementDislikeNumber();
+                    update(interactable.getId(), "dislikes", interactable.getDislikeNumber(), () -> {
                         callback.onSuccess(true);
                     });
                 } else {
-                    interactable.decrementLikeNumber();
-                    update(interactable.getId(), "dislikes", interactable.getLikeNumber(), () -> {
+                    interactable.decrementDislikeNumber();
+                    update(interactable.getId(), "dislikes", interactable.getDislikeNumber(), () -> {
                         callback.onSuccess(false);
                     });
                 }
@@ -141,7 +141,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param callback Callback to return if interactable is disliked.
      */
     public void isDisliked(String interactableId, String userId, FireStoreLikeCallback callback) {
-        likeManager.isLiked(interactableId, userId, callback);
+        dislikeManager.isLiked(interactableId, userId, callback);
     }
 
     /**
