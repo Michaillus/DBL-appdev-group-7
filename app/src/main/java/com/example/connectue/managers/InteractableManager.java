@@ -74,12 +74,15 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
             public void onSuccess(Boolean isLiked) {
                 if (isLiked) {
                     interactable.incrementLikeNumber();
-                    callback.onSuccess(true);
+                    update(interactable.getId(), "likes", interactable.getLikeNumber(), () -> {
+                        callback.onSuccess(true);
+                    });
                 } else {
                     interactable.decrementLikeNumber();
-                    callback.onSuccess(false);
+                    update(interactable.getId(), "likes", interactable.getLikeNumber(), () -> {
+                        callback.onSuccess(false);
+                    });
                 }
-                update(interactable.getId(), "likeNumber", interactable.getLikeNumber(), () -> {});
             }
 
             @Override
@@ -97,6 +100,47 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param callback Callback to return if interactable is liked.
      */
     public void isLiked(String interactableId, String userId, FireStoreLikeCallback callback) {
+        likeManager.isLiked(interactableId, userId, callback);
+    }
+
+    /**
+     * Dislikes the interactable, if it was not disliked or removes the dislike from the interactable,
+     * if it was already disliked.
+     * @param interactable Interactable to dislike or undislike.
+     * @param userId Id of the user who likes or unlikes the interactable.
+     */
+    public void dislikeOrUndislike(T interactable, String userId, FireStoreLikeCallback callback) {
+        dislikeManager.likeOrUnlike(interactable.getId(), userId, new FireStoreLikeCallback() {
+            @Override
+            public void onSuccess(Boolean isLiked) {
+                if (isLiked) {
+                    interactable.incrementLikeNumber();
+                    update(interactable.getId(), "dislikes", interactable.getLikeNumber(), () -> {
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    interactable.decrementLikeNumber();
+                    update(interactable.getId(), "dislikes", interactable.getLikeNumber(), () -> {
+                        callback.onSuccess(false);
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(tag, "Error while disliking", e);
+            }
+        });
+    }
+
+    /**
+     * Checks if the interactable was disliked by user or not. Calls {@code callback.onSuccess} and
+     * returns if interactable is disliked when finished.
+     * @param interactableId Id of the interactable.
+     * @param userId Id of the user.
+     * @param callback Callback to return if interactable is disliked.
+     */
+    public void isDisliked(String interactableId, String userId, FireStoreLikeCallback callback) {
         likeManager.isLiked(interactableId, userId, callback);
     }
 
