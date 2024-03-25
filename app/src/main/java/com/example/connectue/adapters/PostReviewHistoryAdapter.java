@@ -1,6 +1,7 @@
 package com.example.connectue.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,32 +9,33 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.connectue.R;
+import com.example.connectue.model.Interactable;
 import com.example.connectue.model.Post;
+import com.example.connectue.utils.General;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
-import javax.security.auth.callback.Callback;
-
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
-    List<Post> postList;
+public class PostReviewHistoryAdapter extends RecyclerView.Adapter<PostReviewHistoryAdapter.MyViewHolder> {
+    List<Interactable> postList;
     Context context;
+    String collectionName;
 
     private FirebaseFirestore db;
 
-    public RecyclerViewAdapter(List<Post> postList, Context context) {
+    public PostReviewHistoryAdapter(List<Interactable> postList, Context context, String collectionName) {
         this.postList = postList;
         this.context = context;
         db = FirebaseFirestore.getInstance();
+        this.collectionName = collectionName;
     }
 
     @NonNull
@@ -45,7 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Post post = postList.get(position);
+        Interactable post = postList.get(position);
         holder.postTxt.setText(post.getText());
 
         String index = String.valueOf(position);
@@ -53,12 +55,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.i("delete", "post ID: " + post.getId());
-                db.collection("posts").document(post.getId())
+                db.collection(collectionName).document(post.getId())
                         .delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.d("delete", "DocumentSnapshot successfully deleted!");
+                                Log.i("delete", "DocumentSnapshot successfully deleted!");
+                                Log.i("delete", "Delete content: " + post.getText());
+                                Log.i("delete", collectionName);
                                 postList.remove(post);
                                 notifyDataSetChanged();
                             }
@@ -72,7 +76,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
-        Glide.with(this.context).load(postList.get(position).getImageUrl()).into(holder.postPic);
+        if (post instanceof Post) {
+            Log.i("Post history", "This is instance of Post ");
+            Log.i("Post history", "URL: " + ((Post)postList.get(position)).getImageUrl());
+            Log.i("Post history", "text: " + postList.get(position).getText());
+            Glide.with(this.context).load(((Post)postList.get(position)).getImageUrl()).into(holder.postPic);
+        } else {
+            Log.i("Post history", "This NOT is instance of Post ");
+        }
     }
 
     @Override

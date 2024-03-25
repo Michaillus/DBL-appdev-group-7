@@ -128,6 +128,11 @@ public class ManageReportHistoryFragment extends Fragment {
         initRecyclerReview(view);
 
         loadReportedContents(currentChannel);
+
+        initPostButton();
+        initCommentButton();
+        initCourseReviewButton();
+
         return view;
     }
 
@@ -155,17 +160,21 @@ public class ManageReportHistoryFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     QuerySnapshot result = task.getResult();
+                    reports.clear();
+
                     if (result != null) {
+//                        reports.clear();
                         Log.i(TAG_Load_report, "" + result.size());
                         for (QueryDocumentSnapshot document: result) {
                             Log.i(TAG_Load_report, "" + document.getLong(General.REPORTCOUNTER));
                             reports.add(document);
                         }
                         Log.i(TAG_Load_report, "reportIds size: " + reports.size());
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.notifyDataSetChanged();
                     } else {
                         Log.i(TAG_Load_report, "null querySnapShot");
                     }
+                    mAdapter.notifyDataSetChanged();
                 } else {
                     Log.i(TAG_Load_report, "query failed.");
                 }
@@ -375,6 +384,39 @@ public class ManageReportHistoryFragment extends Fragment {
 
     private void contentTextZoomIn() {
 
+    }
+
+    private void initPostButton() {
+        postChannelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentChannel = General.POSTCOLLECTION;
+                resetAfterDeleteKeep();
+                loadReportedContents(currentChannel);
+
+            }
+        });
+
+    }
+    private void initCommentButton() {
+        commentChannelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentChannel = General.COMMENTCOLLECTION;
+                resetAfterDeleteKeep();
+                loadReportedContents(currentChannel);
+            }
+        });
+    }
+    private void initCourseReviewButton() {
+        courseReviewChannelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentChannel = General.COURSEREVIEWCOLLECTION;
+                resetAfterDeleteKeep();
+                loadReportedContents(currentChannel);
+            }
+        });
     }
 
 
