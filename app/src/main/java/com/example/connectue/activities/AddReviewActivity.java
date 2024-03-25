@@ -163,7 +163,7 @@ public class AddReviewActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text, Long stars) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Review review = new Review(FirebaseFirestore.getInstance().collection("reviews").getId(), publisherId, text, stars, Long.parseLong("0"), Long.parseLong("0"), Long.parseLong("0"), new Date(), courseId);
+        Review review = new Review(publisherId, text, stars, courseId);
 
         reviewManager.upload(review, new FireStoreUploadCallback() {
             @Override
