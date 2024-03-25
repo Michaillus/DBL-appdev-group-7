@@ -1,29 +1,55 @@
 package com.example.connectue.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 
 import com.example.connectue.R;
+import com.example.connectue.managers.ReviewManager;
+import com.example.connectue.managers.UserManager;
+import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Review;
+import com.example.connectue.model.User;
+import com.example.connectue.model.User2;
+import com.example.connectue.utils.TimeUtils;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHolder> {
 
-    Context context; // for inflation
-    List<Review> reviewModels;
+    List<Review> reviewList;
+    private Context context; // for inflation
+    private FirebaseFirestore db;
+    private String currentUid;
+    private String TAG = "TestAdapterReviews";
+    private FragmentManager fragmentManager;
+    private ReviewManager reviewManager;
 
-    public ReviewAdapter(Context context, List<Review> reviewModels) {
+
+    public ReviewAdapter(Context context, List<Review> reviewList) {
         this.context = context;
-        this.reviewModels = reviewModels;
+        this.reviewList = reviewList;
+    }
+    public ReviewAdapter(List<Review> reviewList, FragmentManager fragmentManager) {
+        this.reviewList = reviewList;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -31,8 +57,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public ReviewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // This is where we inflate the layout (Giving a look to our rows)
 
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.course_review_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_review_row, parent, false);
         return new ReviewAdapter.MyViewHolder(view);
     }
 
@@ -40,44 +65,192 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public void onBindViewHolder(@NonNull ReviewAdapter.MyViewHolder holder, int position) {
         // assign values to the views we created in the course_review_row file
         // based on the position of the recycler view
-        Review review = reviewModels.get(position);
+        Review review = reviewList.get(position);
 
+        holder.userManager.downloadOne(review.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+            @Override
+            public void onSuccess(User2 user) {
+                holder.reviewerName.setText(user.getFullName());
+            }
 
-        holder.uName.setText(review.getText());
-        holder.review.setText(reviewModels.get(position).getText());
-        holder.date.setText(reviewModels.get(position).getDatetime().toString());
-        holder.star.setImageResource(R.drawable.star);
-        holder.like.setImageResource(R.drawable.like_icon);
-        holder.dislike.setImageResource(R.drawable.dislike);
-        holder.likeNum.setText(String.valueOf(reviewModels.get(position).getLikeNumber()));
-        holder.dislikeNum.setText(String.valueOf(reviewModels.get(position).getDislikeNumber()));
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Error getting the user", e);
+            }
+        });
+        holder.bind(review);
+
     }
 
     @Override
     public int getItemCount() {
         // the recycler view just wants to know the number of items you want to display
-        return reviewModels.size();
+        return reviewList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         // grab the views from course_review_row file
+        private ImageView reviewLike, reviewDislike;
+        private TextView reviewerName, reviewDescription, reviewDate;
+        private TextView reviewLikeNum, reviewDislikeNum;
+        UserManager userManager;
 
-        ImageView star, like, dislike;
-        TextView uName, review, date;
-        TextView likeNum, dislikeNum;
+        private ImageButton[] reviewStars;
+        private long currentRating;
+        private Review currentReview;
+        private FirebaseFirestore db;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            star = itemView.findViewById(R.id.star);
-            date = itemView.findViewById(R.id.date);
-            like = itemView.findViewById(R.id.likePostBtn);
-            dislike = itemView.findViewById(R.id.dislikeReview);
-            uName = itemView.findViewById(R.id.uName);
-            review = itemView.findViewById(R.id.review);
-            likeNum = itemView.findViewById(R.id.likeNum);
-            dislikeNum = itemView.findViewById(R.id.dislikeNum);
+            reviewerName = itemView.findViewById(R.id.reviewerName);
+            reviewDate = itemView.findViewById(R.id.reviewDate);
+            reviewDescription = itemView.findViewById(R.id.reviewDescription);
+            reviewLike = itemView.findViewById(R.id.reviewLikeBtn);
+            reviewLikeNum = itemView.findViewById(R.id.reviewLikeNum);
+            reviewDislike = itemView.findViewById(R.id.reviewDislikeBtn);
+            reviewDislikeNum = itemView.findViewById(R.id.reviewDislikeNum);
+
+            db = FirebaseFirestore.getInstance();
+
+            userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
+
         }
+
+        public void bind(Review review) {
+
+            reviewerName.setText(review.getPublisherId());
+            reviewDescription.setText(review.getText());
+            reviewDate.setText(TimeUtils.getTimeAgo(review.getDatetime()));
+            reviewLikeNum.setText(String.valueOf(review.getLikeNumber()));
+            reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
+
+            reviewLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long currentLikes = review.getLikeNumber();
+                    review.setLikeNumber(currentLikes + 1);
+                    notifyDataSetChanged(); // Refresh UI to reflect changes
+                }
+            });
+
+            reviewDislike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long currentDislikes = review.getDislikeNumber();
+                    review.setDislikeNumber(currentDislikes + 1);
+                    notifyDataSetChanged(); // Refresh UI to reflect changes
+                }
+            });
+
+            db = FirebaseFirestore.getInstance();
+            DocumentReference reviewRef = db.collection("reviews").document(review.getId());
+
+            reviewRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot reviewDocument = task.getResult();
+
+                    // Check whether the review has "likedByUsers" field
+                    if (!reviewDocument.contains("likedByUsers")) {
+                        reviewRef.update("likedByUsers", new ArrayList<String>())
+                                .addOnSuccessListener(aVoid -> {
+                                    // Field "likedByUsers" added successfully
+
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Error adding field "likedByUsers"
+                                });
+                    }
+
+                    // Check whether the review has "dislikedByUsers" field
+                    if (!reviewDocument.contains("dislikedByUsers")) {
+                        reviewRef.update("dislikedByUsers", new ArrayList<String>())
+                                .addOnSuccessListener(aVoid -> {
+                                    // Field "likedByUsers" added successfully
+
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Error adding field "likedByUsers"
+                                });
+                    }
+
+                    // If likedByUsers exists, check whether this post is liked by current user
+                    if (reviewDocument.contains("likedByUsers")) {
+                        List<String> likedByUsers = (List<String>) reviewDocument.get("likedByUsers");
+                        currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
+                                .getCurrentUser()).getUid();
+
+                        // Display like states of the like button
+                        if (!likedByUsers.contains(currentUid)) {
+                            reviewLike.setImageResource(R.drawable.like_icon);
+                        } else {
+                            reviewLike.setImageResource(R.drawable.liked_icon);
+                        }
+
+                        // If the user presses the like button, the post is liked or disliked
+                        reviewLike.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (!likedByUsers.contains(currentUid)) {
+                                    likedByUsers.add(currentUid);
+                                    reviewLike.setImageResource(R.drawable.liked_icon);
+                                    review.incrementLikeNumber();
+                                    reviewLikeNum.setText(String.valueOf(review.getLikeNumber()));
+                                } else {
+                                    reviewLike.setImageResource(R.drawable.like_icon);
+                                    likedByUsers.remove(currentUid);
+                                    review.decrementLikeNumber();
+                                    reviewLikeNum.setText(String.valueOf(review.getLikeNumber()));
+                                }
+                                reviewRef.update("likedByUsers", likedByUsers);
+                                reviewRef.update("likes", review.getLikeNumber());
+                            }
+                        });
+                    }
+
+                    // If dislikedByUsers exists, check whether this post is disliked by current user
+                    if (reviewDocument.contains("dislikedByUsers")) {
+                        List<String> dislikedByUsers = (List<String>) reviewDocument.get("dislikedByUsers");
+                        currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
+                                .getCurrentUser()).getUid();
+
+                        // Display dislike states of the like button
+                        if (!dislikedByUsers.contains(currentUid)) {
+                            reviewDislike.setImageResource(R.drawable.dislike_empty);
+                        } else {
+                            reviewDislike.setImageResource(R.drawable.dislike_filled);
+                        }
+
+                        // If the user presses the dislike button, the post is liked or disliked
+                        reviewDislike.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (!dislikedByUsers.contains(currentUid)) {
+                                    dislikedByUsers.add(currentUid);
+                                    reviewDislike.setImageResource(R.drawable.dislike_filled);
+                                    review.incrementDislikeNumber();
+                                    reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
+                                } else {
+                                    reviewDislike.setImageResource(R.drawable.dislike_empty);
+                                    dislikedByUsers.remove(currentUid);
+                                    review.decrementDislikeNumber();
+                                    reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
+                                }
+                                reviewRef.update("dislikedByUsers", dislikedByUsers);
+                                reviewRef.update("dislikes", review.getDislikeNumber());
+                            }
+                        });
+                    }
+
+
+                } else {
+
+                }
+            });
+
+
+        }
+
     }
 }
-

@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:padding="6dp"
     android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp">
+    android:layout_marginRight="20dp"
+    >
 
 
     <androidx.cardview.widget.CardView
@@ -25,23 +26,74 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/uName"
-                    android:layout_width="129dp"
+                    android:id="@+id/reviewerName"
+                    android:layout_width="119dp"
                     android:layout_height="wrap_content"
                     android:text="Augustin"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/star"
-                    android:layout_width="138dp"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    app:srcCompat="@drawable/star" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/star1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@null"
+                        android:contentDescription="Star"
+                        android:scaleType="fitCenter"
+                        android:padding="2dp"
+                        app:srcCompat="@drawable/star_empty" />
+
+                    <ImageButton
+                        android:id="@+id/star2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@null"
+                        android:contentDescription="Star"
+                        android:scaleType="fitCenter"
+                        android:padding="2dp"
+                        app:srcCompat="@drawable/star_empty" />
+
+                    <ImageButton
+                        android:id="@+id/star3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@null"
+                        android:contentDescription="Star"
+                        android:scaleType="fitCenter"
+                        android:padding="2dp"
+                        app:srcCompat="@drawable/star_empty" />
+
+                    <ImageButton
+                        android:id="@+id/star4"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@null"
+                        android:contentDescription="Star"
+                        android:scaleType="fitCenter"
+                        android:padding="2dp"
+                        app:srcCompat="@drawable/star_empty" />
+
+                    <ImageButton
+                        android:id="@+id/star5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@null"
+                        android:contentDescription="Star"
+                        android:scaleType="fitCenter"
+                        android:padding="2dp"
+                        app:srcCompat="@drawable/star_empty" />
+
+                </LinearLayout>
+
 
                 <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/reviewDate"
+                    android:layout_width="84dp"
                     android:layout_height="wrap_content"
                     android:text="16/03/2024" />
 
@@ -54,7 +106,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/review"
+                    android:id="@+id/reviewDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="I like all courses" />
@@ -68,7 +120,7 @@
                 >
 
                 <ImageButton
-                    android:id="@+id/likePostBtn"
+                    android:id="@+id/reviewLikeBtn"
                     android:layout_width="25dp"
                     android:layout_height="45dp"
                     android:background="@null"
@@ -77,7 +129,7 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:id="@+id/likeNum"
+                    android:id="@+id/reviewLikeNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -86,15 +138,15 @@
                 </TextView>
 
                 <ImageButton
-                    android:id="@+id/dislikeReview"
+                    android:id="@+id/reviewDislikeBtn"
                     android:layout_width="29dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="45dp"
                     android:background="@null"
-                    app:srcCompat="@drawable/dislike" />
+                    app:srcCompat="@drawable/dislike_empty" />
 
                 <TextView
                     android:layout_gravity="center"
-                    android:id="@+id/dislikeNum"
+                    android:id="@+id/reviewDislikeNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"

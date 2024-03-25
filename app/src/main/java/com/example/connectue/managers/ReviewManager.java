@@ -27,6 +27,8 @@ public class ReviewManager extends InteractableManager<Review> {
         TAG = "ReviewManager class: ";
     }
 
+
+
     @Override
     protected Review deserialize(DocumentSnapshot document) {
         return new Review(
@@ -42,17 +44,17 @@ public class ReviewManager extends InteractableManager<Review> {
 
     @Override
     protected Map<String, Object> serialize(Review review) {
-        Map<String, Object> postData = new HashMap<>();
+        Map<String, Object> reviewData = new HashMap<>();
 
 
-        postData.put("publisher", review.getPublisherId());
-        postData.put("text", review.getText());
-        postData.put("stars", review.getStars());
-        postData.put("likes", review.getLikeNumber());
-        postData.put("dislikes", review.getLikeNumber());
-        postData.put("comments", review.getCommentNumber());
-        postData.put("timestamp", new Timestamp(review.getDatetime()));
+        reviewData.put("publisher", review.getPublisherId());
+        reviewData.put("text", review.getText());
+        reviewData.put("stars", review.getStars());
+        reviewData.put("likes", review.getLikeNumber());
+        reviewData.put("dislikes", review.getLikeNumber());
+        reviewData.put("comments", review.getCommentNumber());
+        reviewData.put("timestamp", new Timestamp(review.getDatetime()));
 
-        return postData;
+        return reviewData;
     }
 }
