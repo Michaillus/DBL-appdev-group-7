@@ -29,17 +29,19 @@
 
             <RatingBar
                 android:id="@+id/star"
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                app:srcCompat="@drawable/star" />
+                android:layout_height="40dp"
+                android:layout_toRightOf="@+id/reviewerName"
+                android:progressTint="@color/Design4"
+                app:srcCompat="@drawable/star"
+                android:scaleX=".6"
+                android:scaleY=".6" />
 
             <TextView
                 android:id="@+id/reviewDate"
-                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:text="16/03/2024" />
 
         </RelativeLayout>
@@ -103,10 +105,7 @@
 
             </TextView>
         </LinearLayout>
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_below="@id/visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
 
 
 

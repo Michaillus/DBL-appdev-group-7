@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,7 +29,7 @@ public class AddReviewActivity extends AppCompatActivity {
     Button publishReviewBtn;
     FloatingActionButton backBtn;
     ImageButton star_1, star_2, star_3, star_4, star_5;
-    ImageView rowStar1, rowStar2, rowStar3, rowStar4, rowStar5;
+    RatingBar ratingBar;
     Long stars;
     String text;
 
@@ -46,8 +47,9 @@ public class AddReviewActivity extends AppCompatActivity {
                 Review.REVIEW_DISLIKE_COLLECTION_NAME,
                 Review.REVIEW_COMMENT_COLLECTION_NAME);
 
-        reviewDescription = findViewById(R.id.questionDescription);
-        publishReviewBtn = findViewById(R.id.publishQuestionBtn);
+        reviewDescription = findViewById(R.id.reviewDescription);
+        publishReviewBtn = findViewById(R.id.publishReviewBtn);
+        ratingBar = findViewById(R.id.ratingBar);
         backBtn = findViewById(R.id.back_Btn);
         star_1 = findViewById(R.id.star1);
         star_2 = findViewById(R.id.star2);

@@ -69,6 +69,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             }
         });
         holder.bind(review);
+        holder.ratingBar.setIsIndicator(true);
+        holder.ratingBar.setRating(review.getStars());
 
     }
 
@@ -182,11 +184,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 public void onClick(View v) {
                     reviewManager.dislikeOrUndislike(review, currentUid, new FireStoreLikeCallback() {
                         @Override
-                        public void onSuccess(Boolean isLiked) {
-                            if (!isLiked) {
-                                reviewDislike.setImageResource(R.drawable.dislike_filled);
-                            } else {
+                        public void onSuccess(Boolean isDisliked) {
+                            if (!isDisliked) {
                                 reviewDislike.setImageResource(R.drawable.dislike_empty);
+                            } else {
+                                reviewDislike.setImageResource(R.drawable.dislike_filled);
                             }
                             reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
                         }
