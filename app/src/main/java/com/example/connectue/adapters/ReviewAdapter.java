@@ -81,6 +81,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             }
         });
         holder.bind(review);
+        holder.ratingBar.setIsIndicator(true);
+        holder.ratingBar.setRating(review.getStars());
 
     }
 
