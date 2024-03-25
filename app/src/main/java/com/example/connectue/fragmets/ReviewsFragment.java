@@ -1,10 +1,13 @@
 package com.example.connectue.fragmets;
 
+import static android.app.Activity.RESULT_OK;
 import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.R;
+import com.example.connectue.activities.AddReviewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
@@ -24,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.connectue.activities.AddReviewActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +43,7 @@ public class ReviewsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int ADD_REVIEW_REQUEST_CODE = 1001;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -140,6 +146,8 @@ public class ReviewsFragment extends Fragment {
 
     }
 
+
+
     public void loadPosts() {
         reviewManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Review>>() {
             @Override
@@ -155,4 +163,9 @@ public class ReviewsFragment extends Fragment {
             }
         });
     }
+
+
+
+
+
 }

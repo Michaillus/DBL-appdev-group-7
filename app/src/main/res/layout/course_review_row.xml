@@ -38,8 +38,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/star1"
+                    <ImageView
+                        android:id="@+id/rowstar_1"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@null"
@@ -48,8 +48,8 @@
                         android:padding="2dp"
                         app:srcCompat="@drawable/star_empty" />
 
-                    <ImageButton
-                        android:id="@+id/star2"
+                    <ImageView
+                        android:id="@+id/rowstar_2"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@null"
@@ -58,8 +58,8 @@
                         android:padding="2dp"
                         app:srcCompat="@drawable/star_empty" />
 
-                    <ImageButton
-                        android:id="@+id/star3"
+                    <ImageView
+                        android:id="@+id/rowstar_3"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@null"
@@ -68,8 +68,8 @@
                         android:padding="2dp"
                         app:srcCompat="@drawable/star_empty" />
 
-                    <ImageButton
-                        android:id="@+id/star4"
+                    <ImageView
+                        android:id="@+id/rowstar_4"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@null"
@@ -78,8 +78,8 @@
                         android:padding="2dp"
                         app:srcCompat="@drawable/star_empty" />
 
-                    <ImageButton
-                        android:id="@+id/star5"
+                    <ImageView
+                        android:id="@+id/rowstar_5"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@null"
@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:text="12">
+                    android:text="0">
 
                 </TextView>
 
