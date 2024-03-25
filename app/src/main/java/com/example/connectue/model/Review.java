@@ -38,13 +38,16 @@ public class Review extends Interactable{
      */
     protected long stars;
 
+    /**
+     * Id of the course for which review is written.
+     */
     protected String parentCourseId;
-    protected String publisherName;
 
-    public Review(String publisherId, String text, Long stars) {
+    public Review(String publisherId, String text, Long stars, String parentCourseId) {
         super(publisherId, text);
 
         this.setStars(stars);
+        this.setParentCourseId(parentCourseId);
     }
 
     public Review(String reviewId, String publisherId, String text, Long stars,
@@ -63,12 +66,19 @@ public class Review extends Interactable{
     public long getStars() {
         return stars;
     }
+
     public void setStars(long stars) {
         this.stars = stars;
     }
 
+    /**
+     * Getters and setters for parent course id.
+     */
     public String getParentCourseId() {
         return parentCourseId;
     }
 
+    public void setParentCourseId(String parentCourseId) {
+        this.parentCourseId = parentCourseId;
+    }
 }

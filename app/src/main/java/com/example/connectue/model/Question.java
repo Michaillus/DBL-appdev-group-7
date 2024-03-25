@@ -33,22 +33,35 @@ public class Question extends Interactable{
      */
     public static final String QUESTION_COMMENT_COLLECTION_NAME = "question-comments";
 
+    /**
+     * Id of the course for which question is asked.
+     */
+    protected String parentCourseId;
 
-    public Question(String publisherId, String text) {
+
+    public Question(String publisherId, String text, String parentCourseId) {
         super(publisherId, text);
+
+        setParentCourseId(parentCourseId);
     }
 
-    public Question(String uName, String reviewId, String publisherId, String text,
-                  Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime)
+    public Question(String questionId, String publisherId, String text, Long likeNumber,
+                    Long dislikeNumber, Long commentNumber, Date datetime, String parentCourseId)
             throws IllegalArgumentException {
 
-        super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
-        this.publisherName = uName;
+        super(questionId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
+
+        setParentCourseId(parentCourseId);
     }
 
-    //Getters and setters for publisher name
-    public String getUserName() {return publisherName;}
-    public void setUserName(String publisherName) {this.publisherName = publisherName;}
-    // Getters and setters for interactable text.
+    /**
+     * Getters and setters for parent course id.
+     */
+    public String getParentCourseId() {
+        return parentCourseId;
+    }
 
+    public void setParentCourseId(String parentCourseId) {
+        this.parentCourseId = parentCourseId;
+    }
 }

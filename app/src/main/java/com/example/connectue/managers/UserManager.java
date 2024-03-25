@@ -11,12 +11,24 @@ import java.util.Map;
 
 public class UserManager extends EntityManager<User2> {
 
+    /**
+     * Constructor for a manager of users.
+     *
+     * @param db             Instance of a FireStore database.
+     * @param collectionName Name of the collection that stores user in the database.
+     */
     public UserManager(FirebaseFirestore db, String collectionName) {
         super(db, collectionName);
 
-        TAG = "UserManager class: ";
+        tag = "UserManager class: ";
     }
 
+    /**
+     * Converts a FireBase document snapshot of the user collection into an instance
+     * of user model.
+     * @param document FireBase document snapshot of the user collection.
+     * @return Instance of the user model.
+     */
     @Override
     protected User2 deserialize(DocumentSnapshot document) {
         return new User2(
@@ -32,6 +44,12 @@ public class UserManager extends EntityManager<User2> {
         );
     }
 
+    /**
+     * Converts an instance of the user model to a corresponding map for uploading to the
+     * user collection.
+     * @param user Instance of the user model.
+     * @return Map for uploading to user collection.
+     */
     @Override
     protected Map<String, Object> serialize(User2 user) {
         Map<String, Object> userData = new HashMap<>();

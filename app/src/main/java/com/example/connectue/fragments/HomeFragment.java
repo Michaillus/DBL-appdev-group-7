@@ -35,38 +35,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment} factory method to
- * create an instance of this fragment.
+ * A fragment for the home page with the post feed and add a post button.
  */
 public class HomeFragment extends Fragment {
 
-    private static final String TAG = "HomePageUtil: ";
+    /**
+     * Class tag for logs.
+     */
+    private static final String tag = "HomeFragment";
 
     private FragmentHomeBinding binding;
 
-    // Firebase instance
-    private FirebaseFirestore db;
-
-    // List of posts to output in feed
-    private List<Post> postList;
-
-    // Adapter that is responsible for outputting posts to UI
+    /**
+     * Adapter that is responsible for outputting posts to UI.
+     */
     private PostAdapter postAdapter;
 
-    // Number of posts loaded at once to the feed
-    private final int postsPerChunk = 4;
-
-    // Manager for database requests for posts collection
+    /**
+     * Manager for database requests for posts collection.
+     */
     private PostManager postManager;
 
-    // Indicates if posts are currently loading from database
+    /**
+     * Indicates if posts are currently loading from database.
+     */
     private Boolean isLoading = false;
 
+    /**
+     * Indicates if posts are currently loading from database.
+     */
     private FragmentManager fragmentManager;
-
-    private UserManager userManager;
-    private ImageButton createPostBtn;
 
     public HomeFragment() {
         // Default constructor
@@ -84,52 +82,82 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Define reviews recycler view.
+        RecyclerView postRecyclerView = binding.postsRecyclerView;
+
         // Initialize database post manager.
         postManager = new PostManager(FirebaseFirestore.getInstance(),
                 Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
                 Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
 
-        //Initializing the list of posts
-        postList = new ArrayList<>();
+        // Initializing the list of posts in the feed.
+        List<Post> postList = new ArrayList<>();
 
         //Initialize RecyclerView
-        postAdapter = new PostAdapter(postList, fragmentManager);
-        binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.postsRecyclerView.setHasFixedSize(false);
-        binding.postsRecyclerView.setAdapter(postAdapter);
+        initRecyclerView(postList, postRecyclerView);
 
         // Upload from database and display first chunk of posts
-        loadPosts();
+        loadPosts(postList);
 
         // Display the createPostBtn only for verified users
-        db = FirebaseFirestore.getInstance();
-        userManager = new UserManager(db, "users");
+        displayAddPostButton(root);
+
+        // Add a scroll listener to the RecyclerView
+        getPostsOnScroll(postList, postRecyclerView);
+
+        return root;
+    }
+
+    private void initRecyclerView(List<Post> postList, RecyclerView postRecyclerView) {
+        postAdapter = new PostAdapter(postList, fragmentManager);
+        postRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        postRecyclerView.setHasFixedSize(false);
+        postRecyclerView.setAdapter(postAdapter);
+    }
+
+    private void loadPosts(List<Post> postList) {
+        int postsPerChunk = 4;
+        postManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Post>>() {
+            @Override
+            public void onSuccess(List<Post> data) {
+                postList.addAll(data);
+                postAdapter.notifyDataSetChanged();
+                isLoading = false;
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(tag, "Error while downloading posts", e);
+            }
+        });
+    }
+
+    private void displayAddPostButton(View root) {
+        UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        createPostBtn = root.findViewById(R.id.createPostBtn);
+        ImageButton addPostBtn = root.findViewById(R.id.addPostBtn);
         userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.getRole() == General.STUDENT || data.getRole() == General.ADMIN) {
-                    createPostBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), AddPostActivity.class);
-                            startActivity(intent);
-                        }
+                    addPostBtn.setOnClickListener(v -> {
+                        Intent intent = new Intent(getActivity(), AddPostActivity.class);
+                        startActivity(intent);
                     });
                 } else {
-                    createPostBtn.setVisibility(View.GONE);
+                    addPostBtn.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                Log.e(tag, "Error while retrieving user from the database", e);
             }
         });
+    }
 
-        // Add a scroll listener to the RecyclerView
-        binding.postsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+    private void getPostsOnScroll(List<Post> postList, RecyclerView postRecyclerView) {
+        postRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -145,26 +173,8 @@ public class HomeFragment extends Fragment {
                     // Assuming PAGE_SIZE is the number of items to load per page
                     // Load more items
                     isLoading = true;
-                    loadPosts();
+                    loadPosts(postList);
                 }
-            }
-        });
-
-        return root;
-    }
-
-    public void loadPosts() {
-        postManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Post>>() {
-            @Override
-            public void onSuccess(List<Post> data) {
-                postList.addAll(data);
-                postAdapter.notifyDataSetChanged();
-                isLoading = false;
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Log.e(TAG, "Error while downloading posts", e);
             }
         });
     }
@@ -173,6 +183,5 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        postManager.resetLastRetrieved();
     }
 }

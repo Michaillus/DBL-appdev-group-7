@@ -2,14 +2,9 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.interfaces.FireStoreUploadCallback;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -33,7 +28,7 @@ public abstract class EntityManager<T> {
     /**
      * Class tag for logs.
      */
-    protected String TAG = "EntityManager class: ";
+    protected String tag = "EntityManager class: ";
 
     /**
      * Reference to the firebase collection, that is assigned to the manager.
@@ -69,16 +64,16 @@ public abstract class EntityManager<T> {
         collection.document(documentId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        Log.i(TAG, "Document is downloaded successfully");
+                        Log.i(tag, "Document is downloaded successfully");
                         callback.onSuccess(deserialize(documentSnapshot));
                     } else {
                         Exception e = new NoSuchElementException("Document does not exit");
-                        Log.e(TAG, "Document does not exits",
+                        Log.e(tag, "Document does not exits",
                                 e);
                         callback.onFailure(e);
                     }
                 }).addOnFailureListener(e -> {
-                    Log.e(TAG, "Error getting the document", e);
+                    Log.e(tag, "Error getting the document", e);
                     callback.onFailure(e);
                 });
     }
@@ -114,7 +109,7 @@ public abstract class EntityManager<T> {
                     callback.onSuccess(data);
                 }
             } else {
-                Log.e(TAG, "Error getting documents", task.getException());
+                Log.e(tag, "Error getting documents", task.getException());
             }
         });
     }
@@ -153,10 +148,10 @@ public abstract class EntityManager<T> {
         Map<String, Object> data = serialize(object);
         collection.add(data)
                 .addOnSuccessListener(documentReference -> {
-                    Log.i(TAG, "Document is successfully uploaded to FireStore");
+                    Log.i(tag, "Document is successfully uploaded to FireStore");
                     callback.onSuccess();
                 }).addOnFailureListener(e -> {
-                    Log.e(TAG, "Failed to upload to FireStore", e);
+                    Log.e(tag, "Failed to upload to FireStore", e);
                     callback.onFailure(e);
                 });
     }
@@ -169,16 +164,16 @@ public abstract class EntityManager<T> {
     }
 
     /**
-     * Converts a FireBase document snapshot to the corresponding object of model {@code T}.
+     * Converts a FireBase document snapshot into the corresponding instance of model {@code T}.
      * @param document FireBase document snapshot to be converted.
-     * @return Object of model corresponding to the document.
+     * @return Instance of the model corresponding to the document.
      */
     protected abstract T deserialize(DocumentSnapshot document);
 
     /**
-     * Converts an object of the model {@code T} to the corresponding map for uploading to the
+     * Converts an instance of the model {@code T} to the corresponding map for uploading to the
      * {@code collection}.
-     * @param object Object of the model.
+     * @param object Instance of the model.
      * @return Map for uploading to {@code collection}.
      */
     protected abstract Map<String, Object> serialize(T object);

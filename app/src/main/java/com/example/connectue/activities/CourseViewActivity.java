@@ -1,14 +1,11 @@
 package com.example.connectue.activities;
 
-import static android.app.PendingIntent.getActivity;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.connectue.fragments.MaterialsFragment;
-import com.example.connectue.fragments.QuestionsFragment;
 import com.example.connectue.R;
 import com.example.connectue.fragments.ReviewsFragment;
+import com.example.connectue.fragments.QuestionsFragment;
 import com.example.connectue.databinding.ActivityCourseViewBinding;
 import com.example.connectue.model.Course;
 import com.google.android.gms.tasks.OnCompleteListener;

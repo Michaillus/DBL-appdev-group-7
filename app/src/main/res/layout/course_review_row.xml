@@ -14,39 +14,34 @@
         style="@style/background"
         android:padding="10dp">
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
-<!--            -->
-<!--        </LinearLayout>-->
-
         <RelativeLayout
             android:id="@+id/rounded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/uName"
+                android:id="@+id/reviewerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Augustin"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
-            <ImageButton
+            <RatingBar
                 android:id="@+id/star"
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                app:srcCompat="@drawable/star" />
+                android:layout_height="40dp"
+                android:layout_toRightOf="@+id/reviewerName"
+                android:progressTint="@color/Design4"
+                app:srcCompat="@drawable/star"
+                android:scaleX=".6"
+                android:scaleY=".6" />
 
             <TextView
-                android:id="@+id/date"
-                android:layout_alignParentEnd="true"
+                android:id="@+id/reviewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:text="16/03/2024" />
 
         </RelativeLayout>
@@ -60,7 +55,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/review"
+                android:id="@+id/reviewDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="I like all courses" />
@@ -76,25 +71,25 @@
             >
 
             <ImageButton
-                android:id="@+id/likePostBtn"
+                android:id="@+id/reviewLikeBtn"
                 android:layout_width="25dp"
                 android:layout_height="45dp"
                 android:background="@null"
                 android:contentDescription="Like"
                 app:srcCompat="@drawable/like_icon" />
 
-            <TextView
-                android:layout_gravity="center"
-                android:id="@+id/likeNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="12">
+                <TextView
+                    android:layout_gravity="center"
+                    android:id="@+id/reviewLikeNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="0">
 
             </TextView>
 
             <ImageButton
-                android:id="@+id/dislikeReview"
+                android:id="@+id/reviewDislikeBtn"
                 android:layout_width="29dp"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -102,7 +97,7 @@
 
             <TextView
                 android:layout_gravity="center"
-                android:id="@+id/dislikeNum"
+                android:id="@+id/reviewDislikeNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -110,10 +105,7 @@
 
             </TextView>
         </LinearLayout>
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_below="@id/visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
 
 
 

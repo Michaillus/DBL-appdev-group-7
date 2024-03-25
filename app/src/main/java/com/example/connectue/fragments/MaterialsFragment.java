@@ -16,13 +16,9 @@ import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.activities.MaterialUploadActivity;
 import com.example.connectue.adapters.MaterialAdapter;
-import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.managers.MaterialsManager;
-import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Material;
-import com.example.connectue.model.Review;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -94,7 +90,7 @@ public class MaterialsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_materials, container, false);
 
         RecyclerView materialsRecyclerView = view.findViewById(R.id.recyclerView_materials);
-        ExtendedFloatingActionButton uploadBtn = view.findViewById(R.id.uploadMaterialBtn);
+        ExtendedFloatingActionButton uploadBtn = view.findViewById(R.id.addQuestionBtn);
         materialsManager = new MaterialsManager(FirebaseFirestore.getInstance(),
                 "materials",
                 "material-likes",

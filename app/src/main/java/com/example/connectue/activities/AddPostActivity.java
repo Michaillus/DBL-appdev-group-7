@@ -58,13 +58,14 @@ public class AddPostActivity extends AppCompatActivity {
 
     //views
     EditText postDescription;
-    Button publishPostBtn;
-    ImageView addImageBtn;
-    ImageView postImage;
-    ImageButton backBtn;
 
-    //Reference to the Cloud Firestore database
-    CollectionReference posts;
+    Button publishPostBtn;
+
+    ImageView addImageBtn;
+
+    ImageView postImage;
+
+    ImageButton backBtn;
 
     //image picked will be saved in this uri
     Uri imageUri = null;
@@ -73,8 +74,6 @@ public class AddPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
-
-        posts = FirebaseFirestore.getInstance().collection("posts");
 
         // Initializing post manager
         postManager = new PostManager(FirebaseFirestore.getInstance(),
