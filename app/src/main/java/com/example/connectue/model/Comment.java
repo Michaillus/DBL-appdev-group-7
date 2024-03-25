@@ -2,6 +2,9 @@ package com.example.connectue.model;
 
 import android.util.Log;
 
+import com.example.connectue.interfaces.CommentCreateCallback;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.Date;
 
 public class Comment {
@@ -46,6 +49,7 @@ public class Comment {
     private String parentId;
 
     private Date timestamp;
+    private String userProfilePicUrl;
 
     public Comment(String publisherId, String text, String parentId) {
         this(null, publisherId, text, parentId, new Date());
@@ -102,6 +106,8 @@ public class Comment {
         this.publisherId = publisherId;
     }
 
+    public String getUserProfilePicUrl() {return userProfilePicUrl;}
+
     // Getter and setter for the text of the comment
     public String getText() {
         return text;
@@ -128,4 +134,6 @@ public class Comment {
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
+
+    public void setUserProfilePicUrl(String userProfilePicUrl) {this.userProfilePicUrl = userProfilePicUrl;}
 }

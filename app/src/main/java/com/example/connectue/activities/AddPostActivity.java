@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -135,10 +136,12 @@ public class AddPostActivity extends AppCompatActivity {
 
     // Method to check and request storage permission
     private void requestStoragePermission() {
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_STORAGE);
+            Log.d(TAG, "requestStoragePermission: requestStoragePermission");
         } else {
             // Permission already granted, proceed with gallery operation
             pickImageFromGallery();
@@ -158,12 +161,13 @@ public class AddPostActivity extends AppCompatActivity {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == REQUEST_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if ((grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) ||
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 // Storage permission granted, proceed with gallery operation
                 pickImageFromGallery();
             } else {
                 // Storage permission denied, handle accordingly (e.g., show explanation, disable gallery feature)
-                Toast.makeText(this, "Storage permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Storage permission denied " + grantResults[0], Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -195,15 +199,13 @@ public class AddPostActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == IMAGE_PICK_CAMERA_CODE) {
                 //image picked from camera
-                postImage.setImageURI(imageUri);
-                postImage.setVisibility(View.VISIBLE);
+                addImageBtn.setImageURI(imageUri);
             }
             else if (requestCode == IMAGE_PICK_GALLERY_CODE) {
                 //image picked from gallery
                 imageUri = data.getData();
 
-                postImage.setImageURI(imageUri);
-                postImage.setVisibility(View.VISIBLE);
+                addImageBtn.setImageURI(imageUri);
             }
         }
     }

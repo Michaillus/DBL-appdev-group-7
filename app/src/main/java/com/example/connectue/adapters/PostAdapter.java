@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.example.connectue.interfaces.FireStoreLikeCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.utils.General;
-import com.example.connectue.fragmets.PostFragment;
+import com.example.connectue.fragments.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
@@ -178,7 +178,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         }
 
         private void navigateToPostFragment(String postId) {
-            PostFragment postFragment = new PostFragment(fragmentManager);
+            PostFragment postFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putString("postId", postId);
             postFragment.setArguments(bundle);

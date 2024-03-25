@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Design2"
-    tools:context=".activities.CourseViewActivity">
+    style="@style/background"
+    tools:context=".fragments.CourseReviewFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -13,5 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
          />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/uploadMaterialBtn"
+        app:icon="@drawable/add_post_icon"
+        style="@style/buttonColor"
+        android:text="Review"
+        android:textSize="20dp"
+        android:textColor="@color/Design2"
+        android:textStyle="bold"
+        app:iconTint="@color/Design2"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        />
 
 </RelativeLayout>

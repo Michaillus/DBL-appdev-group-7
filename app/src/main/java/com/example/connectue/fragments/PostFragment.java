@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.connectue.R;
 import com.example.connectue.activities.AddPostActivity;
 import com.example.connectue.activities.MainActivity;
@@ -33,6 +34,7 @@ import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
+import com.example.connectue.utils.General;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -40,6 +42,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.example.connectue.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +69,7 @@ public class PostFragment extends Fragment {
     private String mParam2;
 
     private TextView publisherName;
+    private ImageView profilePic;
     private TextView publisherTime;
     private ImageView postImage;
     private TextView postDescription;
@@ -103,29 +109,28 @@ public class PostFragment extends Fragment {
      */
     int commentsPerChunk = 4;
 
-    public PostFragment(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
+    // Default constructor
+    public PostFragment() {
     }
 
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment PostFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static PostFragment newInstance(String param1, String param2) {
-//
-//        PostFragment fragment = new PostFragment(new FragmentManager() {
-//        });
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment PostFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static PostFragment newInstance(String param1, String param2) {
+
+        PostFragment fragment = new PostFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +173,7 @@ public class PostFragment extends Fragment {
 
     private void initView(View view) {
         publisherName = view.findViewById(R.id.publisherNameTextView);
+        profilePic = view.findViewById(R.id.profilePicPostImageView);
         publisherTime = view.findViewById(R.id.publishTimePostTextView);
         postImage = view.findViewById(R.id.postImageInPostImageView);
         postDescription = view.findViewById(R.id.postDescriptionTextView);
@@ -193,11 +199,23 @@ public class PostFragment extends Fragment {
                 postDescription.setText(post.getText());
                 numOfLikes.setText(String.valueOf(post.getLikeNumber()));
                 currentPost = post;
+                publisherTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
 
                 userManager.downloadOne(post.getPublisherId(), new FireStoreDownloadCallback<User2>() {
                     @Override
                     public void onSuccess(User2 publisher) {
                         publisherName.setText(publisher.getFullName());
+                        // Load user profile picture
+                        String imageUrl = publisher.getProfilePicUrl();
+                        if (imageUrl != null && !imageUrl.equals("")) {
+                            Glide.with(getContext()).load(imageUrl).into(profilePic);
+                            profilePic.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    General.showPopupWindow(profilePic, imageUrl);
+                                }
+                            });
+                        }
                     }
 
                     @Override
@@ -255,9 +273,8 @@ public class PostFragment extends Fragment {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame_layout, new HomeFragment(fragmentManager));
-                fragmentTransaction.commit();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -273,6 +290,8 @@ public class PostFragment extends Fragment {
                 commentList.addAll(comments);
                 commentAdapter.notifyDataSetChanged();
             }
+
+
 
             @Override
             public void onFailure(Exception e) {
@@ -320,7 +339,7 @@ public class PostFragment extends Fragment {
                         userManager.downloadOne(userId, new FireStoreDownloadCallback<User2>() {
                             @Override
                             public void onSuccess(User2 user) {
-                                //comment.setPublisherName(user.getFullName());
+
                                 commentList.add(0, comment);
                                 // Notify the RecyclerView adapter about the dataset change
                                 commentAdapter.notifyItemInserted(0);

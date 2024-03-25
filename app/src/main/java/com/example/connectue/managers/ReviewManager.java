@@ -44,7 +44,9 @@ public class ReviewManager extends InteractableManager<Review> {
                 document.getLong("likes"),
                 document.getLong("dislikes"),
                 document.getLong("comments"),
-                document.getTimestamp("timestamp").toDate());
+                document.getTimestamp("timestamp").toDate(),
+                document.getString("parentCourseId")
+        );
     }
 
     /**
@@ -65,6 +67,7 @@ public class ReviewManager extends InteractableManager<Review> {
         reviewData.put("dislikes", review.getLikeNumber());
         reviewData.put("comments", review.getCommentNumber());
         reviewData.put("timestamp", new Timestamp(review.getDatetime()));
+        reviewData.put("parentCourseId", review.getParentCourseId());
 
         return reviewData;
     }

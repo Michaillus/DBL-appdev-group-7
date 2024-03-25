@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 
@@ -16,9 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.connectue.R;
+import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.managers.ReviewManager;
+import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.Review;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -57,6 +60,12 @@ public class ReviewsFragment extends Fragment {
 
     // Indicates if reviews are currently loading from database
     private Boolean isLoading = false;
+
+    private String courseId;
+
+
+
+    //private Context ReviewsFragment;
 
     public ReviewsFragment() {
         // Required empty public constructor
@@ -142,7 +151,21 @@ public class ReviewsFragment extends Fragment {
         reviewManager.downloadRecent(reviewsPerChunk, new FireStoreDownloadCallback<List<Review>>() {
             @Override
             public void onSuccess(List<Review> data) {
-                reviewList.addAll(data);
+                //check course of opened page
+                CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
+                if (courseViewActivity != null) {
+                    courseId = courseViewActivity.getCourse();
+                } else {
+                    courseId = "";
+                }
+                //only add reviews linked to the opened course card
+
+                for(Review review: data) {
+                    Log.d("ALAL", review.getParentCourseId());
+                    if (review.getParentCourseId().equals(courseId)) {
+                        reviewList.add(review);
+                    }
+                }
                 reviewAdapter.notifyDataSetChanged();
                 isLoading = false;
             }
