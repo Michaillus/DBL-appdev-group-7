@@ -1,5 +1,6 @@
 package com.example.connectue.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.activities.MaterialUploadActivity;
 import com.example.connectue.adapters.MaterialAdapter;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.managers.MaterialsManager;
@@ -21,6 +23,7 @@ import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Material;
 import com.example.connectue.model.Review;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -91,7 +94,7 @@ public class MaterialsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_materials, container, false);
 
         RecyclerView materialsRecyclerView = view.findViewById(R.id.recyclerView_materials);
-
+        ExtendedFloatingActionButton uploadBtn = view.findViewById(R.id.uploadMaterialBtn);
         materialsManager = new MaterialsManager(FirebaseFirestore.getInstance(),
                 "materials",
                 "material-likes",
@@ -105,6 +108,15 @@ public class MaterialsFragment extends Fragment {
         materialsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         loadPosts();
+
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MaterialUploadActivity.class);
+                intent.putExtra("courseId", courseId);
+                getActivity().startActivity(intent);
+            }
+        });
 
         return view;
     }

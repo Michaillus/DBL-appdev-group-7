@@ -61,7 +61,6 @@ public class CourseViewActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replaceFragment(new ReviewsFragment());
         TabLayout tabLayout = findViewById(R.id.tablayout_course_menu);
-        Log.d(TAG, tabLayout.toString());
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                @Override
                public void onTabSelected(TabLayout.Tab tab) {
@@ -188,13 +187,15 @@ public class CourseViewActivity extends AppCompatActivity {
             }
         });
 
-        Log.d(TAG, courseId);
         loadCourseDetails();
 
 
     }
 
     private void loadCourseDetails() {
+        if (courseId == null || courseId == "") {
+            Log.d(TAG, "FBEINHIs");
+        }
         db.collection("courses").document(courseId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

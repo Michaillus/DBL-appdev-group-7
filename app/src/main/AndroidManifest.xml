@@ -20,6 +20,9 @@
         android:theme="@style/Theme.ConnecTue"
         tools:targetApi="31">
         <activity
+            android:name=".activities.MaterialUploadActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.MaterialPDFActivity"
             android:exported="false" />
         <activity

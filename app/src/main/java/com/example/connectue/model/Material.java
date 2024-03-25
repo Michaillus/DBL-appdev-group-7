@@ -6,11 +6,11 @@ public class Material extends Interactable {
     protected String parentCourseId;
     protected String docUrl;
 
-    public Material(String reviewId, String publisherId, String text,
+    public Material(String materialId, String publisherId, String text,
                   Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime, String parentCourseId, String docUrl)
             throws IllegalArgumentException {
 
-        super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
+        super(materialId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
         this.parentCourseId = parentCourseId;
         this.docUrl = docUrl;
     }
