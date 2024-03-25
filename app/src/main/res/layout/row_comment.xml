@@ -9,8 +9,8 @@
     <ImageView
         android:id="@+id/profilePicCommentIv"
         android:src="@drawable/baseline_person_24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentStart="true"/>
 
     <TextView
@@ -40,6 +40,15 @@
         android:layout_alignStart="@+id/publisherNameCommentTv"
         android:layout_marginTop="13dp"
         android:text="Comment content" />
+
+    <ImageButton
+        android:id="@+id/reportCommentBtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:background="@null"
+        app:srcCompat="@drawable/outline_report_24" />
+
 
 </RelativeLayout>
 

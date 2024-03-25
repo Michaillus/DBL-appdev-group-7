@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/uName"
+                    android:id="@+id/questionerName"
                     android:layout_width="279dp"
                     android:layout_height="wrap_content"
                     android:text="Augustin"
@@ -33,7 +33,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/date"
+                    android:id="@+id/questionDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="16/03/2024" />
@@ -48,7 +48,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/review"
+                    android:id="@+id/question"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="I like all courses" />
@@ -61,7 +61,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/likePostBtn"
+                    android:id="@+id/questionLike"
                     android:layout_width="25dp"
                     android:layout_height="45dp"
                     android:background="@null"
@@ -70,7 +70,7 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:id="@+id/likeNum"
+                    android:id="@+id/questionLikeNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"

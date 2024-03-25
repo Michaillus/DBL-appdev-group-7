@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MaterialPDFActivity"
+    style="@style/background">
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/downloadBtn"
+        android:text="Download File"
+        android:layout_centerInParent="true"
+        app:icon="@drawable/baseline_arrow_circle_down_24"
+        app:iconTint="@color/Design2"
+        android:textColor="@color/Design2"
+        style="@style/buttonColor"
+        />
+
+
+</RelativeLayout>

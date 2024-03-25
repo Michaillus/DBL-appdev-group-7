@@ -2,6 +2,16 @@ package com.example.connectue.model;
 
 public class User2 {
 
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "User class: ";
+
+    /**
+     * Name of users collection in the database.
+     */
+    public static final String USER_COLLECTION_NAME = "users";
+
     protected String userId;
 
     protected String firstName;

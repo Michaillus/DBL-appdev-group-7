@@ -5,9 +5,23 @@
         <item name="android:textColorPrimary">@color/Design4</item>
         <item name="colorSecondary">@color/Design2</item>
         <item name="colorPrimary">@color/Design4</item>
+        <item name="colorOnPrimary">@color/Design2</item>
+    </style>
+
+    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorPrimary">@color/Design4</item>
+        <item name="colorOnPrimary">@color/Design2</item>
     </style>
 
     <style name="Theme.ConnecTue" parent="Base.Theme.ConnecTue">
+    </style>
+
+    <style name="buttonColor">
+        <item name="android:backgroundTint">#FF928E</item>
     </style>
     <style name="background"><item name="android:background">#FFFAF1</item></style>
     <style name="cardBackground">
