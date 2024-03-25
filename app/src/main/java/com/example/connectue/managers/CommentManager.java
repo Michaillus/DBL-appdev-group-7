@@ -43,6 +43,12 @@ public class CommentManager extends EntityManager<Comment> {
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
 
+    /**
+     * Converts a FireBase document snapshot of a comment collection into an instance
+     * of comment model.
+     * @param document FireBase document snapshot of a comment collection.
+     * @return Instance of the comment model.
+     */
     @Override
     protected Comment deserialize(DocumentSnapshot document) {
         return new Comment(
@@ -53,6 +59,12 @@ public class CommentManager extends EntityManager<Comment> {
                 document.getTimestamp(Comment.TIMESTAMP).toDate());
     }
 
+    /**
+     * Converts an instance of the comment model to a corresponding map for uploading to a
+     * comment collection.
+     * @param comment Instance of the comment model.
+     * @return Map for uploading to a comment collection.
+     */
     @Override
     protected Map<String, Object> serialize(Comment comment) {
         Map<String, Object> questionData = new HashMap<>();

@@ -168,16 +168,16 @@ public abstract class EntityManager<T> {
     }
 
     /**
-     * Converts a FireBase document snapshot to the corresponding object of model {@code T}.
+     * Converts a FireBase document snapshot into the corresponding instance of model {@code T}.
      * @param document FireBase document snapshot to be converted.
-     * @return Object of model corresponding to the document.
+     * @return Instance of the model corresponding to the document.
      */
     protected abstract T deserialize(DocumentSnapshot document);
 
     /**
-     * Converts an object of the model {@code T} to the corresponding map for uploading to the
+     * Converts an instance of the model {@code T} to the corresponding map for uploading to the
      * {@code collection}.
-     * @param object Object of the model.
+     * @param object Instance of the model.
      * @return Map for uploading to {@code collection}.
      */
     protected abstract Map<String, Object> serialize(T object);
