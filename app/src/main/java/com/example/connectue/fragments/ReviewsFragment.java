@@ -27,6 +27,7 @@ import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Course;
 import com.example.connectue.model.Review;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -118,6 +119,8 @@ public class ReviewsFragment extends Fragment {
         // Initializing list of reviews
         reviewList = new ArrayList<>();
 
+        ExtendedFloatingActionButton uploadReviewBtn = view.findViewById(R.id.uploadReviewBtn);
+
         reviewAdapter = new ReviewAdapter(getContext(), reviewList);
         reviewRecyclerView.setAdapter(reviewAdapter);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -144,6 +147,15 @@ public class ReviewsFragment extends Fragment {
                     isLoading = true;
                     loadReviews();
                 }
+            }
+        });
+
+        uploadReviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                intent.putExtra("courseId", courseId);
+                startActivity(intent);
             }
         });
 

@@ -44,6 +44,8 @@ public class AddReviewActivity extends AppCompatActivity {
     Long stars;
     String text;
 
+    private String courseId;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +67,17 @@ public class AddReviewActivity extends AppCompatActivity {
         star_4 = findViewById(R.id.star4);
         star_5 = findViewById(R.id.star5);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                courseId= "";
+            } else {
+                courseId= extras.getString("courseId");
+            }
+        } else {
+            courseId= (String) savedInstanceState.getSerializable("courseId");
+        }
+
 
 
         // Set listeners for star rating buttons
@@ -78,8 +91,7 @@ public class AddReviewActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddReviewActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -151,7 +163,7 @@ public class AddReviewActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text, Long stars) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Review review = new Review(publisherId, text, stars);
+        Review review = new Review(FirebaseFirestore.getInstance().collection("reviews").getId(), publisherId, text, stars, Long.parseLong("0"), Long.parseLong("0"), Long.parseLong("0"), new Date(), courseId);
 
         reviewManager.upload(review, new FireStoreUploadCallback() {
             @Override
@@ -160,8 +172,7 @@ public class AddReviewActivity extends AppCompatActivity {
                 Toast.makeText(AddReviewActivity.this,
                         "Review is published successfully", Toast.LENGTH_SHORT).show();
 
-                Intent intentReviews = new Intent(AddReviewActivity.this, MainActivity.class);
-                startActivity(intentReviews);
+                finish();
             }
 
             @Override

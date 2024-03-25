@@ -175,10 +175,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
 
 
-            reviewManager.isLiked(review.getId(), currentUid, new FireStoreLikeCallback() {
+            reviewManager.isDisliked(review.getId(), currentUid, new FireStoreLikeCallback() {
                 @Override
-                public void onSuccess(Boolean isLiked) {
-                    if (!isLiked) {
+                public void onSuccess(Boolean isDisliked) {
+                    if (!isDisliked) {
                         reviewDislike.setImageResource(R.drawable.dislike_empty);
                     } else {
                         reviewDislike.setImageResource(R.drawable.dislike_filled);
@@ -193,7 +193,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewDislike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reviewManager.likeOrUnlike(review, currentUid, new FireStoreLikeCallback() {
+                    reviewManager.dislikeOrUndislike(review, currentUid, new FireStoreLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {
