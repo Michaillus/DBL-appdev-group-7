@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.interfaces.FireStoreUploadCallback;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Interactable;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,19 +24,19 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * Like manager that supports database requests regarding liking an interactable
      * of model {@code T}.
      */
-    LikeManager likeManager;
+    protected LikeManager likeManager;
 
     /**
      * Like manager that supports database requests regarding disliking an interactable
      * of model {@code T}.
      */
-    LikeManager dislikeManager;
+    protected LikeManager dislikeManager;
 
     /**
      * Comment manager that supports database requests regarding commenting an interactable
      * of model {@code T}.
      */
-    CommentManager commentManager;
+    protected CommentManager commentManager;
 
     /**
      * Constructor for manager of interactables.
@@ -99,8 +100,25 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         likeManager.isLiked(interactableId, userId, callback);
     }
 
+    /**
+     * Retrieves {@code amount} of most recent comments of {@code parentId} interactable,
+     * after the last uploaded one.
+     * @param parentId Id of interactable which comments to retrieve.
+     * @param amount Number of comments to retrieve
+     * @param callback Callback that passes a list of downloaded comments when finished downloading
+     *                 or passes the error message on failure.
+     */
     public void downloadRecentComments(String parentId, int amount,
                                        FireStoreDownloadCallback<List<Comment>> callback) {
         commentManager.downloadRecent(parentId, amount, callback);
+    }
+
+    /**
+     * Uploads a comment for the interactable to the database.
+     * @param comment Instance of a comment to publish.
+     * @param callback Callback that is called when the upload process is finished.
+     */
+    public void uploadComment(Comment comment, FireStoreUploadCallback callback) {
+        commentManager.upload(comment, callback);
     }
 }
