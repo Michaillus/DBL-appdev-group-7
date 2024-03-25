@@ -279,38 +279,6 @@ public class PostFragment extends Fragment {
         });
     }
 
-//    private void loadCommentsFromFirestore(String postId) {
-//        // Query for retrieving comments for the current post
-//        // Newest comments are shown first
-//        Query commentQuery = db.collection("comments")
-//                .whereEqualTo("parentId", postId)
-//                .orderBy("timestamp", Query.Direction.DESCENDING);
-//        commentQuery.get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful()) {
-//                for (QueryDocumentSnapshot document : task.getResult()) {
-//                    // Convert each comment document to a Comment object
-//                    Comment comment = document.toObject(Comment.class);
-//                    userManager.downloadOne(document.getString("userId"), new FireStoreDownloadCallback<User2>() {
-//                        @Override
-//                        public void onSuccess(User2 user) {
-//                            //comment.setPublisherName(user.getFullName());
-//                            commentList.add(comment);
-//                            commentAdapter.notifyDataSetChanged();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Exception e) {
-//                            Log.e(TAG, "Failed to get comment publisher", e);
-//                        }
-//                    });
-//                }
-//
-//            } else {
-//                Log.d(TAG, "Error getting comments: ", task.getException());
-//            }
-//        });
-//    }
-
     public void loadComments(String postId) {
         Log.e("test", "test");
         postManager.downloadRecentComments(postId, commentsPerChunk,
@@ -371,13 +339,7 @@ public class PostFragment extends Fragment {
                         userManager.downloadOne(userId, new FireStoreDownloadCallback<User2>() {
                             @Override
                             public void onSuccess(User2 user) {
-                                //comment.setPublisherName(user.getFullName());
-//                                comment.setPublisherName(user.getFullName());
-//                                // Load profile picture
-//                                String imageUrl = user.getProfilePicUrl();
-//                                if (imageUrl != null && !imageUrl.equals("")) {
-//                                    comment.setUserProfilePicUrl(imageUrl);
-//                                }
+
                                 commentList.add(0, comment);
                                 // Notify the RecyclerView adapter about the dataset change
                                 commentAdapter.notifyItemInserted(0);

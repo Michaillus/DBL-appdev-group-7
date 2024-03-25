@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.connectue.R;
+import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.General;
@@ -86,21 +87,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         }
 
         public void bind(Comment comment) {
-            publisherName.setText(comment.getPublisherName());
+            userManager.downloadOne(comment.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+                @Override
+                public void onSuccess(User2 data) {
+                    // Load user name
+                    publisherName.setText(data.getFullName());
+                    String imageUrl = data.getProfilePicUrl();
 
-            // Load profile picture
-            String imageUrl = comment.getUserProfilePicUrl();
-            if (imageUrl != null && !imageUrl.equals("")) {
-                Glide.with(profilePic.getContext()).load(imageUrl).into(profilePic);
-                profilePic.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        General.showPopupWindow(profilePic, imageUrl);
+                    // Load profile picture
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Glide.with(profilePic.getContext()).load(imageUrl).into(profilePic);
+                        profilePic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                General.showPopupWindow(profilePic, imageUrl);
+                            }
+                        });
                     }
-                });
-            }
+                }
+            });
 
-            publishTime.setText(TimeUtils.getTimeAgo(comment.gettimestamp()));
+            publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
             commentDescription.setText(comment.getText());
 
             userManager.downloadOne(comment.getPublisherId(),

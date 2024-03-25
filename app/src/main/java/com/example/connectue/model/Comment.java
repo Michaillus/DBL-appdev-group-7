@@ -49,11 +49,7 @@ public class Comment {
     private String parentId;
 
     private Date timestamp;
-    private String commentId;
-    private String publisherName;
     private String userProfilePicUrl;
-
-    private static final String TAG = "Comment class: ";
 
     public Comment(String publisherId, String text, String parentId) {
         this(null, publisherId, text, parentId, new Date());
@@ -112,10 +108,6 @@ public class Comment {
 
     public String getUserProfilePicUrl() {return userProfilePicUrl;}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-
-    }
     // Getter and setter for the text of the comment
     public String getText() {
         return text;
@@ -141,14 +133,6 @@ public class Comment {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public void setCommentId(String commentId) {
-        this.commentId = commentId;
-    }
-
-    public void setPublisherName(String publisherName) {
-        this.publisherName = publisherName;
     }
 
     public void setUserProfilePicUrl(String userProfilePicUrl) {this.userProfilePicUrl = userProfilePicUrl;}
