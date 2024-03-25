@@ -10,6 +10,7 @@ public class Question extends Interactable{
      * Class tag for logs.
      */
     private static final String TAG = "Question class: ";
+    protected String publisherName;
 
 
     /**

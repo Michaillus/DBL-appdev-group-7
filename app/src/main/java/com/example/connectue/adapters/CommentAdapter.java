@@ -1,16 +1,21 @@
 package com.example.connectue.adapters;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.connectue.R;
+import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.General;
@@ -63,6 +68,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         UserManager userManager;
 
         private TextView publisherName;
+        private ImageView profilePic;
         private TextView commentDescription;
         private TextView publishTime;
         private ImageButton reportBtn;
@@ -71,6 +77,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             super(itemView);
 
             publisherName = itemView.findViewById(R.id.publisherNameCommentTv);
+            profilePic = itemView.findViewById(R.id.profilePicCommentIv);
             publishTime = itemView.findViewById(R.id.publishTimeCommentTv);
             commentDescription = itemView.findViewById(R.id.commentDescriptionTv);
             reportBtn = itemView.findViewById(R.id.reportCommentBtn);
@@ -80,6 +87,26 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         }
 
         public void bind(Comment comment) {
+            userManager.downloadOne(comment.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+                @Override
+                public void onSuccess(User2 data) {
+                    // Load user name
+                    publisherName.setText(data.getFullName());
+                    String imageUrl = data.getProfilePicUrl();
+
+                    // Load profile picture
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Glide.with(profilePic.getContext()).load(imageUrl).into(profilePic);
+                        profilePic.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                General.showPopupWindow(profilePic, imageUrl);
+                            }
+                        });
+                    }
+                }
+            });
+
             publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
             commentDescription.setText(comment.getText());
 

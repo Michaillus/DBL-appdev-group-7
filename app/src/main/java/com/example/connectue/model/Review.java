@@ -38,6 +38,9 @@ public class Review extends Interactable{
      */
     protected long stars;
 
+    protected String parentCourseId;
+    protected String publisherName;
+
     public Review(String publisherId, String text, Long stars) {
         super(publisherId, text);
 
@@ -45,11 +48,11 @@ public class Review extends Interactable{
     }
 
     public Review(String reviewId, String publisherId, String text, Long stars,
-                Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime)
+                Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime, String parentCourseId)
             throws IllegalArgumentException {
 
         super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
-
+        this.parentCourseId = parentCourseId;
         this.setStars(stars);
 
     }
@@ -62,6 +65,10 @@ public class Review extends Interactable{
     }
     public void setStars(long stars) {
         this.stars = stars;
+    }
+
+    public String getParentCourseId() {
+        return parentCourseId;
     }
 
 }

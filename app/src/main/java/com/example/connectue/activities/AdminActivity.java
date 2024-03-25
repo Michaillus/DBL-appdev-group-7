@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.example.connectue.fragmets.ManageReportHistoryFragment;
+import com.example.connectue.fragments.ManageReportHistoryFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

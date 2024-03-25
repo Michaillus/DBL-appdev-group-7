@@ -40,7 +40,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
     private FirebaseFirestore db;
     private String currentUid;
-    private String TAG = "TestAdapterQuestions";
     private FragmentManager fragmentManager;
     private QuestionManager questionManager;
 

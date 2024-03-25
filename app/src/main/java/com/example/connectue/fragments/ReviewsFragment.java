@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import static android.app.Activity.RESULT_OK;
 import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
@@ -20,9 +20,12 @@ import android.view.ViewGroup;
 
 import com.example.connectue.R;
 import com.example.connectue.activities.AddReviewActivity;
+import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.managers.ReviewManager;
+import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.Review;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,32 +40,35 @@ import com.example.connectue.activities.AddReviewActivity;
  */
 public class ReviewsFragment extends Fragment {
 
-    private static final String TAG = "ReviewFragment class: ";
+    private static final String tag = "ReviewFragment class: ";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final int ADD_REVIEW_REQUEST_CODE = 1001;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    // List of posts to output in feed.
+    // List of reviews to output in feed.
     private List<Review> reviewList;
 
-    // Adapter that is responsible for outputting posts to UI.
+    // Adapter that is responsible for outputting reviews to UI.
     private ReviewAdapter reviewAdapter;
 
-    // Number of posts loaded at once to the feed.
-    private final int postsPerChunk = 4;
+    // Number of reviews loaded at once to the feed.
+    private final int reviewsPerChunk = 4;
 
-    // Manager for database requests for posts collection.
+    // Manager for database requests for reviews collection.
     private ReviewManager reviewManager;
 
-    // Indicates if posts are currently loading from database
+    // Indicates if reviews are currently loading from database
     private Boolean isLoading = false;
+
+    private String courseId;
+
+
 
     //private Context ReviewsFragment;
 
@@ -117,7 +123,7 @@ public class ReviewsFragment extends Fragment {
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Upload from database and display first chunk of posts
-        loadPosts();
+        loadReviews();
 
         // Add a scroll listener to the RecyclerView
         reviewRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -136,7 +142,7 @@ public class ReviewsFragment extends Fragment {
                     // Assuming PAGE_SIZE is the number of items to load per page
                     // Load more items
                     isLoading = true;
-                    loadPosts();
+                    loadReviews();
                 }
             }
         });
@@ -146,26 +152,40 @@ public class ReviewsFragment extends Fragment {
 
     }
 
-
-
-    public void loadPosts() {
-        reviewManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Review>>() {
+    public void loadReviews() {
+        reviewManager.downloadRecent(reviewsPerChunk, new FireStoreDownloadCallback<List<Review>>() {
             @Override
             public void onSuccess(List<Review> data) {
-                reviewList.addAll(data);
+                //check course of opened page
+                CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
+                if (courseViewActivity != null) {
+                    courseId = courseViewActivity.getCourse();
+                } else {
+                    courseId = "";
+                }
+                //only add reviews linked to the opened course card
+
+                for(Review review: data) {
+                    Log.d("ALAL", review.getParentCourseId());
+                    if (review.getParentCourseId().equals(courseId)) {
+                        reviewList.add(review);
+                    }
+                }
                 reviewAdapter.notifyDataSetChanged();
                 isLoading = false;
             }
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(TAG, "Error while downloading reviews", e);
+                Log.e(tag, "Error while downloading reviews", e);
             }
         });
     }
 
-
-
-
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //binding = null;
+        reviewManager.resetLastRetrieved();
+    }
 }

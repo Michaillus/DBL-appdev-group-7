@@ -12,22 +12,28 @@ import java.util.Map;
 public class QuestionManager extends InteractableManager<Question> {
 
     /**
-     * Constructor for manager of questions.
+     * Constructor for a manager of questions.
      *
      * @param db             Instance of a FireStore database.
-     * @param collectionName Name of collection that stores questions in the database.
-     * @param likeCollectionName Name of collection that stores question likes in the database.
-     * @param dislikeCollectionName Name of collection that stores question dislikes in the database.
-     * @param commentCollectionName Name of collection that stores question comments in the database.
+     * @param collectionName Name of the collection that stores questions in the database.
+     * @param likeCollectionName Name of the collection that stores question likes in the database.
+     * @param dislikeCollectionName Name of the collection that stores question dislikes in the database.
+     * @param commentCollectionName Name of the collection that stores question comments in the database.
      */
     public QuestionManager(FirebaseFirestore db, String collectionName,
                        String likeCollectionName, String dislikeCollectionName,
                        String commentCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
 
-        TAG = "QuestionManager class: ";
+        tag = "QuestionManager class: ";
     }
 
+    /**
+     * Converts a FireBase document snapshot of a question collection into an instance
+     * of comment model.
+     * @param document FireBase document snapshot of the question collection.
+     * @return Instance of the question model.
+     */
     @Override
     protected Question deserialize(DocumentSnapshot document) {
         return new Question(
@@ -40,6 +46,12 @@ public class QuestionManager extends InteractableManager<Question> {
                 document.getTimestamp("timestamp").toDate());
     }
 
+    /**
+     * Converts an instance of the question model to a corresponding map for uploading to the
+     * question collection.
+     * @param question Instance of the question model.
+     * @return Map for uploading to question collection.
+     */
     @Override
     protected Map<String, Object> serialize(Question question) {
         Map<String, Object> questionData = new HashMap<>();

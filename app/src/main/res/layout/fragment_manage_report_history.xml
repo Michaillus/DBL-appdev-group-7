@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".fragmets.ManageReportHistoryFragment">
+    tools:context=".fragments.ManageReportHistoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="146dp"

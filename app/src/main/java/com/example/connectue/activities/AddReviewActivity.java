@@ -35,8 +35,6 @@ import java.util.Locale;
 
 public class AddReviewActivity extends AppCompatActivity {
 
-
-    CollectionReference reviews;
     ReviewManager reviewManager;
     EditText reviewDescription;
     Button publishReviewBtn;
@@ -52,9 +50,7 @@ public class AddReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_review);
 
-        reviews = FirebaseFirestore.getInstance().collection("reviews");
-
-        // Initializing post manager
+        // Initializing review manager
         reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), Review.REVIEW_COLLECTION_NAME,
                 Review.REVIEW_LIKE_COLLECTION_NAME,
                 Review.REVIEW_DISLIKE_COLLECTION_NAME,

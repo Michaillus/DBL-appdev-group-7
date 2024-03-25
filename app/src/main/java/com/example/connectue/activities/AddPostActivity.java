@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -57,13 +58,14 @@ public class AddPostActivity extends AppCompatActivity {
 
     //views
     EditText postDescription;
-    Button publishPostBtn;
-    ImageView addImageBtn;
-    ImageView postImage;
-    ImageButton backBtn;
 
-    //Reference to the Cloud Firestore database
-    CollectionReference posts;
+    Button publishPostBtn;
+
+    ImageView addImageBtn;
+
+    ImageView postImage;
+
+    ImageButton backBtn;
 
     //image picked will be saved in this uri
     Uri imageUri = null;
@@ -72,8 +74,6 @@ public class AddPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
-
-        posts = FirebaseFirestore.getInstance().collection("posts");
 
         // Initializing post manager
         postManager = new PostManager(FirebaseFirestore.getInstance(),
@@ -136,13 +136,25 @@ public class AddPostActivity extends AppCompatActivity {
 
     // Method to check and request storage permission
     private void requestStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_STORAGE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO}, REQUEST_STORAGE);
+            } else {
+                // Permission already granted, proceed with gallery operation
+                pickImageFromGallery();
+            }
         } else {
-            // Permission already granted, proceed with gallery operation
-            pickImageFromGallery();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_STORAGE);
+                Log.d(TAG, "requestStoragePermission: requestStoragePermission");
+            } else {
+                // Permission already granted, proceed with gallery operation
+                pickImageFromGallery();
+            }
         }
     }
 
@@ -164,7 +176,7 @@ public class AddPostActivity extends AppCompatActivity {
                 pickImageFromGallery();
             } else {
                 // Storage permission denied, handle accordingly (e.g., show explanation, disable gallery feature)
-                Toast.makeText(this, "Storage permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Storage permission denied " + grantResults[0], Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -196,15 +208,13 @@ public class AddPostActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == IMAGE_PICK_CAMERA_CODE) {
                 //image picked from camera
-                postImage.setImageURI(imageUri);
-                postImage.setVisibility(View.VISIBLE);
+                addImageBtn.setImageURI(imageUri);
             }
             else if (requestCode == IMAGE_PICK_GALLERY_CODE) {
                 //image picked from gallery
                 imageUri = data.getData();
 
-                postImage.setImageURI(imageUri);
-                postImage.setVisibility(View.VISIBLE);
+                addImageBtn.setImageURI(imageUri);
             }
         }
     }
