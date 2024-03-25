@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.connectue.model.Interactable;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.activities.AdminActivity;
@@ -243,6 +244,7 @@ public class ProfileFragment extends Fragment {
         initSignoutButton();
         initDeleteButton();
         initPostHisButton();
+        initReviewHisButton();
         initAdminButton();
         initProfileImageView();
     }
@@ -445,7 +447,7 @@ public class ProfileFragment extends Fragment {
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
         if (document.get(General.LASTNAME) != null) {  lastNameStr = document.getString(General.LASTNAME);}
         if (document.get(General.EMAIL) != null) { emailStr = document.getString(General.EMAIL);}
-        if (document.get(General.PROGRAM) != null) { majorStr = document.getString(General.PROGRAM);}
+
         if (document.get(General.PHONE) != null) { phoneStr = document.getString(General.PHONE);}
         if (document.get(General.ROLE) != null) {
             role = document.getLong(General.ROLE);
@@ -462,7 +464,22 @@ public class ProfileFragment extends Fragment {
         postHisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toOtherActivity(PostHistoryActivity.class);
+                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
+                history.putExtra("collection", General.POSTCOLLECTION);
+//                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
+                getActivity().startActivity(history);
+            }
+        });
+    }
+
+    private void initReviewHisButton() {
+        reviewHisBtn.setText("Course Review History");
+        reviewHisBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
+                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
+                getActivity().startActivity(history);
             }
         });
     }

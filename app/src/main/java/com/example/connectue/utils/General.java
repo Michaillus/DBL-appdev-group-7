@@ -58,6 +58,9 @@ public class General {
     public static final String POSTCOLLECTION = "posts";
     public static final String REPORTEDCOLLECTION = "reported";
     public static final String PROFILECOLLECTION = "profilePicture";
+    public static final String COURSEREVIEWCOLLECTION = "reviews";
+    public static final String COMMENTCOLLECTION = "post-comments";
+
 //    fields name in "users"
     public static final String EMAIL = "email";
     public static final String FIRSTNAME = "firstName";
