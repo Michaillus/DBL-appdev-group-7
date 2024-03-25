@@ -110,6 +110,7 @@
             android:layout_toEndOf="@+id/email_title"
             android:autofillHints=""
             android:hint="@string/email_hint"
+            android:editable="false"
             android:textColor="@color/textLightMode"
             android:textSize="16sp" />
 

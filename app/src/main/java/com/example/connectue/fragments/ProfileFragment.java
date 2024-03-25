@@ -47,9 +47,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -355,9 +358,18 @@ public class ProfileFragment extends Fragment {
     private void initDeleteButton() {
         deleteBtn.setText("DELETE ACCOUNT");
 
+        CollectionReference reviewsRef = db.collection("reviews");
+        CollectionReference postsRef = db.collection("posts");
+        CollectionReference commentsRef = db.collection("post-comments");
+
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Firstly, delete all posts and reviews posted by this user
+                deleteUserContents(reviewsRef);
+                deleteUserContents(postsRef);
+                deleteUserContents(commentsRef);
 
                 db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -382,6 +394,40 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+    private void deleteUserContents(CollectionReference collectionRef) {
+
+        collectionRef.whereEqualTo("publisher", user.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // delete posts posted by this user
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            documentSnapshot.getReference().delete();
+
+                            // delete photos of the post that are still stored in storage
+                            String photoURL = documentSnapshot.getString("photoURL");
+                            if (photoURL != null){
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(photoURL);
+                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {}
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {}
+                                });
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {}
+                });
+    }
+
+
     private void updateInfo() {
         Map<String, Object> uploadInfo = new HashMap<>();
         firstNameStr = firstName_fld.getText().toString().trim();
