@@ -23,6 +23,7 @@ import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
+import com.example.connectue.utils.General;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -108,7 +109,7 @@ public class HomeFragment extends Fragment {
         userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
-                if (data.isVerified()) {
+                if (data.getRole() == General.STUDENT || data.getRole() == General.ADMIN) {
                     createPostBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

@@ -24,6 +24,7 @@ import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
+import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -77,6 +78,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         holder.description.setText(post.getText());
         holder.likeNumber.setText(String.valueOf(post.getLikeNumber()));
         holder.commentNumber.setText(String.valueOf(post.getCommentNumber()));
+        holder.publishTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
         holder.bind(post);
     }
 
@@ -90,9 +92,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
         private RowPostsBinding binding;
 
-        ImageView pImage;
-
-        TextView publisherName, description, likeNumber, commentNumber;
+        TextView publisherName, description, likeNumber, commentNumber, publishTime;
 
         UserManager userManager;
         PostManager postManager;
@@ -107,6 +107,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             description = itemView.findViewById(R.id.pDescriptionTv);
             likeNumber = itemView.findViewById(R.id.pLikesTv);
             commentNumber = itemView.findViewById(R.id.pCommentTv);
+            publishTime = itemView.findViewById(R.id.PublishTimePost);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
             db = FirebaseFirestore.getInstance();
@@ -159,12 +160,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
                 }
             });
 
-
-
-            binding.reportBtn.setOnClickListener(new View.OnClickListener() {
+            // Initialize report button for verified users
+            userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
                 @Override
-                public void onClick(View v) {
-                    General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
+                public void onSuccess(User2 data) {
+                    if (data.getRole() == General.GUEST) {
+                        binding.reportBtn.setVisibility(View.GONE);
+                    } else {
+                        binding.reportBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
+                            }
+                        });
+                    }
                 }
             });
         }
