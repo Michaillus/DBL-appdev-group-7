@@ -20,9 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.connectue.fragments.MaterialsFragment;
-import com.example.connectue.fragments.QuestionsFragment;
 import com.example.connectue.R;
 import com.example.connectue.fragments.ReviewsFragment;
+import com.example.connectue.fragmets.QuestionsFragment;
 import com.example.connectue.databinding.ActivityCourseViewBinding;
 import com.example.connectue.model.Course;
 import com.google.android.gms.tasks.OnCompleteListener;

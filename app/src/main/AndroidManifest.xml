@@ -41,9 +41,6 @@
             android:name=".activities.AddReviewActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.PostHistoryActivity"
             android:exported="false" />
         <activity
