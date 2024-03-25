@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.content.Context;
 
 import com.example.connectue.R;
+import com.example.connectue.databinding.FragmentQuestionsBinding;
 import com.example.connectue.managers.EntityManager;
 import com.example.connectue.managers.QuestionManager;
 import com.example.connectue.managers.UserManager;
@@ -41,16 +42,15 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
     private FirebaseFirestore db;
     private String currentUid;
     private FragmentManager fragmentManager;
-    private QuestionManager questionManager;
 
     public QuestionAdapter(Context context, List<Question> questionList) {
         this.context = context;
         this.questionList = questionList;
     }
 
-    public QuestionAdapter(List<Question> questionList, QuestionManager questionManager) {
+    public QuestionAdapter(List<Question> questionList, FragmentManager fragmentManager) {
         this.questionList = questionList;
-        this.questionManager = questionManager;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull

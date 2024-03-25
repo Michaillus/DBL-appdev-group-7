@@ -1,12 +1,16 @@
 package com.example.connectue.managers;
 
+import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Question;
+import com.example.connectue.model.Review;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class QuestionManager extends InteractableManager<Question> {
@@ -29,6 +33,21 @@ public class QuestionManager extends InteractableManager<Question> {
     }
 
     /**
+     * Retrieves {@code amount} of latest questions on the {@code courseId} course
+     * starting from {@code lastRetrieved} and passes list of their models through
+     * {@code onSuccess} method of {@code callback}.
+     * If download of questions has failed, passes the error message through {@code onFailure}
+     * method of the {@code callback}.
+     * @param courseId id of the course which questions to retrieve.
+     * @param amount number of reviews to retrieve.
+     * @param callback Callback to pass list of retrieved questions or an error message.
+     */
+    public void downloadRecent(String courseId, int amount, FireStoreDownloadCallback<List<Question>> callback) {
+        Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
+        super.downloadRecentWithQuery(basicQuery, amount, callback);
+    }
+
+    /**
      * Converts a FireBase document snapshot of a question collection into an instance
      * of comment model.
      * @param document FireBase document snapshot of the question collection.
@@ -43,7 +62,8 @@ public class QuestionManager extends InteractableManager<Question> {
                 document.getLong("likes"),
                 document.getLong("dislikes"),
                 document.getLong("comments"),
-                document.getTimestamp("timestamp").toDate());
+                document.getTimestamp("timestamp").toDate(),
+                document.getString("parentCourseId"));
     }
 
     /**
@@ -62,6 +82,7 @@ public class QuestionManager extends InteractableManager<Question> {
         questionData.put("dislikes", question.getDislikeNumber());
         questionData.put("comments", question.getCommentNumber());
         questionData.put("timestamp", new Timestamp(question.getDatetime()));
+        questionData.put("parentCourseId", question.getParentCourseId());
 
         questionData.put("likedByUsers", new ArrayList<String>());
 

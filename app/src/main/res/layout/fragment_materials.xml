@@ -14,7 +14,7 @@
         />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/uploadMaterialBtn"
+        android:id="@+id/addQuestionBtn"
         style="@style/buttonColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

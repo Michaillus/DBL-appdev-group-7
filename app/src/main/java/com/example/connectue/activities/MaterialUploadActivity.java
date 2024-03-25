@@ -31,8 +31,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -61,7 +59,7 @@ public class MaterialUploadActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         TextView title = findViewById(R.id.courseName);
-        MaterialCardView uploadBtn = findViewById(R.id.uploadMaterialBtn);
+        MaterialCardView uploadBtn = findViewById(R.id.addQuestionBtn);
         ExtendedFloatingActionButton submitBtn = findViewById(R.id.submitBtn);
         caption = findViewById(R.id.materialCaption);
 

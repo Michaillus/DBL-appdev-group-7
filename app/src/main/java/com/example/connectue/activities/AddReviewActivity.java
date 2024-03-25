@@ -1,8 +1,6 @@
 package com.example.connectue.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,8 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.Manifest;
-import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,17 +18,8 @@ import com.example.connectue.R;
 import com.example.connectue.interfaces.FireStoreUploadCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.model.Review;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class AddReviewActivity extends AppCompatActivity {
 
@@ -58,8 +46,8 @@ public class AddReviewActivity extends AppCompatActivity {
                 Review.REVIEW_DISLIKE_COLLECTION_NAME,
                 Review.REVIEW_COMMENT_COLLECTION_NAME);
 
-        reviewDescription = findViewById(R.id.reviewDescription);
-        publishReviewBtn = findViewById(R.id.publishReviewBtn);
+        reviewDescription = findViewById(R.id.questionDescription);
+        publishReviewBtn = findViewById(R.id.publishQuestionBtn);
         backBtn = findViewById(R.id.back_Btn);
         star_1 = findViewById(R.id.star1);
         star_2 = findViewById(R.id.star2);

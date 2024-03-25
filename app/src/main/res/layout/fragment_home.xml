@@ -26,17 +26,17 @@
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createPostBtn"
+        android:id="@+id/addPostBtn"
+        style="@style/buttonColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="-16dp"
-        style="@style/buttonColor"
-        app:tint="@color/Design2"
-        app:srcCompat="@drawable/add_white"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/postsRecyclerView"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_white"
+        app:tint="@color/Design2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:background="@color/Design2"

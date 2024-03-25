@@ -34,9 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment} factory method to
- * create an instance of this fragment.
+ * A fragment for the home page with the post feed and add a post button.
  */
 public class HomeFragment extends Fragment {
 
@@ -83,6 +81,9 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Define reviews recycler view.
+        RecyclerView postRecyclerView = binding.postsRecyclerView;
+
         // Initialize database post manager.
         postManager = new PostManager(FirebaseFirestore.getInstance(),
                 Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
@@ -92,25 +93,25 @@ public class HomeFragment extends Fragment {
         List<Post> postList = new ArrayList<>();
 
         //Initialize RecyclerView
-        initRecyclerView(postList);
+        initRecyclerView(postList, postRecyclerView);
 
         // Upload from database and display first chunk of posts
         loadPosts(postList);
 
         // Display the createPostBtn only for verified users
-        displayCreatePostButton(root);
+        displayAddPostButton(root);
 
         // Add a scroll listener to the RecyclerView
-        getPostsOnScroll(postList);
+        getPostsOnScroll(postList, postRecyclerView);
 
         return root;
     }
 
-    private void initRecyclerView(List<Post> postList) {
+    private void initRecyclerView(List<Post> postList, RecyclerView postRecyclerView) {
         postAdapter = new PostAdapter(postList, fragmentManager);
-        binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.postsRecyclerView.setHasFixedSize(false);
-        binding.postsRecyclerView.setAdapter(postAdapter);
+        postRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        postRecyclerView.setHasFixedSize(false);
+        postRecyclerView.setAdapter(postAdapter);
     }
 
     private void loadPosts(List<Post> postList) {
@@ -130,20 +131,20 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void displayCreatePostButton(View root) {
+    private void displayAddPostButton(View root) {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        ImageButton createPostBtn = root.findViewById(R.id.createPostBtn);
+        ImageButton addPostBtn = root.findViewById(R.id.addPostBtn);
         userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
-                    createPostBtn.setOnClickListener(v -> {
+                    addPostBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddPostActivity.class);
                         startActivity(intent);
                     });
                 } else {
-                    createPostBtn.setVisibility(View.GONE);
+                    addPostBtn.setVisibility(View.GONE);
                 }
             }
 
@@ -154,8 +155,8 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void getPostsOnScroll(List<Post> postList) {
-        binding.postsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+    private void getPostsOnScroll(List<Post> postList, RecyclerView postRecyclerView) {
+        postRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -181,6 +182,5 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        postManager.resetLastRetrieved();
     }
 }

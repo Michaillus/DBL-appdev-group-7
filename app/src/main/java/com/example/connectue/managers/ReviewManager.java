@@ -1,11 +1,15 @@
 package com.example.connectue.managers;
 
+import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.model.Comment;
 import com.example.connectue.model.Review;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ReviewManager extends InteractableManager<Review> {
@@ -27,6 +31,20 @@ public class ReviewManager extends InteractableManager<Review> {
         tag = "ReviewManager class: ";
     }
 
+    /**
+     * Retrieves {@code amount} of latest reviews on the {@code courseId} course
+     * starting from {@code lastRetrieved} and passes list of their models through
+     * {@code onSuccess} method of {@code callback}.
+     * If download of reviews has failed, passes the error message through {@code onFailure}
+     * method of the {@code callback}.
+     * @param courseId id of the course which reviews to retrieve.
+     * @param amount number of reviews to retrieve.
+     * @param callback Callback to pass list of retrieved reviews or an error message.
+     */
+    public void downloadRecent(String courseId, int amount, FireStoreDownloadCallback<List<Review>> callback) {
+        Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
+        super.downloadRecentWithQuery(basicQuery, amount, callback);
+    }
 
     /**
      * Converts a FireBase document snapshot of the review collection into an instance
