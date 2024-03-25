@@ -27,7 +27,6 @@ import com.example.connectue.model.User2;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,11 +35,9 @@ import java.util.Objects;
  */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
-    private static final String TAG = "AdapterPosts class: ";
+    private static final String tag = "AdapterPosts";
 
     List<Post> postList;
-
-    private FirebaseFirestore db;
 
     private String currentUid;
     private FragmentManager fragmentManager;
@@ -72,7 +69,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(TAG, "Error getting the user", e);
+                Log.e(tag, "Error getting the user", e);
             }});
         holder.description.setText(post.getText());
         holder.likeNumber.setText(String.valueOf(post.getLikeNumber()));
@@ -109,7 +106,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             commentNumber = itemView.findViewById(R.id.pCommentTv);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
-            db = FirebaseFirestore.getInstance();
+
             postManager = new PostManager(FirebaseFirestore.getInstance(),
                     Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
                     Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
@@ -172,7 +169,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         // Click a post card to jump to post details page
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "onClick: card clicked");
+            Log.d(tag, "onClick: card clicked");
             int position = getBindingAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 String postId = postList.get(position).getId();
