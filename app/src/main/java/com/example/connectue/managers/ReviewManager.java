@@ -24,7 +24,7 @@ public class ReviewManager extends InteractableManager<Review> {
                        String commentCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
 
-        TAG = "ReviewManager class: ";
+        tag = "ReviewManager class: ";
     }
 
 

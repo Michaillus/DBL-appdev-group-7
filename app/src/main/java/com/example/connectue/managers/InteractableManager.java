@@ -59,7 +59,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         dislikeManager = new LikeManager(db, dislikeCollectionName);
         commentManager = new CommentManager(db, commentCollectionName);
 
-        TAG = "InteractableManager class: ";
+        tag = "InteractableManager class: ";
     }
 
     /**
@@ -84,7 +84,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(TAG, "Error while liking", e);
+                Log.e(tag, "Error while liking", e);
             }
         });
     }

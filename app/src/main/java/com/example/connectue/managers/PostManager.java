@@ -26,7 +26,7 @@ public class PostManager extends InteractableManager<Post> {
                        String commentCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
 
-        TAG = "PostManager class: ";
+        tag = "PostManager class: ";
     }
 
     /**
@@ -38,7 +38,7 @@ public class PostManager extends InteractableManager<Post> {
     @Override
     protected Post deserialize(DocumentSnapshot document) {
         // TODO: implement dislikes for posts.
-        Log.i(TAG, "TODO: implement dislikes for posts");
+        Log.i(tag, "TODO: implement dislikes for posts");
         return new Post(
                 document.getId(),
                 document.getString("publisher"),

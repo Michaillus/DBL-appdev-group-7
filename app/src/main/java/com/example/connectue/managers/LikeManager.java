@@ -1,19 +1,14 @@
 package com.example.connectue.managers;
 
-import android.nfc.Tag;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.interfaces.FireStoreLikeCallback;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +18,7 @@ public class LikeManager {
     /**
      * Class tag for logs.
      */
-    protected String TAG = "LikeManager class: ";
+    protected String tag = "LikeManager class: ";
 
     /**
      * Reference to the FireStore like collection, that is assigned to the manager.
@@ -125,10 +120,10 @@ public class LikeManager {
         query.get().addOnSuccessListener(snapshot -> {
             if (snapshot.isEmpty()) {
                 callback.onSuccess(null);
-                Log.i(TAG, "obtainLike onSuccess: " + documentId + " not liked by " + userId);
+                Log.i(tag, "obtainLike onSuccess: " + documentId + " not liked by " + userId);
             } else {
                 callback.onSuccess(snapshot.getDocuments().get(0).getId());
-                Log.i(TAG, "obtainLike onSuccess: " + documentId + " is liked by " + userId);
+                Log.i(tag, "obtainLike onSuccess: " + documentId + " is liked by " + userId);
             }
         }).addOnFailureListener(e -> callback.onFailure(e));
 

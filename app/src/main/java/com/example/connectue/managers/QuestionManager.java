@@ -25,7 +25,7 @@ public class QuestionManager extends InteractableManager<Question> {
                        String commentCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
 
-        TAG = "QuestionManager class: ";
+        tag = "QuestionManager class: ";
     }
 
     /**
