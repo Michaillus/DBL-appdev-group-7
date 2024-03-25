@@ -40,32 +40,32 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
 
-    private static final String TAG = "HomePageUtil: ";
+    /**
+     * Class tag for logs.
+     */
+    private static final String tag = "HomeFragment";
 
     private FragmentHomeBinding binding;
 
-    // Firebase instance
-    private FirebaseFirestore db;
-
-    // List of posts to output in feed
-    private List<Post> postList;
-
-    // Adapter that is responsible for outputting posts to UI
+    /**
+     * Adapter that is responsible for outputting posts to UI.
+     */
     private PostAdapter postAdapter;
 
-    // Number of posts loaded at once to the feed
-    private final int postsPerChunk = 4;
-
-    // Manager for database requests for posts collection
+    /**
+     * Manager for database requests for posts collection.
+     */
     private PostManager postManager;
 
-    // Indicates if posts are currently loading from database
+    /**
+     * Indicates if posts are currently loading from database.
+     */
     private Boolean isLoading = false;
 
+    /**
+     * Indicates if posts are currently loading from database.
+     */
     private FragmentManager fragmentManager;
-
-    private UserManager userManager;
-    private ImageButton createPostBtn;
 
     public HomeFragment() {
         // Default constructor
@@ -88,33 +88,59 @@ public class HomeFragment extends Fragment {
                 Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
                 Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
 
-        //Initializing the list of posts
-        postList = new ArrayList<>();
+        // Initializing the list of posts in the feed.
+        List<Post> postList = new ArrayList<>();
 
         //Initialize RecyclerView
+        initRecyclerView(postList);
+
+        // Upload from database and display first chunk of posts
+        loadPosts(postList);
+
+        // Display the createPostBtn only for verified users
+        displayCreatePostButton(root);
+
+        // Add a scroll listener to the RecyclerView
+        getPostsOnScroll(postList);
+
+        return root;
+    }
+
+    private void initRecyclerView(List<Post> postList) {
         postAdapter = new PostAdapter(postList, fragmentManager);
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecyclerView.setHasFixedSize(false);
         binding.postsRecyclerView.setAdapter(postAdapter);
+    }
 
-        // Upload from database and display first chunk of posts
-        loadPosts();
+    private void loadPosts(List<Post> postList) {
+        int postsPerChunk = 4;
+        postManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Post>>() {
+            @Override
+            public void onSuccess(List<Post> data) {
+                postList.addAll(data);
+                postAdapter.notifyDataSetChanged();
+                isLoading = false;
+            }
 
-        // Display the createPostBtn only for verified users
-        db = FirebaseFirestore.getInstance();
-        userManager = new UserManager(db, "users");
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(tag, "Error while downloading posts", e);
+            }
+        });
+    }
+
+    private void displayCreatePostButton(View root) {
+        UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        createPostBtn = root.findViewById(R.id.createPostBtn);
+        ImageButton createPostBtn = root.findViewById(R.id.createPostBtn);
         userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
-                    createPostBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), AddPostActivity.class);
-                            startActivity(intent);
-                        }
+                    createPostBtn.setOnClickListener(v -> {
+                        Intent intent = new Intent(getActivity(), AddPostActivity.class);
+                        startActivity(intent);
                     });
                 } else {
                     createPostBtn.setVisibility(View.GONE);
@@ -123,11 +149,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-
+                Log.e(tag, "Error while retrieving user from the database", e);
             }
         });
+    }
 
-        // Add a scroll listener to the RecyclerView
+    private void getPostsOnScroll(List<Post> postList) {
         binding.postsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -144,26 +171,8 @@ public class HomeFragment extends Fragment {
                     // Assuming PAGE_SIZE is the number of items to load per page
                     // Load more items
                     isLoading = true;
-                    loadPosts();
+                    loadPosts(postList);
                 }
-            }
-        });
-
-        return root;
-    }
-
-    public void loadPosts() {
-        postManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Post>>() {
-            @Override
-            public void onSuccess(List<Post> data) {
-                postList.addAll(data);
-                postAdapter.notifyDataSetChanged();
-                isLoading = false;
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Log.e(TAG, "Error while downloading posts", e);
             }
         });
     }
