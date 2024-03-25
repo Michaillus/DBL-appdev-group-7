@@ -19,10 +19,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.connectue.fragmets.MaterialsFragment;
-import com.example.connectue.fragmets.QuestionsFragment;
+import com.example.connectue.fragments.MaterialsFragment;
+import com.example.connectue.fragments.QuestionsFragment;
 import com.example.connectue.R;
-import com.example.connectue.fragmets.ReviewsFragment;
+import com.example.connectue.fragments.ReviewsFragment;
 import com.example.connectue.databinding.ActivityCourseViewBinding;
 import com.example.connectue.model.Course;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,7 +61,6 @@ public class CourseViewActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replaceFragment(new ReviewsFragment());
         TabLayout tabLayout = findViewById(R.id.tablayout_course_menu);
-        Log.d(TAG, tabLayout.toString());
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                @Override
                public void onTabSelected(TabLayout.Tab tab) {
@@ -184,19 +183,19 @@ public class CourseViewActivity extends AppCompatActivity {
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CourseViewActivity.this, MainActivity.class);
-                intent.putExtra("pageIntent", "channels");
-                startActivity(intent);
+                finish();
             }
         });
 
-        Log.d(TAG, courseId);
         loadCourseDetails();
 
 
     }
 
     private void loadCourseDetails() {
+        if (courseId == null || courseId == "") {
+            Log.d(TAG, "FBEINHIs");
+        }
         db.collection("courses").document(courseId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -242,5 +241,9 @@ public class CourseViewActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    public String getCourse() {
+        return courseId;
     }
 }

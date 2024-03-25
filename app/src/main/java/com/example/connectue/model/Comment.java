@@ -8,9 +8,46 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.Date;
 
 public class Comment {
-    private String userId;
-    private String content;
+
+    /**
+     * Class tag for logs.
+     */
+    protected static final String TAG = "Comment class: ";
+
+
+    /**
+     * Name of publisher id field in comment collection.
+     */
+    public static final String PUBLISHER_ID = "userId";
+
+    /**
+     * Name of content field in comment collection.
+     */
+    public static final String CONTENT = "content";
+
+    /**
+     * Name of parent interactable id field in comment collection.
+     */
+    public static final String PARENT_ID = "parentId";
+
+    /**
+     * Name of timestamp field in comment collection.
+     */
+    public static final String TIMESTAMP = "timestamp";
+
+
+    /**
+     * FireBase id of the comment. Is defined NULL if a comment is initialized not based on the
+     * FireBase document.
+     */
+    private String commentId;
+
+    private String publisherId;
+
+    private String text;
+
     private String parentId;
+
     private Date timestamp;
     private String commentId;
     private String publisherName;
@@ -18,77 +55,88 @@ public class Comment {
 
     private static final String TAG = "Comment class: ";
 
-    public Comment() {
-        // Default
+    public Comment(String publisherId, String text, String parentId) {
+        this(null, publisherId, text, parentId, new Date());
     }
 
-    public Comment(String userId, String content, String parentId, Date timestamp) {
-        this.userId = userId;
-        this.content = content;
-        this.parentId = parentId;
-        this.timestamp = timestamp;
-    }
+    public Comment(String commentId, String publisherId, String text, String parentId,
+                   Date timestamp) throws IllegalArgumentException {
 
-    public static void createComment(DocumentSnapshot document, CommentCreateCallback callback) {
         // Handling documents with a null field
-        if (document.getString("userId") == null) {
-            String m = "Comment userId should not be null";
+        if (publisherId == null) {
+            String m = "Comment publisher id should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
-        if (document.getString("content") == null) {
-            String m = "Comment content should not be null";
+        if (text == null) {
+            String m = "Comment text should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
-        if (document.getString("parentId") == null) {
-            String m = "parent of comment should not be null";
+        if (parentId == null) {
+            String m = "Parent of comment should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
-        if (document.getLong("comments") == null) {
-            String m = "Number of post comments should not be null";
+        if (timestamp == null) {
+            String m = "Timestamps of comment should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
+
+        // Setting field values of the model
+        setPublisherId(publisherId);
+        setText(text);
+        setParentId(parentId);
+        setTimestamp(timestamp);
+        setCommentId(commentId);
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public Date gettimestamp() {
-        return timestamp;
-    }
-
+    // Getter and setter for id of the comment
     public String getCommentId() {
         return commentId;
     }
 
-    public String getPublisherName() {
-        return publisherName;
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
+    }
+
+    // Getter and setter for id of the publisher of the comment
+    public String getPublisherId() {
+        return publisherId;
+    }
+
+    public void setPublisherId(String publisherId) {
+        this.publisherId = publisherId;
     }
 
     public String getUserProfilePicUrl() {return userProfilePicUrl;}
 
     public void setUserId(String userId) {
         this.userId = userId;
+
+    }
+    // Getter and setter for the text of the comment
+    public String getText() {
+        return text;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    // Getter and setter for id of the parent interactable of the comment
+    public String getParentId() {
+        return parentId;
     }
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    // Getter and setter for timestamps of the comment
+    public Date getTimestamp() {
+        return timestamp;
     }
 
     public void setTimestamp(Date timestamp) {

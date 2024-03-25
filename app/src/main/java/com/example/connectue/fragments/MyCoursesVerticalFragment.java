@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import android.content.Intent;
 import android.graphics.Typeface;

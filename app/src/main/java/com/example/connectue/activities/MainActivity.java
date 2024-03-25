@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.connectue.fragmets.ChannelsFragment;
-import com.example.connectue.fragmets.HomeFragment;
-import com.example.connectue.fragmets.ProfileFragment;
+import com.example.connectue.fragments.ChannelsFragment;
+import com.example.connectue.fragments.HomeFragment;
+import com.example.connectue.fragments.ProfileFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.ActivityMainBinding;
 

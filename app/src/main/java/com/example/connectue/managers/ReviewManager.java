@@ -1,19 +1,30 @@
-package com.example.connectue.firestoreManager;
+package com.example.connectue.managers;
 
 import com.example.connectue.model.Review;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ReviewManager extends InteractableManager<Review> {
 
+    /**
+     * Constructor for manager of reviews.
+     *
+     * @param db             Instance of a FireStore database.
+     * @param collectionName Name of collection that stores posts in the database.
+     * @param likeCollectionName Name of collection that stores review likes in the database.
+     * @param dislikeCollectionName Name of collection that stores review dislikes in the database.
+     * @param commentCollectionName Name of collection that stores review comments in the database.
+     */
     public ReviewManager(FirebaseFirestore db, String collectionName,
-                       String likeCollectionName, String dislikeCollectionName) {
-        super(db, collectionName, likeCollectionName, dislikeCollectionName);
+                       String likeCollectionName, String dislikeCollectionName,
+                       String commentCollectionName) {
+        super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
+
+        TAG = "ReviewManager class: ";
     }
 
     @Override
@@ -26,7 +37,9 @@ public class ReviewManager extends InteractableManager<Review> {
                 document.getLong("likes"),
                 document.getLong("dislikes"),
                 document.getLong("comments"),
-                document.getTimestamp("timestamp").toDate());
+                document.getTimestamp("timestamp").toDate(),
+                document.getString("parentCourseId")
+        );
     }
 
     @Override
@@ -41,6 +54,7 @@ public class ReviewManager extends InteractableManager<Review> {
         postData.put("dislikes", review.getLikeNumber());
         postData.put("comments", review.getCommentNumber());
         postData.put("timestamp", new Timestamp(review.getDatetime()));
+        postData.put("parentCourseId", review.getParentCourseId());
 
         return postData;
     }

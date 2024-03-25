@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 
@@ -18,9 +18,9 @@ import com.example.connectue.R;
 import com.example.connectue.activities.AddPostActivity;
 import com.example.connectue.adapters.PostAdapter;
 import com.example.connectue.databinding.FragmentHomeBinding;
-import com.example.connectue.firestoreManager.UserManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.firestoreManager.PostManager;
+import com.example.connectue.managers.PostManager;
+import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
@@ -84,13 +84,14 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         // Initialize database post manager.
-        postManager = new PostManager(FirebaseFirestore.getInstance(), "posts",
-                "post-likes", "post-dislikes");
+        postManager = new PostManager(FirebaseFirestore.getInstance(),
+                Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
+                Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
 
         //Initializing the list of posts
         postList = new ArrayList<>();
 
-        //Initialize ReclerView
+        //Initialize RecyclerView
         postAdapter = new PostAdapter(postList, fragmentManager);
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecyclerView.setHasFixedSize(false);

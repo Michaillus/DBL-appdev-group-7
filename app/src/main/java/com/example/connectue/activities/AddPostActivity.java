@@ -26,26 +26,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.connectue.R;
-import com.example.connectue.firestoreManager.PostManager;
+import com.example.connectue.managers.PostManager;
 import com.example.connectue.interfaces.FireStoreUploadCallback;
 import com.example.connectue.model.Post;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 
 public class AddPostActivity extends AppCompatActivity {
@@ -82,8 +76,9 @@ public class AddPostActivity extends AppCompatActivity {
         posts = FirebaseFirestore.getInstance().collection("posts");
 
         // Initializing post manager
-        postManager = new PostManager(FirebaseFirestore.getInstance(), "posts",
-                "post-likes", "post-dislikes");
+        postManager = new PostManager(FirebaseFirestore.getInstance(),
+                Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
+                Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
 
         postDescription = findViewById(R.id.postDescription);
         publishPostBtn = findViewById(R.id.publishPostBtn);

@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.connectue.R;
+import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.User2;
 import com.example.connectue.utils.General;
 import com.example.connectue.utils.TimeUtils;
 import com.example.connectue.model.Comment;
@@ -62,6 +64,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     //view holder class
     public class CommentHolder extends RecyclerView.ViewHolder {
 
+        UserManager userManager;
+
         private TextView publisherName;
         private ImageView profilePic;
         private TextView commentDescription;
@@ -70,11 +74,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
+
             publisherName = itemView.findViewById(R.id.publisherNameCommentTv);
             profilePic = itemView.findViewById(R.id.profilePicCommentIv);
             publishTime = itemView.findViewById(R.id.publishTimeCommentTv);
             commentDescription = itemView.findViewById(R.id.commentDescriptionTv);
             reportBtn = itemView.findViewById(R.id.reportCommentBtn);
+
+            userManager = new UserManager(FirebaseFirestore.getInstance(),
+                    User2.USER_COLLECTION_NAME);
         }
 
         public void bind(Comment comment) {
@@ -93,8 +101,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             }
 
             publishTime.setText(TimeUtils.getTimeAgo(comment.gettimestamp()));
-            commentDescription.setText(comment.getContent());
+            commentDescription.setText(comment.getText());
 
+            userManager.downloadOne(comment.getPublisherId(),
+                    user -> publisherName.setText(user.getFullName()));
             reportBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

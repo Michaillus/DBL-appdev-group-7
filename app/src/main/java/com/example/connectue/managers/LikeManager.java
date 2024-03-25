@@ -1,4 +1,4 @@
-package com.example.connectue.firestoreManager;
+package com.example.connectue.managers;
 
 import android.nfc.Tag;
 import android.util.Log;
@@ -18,9 +18,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LikeManager<T> {
+public class LikeManager {
 
-    private String TAG = "likeManager";
+    /**
+     * Class tag for logs.
+     */
+    protected String TAG = "LikeManager class: ";
+
+    /**
+     * Reference to the firebase collection, that is assigned to the manager.
+     */
     CollectionReference likeCollection;
 
     public LikeManager(FirebaseFirestore db, String collection) {

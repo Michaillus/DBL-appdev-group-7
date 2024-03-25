@@ -1,4 +1,4 @@
-package com.example.connectue.fragmets;
+package com.example.connectue.fragments;
 
 import android.os.Bundle;
 
@@ -97,7 +97,7 @@ public class QuestionsFragment extends Fragment {
 //                    uText[i],
 //                    R.drawable.like_icon,
 //                    likeNum[i]));
-            questionModels.add(new Question("id", uText[i], uText[i],
+            questionModels.add(new Question("name", "id", uText[i], uText[i],
                     3L, 2L, 1L, new Date()));
         }
     }

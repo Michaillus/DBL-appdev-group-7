@@ -15,18 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.managers.PostManager;
 import com.example.connectue.utils.General;
-import com.example.connectue.fragmets.PostFragment;
+import com.example.connectue.fragments.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.firestoreManager.PostManager;
-import com.example.connectue.firestoreManager.UserManager;
+import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -112,7 +110,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
             db = FirebaseFirestore.getInstance();
-            postManager = new PostManager(db, "posts", "posts-likes", "posts-dislikes");
+            postManager = new PostManager(FirebaseFirestore.getInstance(),
+                    Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
+                    Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
         }
 
         public void bind(Post post) {
