@@ -1,10 +1,14 @@
 package com.example.connectue.managers;
 
+import android.util.Log;
+
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.User2;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +40,8 @@ public class UserManager extends EntityManager<User2> {
                 document.getString("firstName"),
                 document.getString("lastName"),
                 document.getBoolean("isVerified"),
-                document.getString("password"),
+                //document.getString("password"),
+                document.getString("email"),
                 document.getString("phone"),
                 document.getString("profilePicURL"),
                 document.getString("program"),
@@ -58,11 +63,14 @@ public class UserManager extends EntityManager<User2> {
         userData.put("firstName", user.getFirstName());
         userData.put("lastName", user.getLastName());
         userData.put("isVerified", user.isVerified());
-        userData.put("password", user.getPassword());
+        //userData.put("password", user.getPassword());
+        userData.put("email", user.getEmail());
         userData.put("phone", user.getPhoneNumber());
         userData.put("profilePicUrl", user.getProfilePicUrl());
         userData.put("program", user.getProgram());
         userData.put("role", user.getRole());
+
+        userData.put("userCourses", new ArrayList<String>());
 
         return userData;
     }

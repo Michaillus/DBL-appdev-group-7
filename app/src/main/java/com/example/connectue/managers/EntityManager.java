@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
+import com.example.connectue.model.User2;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -141,7 +142,7 @@ public abstract class EntityManager<T> {
      * If upload of the documents has failed, passes the error message
      * through {@code callback.onFailure}
      * @param object Object to upload to the database.
-     * @param callback Callback to call when object is uploaded or the upload has failed.
+     * @param callback Callback that is called when object is uploaded or the upload has failed.
      */
     public void upload(T object, ItemUploadCallback callback) {
         Map<String, Object> data = serialize(object);
@@ -151,6 +152,24 @@ public abstract class EntityManager<T> {
                     callback.onSuccess();
                 }).addOnFailureListener(e -> {
                     Log.e(tag, "Failed to upload to FireStore", e);
+                    callback.onFailure(e);
+                });
+    }
+
+    /**
+     * Set (uploads) an instance of the model to the specifies id in the collection in database.
+     * @param object instance of the model to set on id
+     * @param objectId Id of the object in the database
+     * @param callback Callback that is called when the document is set.
+     */
+    public void set(T object, String objectId, ItemUploadCallback callback) {
+        Map<String, Object> data = serialize(object);
+        collection.document(objectId).set(data)
+                .addOnSuccessListener(documentReference -> {
+                    Log.i(tag, "Document is successfully set to FireStore");
+                    callback.onSuccess();
+                }).addOnFailureListener(e -> {
+                    Log.e(tag, "Failed to set document to FireStore", e);
                     callback.onFailure(e);
                 });
     }

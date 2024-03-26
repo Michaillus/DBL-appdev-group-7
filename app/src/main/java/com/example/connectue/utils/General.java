@@ -66,11 +66,8 @@ public class General {
     public static final String FIRSTNAME = "firstName";
     public static final String VERIFY = "isVerified";
     public static final String LASTNAME = "lastName";
-    public static final String PASSWORD = "password";
-    public static final String POSTHISTORY = "postHistory";
     public static final String PROFILEPICTURE = "profilePicURL";
     public static final String PROGRAM = "program";
-    public static final String REVIEWHISTORY = "reviewHistory";
     public static final String ROLE = "role";
     public static final String COURSE = "userCourses";
     public static final String USERID = "userId";

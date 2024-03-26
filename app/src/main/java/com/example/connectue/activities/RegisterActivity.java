@@ -19,10 +19,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.connectue.R;
-import com.example.connectue.model.StudentUser;
-import com.example.connectue.model.User;
+import com.example.connectue.interfaces.ItemUploadCallback;
+import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.User2;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -158,7 +158,7 @@ public class RegisterActivity extends AppCompatActivity
                         Toast.makeText(RegisterActivity.this,
                                 "Verification email sent",
                                 Toast.LENGTH_SHORT).show();
-                        addUserToFirestore(user.getUid(), email, password, firstName, lastName, program, role);
+                        addUserToFirestore(user.getUid(), email, firstName, lastName, program, role);
 
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -184,33 +184,32 @@ public class RegisterActivity extends AppCompatActivity
         }
     }
 
-    private void addUserToFirestore(String uid, String email, String password, String firstName,
-                                    String lastName, String program, int role) {
-        User user = new StudentUser(uid, email, password, firstName, false, lastName,
-                program, role);
-        db.collection("users")
-                .document(uid)
-                .set(user)
-                .addOnCompleteListener(this,new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, "User added to Firestore successfully");
-                        progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this,
-                                "Registration successful",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error adding user to Firestore", e);
-                        progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this,
-                                "Error during the registration occurred",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private void addUserToFirestore(String uid, String email, String firstName, String lastName,
+                                    String program, int role) {
+        User2 user = new User2(uid, firstName, lastName, false,
+                email, null, null, program, role);
+        UserManager userManager = new UserManager(FirebaseFirestore.getInstance(),
+                User2.USER_COLLECTION_NAME);
+        userManager.set(user, uid, new ItemUploadCallback() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "User added to Firestore successfully");
+                progressDialog.dismiss();
+                Toast.makeText(RegisterActivity.this,
+                        "Registration successful",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "Error adding user to Firestore", e);
+                progressDialog.dismiss();
+                Toast.makeText(RegisterActivity.this,
+                        "Error during the registration occurred",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
 
