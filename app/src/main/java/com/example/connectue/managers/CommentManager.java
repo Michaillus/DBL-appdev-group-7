@@ -1,8 +1,6 @@
 package com.example.connectue.managers;
 
-import android.util.Log;
-
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
 import com.example.connectue.model.Comment;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -38,7 +36,7 @@ public class CommentManager extends EntityManager<Comment> {
      * @param callback Callback to pass list of models of the retrieved documents or
      *                 an error message.
      */
-    public void downloadRecent(String parentId, int amount, FireStoreDownloadCallback<List<Comment>> callback) {
+    public void downloadRecent(String parentId, int amount, DownloadItemCallback<List<Comment>> callback) {
         Query basicQuery = collection.whereEqualTo(Comment.PARENT_ID, parentId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }

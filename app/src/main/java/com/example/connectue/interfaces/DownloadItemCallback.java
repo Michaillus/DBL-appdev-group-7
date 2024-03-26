@@ -1,7 +1,7 @@
 package com.example.connectue.interfaces;
 
-public interface FireStoreUploadCallback {
-    public void onSuccess();
+public interface DownloadItemCallback<T> {
+    public void onSuccess(T data);
 
     default void onFailure(Exception e) {};
 }

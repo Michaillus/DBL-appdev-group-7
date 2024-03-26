@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.example.connectue.R;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
 import com.example.connectue.model.Question;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
@@ -86,7 +86,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         public void bind(Question question) {
 
             // Set publisher name
-            userManager.downloadOne(question.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+            userManager.downloadOne(question.getPublisherId(), new DownloadItemCallback<User2>() {
                 @Override
                 public void onSuccess(User2 user) {
                     publisherName.setText(user.getFullName());

@@ -28,11 +28,10 @@ import androidx.annotation.NonNull;
 
 import com.example.connectue.R;
 import com.example.connectue.managers.PostManager;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Post;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -279,7 +278,7 @@ public class AddPostActivity extends AppCompatActivity {
     private void uploadPostToDatabase(String text, String imageUrl) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Post post = new Post(publisherId, text, imageUrl);
-        postManager.upload(post, new FireStoreUploadCallback() {
+        postManager.upload(post, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i("Upload post", "Post is uploaded successfully");

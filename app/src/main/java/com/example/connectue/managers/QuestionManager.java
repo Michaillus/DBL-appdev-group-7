@@ -1,8 +1,7 @@
 package com.example.connectue.managers;
 
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.Review;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,7 +41,7 @@ public class QuestionManager extends InteractableManager<Question> {
      * @param amount number of reviews to retrieve.
      * @param callback Callback to pass list of retrieved questions or an error message.
      */
-    public void downloadRecent(String courseId, int amount, FireStoreDownloadCallback<List<Question>> callback) {
+    public void downloadRecent(String courseId, int amount, DownloadItemCallback<List<Question>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }

@@ -2,8 +2,8 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -11,7 +11,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,7 @@ public abstract class EntityManager<T> {
      * @param documentId Id of the document to retrieve from {@code collection}.
      * @param callback Callback to pass model object of the retrieved document or an error message.
      */
-    public void downloadOne(String documentId, FireStoreDownloadCallback<T> callback) {
+    public void downloadOne(String documentId, DownloadItemCallback<T> callback) {
         collection.document(documentId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -87,12 +86,12 @@ public abstract class EntityManager<T> {
      * @param callback Callback to pass list of models of the retrieved documents or
      *                 an error message.
      */
-    public void downloadRecent(int amount, FireStoreDownloadCallback<List<T>> callback) {
+    public void downloadRecent(int amount, DownloadItemCallback<List<T>> callback) {
         downloadRecentWithQuery(collection, amount, callback);
     }
 
     protected void downloadRecentWithQuery(Query basicQuery, int amount,
-                                         FireStoreDownloadCallback<List<T>> callback) {
+                                         DownloadItemCallback<List<T>> callback) {
 
         Query query = basicQuery.orderBy("timestamp", Query.Direction.DESCENDING);
         if (lastRetrieved != null) {
@@ -144,7 +143,7 @@ public abstract class EntityManager<T> {
      * @param object Object to upload to the database.
      * @param callback Callback to call when object is uploaded or the upload has failed.
      */
-    public void upload(T object, FireStoreUploadCallback callback) {
+    public void upload(T object, ItemUploadCallback callback) {
         Map<String, Object> data = serialize(object);
         collection.add(data)
                 .addOnSuccessListener(documentReference -> {
@@ -157,7 +156,7 @@ public abstract class EntityManager<T> {
     }
 
     protected void update(String documentId, String field, Object value,
-                          FireStoreUploadCallback callback) {
+                          ItemUploadCallback callback) {
         collection.document(documentId).update(field, value)
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure(e));

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -16,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.model.Review;
 import com.google.firebase.auth.FirebaseAuth;
@@ -155,7 +154,7 @@ public class AddReviewActivity extends AppCompatActivity {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Review review = new Review(publisherId, text, stars, courseId);
 
-        reviewManager.upload(review, new FireStoreUploadCallback() {
+        reviewManager.upload(review, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i("Upload review", "Review is uploaded successfully");

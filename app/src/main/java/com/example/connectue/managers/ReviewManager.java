@@ -1,9 +1,16 @@
 package com.example.connectue.managers;
 
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.model.Comment;
+import androidx.annotation.NonNull;
+
+import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.model.Review;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -41,9 +48,32 @@ public class ReviewManager extends InteractableManager<Review> {
      * @param amount number of reviews to retrieve.
      * @param callback Callback to pass list of retrieved reviews or an error message.
      */
-    public void downloadRecent(String courseId, int amount, FireStoreDownloadCallback<List<Review>> callback) {
+    public void downloadRecent(String courseId, int amount, DownloadItemCallback<List<Review>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
+    }
+
+    /**
+     * Checks and returns through the callback if the user have a review on the course.
+     * @param courseId Course to check.
+     * @param userId User to check.
+     * @param callback Returns if the user has a review on the course through the {@code onSuccess}
+     *                 method, if database request is successful. Otherwise, returns exception
+     *                 through the {@code onFailure} method.
+     */
+    public void hasUserReviewedCourse(String courseId, String userId, ItemExistsCallback callback) {
+        Query query = collection.whereEqualTo("parentCourseId", courseId)
+                .whereEqualTo("publisher", userId);
+        AggregateQuery countQuery = query.count();
+        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                AggregateQuerySnapshot snapshot = task.getResult();
+                // Returns if there exists a review on the course from the user.
+                callback.onSuccess(snapshot.getCount() > 0);
+            } else {
+                callback.onFailure(task.getException());
+            }
+        });
     }
 
     /**

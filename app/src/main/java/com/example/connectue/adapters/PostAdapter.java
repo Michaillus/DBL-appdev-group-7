@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.utils.General;
 import com.example.connectue.fragments.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
@@ -103,7 +103,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
             // Set publisher name
             userManager.downloadOne(post.getPublisherId(),
-                new FireStoreDownloadCallback<User2>() {
+                new DownloadItemCallback<User2>() {
                     @Override
                     public void onSuccess(User2 user) {
                         publisherName.setText(user.getFullName());
@@ -128,7 +128,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
                     .getCurrentUser()).getUid();
 
             // Display like button depending on whether the post is liked
-            postManager.isLiked(post.getId(), currentUid, new FireStoreLikeCallback() {
+            postManager.isLiked(post.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
@@ -147,7 +147,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             binding.likePostBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    postManager.likeOrUnlike(post, currentUid, new FireStoreLikeCallback() {
+                    postManager.likeOrUnlike(post, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {

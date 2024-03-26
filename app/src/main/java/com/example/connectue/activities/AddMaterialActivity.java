@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.managers.MaterialManager;
 import com.example.connectue.model.Material;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -175,7 +175,7 @@ public class AddMaterialActivity extends AppCompatActivity {
     private void uploadMaterialToDatabase(String caption, String pdfUri) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Material material = new Material(publisherId, caption, courseId, pdfUri);
-        materialManager.upload(material, new FireStoreUploadCallback() {
+        materialManager.upload(material, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i("Upload material", "Material is uploaded successfully");

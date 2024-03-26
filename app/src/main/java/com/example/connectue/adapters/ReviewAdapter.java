@@ -14,10 +14,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
 import com.example.connectue.model.Review;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
@@ -107,7 +107,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         public void bind(Review review) {
 
             // Set publisher name
-            userManager.downloadOne(review.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+            userManager.downloadOne(review.getPublisherId(), new DownloadItemCallback<User2>() {
                 @Override
                 public void onSuccess(User2 user) {
                     reviewerName.setText(user.getFullName());
@@ -132,7 +132,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
 
 
-            reviewManager.isLiked(review.getId(), currentUid, new FireStoreLikeCallback() {
+            reviewManager.isLiked(review.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
@@ -150,7 +150,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reviewManager.likeOrUnlike(review, currentUid, new FireStoreLikeCallback() {
+                    reviewManager.likeOrUnlike(review, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {
@@ -169,7 +169,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
 
 
-            reviewManager.isDisliked(review.getId(), currentUid, new FireStoreLikeCallback() {
+            reviewManager.isDisliked(review.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isDisliked) {
                     if (!isDisliked) {
@@ -187,7 +187,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewDislike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reviewManager.dislikeOrUndislike(review, currentUid, new FireStoreLikeCallback() {
+                    reviewManager.dislikeOrUndislike(review, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isDisliked) {
                             if (!isDisliked) {

@@ -18,7 +18,8 @@ import com.example.connectue.activities.AddReviewActivity;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.databinding.FragmentReviewsBinding;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Review;
@@ -126,7 +127,7 @@ public class ReviewsFragment extends Fragment {
     private void loadReviews(List<Review> reviewList) {
         int reviewsPerChunk = 6;
 
-        reviewManager.downloadRecent(courseId, reviewsPerChunk, new FireStoreDownloadCallback<List<Review>>() {
+        reviewManager.downloadRecent(courseId, reviewsPerChunk, new DownloadItemCallback<List<Review>>() {
             @Override
             public void onSuccess(List<Review> data) {
                 reviewList.addAll(data);
@@ -145,17 +146,24 @@ public class ReviewsFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addReviewBtn = root.findViewById(R.id.addReviewBtn);
-        userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new DownloadItemCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
-                    addReviewBtn.setOnClickListener(v -> {
-                        Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-                        intent.putExtra("courseId", courseId);
-                        startActivity(intent);
+                    reviewManager.hasUserReviewedCourse(courseId, currentUid, new ItemExistsCallback() {
+                        @Override
+                        public void onSuccess(boolean exists) {
+                            // User is student and has no reviews on the course
+                            if (!exists) {
+                                addReviewBtn.setOnClickListener(v -> {
+                                    Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                                    intent.putExtra("courseId", courseId);
+                                    startActivity(intent);
+                                });
+                                addReviewBtn.setVisibility(View.VISIBLE);
+                            }
+                        }
                     });
-                } else {
-                    addReviewBtn.setVisibility(View.GONE);
                 }
             }
 

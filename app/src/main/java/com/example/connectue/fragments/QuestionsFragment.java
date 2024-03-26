@@ -18,11 +18,10 @@ import com.example.connectue.activities.AddQuestionActivity;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.QuestionAdapter;
 import com.example.connectue.databinding.FragmentQuestionsBinding;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
 import com.example.connectue.managers.QuestionManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.Review;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -127,7 +126,7 @@ public class QuestionsFragment extends Fragment {
     private void loadQuestions(List<Question> questionList) {
         int questionsPerChunk = 4;
 
-        questionManager.downloadRecent(courseId, questionsPerChunk, new FireStoreDownloadCallback<List<Question>>() {
+        questionManager.downloadRecent(courseId, questionsPerChunk, new DownloadItemCallback<List<Question>>() {
             @Override
             public void onSuccess(List<Question> data) {
                 questionList.addAll(data);
@@ -146,7 +145,7 @@ public class QuestionsFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addQuestionButton = root.findViewById(R.id.addQuestionBtn);
-        userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new DownloadItemCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {

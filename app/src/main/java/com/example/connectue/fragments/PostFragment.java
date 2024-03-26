@@ -17,18 +17,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.connectue.R;
-import com.example.connectue.activities.AddPostActivity;
 import com.example.connectue.activities.MainActivity;
-import com.example.connectue.interfaces.FireStoreLikeCallback;
-import com.example.connectue.interfaces.UserNameCallback;
+import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.adapters.CommentAdapter;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.DownloadItemCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Comment;
@@ -42,8 +39,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.example.connectue.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -192,7 +187,7 @@ public class PostFragment extends Fragment {
     }
 
     private void loadContentsFromFirestore() {
-        postManager.downloadOne(postId, new FireStoreDownloadCallback<Post>() {
+        postManager.downloadOne(postId, new DownloadItemCallback<Post>() {
             @Override
             public void onSuccess(Post post) {
                 Post.loadImage(postImage, post.getImageUrl());
@@ -201,7 +196,7 @@ public class PostFragment extends Fragment {
                 currentPost = post;
                 publisherTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
 
-                userManager.downloadOne(post.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+                userManager.downloadOne(post.getPublisherId(), new DownloadItemCallback<User2>() {
                     @Override
                     public void onSuccess(User2 publisher) {
                         publisherName.setText(publisher.getFullName());
@@ -234,7 +229,7 @@ public class PostFragment extends Fragment {
         loadComments(postId);
 
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        postManager.isLiked(postId, currentUid, new FireStoreLikeCallback() {
+        postManager.isLiked(postId, currentUid, new ItemLikeCallback() {
             @Override
             public void onSuccess(Boolean isLiked) {
                 if (!isLiked) {
@@ -252,7 +247,7 @@ public class PostFragment extends Fragment {
         likePostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postManager.likeOrUnlike(currentPost, currentUid, new FireStoreLikeCallback() {
+                postManager.likeOrUnlike(currentPost, currentUid, new ItemLikeCallback() {
                     @Override
                     public void onSuccess(Boolean isLiked) {
                         if (!isLiked) {
@@ -282,7 +277,7 @@ public class PostFragment extends Fragment {
     public void loadComments(String postId) {
         Log.e("test", "test");
         postManager.downloadRecentComments(postId, commentsPerChunk,
-                new FireStoreDownloadCallback<List<Comment>>() {
+                new DownloadItemCallback<List<Comment>>() {
 
             @Override
             public void onSuccess(List<Comment> comments) {
@@ -336,7 +331,7 @@ public class PostFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         // Update the UI to reflect the new comment
-                        userManager.downloadOne(userId, new FireStoreDownloadCallback<User2>() {
+                        userManager.downloadOne(userId, new DownloadItemCallback<User2>() {
                             @Override
                             public void onSuccess(User2 user) {
 

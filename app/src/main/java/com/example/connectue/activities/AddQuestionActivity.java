@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -77,7 +77,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Question question = new Question(publisherId, text, courseId);
 
-        questionManager.upload(question, new FireStoreUploadCallback() {
+        questionManager.upload(question, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i(tag, "Question is uploaded successfully");
