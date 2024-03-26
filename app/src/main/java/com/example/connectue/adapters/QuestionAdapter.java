@@ -97,7 +97,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
                     Log.e(TAG, "Error getting the user", e);
                 }});
 
-            // Set question text
+            // Set main text
             description.setText(question.getText());
             // Set publication date
             date.setText(TimeUtils.getTimeAgo(question.getDatetime()));
