@@ -16,16 +16,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import android.content.Context;
-
 import com.example.connectue.R;
-import com.example.connectue.databinding.FragmentQuestionsBinding;
-import com.example.connectue.managers.EntityManager;
-import com.example.connectue.managers.QuestionManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.FireStoreDownloadCallback;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.Review;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,17 +30,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyViewHolder> {
 
-    Context context;
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "QuestionAdapter";
+
     List<Question> questionList;
 
     private FirebaseFirestore db;
     private String currentUid;
     private FragmentManager fragmentManager;
-
-    public QuestionAdapter(Context context, List<Question> questionList) {
-        this.context = context;
-        this.questionList = questionList;
-    }
 
     public QuestionAdapter(List<Question> questionList, FragmentManager fragmentManager) {
         this.questionList = questionList;
@@ -73,20 +66,18 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView questionLike;
-        TextView publisherName, questionDescription, questionLikeNum, questionDate;
+        TextView publisherName, description, likeNumber, date;
         UserManager userManager;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            db = FirebaseFirestore.getInstance();
-
             publisherName = itemView.findViewById(R.id.questionerName);
-            questionDate = itemView.findViewById(R.id.questionDate);
-            questionDescription = itemView.findViewById(R.id.question);
+            date = itemView.findViewById(R.id.questionDate);
+            description = itemView.findViewById(R.id.question);
             questionLike = itemView.findViewById(R.id.questionLike);
-            questionLikeNum = itemView.findViewById(R.id.questionLikeNum);
+            likeNumber = itemView.findViewById(R.id.questionLikeNum);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
 
@@ -94,10 +85,24 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
         public void bind(Question question) {
 
-            publisherName.setText(question.getPublisherId());
-            questionDescription.setText(question.getText());
-            questionDate.setText(TimeUtils.getTimeAgo(question.getDatetime()));
-            questionLikeNum.setText(String.valueOf(question.getLikeNumber()));
+            // Set publisher name
+            userManager.downloadOne(question.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+                @Override
+                public void onSuccess(User2 user) {
+                    publisherName.setText(user.getFullName());
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Log.e(TAG, "Error getting the user", e);
+                }});
+
+            // Set question text
+            description.setText(question.getText());
+            // Set publication date
+            date.setText(TimeUtils.getTimeAgo(question.getDatetime()));
+            // Set like number
+            likeNumber.setText(String.valueOf(question.getLikeNumber()));
 
             questionLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -149,12 +154,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
                                     likedByUsers.add(currentUid);
                                     questionLike.setImageResource(R.drawable.liked_icon);
                                     question.incrementLikeNumber();
-                                    questionLikeNum.setText(String.valueOf(question.getLikeNumber()));
+                                    likeNumber.setText(String.valueOf(question.getLikeNumber()));
                                 } else {
                                     questionLike.setImageResource(R.drawable.like_icon);
                                     likedByUsers.remove(currentUid);
                                     question.decrementLikeNumber();
-                                    questionLikeNum.setText(String.valueOf(question.getLikeNumber()));
+                                    likeNumber.setText(String.valueOf(question.getLikeNumber()));
                                 }
                                 questionRef.update("likedByUsers", likedByUsers);
                                 questionRef.update("likes", question.getLikeNumber());

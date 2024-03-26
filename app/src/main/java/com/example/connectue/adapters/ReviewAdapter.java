@@ -53,22 +53,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ReviewAdapter.MyViewHolder holder, int position) {
+
         // assign values to the views we created in the course_review_row file
         // based on the position of the recycler view
         Review review = reviewList.get(position);
-
-        holder.userManager.downloadOne(review.getPublisherId(),
-                new FireStoreDownloadCallback<User2>() {
-            @Override
-            public void onSuccess(User2 user) {
-                holder.reviewerName.setText(user.getFullName());
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Log.e(TAG, "Error getting the user", e);
-            }
-        });
         holder.bind(review);
         holder.ratingBar.setIsIndicator(true);
         holder.ratingBar.setRating(review.getStars());
@@ -85,8 +73,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
         // grab the views from course_review_row file
         private ImageView reviewLike, reviewDislike;
-        private TextView reviewerName, reviewDescription, reviewDate;
-        private TextView reviewLikeNum, reviewDislikeNum;
+        private TextView reviewerName, description, date;
+        private TextView likeNumber, dislikeNumber;
         private RatingBar ratingBar;
         UserManager userManager;
 
@@ -99,13 +87,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             super(itemView);
 
             reviewerName = itemView.findViewById(R.id.reviewerName);
-            reviewDate = itemView.findViewById(R.id.reviewDate);
+            date = itemView.findViewById(R.id.reviewDate);
             ratingBar = itemView.findViewById(R.id.star);
-            reviewDescription = itemView.findViewById(R.id.reviewDescription);
+            description = itemView.findViewById(R.id.reviewDescription);
             reviewLike = itemView.findViewById(R.id.reviewLikeBtn);
-            reviewLikeNum = itemView.findViewById(R.id.reviewLikeNum);
+            likeNumber = itemView.findViewById(R.id.reviewLikeNum);
             reviewDislike = itemView.findViewById(R.id.reviewDislikeBtn);
-            reviewDislikeNum = itemView.findViewById(R.id.reviewDislikeNum);
+            dislikeNumber = itemView.findViewById(R.id.reviewDislikeNum);
 
             db = FirebaseFirestore.getInstance();
 
@@ -118,10 +106,26 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
         public void bind(Review review) {
 
-            reviewDescription.setText(review.getText());
-            reviewDate.setText(TimeUtils.getTimeAgo(review.getDatetime()));
-            reviewLikeNum.setText(String.valueOf(review.getLikeNumber()));
-            reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
+            // Set publisher name
+            userManager.downloadOne(review.getPublisherId(), new FireStoreDownloadCallback<User2>() {
+                @Override
+                public void onSuccess(User2 user) {
+                    reviewerName.setText(user.getFullName());
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Log.e(TAG, "Error getting the user", e);
+                }});
+
+            // Set review text
+            description.setText(review.getText());
+            // Set publication date
+            date.setText(TimeUtils.getTimeAgo(review.getDatetime()));
+            // Set like number
+            likeNumber.setText(String.valueOf(review.getLikeNumber()));
+            // Set dislike number
+            dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
 
             currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
                     .getCurrentUser()).getUid();
@@ -154,7 +158,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                             } else {
                                 reviewLike.setImageResource(R.drawable.liked_icon);
                             }
-                            reviewLikeNum.setText(String.valueOf(review.getLikeNumber()));
+                            likeNumber.setText(String.valueOf(review.getLikeNumber()));
                         }
 
                         @Override
@@ -191,7 +195,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                             } else {
                                 reviewDislike.setImageResource(R.drawable.dislike_filled);
                             }
-                            reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
+                            dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
                         }
 
                         @Override

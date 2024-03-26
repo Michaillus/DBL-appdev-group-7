@@ -49,7 +49,7 @@ public class AddMaterialActivity extends AppCompatActivity {
     MaterialManager materialManager;
 
     Boolean uploaded = false;
-    private String TAG = "MatUploadUtil: ";
+    private static final String TAG = "AddMaterialActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -35,7 +35,7 @@ import java.util.Objects;
  */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
-    private static final String tag = "AdapterPosts";
+    private static final String TAG = "AdapterPosts";
 
     List<Post> postList;
 
@@ -58,23 +58,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+
         Post post = postList.get(position);
-
-        holder.userManager.downloadOne(post.getPublisherId(),
-                new FireStoreDownloadCallback<User2>() {
-            @Override
-            public void onSuccess(User2 user) {
-                holder.publisherName.setText(user.getFullName());
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Log.e(tag, "Error getting the user", e);
-            }});
-        holder.description.setText(post.getText());
-        holder.likeNumber.setText(String.valueOf(post.getLikeNumber()));
-        holder.commentNumber.setText(String.valueOf(post.getCommentNumber()));
         holder.bind(post);
+
     }
 
     @Override
@@ -113,6 +100,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         }
 
         public void bind(Post post) {
+
+            // Set publisher name
+            userManager.downloadOne(post.getPublisherId(),
+                new FireStoreDownloadCallback<User2>() {
+                    @Override
+                    public void onSuccess(User2 user) {
+                        publisherName.setText(user.getFullName());
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(TAG, "Error getting the user", e);
+                    }});
+
+            // Set post text
+            description.setText(post.getText());
+            // Set like number
+            likeNumber.setText(String.valueOf(post.getLikeNumber()));
+            // Set comment number
+            commentNumber.setText(String.valueOf(post.getCommentNumber()));
+
             binding.setPost(post);
             binding.executePendingBindings();
 
@@ -169,7 +177,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         // Click a post card to jump to post details page
         @Override
         public void onClick(View v) {
-            Log.d(tag, "onClick: card clicked");
+            Log.d(TAG, "onClick: card clicked");
             int position = getBindingAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 String postId = postList.get(position).getId();
