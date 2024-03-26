@@ -164,13 +164,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
                 }
             });
 
-
-
             binding.reportBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
                 }
+            });
+
+            // Click a comment button to jump to post details page
+            binding.commentPostBtn.setOnClickListener(v -> {
+                Log.d(TAG, "onClick: card clicked");
+                navigateToPostFragment(post.getId());
             });
         }
 
