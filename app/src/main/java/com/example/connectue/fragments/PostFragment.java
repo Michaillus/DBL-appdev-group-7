@@ -25,7 +25,7 @@ import com.example.connectue.R;
 import com.example.connectue.activities.MainActivity;
 import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.adapters.CommentAdapter;
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Comment;
@@ -187,7 +187,7 @@ public class PostFragment extends Fragment {
     }
 
     private void loadContentsFromFirestore() {
-        postManager.downloadOne(postId, new DownloadItemCallback<Post>() {
+        postManager.downloadOne(postId, new ItemDownloadCallback<Post>() {
             @Override
             public void onSuccess(Post post) {
                 Post.loadImage(postImage, post.getImageUrl());
@@ -196,7 +196,7 @@ public class PostFragment extends Fragment {
                 currentPost = post;
                 publisherTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
 
-                userManager.downloadOne(post.getPublisherId(), new DownloadItemCallback<User2>() {
+                userManager.downloadOne(post.getPublisherId(), new ItemDownloadCallback<User2>() {
                     @Override
                     public void onSuccess(User2 publisher) {
                         publisherName.setText(publisher.getFullName());
@@ -277,7 +277,7 @@ public class PostFragment extends Fragment {
     public void loadComments(String postId) {
         Log.e("test", "test");
         postManager.downloadRecentComments(postId, commentsPerChunk,
-                new DownloadItemCallback<List<Comment>>() {
+                new ItemDownloadCallback<List<Comment>>() {
 
             @Override
             public void onSuccess(List<Comment> comments) {
@@ -331,7 +331,7 @@ public class PostFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         // Update the UI to reflect the new comment
-                        userManager.downloadOne(userId, new DownloadItemCallback<User2>() {
+                        userManager.downloadOne(userId, new ItemDownloadCallback<User2>() {
                             @Override
                             public void onSuccess(User2 user) {
 

@@ -17,7 +17,7 @@ import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Review;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
@@ -107,7 +107,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         public void bind(Review review) {
 
             // Set publisher name
-            userManager.downloadOne(review.getPublisherId(), new DownloadItemCallback<User2>() {
+            userManager.downloadOne(review.getPublisherId(), new ItemDownloadCallback<User2>() {
                 @Override
                 public void onSuccess(User2 user) {
                     reviewerName.setText(user.getFullName());

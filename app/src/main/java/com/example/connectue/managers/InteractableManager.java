@@ -2,7 +2,7 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Comment;
@@ -153,7 +153,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      *                 or passes the error message on failure.
      */
     public void downloadRecentComments(String parentId, int amount,
-                                       DownloadItemCallback<List<Comment>> callback) {
+                                       ItemDownloadCallback<List<Comment>> callback) {
         commentManager.downloadRecent(parentId, amount, callback);
     }
 

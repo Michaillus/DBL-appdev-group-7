@@ -2,7 +2,7 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -59,7 +59,7 @@ public abstract class EntityManager<T> {
      * @param documentId Id of the document to retrieve from {@code collection}.
      * @param callback Callback to pass model object of the retrieved document or an error message.
      */
-    public void downloadOne(String documentId, DownloadItemCallback<T> callback) {
+    public void downloadOne(String documentId, ItemDownloadCallback<T> callback) {
         collection.document(documentId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -86,12 +86,12 @@ public abstract class EntityManager<T> {
      * @param callback Callback to pass list of models of the retrieved documents or
      *                 an error message.
      */
-    public void downloadRecent(int amount, DownloadItemCallback<List<T>> callback) {
+    public void downloadRecent(int amount, ItemDownloadCallback<List<T>> callback) {
         downloadRecentWithQuery(collection, amount, callback);
     }
 
     protected void downloadRecentWithQuery(Query basicQuery, int amount,
-                                         DownloadItemCallback<List<T>> callback) {
+                                         ItemDownloadCallback<List<T>> callback) {
 
         Query query = basicQuery.orderBy("timestamp", Query.Direction.DESCENDING);
         if (lastRetrieved != null) {

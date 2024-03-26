@@ -20,7 +20,7 @@ import com.example.connectue.utils.General;
 import com.example.connectue.fragments.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
@@ -103,7 +103,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
             // Set publisher name
             userManager.downloadOne(post.getPublisherId(),
-                new DownloadItemCallback<User2>() {
+                new ItemDownloadCallback<User2>() {
                     @Override
                     public void onSuccess(User2 user) {
                         publisherName.setText(user.getFullName());

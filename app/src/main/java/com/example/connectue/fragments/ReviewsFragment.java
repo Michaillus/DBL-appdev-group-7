@@ -18,7 +18,8 @@ import com.example.connectue.activities.AddReviewActivity;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.databinding.FragmentReviewsBinding;
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ConditionCheckCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
@@ -43,7 +44,7 @@ public class ReviewsFragment extends Fragment {
     /**
      * Class tag for logs.
      */
-    private static final String tag = "ReviewFragment";
+    private static final String TAG = "ReviewFragment";
 
     private FragmentReviewsBinding binding;
 
@@ -127,7 +128,7 @@ public class ReviewsFragment extends Fragment {
     private void loadReviews(List<Review> reviewList) {
         int reviewsPerChunk = 6;
 
-        reviewManager.downloadRecent(courseId, reviewsPerChunk, new DownloadItemCallback<List<Review>>() {
+        reviewManager.downloadRecent(courseId, reviewsPerChunk, new ItemDownloadCallback<List<Review>>() {
             @Override
             public void onSuccess(List<Review> data) {
                 reviewList.addAll(data);
@@ -137,40 +138,73 @@ public class ReviewsFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while downloading reviews", e);
+                Log.e(TAG, "Error while downloading reviews", e);
             }
         });
     }
 
     private void displayAddReviewButton(View root) {
-        UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addReviewBtn = root.findViewById(R.id.addReviewBtn);
-        userManager.downloadOne(currentUid, new DownloadItemCallback<User2>() {
+        checkUserAllowedAddReview(currentUid, new ConditionCheckCallback() {
             @Override
-            public void onSuccess(User2 data) {
-                if (data.isVerified()) {
-                    reviewManager.hasUserReviewedCourse(courseId, currentUid, new ItemExistsCallback() {
-                        @Override
-                        public void onSuccess(boolean exists) {
-                            // User is student and has no reviews on the course
-                            if (!exists) {
-                                addReviewBtn.setOnClickListener(v -> {
-                                    Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-                                    intent.putExtra("courseId", courseId);
-                                    startActivity(intent);
-                                });
-                                addReviewBtn.setVisibility(View.VISIBLE);
-                            }
-                        }
+            public void onSuccess(boolean conditionSatisfied) {
+                if (conditionSatisfied) {
+                    Log.i(TAG, "User is allowed to add a review");
+                    addReviewBtn.setOnClickListener(v -> {
+                        Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                        intent.putExtra("courseId", courseId);
+                        startActivity(intent);
                     });
+                    addReviewBtn.setVisibility(View.VISIBLE);
+                } else {
+                    Log.i(TAG, "User is not allowed to add a review");
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while retrieving user from the database", e);
+                Log.e(TAG, "Error while checking if user allowed to add a review", e);
             }
+        });
+    }
+
+    public void checkUserAllowedAddReview(String userId, ConditionCheckCallback callback) {
+        UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
+        userManager.downloadOne(userId, new ItemDownloadCallback<User2>() {
+            @Override
+            public void onSuccess(User2 data) {
+                if (data.isVerified()) {
+                    // User is a student
+                    reviewManager.hasUserReviewedCourse(courseId, userId, new ItemExistsCallback() {
+                        @Override
+                        public void onSuccess(boolean exists) {
+                            if (!exists) {
+                                // User is a student and has no reviews on the course
+                                callback.onSuccess(true);
+                            } else {
+                                // User has a review on the course
+                                callback.onSuccess(false);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            callback.onFailure(e);
+                        }
+
+                    });
+                } else {
+                    // User is not a student
+                    callback.onSuccess(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onFailure(e);
+            }
+
         });
     }
 

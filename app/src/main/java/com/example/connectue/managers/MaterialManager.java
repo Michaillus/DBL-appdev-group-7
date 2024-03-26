@@ -1,6 +1,6 @@
 package com.example.connectue.managers;
 
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Material;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,7 +27,7 @@ public class MaterialManager extends InteractableManager<Material>{
      * @param amount number of study materials to retrieve.
      * @param callback Callback to pass list of retrieved study materials or an error message.
      */
-    public void downloadRecent(String courseId, int amount, DownloadItemCallback<List<Material>> callback) {
+    public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<Material>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }

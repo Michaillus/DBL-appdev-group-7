@@ -18,7 +18,7 @@ import com.example.connectue.activities.AddQuestionActivity;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.QuestionAdapter;
 import com.example.connectue.databinding.FragmentQuestionsBinding;
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.QuestionManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Question;
@@ -126,7 +126,7 @@ public class QuestionsFragment extends Fragment {
     private void loadQuestions(List<Question> questionList) {
         int questionsPerChunk = 4;
 
-        questionManager.downloadRecent(courseId, questionsPerChunk, new DownloadItemCallback<List<Question>>() {
+        questionManager.downloadRecent(courseId, questionsPerChunk, new ItemDownloadCallback<List<Question>>() {
             @Override
             public void onSuccess(List<Question> data) {
                 questionList.addAll(data);
@@ -145,7 +145,7 @@ public class QuestionsFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addQuestionButton = root.findViewById(R.id.addQuestionBtn);
-        userManager.downloadOne(currentUid, new DownloadItemCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {

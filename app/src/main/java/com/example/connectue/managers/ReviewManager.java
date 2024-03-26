@@ -1,12 +1,8 @@
 package com.example.connectue.managers;
 
-import androidx.annotation.NonNull;
-
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.model.Review;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
@@ -48,7 +44,7 @@ public class ReviewManager extends InteractableManager<Review> {
      * @param amount number of reviews to retrieve.
      * @param callback Callback to pass list of retrieved reviews or an error message.
      */
-    public void downloadRecent(String courseId, int amount, DownloadItemCallback<List<Review>> callback) {
+    public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<Review>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }

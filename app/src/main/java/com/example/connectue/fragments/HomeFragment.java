@@ -18,7 +18,7 @@ import com.example.connectue.R;
 import com.example.connectue.activities.AddPostActivity;
 import com.example.connectue.adapters.PostAdapter;
 import com.example.connectue.databinding.FragmentHomeBinding;
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
 
     private void loadPosts(List<Post> postList) {
         int postsPerChunk = 4;
-        postManager.downloadRecent(postsPerChunk, new DownloadItemCallback<List<Post>>() {
+        postManager.downloadRecent(postsPerChunk, new ItemDownloadCallback<List<Post>>() {
             @Override
             public void onSuccess(List<Post> data) {
                 postList.addAll(data);
@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ImageButton addPostBtn = root.findViewById(R.id.addPostBtn);
-        userManager.downloadOne(currentUid, new DownloadItemCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.getRole() == General.STUDENT || data.getRole() == General.ADMIN) {

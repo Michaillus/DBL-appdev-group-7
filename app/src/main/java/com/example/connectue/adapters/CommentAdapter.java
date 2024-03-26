@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.connectue.R;
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.General;
@@ -86,7 +86,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         }
 
         public void bind(Comment comment) {
-            userManager.downloadOne(comment.getPublisherId(), new DownloadItemCallback<User2>() {
+            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User2>() {
                 @Override
                 public void onSuccess(User2 data) {
                     // Load user name
@@ -109,7 +109,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
             commentDescription.setText(comment.getText());
 
-            userManager.downloadOne(comment.getPublisherId(), new DownloadItemCallback<User2>() {
+            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User2>() {
                 @Override
                 public void onSuccess(User2 data) {
                     // Set comment user name
@@ -119,7 +119,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
             // Initialize report button only for verified users
             currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            userManager.downloadOne(currentUid, new DownloadItemCallback<User2>() {
+            userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
                 @Override
                 public void onSuccess(User2 data) {
                     // Check current user role

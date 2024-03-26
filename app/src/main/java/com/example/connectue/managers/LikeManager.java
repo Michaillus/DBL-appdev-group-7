@@ -2,7 +2,7 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.DownloadItemCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemLikeCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -46,7 +46,7 @@ public class LikeManager {
      */
     public void likeOrUnlike(String documentId, String userId, ItemLikeCallback callback) {
 
-        obtainLike(documentId, userId, new DownloadItemCallback<String>() {
+        obtainLike(documentId, userId, new ItemDownloadCallback<String>() {
             @Override
             public void onSuccess(String likeId) {
                 if (likeId == null) {
@@ -89,7 +89,7 @@ public class LikeManager {
     public void isLiked(String documentId, String userId,
                              ItemLikeCallback callback) {
 
-        obtainLike(documentId, userId, new DownloadItemCallback<String>() {
+        obtainLike(documentId, userId, new ItemDownloadCallback<String>() {
             @Override
             public void onSuccess(String data) {
                 callback.onSuccess(data != null);
@@ -113,7 +113,7 @@ public class LikeManager {
      *                 is no like.
      */
     private void obtainLike(String documentId, String userId,
-                            DownloadItemCallback<String> callback) {
+                            ItemDownloadCallback<String> callback) {
         Query query = likeCollection.whereEqualTo("parentId", documentId)
                 .whereEqualTo("userId", userId);
 
