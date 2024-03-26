@@ -30,10 +30,9 @@ public class LoginActivity extends AppCompatActivity {
     Button mRegisterBtn, mLoginBtn;
     private boolean isVerified;
     private FirebaseAuth mAuth;
-    FirebaseUser user;
     private FirebaseFirestore db;
 
-    private String TAG = "Login user: ";
+    private static final String TAG = "LoginActivity";
 
     private Object verifiedObject;
     @Override
@@ -51,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-//        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
 
@@ -119,14 +117,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             return false;
         }
-
-//        if (user.isEmailVerified()) {
-//            db.collection("users").document(user.getUid()).update("isVerified", true);
-//            return true;
-//        }
-//        Toast.makeText(LoginActivity.this, "User not verified",
-//                Toast.LENGTH_SHORT).show();
-//        return false;
     }
 
     private void loginUser(String email, String password) {

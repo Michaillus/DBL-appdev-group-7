@@ -29,7 +29,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class RegisterActivity extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener {
+
+    private static final String TAG = "RegisterActivity";
 
     //views
     EditText emailEt, passEt, fNameEt, lNameEt;
@@ -114,7 +117,6 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         selectedProgram = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(adapterView.getContext(), selectedProgram, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -122,11 +124,11 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    private String TAG = "RegisterUtil: ";
-
-    private void registerUser(String email, String password, String firstName, String lastName, String program, int role) {
+    private void registerUser(String email, String password, String firstName, String lastName,
+                              String program, int role) {
         progressDialog.show();
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -137,7 +139,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 } else {
                     Log.d(TAG, "createUserWithEmail:failure", task.getException());
                     progressDialog.dismiss();
-                    Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,
+                            "Registration failed",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -151,7 +155,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "Email verification sent.");
-                        Toast.makeText(RegisterActivity.this, "Verification email sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this,
+                                "Verification email sent",
+                                Toast.LENGTH_SHORT).show();
                         addUserToFirestore(user.getUid(), email, password, firstName, lastName, program, role);
 
                         final Handler handler = new Handler();
@@ -168,7 +174,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 //                        waitForVerification(user, email, password, firstName, lastName, program);
                     } else {
                         Log.e(TAG, "Failed to send verification email.", task.getException());
-                        Toast.makeText(RegisterActivity.this, "Failed to send verification email", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this,
+                                "Failed to send verification email",
+                                Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 }
@@ -176,31 +184,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
-//    private void waitForVerification(final FirebaseUser user, String email, String password, String firstName, String lastName, String program) {
-//        user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful()) {
-//                    if (user.isEmailVerified()) {
-//                        // If email is verified, add user to Firestore
-//                        addUserToFirestore(user.getUid(), email, password, firstName, lastName, program);
-//                    } else {
-//                        // If email is not verified, show a message to the user
-//                        Toast.makeText(RegisterActivity.this, "Please verify your email", Toast.LENGTH_SHORT).show();
-//                        progressDialog.dismiss();
-//                    }
-//                } else {
-//                    Log.e(TAG, "Error reloading user", task.getException());
-//                    progressDialog.dismiss();
-//                    Toast.makeText(RegisterActivity.this, "Error registering user", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//    }
-
-
-    private void addUserToFirestore(String uid, String email, String password, String firstName, String lastName, String program, int role) {
-        User user = new StudentUser(uid, email, password, firstName, false, lastName, program, role);
+    private void addUserToFirestore(String uid, String email, String password, String firstName,
+                                    String lastName, String program, int role) {
+        User user = new StudentUser(uid, email, password, firstName, false, lastName,
+                program, role);
         db.collection("users")
                 .document(uid)
                 .set(user)
@@ -209,7 +196,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     public void onComplete(@NonNull Task<Void> task) {
                         Log.d(TAG, "User added to Firestore successfully");
                         progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this,
+                                "Registration successful",
+                                Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -217,7 +206,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "Error adding user to Firestore", e);
                         progressDialog.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Error adding user to Firestore", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this,
+                                "Error during the registration occurred",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
