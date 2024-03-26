@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
     /**
      * Class tag for logs.
      */
-    private static final String tag = "HomeFragment";
+    private static final String TAG = "HomeFragment";
 
     private FragmentHomeBinding binding;
 
@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while downloading posts", e);
+                Log.e(TAG, "Error while downloading posts", e);
             }
         });
     }
@@ -150,7 +150,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while retrieving user from the database", e);
+                Log.e(TAG, "Error while retrieving user from the database", e);
             }
         });
     }
@@ -160,7 +160,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager layoutManager = (LinearLayoutManager) binding.postsRecyclerView.getLayoutManager();
+                LinearLayoutManager layoutManager = (LinearLayoutManager) postRecyclerView.getLayoutManager();
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();

@@ -66,6 +66,11 @@ public class ReviewsFragment extends Fragment {
      */
     private FragmentManager fragmentManager;
 
+    /**
+     * Database id of the course of the opened page.
+     */
+    String courseId;
+
     public ReviewsFragment() {
         // Default constructor
     }
@@ -89,6 +94,9 @@ public class ReviewsFragment extends Fragment {
         reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
                 Review.REVIEW_COLLECTION_NAME, Review.REVIEW_LIKE_COLLECTION_NAME,
                 Review.REVIEW_DISLIKE_COLLECTION_NAME, Review.REVIEW_COMMENT_COLLECTION_NAME);
+
+        // Initialize course id.
+        courseId = retrieveCourseId();
 
         // Initializing the list of posts in the feed.
         List<Review> reviewList = new ArrayList<>();
@@ -116,10 +124,7 @@ public class ReviewsFragment extends Fragment {
     }
 
     private void loadReviews(List<Review> reviewList) {
-        int reviewsPerChunk = 4;
-
-
-        String courseId = retrieveCourseId();
+        int reviewsPerChunk = 6;
 
         reviewManager.downloadRecent(courseId, reviewsPerChunk, new FireStoreDownloadCallback<List<Review>>() {
             @Override
@@ -136,15 +141,6 @@ public class ReviewsFragment extends Fragment {
         });
     }
 
-    private String retrieveCourseId() {
-        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
-        if (courseViewActivity != null) {
-            return courseViewActivity.getCourse();
-        } else {
-            return "";
-        }
-    }
-
     private void displayAddReviewButton(View root) {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -155,6 +151,7 @@ public class ReviewsFragment extends Fragment {
                 if (data.isVerified()) {
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                        intent.putExtra("courseId", courseId);
                         startActivity(intent);
                     });
                 } else {
@@ -190,6 +187,18 @@ public class ReviewsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves the id of the course of current page.
+     */
+    private String retrieveCourseId() {
+        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
+        if (courseViewActivity != null) {
+            return courseViewActivity.getCourse();
+        } else {
+            return "";
+        }
     }
 
     @Override

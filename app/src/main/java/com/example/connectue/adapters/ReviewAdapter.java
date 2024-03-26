@@ -46,7 +46,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public ReviewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // This is where we inflate the layout (Giving a look to our rows)
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_review_row, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.course_review_row, parent, false);
         return new ReviewAdapter.MyViewHolder(view);
     }
 

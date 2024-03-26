@@ -5,12 +5,6 @@ import com.google.firebase.firestore.PropertyName;
 import java.util.Date;
 
 public class Review extends Interactable{
-
-    /**
-     * Class tag for logs.
-     */
-    private static final String TAG = "Review class: ";
-
     
     /**
      * Name of review collection in the database.
@@ -48,6 +42,9 @@ public class Review extends Interactable{
 
         this.setStars(stars);
         this.setParentCourseId(parentCourseId);
+
+        // Setting class tag for logs.
+        tag = "Review Model";
     }
 
     public Review(String reviewId, String publisherId, String text, Long stars,
@@ -57,6 +54,9 @@ public class Review extends Interactable{
         super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
         this.parentCourseId = parentCourseId;
         this.setStars(stars);
+
+        // Setting class tag for logs.
+        tag = "Post Review";
 
     }
 

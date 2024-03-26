@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.example.connectue.R;
 import com.example.connectue.interfaces.FireStoreUploadCallback;
-import com.example.connectue.managers.MaterialsManager;
+import com.example.connectue.managers.MaterialManager;
 import com.example.connectue.model.Material;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class MaterialUploadActivity extends AppCompatActivity {
+public class AddMaterialActivity extends AppCompatActivity {
 
     private static final int REQUEST_PICK_PDF_FILE = 1;
 
@@ -46,7 +46,7 @@ public class MaterialUploadActivity extends AppCompatActivity {
     private Uri selectedPdfUri;
 
     TextInputEditText caption;
-    MaterialsManager materialsManager;
+    MaterialManager materialManager;
 
     Boolean uploaded = false;
     private String TAG = "MatUploadUtil: ";
@@ -63,11 +63,11 @@ public class MaterialUploadActivity extends AppCompatActivity {
         ExtendedFloatingActionButton submitBtn = findViewById(R.id.submitBtn);
         caption = findViewById(R.id.materialCaption);
 
-        materialsManager = new MaterialsManager(db, "materials",
-                "materials-likes",
-                "materials-dislikes",
-                "materials-comments"
-                );
+        materialManager = new MaterialManager(db,
+                Material.MATERIAL_COLLECTION_NAME,
+                Material.MATERIAL_LIKE_COLLECTION_NAME,
+                Material.MATERIAL_DISLIKE_COLLECTION_NAME,
+                Material.MATERIAL_COMMENT_COLLECTION_NAME);
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -92,7 +92,7 @@ public class MaterialUploadActivity extends AppCompatActivity {
                                 title.setText(courseCode);
                             }
                         } else {
-                            Toast.makeText(MaterialUploadActivity.this, "Failed to retrieve course details", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddMaterialActivity.this, "Failed to retrieve course details", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -119,7 +119,7 @@ public class MaterialUploadActivity extends AppCompatActivity {
                     // Upload the selected PDF file to Firebase Storage
                     uploadPdfToFirebase(selectedPdfUri);
                 } else {
-                    Toast.makeText(MaterialUploadActivity.this, "Please select a PDF file", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddMaterialActivity.this, "Please select a PDF file", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -137,7 +137,7 @@ public class MaterialUploadActivity extends AppCompatActivity {
                 downloadText.setText("Uploaded!");
                 uploadIcon.setImageResource(R.drawable.baseline_check_circle_24);
                 uploaded = true;
-                Toast.makeText(MaterialUploadActivity.this, "PDF uploaded successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddMaterialActivity.this, "PDF uploaded successfully", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -158,7 +158,7 @@ public class MaterialUploadActivity extends AppCompatActivity {
                 // File uploaded successfully
                 pdfRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String fileUri = uri.toString();
-                    uploadMaterialToDatabase(caption.getText().toString(), fileUri, now);
+                    uploadMaterialToDatabase(caption.getText().toString(), fileUri);
                 });
 
             }
@@ -166,27 +166,21 @@ public class MaterialUploadActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 // Handle file upload failure
-                Toast.makeText(MaterialUploadActivity.this, "Failed to upload PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddMaterialActivity.this, "Failed to upload PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
 
-    private void uploadMaterialToDatabase(String caption, String pdfUri, Date date) {
+    private void uploadMaterialToDatabase(String caption, String pdfUri) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Material material = new Material( db.collection("materials").document().getId(),
-                publisherId,
-                caption,
-                Long.parseLong("0"),
-                Long.parseLong("0"),
-                Long.parseLong("0"),
-                date, courseId, pdfUri);
-        materialsManager.upload(material, new FireStoreUploadCallback() {
+        Material material = new Material(publisherId, caption, courseId, pdfUri);
+        materialManager.upload(material, new FireStoreUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i("Upload material", "Material is uploaded successfully");
-                Toast.makeText(MaterialUploadActivity.this,
-                        "Post is published successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddMaterialActivity.this,
+                        "Material is published successfully", Toast.LENGTH_SHORT).show();
                 finish();
 
             }

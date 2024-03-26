@@ -67,6 +67,11 @@ public class QuestionsFragment extends Fragment {
      */
     private FragmentManager fragmentManager;
 
+    /**
+     * Database id of the course of the opened page.
+     */
+    String courseId;
+
     public QuestionsFragment() {
         // Default constructor
     }
@@ -90,6 +95,9 @@ public class QuestionsFragment extends Fragment {
         questionManager = new QuestionManager(FirebaseFirestore.getInstance(),
                 Question.QUESTION_COLLECTION_NAME, Question.QUESTION_LIKE_COLLECTION_NAME,
                 Question.QUESTION_DISLIKE_COLLECTION_NAME, Question.QUESTION_COMMENT_COLLECTION_NAME);
+
+        // Initialize course id.
+        courseId = retrieveCourseId();
 
         // Initializing the list of posts in the feed.
         List<Question> questionList = new ArrayList<>();
@@ -119,9 +127,6 @@ public class QuestionsFragment extends Fragment {
     private void loadQuestions(List<Question> questionList) {
         int questionsPerChunk = 4;
 
-
-        String courseId = retrieveCourseId();
-
         questionManager.downloadRecent(courseId, questionsPerChunk, new FireStoreDownloadCallback<List<Question>>() {
             @Override
             public void onSuccess(List<Question> data) {
@@ -137,15 +142,6 @@ public class QuestionsFragment extends Fragment {
         });
     }
 
-    private String retrieveCourseId() {
-        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
-        if (courseViewActivity != null) {
-            return courseViewActivity.getCourse();
-        } else {
-            return "";
-        }
-    }
-
     private void displayAddQuestionButton(View root) {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -156,6 +152,7 @@ public class QuestionsFragment extends Fragment {
                 if (data.isVerified()) {
                     addQuestionButton.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddQuestionActivity.class);
+                        intent.putExtra("courseId", courseId);
                         startActivity(intent);
                     });
                 } else {
@@ -191,6 +188,18 @@ public class QuestionsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves the id of the course of current page.
+     */
+    private String retrieveCourseId() {
+        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
+        if (courseViewActivity != null) {
+            return courseViewActivity.getCourse();
+        } else {
+            return "";
+        }
     }
 
     @Override
