@@ -21,6 +21,7 @@ import com.example.connectue.model.User2;
 import com.example.connectue.utils.General;
 import com.example.connectue.utils.TimeUtils;
 import com.example.connectue.model.Comment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -110,15 +111,32 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
             commentDescription.setText(comment.getText());
 
-            userManager.downloadOne(comment.getPublisherId(),
-                    user -> publisherName.setText(user.getFullName()));
-            reportBtn.setOnClickListener(new View.OnClickListener() {
+            userManager.downloadOne(comment.getPublisherId(), new FireStoreDownloadCallback<User2>() {
                 @Override
-                public void onClick(View v) {
-                    General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, comment.getParentId());
+                public void onSuccess(User2 data) {
+                    // Set comment user name
+                    publisherName.setText(data.getFullName());
                 }
             });
 
+            // Initialize report button only for verified users
+            currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
+                @Override
+                public void onSuccess(User2 data) {
+                    // Check current user role
+                    if (data.getRole() == General.GUEST) {
+                        reportBtn.setVisibility(View.GONE);
+                    } else {
+                        reportBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                General.reportOperation(itemView.getContext(), General.COMMENTCOLLECTION, comment.getParentId());
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
 }

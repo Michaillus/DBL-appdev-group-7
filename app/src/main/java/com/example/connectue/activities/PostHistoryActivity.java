@@ -10,9 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.connectue.model.Interactable;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
-import com.example.connectue.adapters.RecyclerViewAdapter;
+import com.example.connectue.adapters.PostReviewHistoryAdapter;
 import com.example.connectue.model.Post;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,8 +31,7 @@ public class PostHistoryActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private CollectionReference postRef;
     private FirebaseUser user;
-//    TODO: the following is the text version
-    private List<Post> postList;
+    private List<Interactable> postList;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -40,11 +40,12 @@ public class PostHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_history);
+        String collectionName = getIntent().getStringExtra("collection");
 
         db = FirebaseFirestore.getInstance();
-        postRef = db.collection("posts");
+        postRef = db.collection(collectionName);
         postList = new ArrayList<>();
-        loadUserPost();
+        loadUserPost(collectionName);
 
 //        recyclerView = findViewById(R.id.postList_rv);
 //        recyclerView.setHasFixedSize(true);
@@ -57,7 +58,7 @@ public class PostHistoryActivity extends AppCompatActivity {
     }
 
     //TODO: test version
-    private void loadUserPost() {
+    private void loadUserPost(String collectionName) {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         Query query = postRef.whereEqualTo("publisher", user.getUid());
@@ -67,10 +68,10 @@ public class PostHistoryActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String userId = document.getString(General.PUBLISHER);
-                                Post post = new Post(document.getId(),
+                                Interactable post = new Post(document.getId(),
                                         document.getString("publisher"),
                                         document.getString("text"),
-                                        document.getString("photoULR"),
+                                        document.getString("photoURL"),
                                         0L,
                                         document.getLong("likes"),
                                         document.getLong("comments"),
@@ -85,7 +86,8 @@ public class PostHistoryActivity extends AppCompatActivity {
                         recyclerView.setHasFixedSize(true);
                         layoutManager = new LinearLayoutManager(this);
                         recyclerView.setLayoutManager(layoutManager);
-                        mAdapter = new RecyclerViewAdapter(postList, PostHistoryActivity.this);
+                        mAdapter = new PostReviewHistoryAdapter(
+                                postList, PostHistoryActivity.this, collectionName);
                         recyclerView.setAdapter(mAdapter);
                         Log.i(TAG,"end of init");
                     });

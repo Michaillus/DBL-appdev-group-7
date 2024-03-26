@@ -327,7 +327,7 @@ public class PostFragment extends Fragment {
         Comment comment = new Comment(userId, commentText, postId);
         Timestamp timestamp = new Timestamp(date);
         Map<String, Object> commentData = new HashMap<>();
-        commentData.put("content", commentText);
+        commentData.put("text", commentText);
         commentData.put("parentId", postId);
         commentData.put("timestamp", timestamp);
         commentData.put("userId", userId);

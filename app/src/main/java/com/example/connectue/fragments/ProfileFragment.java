@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.connectue.model.Interactable;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.activities.AdminActivity;
@@ -46,9 +47,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -243,6 +247,7 @@ public class ProfileFragment extends Fragment {
         initSignoutButton();
         initDeleteButton();
         initPostHisButton();
+        initReviewHisButton();
         initAdminButton();
         initProfileImageView();
     }
@@ -353,9 +358,18 @@ public class ProfileFragment extends Fragment {
     private void initDeleteButton() {
         deleteBtn.setText("DELETE ACCOUNT");
 
+        CollectionReference reviewsRef = db.collection("reviews");
+        CollectionReference postsRef = db.collection("posts");
+        CollectionReference commentsRef = db.collection("post-comments");
+
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Firstly, delete all posts and reviews posted by this user
+                deleteUserContents(reviewsRef);
+                deleteUserContents(postsRef);
+                deleteUserContents(commentsRef);
 
                 db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -380,6 +394,40 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+    private void deleteUserContents(CollectionReference collectionRef) {
+
+        collectionRef.whereEqualTo("publisher", user.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // delete posts posted by this user
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            documentSnapshot.getReference().delete();
+
+                            // delete photos of the post that are still stored in storage
+                            String photoURL = documentSnapshot.getString("photoURL");
+                            if (photoURL != null){
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(photoURL);
+                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {}
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {}
+                                });
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {}
+                });
+    }
+
+
     private void updateInfo() {
         Map<String, Object> uploadInfo = new HashMap<>();
         firstNameStr = firstName_fld.getText().toString().trim();
@@ -443,13 +491,17 @@ public class ProfileFragment extends Fragment {
         }
 
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
+        if (document.get(General.LASTNAME) != null) {  lastNameStr = document.getString(General.LASTNAME);}
+        if (document.get(General.EMAIL) != null) { emailStr = document.getString(General.EMAIL);}
+
+        if (document.get(General.PHONE) != null) { phoneStr = document.getString(General.PHONE);}
         if (document.get(General.ROLE) != null) {
             role = document.getLong(General.ROLE);
 //            isAdmin = General.isAdmin(document.getLong(General.ROLE));
 //            Log.i(TAG, "" + isAdmin);
         }
         if (document.get(PROFILEPICTURE) != null) {
-            imageURL = (String) document.get(PROFILEPICTURE);
+            imageURL = document.getString(PROFILEPICTURE);
         }
     }
 
@@ -458,7 +510,22 @@ public class ProfileFragment extends Fragment {
         postHisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toOtherActivity(PostHistoryActivity.class);
+                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
+                history.putExtra("collection", General.POSTCOLLECTION);
+//                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
+                getActivity().startActivity(history);
+            }
+        });
+    }
+
+    private void initReviewHisButton() {
+        reviewHisBtn.setText("Course Review History");
+        reviewHisBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
+                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
+                getActivity().startActivity(history);
             }
         });
     }
@@ -555,6 +622,7 @@ public class ProfileFragment extends Fragment {
 
     private void captureImageFromCamera() {
         //intent to pick image from camera
+        Log.i(TAG_Profile, "captureImageFromCamera entered ");
         ContentValues cv = new ContentValues();
         cv.put(MediaStore.Images.Media.TITLE, "Temp Pick");
         cv.put(MediaStore.Images.Media.DESCRIPTION, "Temp Descr");
@@ -563,6 +631,21 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG_Profile, "activity result entered ");
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+                //image picked from gallery
+                imageUri = data.getData();
+            }
+            profileIV.setImageURI(imageUri);
+            profileIV.setVisibility(View.VISIBLE);
+            updateProfilePicture();
+        }
     }
 
     @Override
@@ -587,28 +670,11 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
-                //image picked from gallery
-                imageUri = data.getData();
-            }
-            profileIV.setImageURI(imageUri);
-            profileIV.setVisibility(View.VISIBLE);
-            updateProfilePicture();
-        }
-    }
-
     private void updateProfilePicture() {
-
+        Log.i(TAG_Profile, "updateProfilePicture entered");
         if (imageUri == null) {
             return;
         }
-
-        StorageReference filePath = FirebaseStorage.getInstance().getReference("posts")
-                .child(emailStr + "." + General.getFileExtension(getContext(), imageUri));
 
         if (imageURL != null && !imageURL.equals("")) {
             StorageReference currentPicture = FirebaseStorage.getInstance().
@@ -626,6 +692,9 @@ public class ProfileFragment extends Fragment {
                         }
                     });
         }
+
+        StorageReference filePath = FirebaseStorage.getInstance().getReference("profilePicture")
+                .child(emailStr + "." + General.getFileExtension(getContext(), imageUri));
 
         filePath.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -647,8 +716,13 @@ public class ProfileFragment extends Fragment {
                                     }
                                 });
                     }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG_Profile, "In updateProfilePicture, upload to storage failed");
+                    }
                 });
-
+        Log.i(TAG_Profile, "In updateProfilePicture, after upload");
     }
 
 }
