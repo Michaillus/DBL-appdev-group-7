@@ -85,7 +85,7 @@ public class CourseViewActivity extends AppCompatActivity {
                }
            });
 
-        ratingBar = findViewById(R.id.ratingBar);
+        ratingBar = findViewById(R.id.courseRating);
         ratingIndicator = findViewById(R.id.rating);
         followButton = findViewById(R.id.followButton);
         db = FirebaseFirestore.getInstance();
