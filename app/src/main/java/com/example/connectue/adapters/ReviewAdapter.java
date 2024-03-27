@@ -137,6 +137,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
                         reviewLike.setImageResource(R.drawable.like_icon);
+//                        reviewLike.setEnabled(true);
+//                        reviewDislike.setEnabled(true);
                         reviewDislike.setVisibility(View.VISIBLE);
                         dislikeNumber.setVisibility(View.VISIBLE);
                     } else {
@@ -159,6 +161,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {
                                 reviewLike.setImageResource(R.drawable.like_icon);
+                                reviewLike.setEnabled(true);
+                                reviewDislike.setEnabled(true);
                                 reviewDislike.setVisibility(View.VISIBLE);
                                 dislikeNumber.setVisibility(View.VISIBLE);
                             } else {
@@ -182,6 +186,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 public void onSuccess(Boolean isDisliked) {
                     if (!isDisliked) {
                         reviewDislike.setImageResource(R.drawable.dislike_empty);
+//                        reviewLike.setEnabled(true);
+//                        reviewDislike.setEnabled(true);
                         reviewLike.setVisibility(View.VISIBLE);
                         likeNumber.setVisibility(View.VISIBLE);
                     } else {
@@ -204,6 +210,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                         public void onSuccess(Boolean isDisliked) {
                             if (!isDisliked) {
                                 reviewDislike.setImageResource(R.drawable.dislike_empty);
+                                reviewLike.setEnabled(true);
+                                reviewDislike.setEnabled(true);
                                 reviewLike.setVisibility(View.VISIBLE);
                                 likeNumber.setVisibility(View.VISIBLE);
                             } else {
