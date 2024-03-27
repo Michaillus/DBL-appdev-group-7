@@ -10,20 +10,20 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.example.connectue.model.CourseReview;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemUploadCallback;
-import com.example.connectue.managers.ReviewManager;
-import com.example.connectue.model.Review;
+import com.example.connectue.managers.CourseReviewManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddReviewActivity extends AppCompatActivity {
 
-    ReviewManager reviewManager;
+    CourseReviewManager courseReviewManager;
     EditText reviewDescription;
     Button publishReviewBtn;
     FloatingActionButton backBtn;
@@ -41,10 +41,10 @@ public class AddReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_review);
 
         // Initializing review manager
-        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), Review.REVIEW_COLLECTION_NAME,
-                Review.REVIEW_LIKE_COLLECTION_NAME,
-                Review.REVIEW_DISLIKE_COLLECTION_NAME,
-                Review.REVIEW_COMMENT_COLLECTION_NAME);
+        courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(), CourseReview.COURSE_REVIEW_COLLECTION_NAME,
+                CourseReview.COURSE_REVIEW_LIKE_COLLECTION_NAME,
+                CourseReview.COURSE_REVIEW_DISLIKE_COLLECTION_NAME,
+                CourseReview.COURSE_REVIEW_COMMENT_COLLECTION_NAME);
 
         reviewDescription = findViewById(R.id.reviewDescription);
         publishReviewBtn = findViewById(R.id.publishReviewBtn);
@@ -152,9 +152,9 @@ public class AddReviewActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text, Long stars) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Review review = new Review(publisherId, text, stars, courseId);
+        CourseReview courseReview = new CourseReview(publisherId, text, stars, courseId);
 
-        reviewManager.upload(review, new ItemUploadCallback() {
+        courseReviewManager.upload(courseReview, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i("Upload review", "Review is uploaded successfully");

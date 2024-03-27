@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemLikeCallback;
-import com.example.connectue.managers.ReviewManager;
+import com.example.connectue.managers.CourseReviewManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.ItemDownloadCallback;
-import com.example.connectue.model.Review;
+import com.example.connectue.model.CourseReview;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,15 +29,15 @@ import java.util.Objects;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHolder> {
 
-    List<Review> reviewList;
+    List<CourseReview> courseReviewList;
     private String currentUid;
     private String TAG = "TestAdapterReviews";
     private FragmentManager fragmentManager;
-    private ReviewManager reviewManager;
+    private CourseReviewManager courseReviewManager;
 
 
-    public ReviewAdapter(List<Review> reviewList, FragmentManager fragmentManager) {
-        this.reviewList = reviewList;
+    public ReviewAdapter(List<CourseReview> courseReviewList, FragmentManager fragmentManager) {
+        this.courseReviewList = courseReviewList;
         this.fragmentManager = fragmentManager;
     }
 
@@ -56,17 +56,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
         // assign values to the views we created in the course_review_row file
         // based on the position of the recycler view
-        Review review = reviewList.get(position);
-        holder.bind(review);
+        CourseReview courseReview = courseReviewList.get(position);
+        holder.bind(courseReview);
         holder.ratingBar.setIsIndicator(true);
-        holder.ratingBar.setRating(review.getStars());
+        holder.ratingBar.setRating(courseReview.getStars());
 
     }
 
     @Override
     public int getItemCount() {
         // the recycler view just wants to know the number of items you want to display
-        return reviewList.size();
+        return courseReviewList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -80,7 +80,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
         private ImageButton[] reviewStars;
         private long currentRating;
-        private Review currentReview;
+        private CourseReview currentCourseReview;
         private FirebaseFirestore db;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -98,16 +98,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             db = FirebaseFirestore.getInstance();
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
-            reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), Review.REVIEW_COLLECTION_NAME,
-                    Review.REVIEW_LIKE_COLLECTION_NAME, Review.REVIEW_DISLIKE_COLLECTION_NAME,
-                    Review.REVIEW_COMMENT_COLLECTION_NAME);
+            courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(), CourseReview.COURSE_REVIEW_COLLECTION_NAME,
+                    CourseReview.COURSE_REVIEW_LIKE_COLLECTION_NAME, CourseReview.COURSE_REVIEW_DISLIKE_COLLECTION_NAME,
+                    CourseReview.COURSE_REVIEW_COMMENT_COLLECTION_NAME);
 
         }
 
-        public void bind(Review review) {
+        public void bind(CourseReview courseReview) {
 
             // Set publisher name
-            userManager.downloadOne(review.getPublisherId(), new ItemDownloadCallback<User2>() {
+            userManager.downloadOne(courseReview.getPublisherId(), new ItemDownloadCallback<User2>() {
                 @Override
                 public void onSuccess(User2 user) {
                     reviewerName.setText(user.getFullName());
@@ -119,20 +119,20 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 }});
 
             // Set review text
-            description.setText(review.getText());
+            description.setText(courseReview.getText());
             // Set publication date
-            date.setText(TimeUtils.getTimeAgo(review.getDatetime()));
+            date.setText(TimeUtils.getTimeAgo(courseReview.getDatetime()));
             // Set like number
-            likeNumber.setText(String.valueOf(review.getLikeNumber()));
+            likeNumber.setText(String.valueOf(courseReview.getLikeNumber()));
             // Set dislike number
-            dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
+            dislikeNumber.setText(String.valueOf(courseReview.getDislikeNumber()));
 
             currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
                     .getCurrentUser()).getUid();
 
 
 
-            reviewManager.isLiked(review.getId(), currentUid, new ItemLikeCallback() {
+            courseReviewManager.isLiked(courseReview.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
@@ -150,7 +150,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reviewManager.likeOrUnlike(review, currentUid, new ItemLikeCallback() {
+                    courseReviewManager.likeOrUnlike(courseReview, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {
@@ -158,7 +158,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                             } else {
                                 reviewLike.setImageResource(R.drawable.liked_icon);
                             }
-                            likeNumber.setText(String.valueOf(review.getLikeNumber()));
+                            likeNumber.setText(String.valueOf(courseReview.getLikeNumber()));
                         }
 
                         @Override
@@ -169,7 +169,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
 
 
-            reviewManager.isDisliked(review.getId(), currentUid, new ItemLikeCallback() {
+            courseReviewManager.isDisliked(courseReview.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isDisliked) {
                     if (!isDisliked) {
@@ -187,7 +187,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewDislike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reviewManager.dislikeOrUndislike(review, currentUid, new ItemLikeCallback() {
+                    courseReviewManager.dislikeOrUndislike(courseReview, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isDisliked) {
                             if (!isDisliked) {
@@ -195,7 +195,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                             } else {
                                 reviewDislike.setImageResource(R.drawable.dislike_filled);
                             }
-                            dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
+                            dislikeNumber.setText(String.valueOf(courseReview.getDislikeNumber()));
                         }
 
                         @Override

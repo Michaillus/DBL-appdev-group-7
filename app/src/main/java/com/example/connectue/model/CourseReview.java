@@ -1,31 +1,41 @@
 package com.example.connectue.model;
 
-import com.google.firebase.firestore.PropertyName;
-
 import java.util.Date;
 
-public class Review extends Interactable{
+/**
+ * Class that defines the model for a review of a course.
+ */
+public class CourseReview extends Interactable{
     
     /**
      * Name of review collection in the database.
      */
-    public static final String REVIEW_COLLECTION_NAME = "reviews";
+    public static final String COURSE_REVIEW_COLLECTION_NAME = "reviews";
 
     /**
      * Name of review likes collection in the database.
      */
-    public static final String REVIEW_LIKE_COLLECTION_NAME = "review-likes";
+    public static final String COURSE_REVIEW_LIKE_COLLECTION_NAME = "review-likes";
 
     /**
      * Name of review dislikes collection in the database.
      */
-    public static final String REVIEW_DISLIKE_COLLECTION_NAME = "review-dislikes";
+    public static final String COURSE_REVIEW_DISLIKE_COLLECTION_NAME = "review-dislikes";
 
     /**
      * Name of review comments collection in the database.
      */
-    public static final String REVIEW_COMMENT_COLLECTION_NAME = "review-comments";
+    public static final String COURSE_REVIEW_COMMENT_COLLECTION_NAME = "review-comments";
 
+    /**
+     * Name of stars field in the course reviews collection
+     */
+    public static final String STARS_ATTRIBUTE = "stars";
+
+    /**
+     * Name of parent course id field in the course reviews collection
+     */
+    public static final String PARENT_COURSE_ID_ATTRIBUTE = "parentCourseId";
     
     /**
      * Rating in terms of number of stars from 1 to 5, that was given in the review.
@@ -37,7 +47,7 @@ public class Review extends Interactable{
      */
     protected String parentCourseId;
 
-    public Review(String publisherId, String text, Long stars, String parentCourseId) {
+    public CourseReview(String publisherId, String text, Long stars, String parentCourseId) {
         super(publisherId, text);
 
         this.setStars(stars);
@@ -47,8 +57,8 @@ public class Review extends Interactable{
         tag = "Review Model";
     }
 
-    public Review(String reviewId, String publisherId, String text, Long stars,
-                Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime, String parentCourseId)
+    public CourseReview(String reviewId, String publisherId, String text, Long stars,
+                        Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime, String parentCourseId)
             throws IllegalArgumentException {
 
         super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
@@ -56,7 +66,7 @@ public class Review extends Interactable{
         this.setStars(stars);
 
         // Setting class tag for logs.
-        tag = "Post Review";
+        tag = "CourseReview";
 
     }
 

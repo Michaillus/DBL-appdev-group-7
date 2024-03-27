@@ -12,6 +12,36 @@ public abstract class Interactable {
     protected String tag = "Interactable model";
 
     /**
+     * Name of publisher id field in a collection of any interactable
+     */
+    public static final String PUBLISHER_ID_ATTRIBUTE = "publisher";
+
+    /**
+     * Name of the main text field in a collection of any interactable
+     */
+    public static final String TEXT_ATTRIBUTE = "text";
+
+    /**
+     * Name of like number field in a collection of any interactable
+     */
+    public static final String LIKE_NUMBER_ATTRIBUTE = "likes";
+
+    /**
+     * Name of dislike number field in a collection of any interactable
+     */
+    public static final String DISLIKE_NUMBER_ATTRIBUTE = "dislikes";
+
+    /**
+     * Name of comment number field in a collection of any interactable
+     */
+    public static final String COMMENT_NUMBER_ATTRIBUTE = "comments";
+
+    /**
+     * Name of date and time field in a collection of any interactable
+     */
+    public static final String DATETIME_ATTRIBUTE = "timestamp";
+
+    /**
      * Id of the interactable in a corresponding table in the database.
      */
     protected String interactableId;

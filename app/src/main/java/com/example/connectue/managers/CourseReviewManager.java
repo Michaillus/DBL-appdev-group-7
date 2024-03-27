@@ -2,7 +2,7 @@ package com.example.connectue.managers;
 
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
-import com.example.connectue.model.Review;
+import com.example.connectue.model.CourseReview;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReviewManager extends InteractableManager<Review> {
+public class CourseReviewManager extends InteractableManager<CourseReview> {
 
     /**
-     * Constructor for a manager of reviews.
+     * Constructor for a manager of reviews of courses.
      *
      * @param db             Instance of a FireStore database.
      * @param collectionName Name of the collection that stores posts in the database.
@@ -26,12 +26,12 @@ public class ReviewManager extends InteractableManager<Review> {
      * @param dislikeCollectionName Name of the collection that stores review dislikes in the database.
      * @param commentCollectionName Name of the collection that stores review comments in the database.
      */
-    public ReviewManager(FirebaseFirestore db, String collectionName,
-                       String likeCollectionName, String dislikeCollectionName,
-                       String commentCollectionName) {
+    public CourseReviewManager(FirebaseFirestore db, String collectionName,
+                               String likeCollectionName, String dislikeCollectionName,
+                               String commentCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
 
-        tag = "ReviewManager class: ";
+        tag = "CourseReviewManager";
     }
 
     /**
@@ -44,7 +44,7 @@ public class ReviewManager extends InteractableManager<Review> {
      * @param amount number of reviews to retrieve.
      * @param callback Callback to pass list of retrieved reviews or an error message.
      */
-    public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<Review>> callback) {
+    public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<CourseReview>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
@@ -73,45 +73,45 @@ public class ReviewManager extends InteractableManager<Review> {
     }
 
     /**
-     * Converts a FireBase document snapshot of the review collection into an instance
-     * of review model.
-     * @param document FireBase document snapshot of the review collection.
-     * @return Instance of the review model.
+     * Converts a FireBase document snapshot of the course review collection into an instance
+     * of course review model.
+     * @param document FireBase document snapshot of the course review collection.
+     * @return Instance of the course review model.
      */
     @Override
-    protected Review deserialize(DocumentSnapshot document) {
-        return new Review(
+    protected CourseReview deserialize(DocumentSnapshot document) {
+        return new CourseReview(
                 document.getId(),
-                document.getString("publisher"),
-                document.getString("text"),
-                document.getLong("stars"),
-                document.getLong("likes"),
-                document.getLong("dislikes"),
-                document.getLong("comments"),
-                document.getTimestamp("timestamp").toDate(),
-                document.getString("parentCourseId")
+                document.getString(CourseReview.PUBLISHER_ID_ATTRIBUTE),
+                document.getString(CourseReview.TEXT_ATTRIBUTE),
+                document.getLong(CourseReview.STARS_ATTRIBUTE),
+                document.getLong(CourseReview.LIKE_NUMBER_ATTRIBUTE),
+                document.getLong(CourseReview.DISLIKE_NUMBER_ATTRIBUTE),
+                document.getLong(CourseReview.COMMENT_NUMBER_ATTRIBUTE),
+                document.getTimestamp(CourseReview.DATETIME_ATTRIBUTE).toDate(),
+                document.getString(CourseReview.PARENT_COURSE_ID_ATTRIBUTE)
         );
     }
 
     /**
-     * Converts an instance of the review model to a corresponding map for uploading to the
-     * review collection.
-     * @param review Instance of the review model.
-     * @return Map for uploading to review collection.
+     * Converts an instance of the course review model to a corresponding map for uploading to the
+     * course review collection.
+     * @param courseReview Instance of the course review model.
+     * @return Map for uploading to course review collection.
      */
     @Override
-    protected Map<String, Object> serialize(Review review) {
+    protected Map<String, Object> serialize(CourseReview courseReview) {
         Map<String, Object> reviewData = new HashMap<>();
 
 
-        reviewData.put("publisher", review.getPublisherId());
-        reviewData.put("text", review.getText());
-        reviewData.put("stars", review.getStars());
-        reviewData.put("likes", review.getLikeNumber());
-        reviewData.put("dislikes", review.getLikeNumber());
-        reviewData.put("comments", review.getCommentNumber());
-        reviewData.put("timestamp", new Timestamp(review.getDatetime()));
-        reviewData.put("parentCourseId", review.getParentCourseId());
+        reviewData.put(CourseReview.PUBLISHER_ID_ATTRIBUTE, courseReview.getPublisherId());
+        reviewData.put(CourseReview.TEXT_ATTRIBUTE, courseReview.getText());
+        reviewData.put(CourseReview.STARS_ATTRIBUTE, courseReview.getStars());
+        reviewData.put(CourseReview.LIKE_NUMBER_ATTRIBUTE, courseReview.getLikeNumber());
+        reviewData.put(CourseReview.DISLIKE_NUMBER_ATTRIBUTE, courseReview.getLikeNumber());
+        reviewData.put(CourseReview.COMMENT_NUMBER_ATTRIBUTE, courseReview.getCommentNumber());
+        reviewData.put(CourseReview.DATETIME_ATTRIBUTE, new Timestamp(courseReview.getDatetime()));
+        reviewData.put(CourseReview.PARENT_COURSE_ID_ATTRIBUTE, courseReview.getParentCourseId());
 
         return reviewData;
     }
