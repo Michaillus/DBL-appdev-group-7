@@ -115,6 +115,31 @@ public abstract class EntityManager<T> {
     }
 
     /**
+     * Asynchronously downloads all the documents in the {@code collection}
+     * and passes list of their models through {@code onSuccess} method of {@code callback}.
+     * If download of the documents has failed, passes the error message through {@code onFailure}
+     * method of the {@code callback}.
+     * @param callback Callback to pass list of models of the retrieved documents or
+     *                 an error message.
+     */
+    public void downloadAll(ItemDownloadCallback<List<T>> callback) {
+        downloadAllWithQuery(collection, callback);
+    }
+
+    protected void downloadAllWithQuery(Query basicQuery, ItemDownloadCallback<List<T>> callback) {
+
+        basicQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<T> data = deserializeList(task.getResult());
+                callback.onSuccess(data);
+            } else {
+                Log.e(tag, "Error getting documents", task.getException());
+            }
+        });
+
+    }
+
+    /**
      * Resets the last retrieved post to the initial state. Recent post retrieval will start from
      * the beginning.
      */

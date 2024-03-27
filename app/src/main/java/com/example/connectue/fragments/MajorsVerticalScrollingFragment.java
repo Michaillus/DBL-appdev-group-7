@@ -3,7 +3,6 @@ package com.example.connectue.fragments;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -14,16 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.connectue.R;
-import com.example.connectue.model.Program;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.managers.MajorManager;
+import com.example.connectue.model.Major;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,10 +26,10 @@ import java.util.List;
  */
 public class MajorsVerticalScrollingFragment extends Fragment {
 
-    FirebaseUser user;
-    FirebaseFirestore db;
-    List<Program> majors;
-    private String TAG = "MajorsFragUtil: ";
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "MajorsVerticalScrollingFragment";
 
     public MajorsVerticalScrollingFragment() {
         // Required empty public constructor
@@ -66,51 +59,35 @@ public class MajorsVerticalScrollingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_majors_vertical_scrolling, container, false);
         LinearLayout scrollViewLayout = view.findViewById(R.id.majorsScrollViewLayout);
 
-        db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        MajorManager majorManager = new MajorManager(FirebaseFirestore.getInstance(),
+                Major.MAJOR_COLLECTION_NAME);
 
-        majors = new ArrayList<>();
+        majorManager.downloadAll(new ItemDownloadCallback<List<Major>>() {
+            @Override
+            public void onSuccess(List<Major> majors) {
+                Log.i(TAG, "Majors are retrieved successfully");
+                for (Major major : majors) {
+                    //Remember: inflater is used to instantiate layout XML files into their
+                    //corresponding View objects in the app's user interface.
+                    View cardView = inflater.inflate(R.layout.clickable_course, null);
+                    scrollViewLayout.addView(cardView);
 
-        db.collection("programs")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    //onComplete is an asynchronous method, therefore it is needed to
-                    //finish all tasks requiring the fetched objects within the method.
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String programName = (String) document.get("programName");
-                                Program program = new Program(programName.toString());
-                                majors.add(program);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                        //add fetched courses to list of Course observers
-                        for (Program program : majors) {
-                            //Remember: inflater is used to instantiate layout XML files into their
-                            //corresponding View objects in the app's user interface.
-                            View cardView = inflater.inflate(R.layout.clickable_course, null);
-                            scrollViewLayout.addView(cardView);
+                    TextView textView = cardView.findViewById(R.id.courseCardText);
 
-                            TextView textView = cardView.findViewById(R.id.courseCardText);
-
-                            //give layout parameters to each course card.
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.MATCH_PARENT
-                            );
-                            layoutParams.bottomMargin = 35;
-                            textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                            textView.setText(program.getProgramName());
-                            cardView.setLayoutParams(layoutParams);
-                        }
-                    }
-                });
+                    //give layout parameters to each course card.
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    );
+                    layoutParams.bottomMargin = 35;
+                    textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    textView.setText(major.getMajorName());
+                    cardView.setLayoutParams(layoutParams);
+                }
+            }
+        });
 
         return view;
-
 
     }
 }

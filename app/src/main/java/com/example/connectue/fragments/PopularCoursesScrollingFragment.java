@@ -32,16 +32,22 @@ import java.util.List;
  * Class to manage display of horizontal scroll fragment in courses tab of channels view.
  */
 public class PopularCoursesScrollingFragment extends Fragment {
-    FirebaseUser user;
+
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "PopularCoursesScrollingFragment";
+
     FirebaseFirestore db;
 
     List<Course> courses;
 
     Object courseName;
+
     Object courseCode;
 
     Object ratingObject;
-    private String TAG = "PopCoursesFragUtil: ";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -51,7 +57,6 @@ public class PopularCoursesScrollingFragment extends Fragment {
         LinearLayout scrollViewLayout = view.findViewById(R.id.scrollViewLayout);
 
         db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
 
         courses = new ArrayList<>();
 
