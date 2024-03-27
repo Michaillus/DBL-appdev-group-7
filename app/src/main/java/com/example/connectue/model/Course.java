@@ -5,10 +5,24 @@ import java.util.List;
 
 public class Course {
 
+    /**
+     * Name of courses collection in the database.
+     */
+    public static final String COURSE_COLLECTION_NAME = "courses";
 
-    public String courseName;
+    /**
+     * Name of course name in the majors collection.
+     */
+    public static final String COURSE_NAME_ATTRIBUTE = "courseName";
+
+    /**
+     * Name of course code in the majors collection.
+     */
+    public static final String COURSE_CODE_ATTRIBUTE = "courseCode";
 
     private String courseId;
+
+    public String courseName;
 
     public String courseCode;
 
@@ -19,6 +33,14 @@ public class Course {
         this.courseCode = courseCode;
         this.rating = new ArrayList<>();
         this.courseId = courseId;
+    }
+
+    /**
+     * Returns the id of the course.
+     * @return courseId.
+     */
+    public String getCourseId() {
+        return courseId;
     }
 
     /**
@@ -36,14 +58,6 @@ public class Course {
      */
     public String getCourseName() {
         return courseName;
-    }
-
-    /**
-     * Returns the id of the course.
-     * @return courseId.
-     */
-    public String getCourseId() {
-        return courseId;
     }
 
     /**

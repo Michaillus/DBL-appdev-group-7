@@ -63,8 +63,6 @@ public class PopularCoursesScrollingFragment extends Fragment {
         db.collection("courses")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    //onComplete is an asynchronous method, therefore it is needed to
-                    //finish all tasks requiring the fetched objects within the method.
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
