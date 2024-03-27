@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Course {
+
+
     public String courseName;
+
     private String courseId;
+
     public String courseCode;
 
     public List<Integer> rating;

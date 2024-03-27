@@ -23,6 +23,7 @@ public class MajorManager extends EntityManager<Major> {
     @Override
     protected Major deserialize(DocumentSnapshot document) {
         return new Major(
+                document.getId(),
                 document.getString(Major.MAJOR_NAME_ATTRIBUTE),
                 document.getString(Major.MAJOR_CODE_ATTRIBUTE));
     }

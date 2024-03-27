@@ -18,6 +18,11 @@ public class Major {
     public static final String MAJOR_CODE_ATTRIBUTE = "majorCode";
 
     /**
+     * Id of the major
+     */
+    public String majorId;
+
+    /**
      * Name of the major.
      */
     public String majorName;
@@ -30,6 +35,20 @@ public class Major {
     public Major(String majorName, String majorCode) {
         this.majorName = majorName;
         this.majorCode = majorCode;
+    }
+
+    public Major(String majorId, String majorName, String majorCode) {
+        this.majorId = majorId;
+        this.majorName = majorName;
+        this.majorCode = majorCode;
+    }
+
+    /**
+     * Getter for major id.
+     * @return Major id.
+     */
+    public String getMajorId() {
+        return majorId;
     }
 
     /**

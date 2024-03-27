@@ -126,5 +126,6 @@ public class PopularCoursesScrollingFragment extends Fragment {
 
 
         return view;
+
     }
 }
