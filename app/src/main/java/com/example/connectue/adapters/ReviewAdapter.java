@@ -137,8 +137,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
                         reviewLike.setImageResource(R.drawable.like_icon);
+                        reviewDislike.setVisibility(View.VISIBLE);
+                        dislikeNumber.setVisibility(View.VISIBLE);
                     } else {
                         reviewLike.setImageResource(R.drawable.liked_icon);
+                        likeNumber.setVisibility(View.VISIBLE);
+                        reviewDislike.setEnabled(false);
                     }
                 }
 
@@ -155,8 +159,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {
                                 reviewLike.setImageResource(R.drawable.like_icon);
+                                reviewDislike.setVisibility(View.VISIBLE);
+                                dislikeNumber.setVisibility(View.VISIBLE);
                             } else {
                                 reviewLike.setImageResource(R.drawable.liked_icon);
+                                likeNumber.setVisibility(View.VISIBLE);
+                                reviewDislike.setEnabled(false);
                             }
                             likeNumber.setText(String.valueOf(review.getLikeNumber()));
                         }
@@ -174,8 +182,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 public void onSuccess(Boolean isDisliked) {
                     if (!isDisliked) {
                         reviewDislike.setImageResource(R.drawable.dislike_empty);
+                        reviewLike.setVisibility(View.VISIBLE);
+                        likeNumber.setVisibility(View.VISIBLE);
                     } else {
                         reviewDislike.setImageResource(R.drawable.dislike_filled);
+                        dislikeNumber.setVisibility(View.VISIBLE);
+                        reviewLike.setEnabled(false);
                     }
                 }
 
@@ -192,8 +204,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                         public void onSuccess(Boolean isDisliked) {
                             if (!isDisliked) {
                                 reviewDislike.setImageResource(R.drawable.dislike_empty);
+                                reviewLike.setVisibility(View.VISIBLE);
+                                likeNumber.setVisibility(View.VISIBLE);
                             } else {
                                 reviewDislike.setImageResource(R.drawable.dislike_filled);
+                                dislikeNumber.setVisibility(View.VISIBLE);
+                                reviewLike.setEnabled(false);
                             }
                             dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
                         }
