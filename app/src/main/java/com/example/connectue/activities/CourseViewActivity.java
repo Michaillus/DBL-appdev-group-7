@@ -22,6 +22,7 @@ import com.example.connectue.fragments.ReviewsFragment;
 import com.example.connectue.fragments.QuestionsFragment;
 import com.example.connectue.databinding.ActivityCourseViewBinding;
 import com.example.connectue.model.Course;
+import com.example.connectue.utils.ActivityUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,8 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 public class CourseViewActivity extends AppCompatActivity {
-
-    private String courseId = "";
 
     private Course course;
 
@@ -99,23 +98,7 @@ public class CourseViewActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        String courseAsString;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                courseAsString= "0#0#0#0#0";
-            } else {
-                courseAsString= extras.getString("courseId");
-            }
-        } else {
-            courseAsString= (String) savedInstanceState.getSerializable("course");
-        }
-        if (courseAsString == null) {
-            courseAsString = "0#0#0#0#0";
-        }
-        Log.e(TAG, courseAsString);
-        course = Course.stringToCourse(courseAsString);
-        Log.e(TAG, courseAsString);
+        course = ActivityUtils.getCourse(this, savedInstanceState);
 
 
         db.collection("users")
@@ -221,7 +204,7 @@ public class CourseViewActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public String getCourse() {
-        return course.getId();
+    public Course getCourse() {
+        return course;
     }
 }

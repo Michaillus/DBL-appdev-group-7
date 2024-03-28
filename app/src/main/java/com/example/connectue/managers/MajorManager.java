@@ -1,5 +1,6 @@
 package com.example.connectue.managers;
 
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Major;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,18 +23,35 @@ public class MajorManager extends EntityManager<Major> {
 
     @Override
     protected Major deserialize(DocumentSnapshot document) {
-        return new Major(
-                document.getId(),
-                document.getString(Major.MAJOR_NAME_ATTRIBUTE),
-                document.getString(Major.MAJOR_CODE_ATTRIBUTE));
+
+        Major major;
+        if ((document.getLong(Major.RATING_SUM_ATTRIBUTE) == null) ||
+                (document.getLong(Major.RATING_NUMBER_ATTRIBUTE) == null)) {
+            major = new Major(document.getString(Major.MAJOR_NAME_ATTRIBUTE),
+                    document.getString(Major.MAJOR_CODE_ATTRIBUTE));
+            set(major, document.getId(), new ItemUploadCallback() {
+                @Override
+                public void onSuccess() {}
+            });
+        } else {
+            major = new Major(
+                    document.getId(),
+                    document.getString(Major.MAJOR_NAME_ATTRIBUTE),
+                    document.getString(Major.MAJOR_CODE_ATTRIBUTE),
+                    document.getLong(Major.RATING_SUM_ATTRIBUTE),
+                    document.getLong(Major.RATING_NUMBER_ATTRIBUTE));
+        }
+        return major;
     }
 
     @Override
     protected Map<String, Object> serialize(Major major) {
         Map<String, Object> majorData = new HashMap<>();
 
-        majorData.put(Major.MAJOR_NAME_ATTRIBUTE, major.majorName);
-        majorData.put(Major.MAJOR_CODE_ATTRIBUTE, major.majorCode);
+        majorData.put(Major.MAJOR_NAME_ATTRIBUTE, major.getMajorName());
+        majorData.put(Major.MAJOR_CODE_ATTRIBUTE, major.getMajorCode());
+        majorData.put(Major.RATING_SUM_ATTRIBUTE, major.getRatingSum());
+        majorData.put(Major.RATING_NUMBER_ATTRIBUTE, major.getRatingNumber());
 
         return majorData;
     }

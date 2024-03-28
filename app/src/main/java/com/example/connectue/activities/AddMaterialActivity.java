@@ -16,7 +16,9 @@ import android.widget.Toast;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.managers.MaterialManager;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.Material;
+import com.example.connectue.utils.ActivityUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,10 +39,17 @@ import java.util.Locale;
 
 public class AddMaterialActivity extends AppCompatActivity {
 
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "AddMaterialActivity";
+
     private static final int REQUEST_PICK_PDF_FILE = 1;
 
-    private String courseCode;
-    private String courseId;
+    /**
+     * Course for which material is added.
+     */
+    private Course course;
 
     private FirebaseFirestore db;
     private Uri selectedPdfUri;
@@ -49,7 +58,6 @@ public class AddMaterialActivity extends AppCompatActivity {
     MaterialManager materialManager;
 
     Boolean uploaded = false;
-    private static final String TAG = "AddMaterialActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,33 +77,10 @@ public class AddMaterialActivity extends AppCompatActivity {
                 Material.MATERIAL_DISLIKE_COLLECTION_NAME,
                 Material.MATERIAL_COMMENT_COLLECTION_NAME);
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                courseId= "";
-            } else {
-                courseId= extras.getString("courseId");
-            }
-        } else {
-            courseId= (String) savedInstanceState.getSerializable("courseId");
-        }
+        // Retrieve course model passed from the previous activity / fragment.
+        course = ActivityUtils.getCourse(this, savedInstanceState);
 
-        db.collection("courses").document(courseId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            if (documentSnapshot != null) {
-                                courseCode = documentSnapshot.getString("courseCode");
-                                title.setText(courseCode);
-                            }
-                        } else {
-                            Toast.makeText(AddMaterialActivity.this, "Failed to retrieve course details", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        title.setText(course.getCourseCode());
 
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +100,6 @@ public class AddMaterialActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (selectedPdfUri != null && !caption.getText().toString().isEmpty()) {
-                    Log.d(TAG, "WHATT");
                     // Upload the selected PDF file to Firebase Storage
                     uploadPdfToFirebase(selectedPdfUri);
                 } else {
@@ -144,7 +128,8 @@ public class AddMaterialActivity extends AppCompatActivity {
 
     private void uploadPdfToFirebase(Uri pdfUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference("materialPdfDocuments").child(courseId); // Adjust path as needed
+        StorageReference storageRef = storage.getReference("materialPdfDocuments")
+                .child(course.getId()); // Adjust path as needed
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.GERMANY);
         Date now = new Date();
@@ -174,7 +159,7 @@ public class AddMaterialActivity extends AppCompatActivity {
 
     private void uploadMaterialToDatabase(String caption, String pdfUri) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Material material = new Material(publisherId, caption, courseId, pdfUri);
+        Material material = new Material(publisherId, caption, course.getId(), pdfUri);
         materialManager.upload(material, new ItemUploadCallback() {
             @Override
             public void onSuccess() {

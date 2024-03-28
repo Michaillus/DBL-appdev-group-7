@@ -21,6 +21,7 @@ import com.example.connectue.databinding.FragmentMaterialsBinding;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.MaterialManager;
 import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.Material;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -67,9 +68,9 @@ public class MaterialsFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     /**
-     * Database id of the course of the current page.
+     * Course model of the opened page.
      */
-    String courseId;
+    Course course;
 
     public MaterialsFragment() {
         // Default constructor
@@ -97,8 +98,8 @@ public class MaterialsFragment extends Fragment {
                 Material.MATERIAL_DISLIKE_COLLECTION_NAME,
                 Material.MATERIAL_COMMENT_COLLECTION_NAME);
 
-        // Initialize course id.
-        courseId  = retrieveCourseId();
+        // Initialize the course.
+        course = retrieveCourse();
 
         // Initializing the list of posts in the feed.
         List<Material> materialList = new ArrayList<>();
@@ -127,7 +128,7 @@ public class MaterialsFragment extends Fragment {
 
     private void loadMaterials(List<Material> materialList) {
         int materialsPerChunk = 8;
-        materialManager.downloadRecent(courseId, materialsPerChunk, new ItemDownloadCallback<List<Material>>() {
+        materialManager.downloadRecent(course.getId(), materialsPerChunk, new ItemDownloadCallback<List<Material>>() {
             @Override
             public void onSuccess(List<Material> data) {
                 materialList.addAll(data);
@@ -152,7 +153,7 @@ public class MaterialsFragment extends Fragment {
                 if (data.isVerified()) {
                     addQuestionBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddMaterialActivity.class);
-                        intent.putExtra("courseId", courseId);
+                        intent.putExtra("course", course.courseToString());
                         startActivity(intent);
                     });
                 } else {
@@ -191,14 +192,14 @@ public class MaterialsFragment extends Fragment {
     }
 
     /**
-     * Retrieves the id of the course of current page.
+     * Retrieves the course model of current page.
      */
-    private String retrieveCourseId() {
+    private Course retrieveCourse() {
         CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
         if (courseViewActivity != null) {
             return courseViewActivity.getCourse();
         } else {
-            return "";
+            return new Course("0", "0");
         }
     }
 

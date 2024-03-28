@@ -5,7 +5,7 @@ public class User2 {
     /**
      * Class tag for logs.
      */
-    private static final String TAG = "User class: ";
+    private static final String TAG = "User model";
 
     /**
      * Name of users collection in the database.

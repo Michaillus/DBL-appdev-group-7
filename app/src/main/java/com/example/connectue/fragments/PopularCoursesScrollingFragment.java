@@ -88,7 +88,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
                             // Start new activity and pass course id
                             Intent intent = new Intent(getActivity(), CourseViewActivity.class);
                             Log.e(TAG, course.courseToString());
-                            intent.putExtra("courseId", course.courseToString()); // Assuming getId() returns the id of the course
+                            intent.putExtra("course", course.courseToString()); // Assuming getId() returns the id of the course
                             startActivity(intent);
                         }
                     });

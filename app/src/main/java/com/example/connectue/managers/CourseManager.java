@@ -1,12 +1,9 @@
 package com.example.connectue.managers;
 
-import android.util.Log;
-
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Course;
 import com.example.connectue.model.CourseReview;
-import com.example.connectue.model.Major;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -64,8 +61,8 @@ public class CourseManager extends EntityManager<Course> {
                 document.getId(),
                 document.getString(Course.COURSE_NAME_ATTRIBUTE),
                 document.getString(Course.COURSE_CODE_ATTRIBUTE),
-                document.getLong(Course.COURSE_RATING_SUM_ATTRIBUTE).longValue(),
-                document.getLong(Course.COURSE_RATING_NUMBER_ATTRIBUTE).longValue());
+                document.getLong(Course.RATING_SUM_ATTRIBUTE).longValue(),
+                document.getLong(Course.RATING_NUMBER_ATTRIBUTE).longValue());
     }
 
     @Override
@@ -74,8 +71,8 @@ public class CourseManager extends EntityManager<Course> {
 
         majorData.put(Course.COURSE_NAME_ATTRIBUTE, course.getCourseName());
         majorData.put(Course.COURSE_CODE_ATTRIBUTE, course.getCourseCode());
-        majorData.put(Course.COURSE_RATING_SUM_ATTRIBUTE, course.getRatingSum());
-        majorData.put(Course.COURSE_RATING_NUMBER_ATTRIBUTE, course.getRatingNumber());
+        majorData.put(Course.RATING_SUM_ATTRIBUTE, course.getRatingSum());
+        majorData.put(Course.RATING_NUMBER_ATTRIBUTE, course.getRatingNumber());
 
 
         return majorData;

@@ -1,8 +1,5 @@
 package com.example.connectue.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Course {
 
     /**
@@ -11,29 +8,38 @@ public class Course {
     public static final String COURSE_COLLECTION_NAME = "courses";
 
     /**
-     * Name of course name attribute in the majors collection.
+     * Name of course name attribute in the courses collection.
      */
     public static final String COURSE_NAME_ATTRIBUTE = "courseName";
 
     /**
-     * Name of course code attribute in the majors collection.
+     * Name of course code attribute in the courses collection.
      */
     public static final String COURSE_CODE_ATTRIBUTE = "courseCode";
 
     /**
-     * Name of course rating sum attribute in the majors collection.
+     * Name of rating sum attribute in the courses collection.
      */
-    public static final String COURSE_RATING_SUM_ATTRIBUTE = "ratingSum";
+    public static final String RATING_SUM_ATTRIBUTE = "ratingSum";
 
     /**
-     * Name of course rating number attribute in the majors collection.
+     * Name of rating number attribute in the courses collection.
      */
-    public static final String COURSE_RATING_NUMBER_ATTRIBUTE = "ratingNumber";
+    public static final String RATING_NUMBER_ATTRIBUTE = "ratingNumber";
 
+    /**
+     * Id of the course.
+     */
     private String courseId;
 
+    /**
+     * Full name of the course.
+     */
     private String courseName;
 
+    /**
+     * Code (abbreviation) of the course.
+     */
     private String courseCode;
 
     /**
@@ -45,6 +51,10 @@ public class Course {
      * Number of ratings on the course.
      */
     private long ratingNumber;
+
+    public Course(String courseName, String courseCode) {
+        this("0", courseName, courseCode, 0L, 0L);
+    }
 
     public Course(String courseId, String courseName, String courseCode, Long ratingSum,
                   Long ratingNumber) {

@@ -10,7 +10,9 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.example.connectue.model.Course;
 import com.example.connectue.model.CourseReview;
+import com.example.connectue.utils.ActivityUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +39,10 @@ public class AddReviewActivity extends AppCompatActivity {
     Long stars;
     String text;
 
-    private String courseId;
+    /**
+     * Course for which review is added.
+     */
+    private Course course;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -61,18 +66,8 @@ public class AddReviewActivity extends AppCompatActivity {
         star_4 = findViewById(R.id.star4);
         star_5 = findViewById(R.id.star5);
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                courseId= "";
-            } else {
-                courseId= extras.getString("courseId");
-            }
-        } else {
-            courseId= (String) savedInstanceState.getSerializable("courseId");
-        }
-
-
+        // Retrieve course model passed from the previous activity / fragment.
+        course = ActivityUtils.getCourse(this, savedInstanceState);
 
         // Set listeners for star rating buttons
         star_1.setOnClickListener(v -> selectStarRating(1));
@@ -157,7 +152,7 @@ public class AddReviewActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text, Long stars) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        CourseReview courseReview = new CourseReview(publisherId, text, stars, courseId);
+        CourseReview courseReview = new CourseReview(publisherId, text, stars, course.getId());
 
         courseReviewManager.addReview(courseReview, new ItemUploadCallback() {
             @Override

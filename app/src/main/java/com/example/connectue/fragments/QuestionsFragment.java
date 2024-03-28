@@ -21,6 +21,7 @@ import com.example.connectue.databinding.FragmentQuestionsBinding;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.QuestionManager;
 import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.Question;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -67,9 +68,9 @@ public class QuestionsFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     /**
-     * Database id of the course of the opened page.
+     * Course model of the opened page.
      */
-    String courseId;
+    Course course;
 
     public QuestionsFragment() {
         // Default constructor
@@ -96,7 +97,7 @@ public class QuestionsFragment extends Fragment {
                 Question.QUESTION_DISLIKE_COLLECTION_NAME, Question.QUESTION_COMMENT_COLLECTION_NAME);
 
         // Initialize course id.
-        courseId = retrieveCourseId();
+        course = retrieveCourse();
 
         // Initializing the list of posts in the feed.
         List<Question> questionList = new ArrayList<>();
@@ -126,7 +127,7 @@ public class QuestionsFragment extends Fragment {
     private void loadQuestions(List<Question> questionList) {
         int questionsPerChunk = 4;
 
-        questionManager.downloadRecent(courseId, questionsPerChunk, new ItemDownloadCallback<List<Question>>() {
+        questionManager.downloadRecent(course.getId(), questionsPerChunk, new ItemDownloadCallback<List<Question>>() {
             @Override
             public void onSuccess(List<Question> data) {
                 questionList.addAll(data);
@@ -151,7 +152,7 @@ public class QuestionsFragment extends Fragment {
                 if (data.isVerified()) {
                     addQuestionButton.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddQuestionActivity.class);
-                        intent.putExtra("courseId", courseId);
+                        intent.putExtra("course", course.courseToString());
                         startActivity(intent);
                     });
                 } else {
@@ -190,14 +191,14 @@ public class QuestionsFragment extends Fragment {
     }
 
     /**
-     * Retrieves the id of the course of current page.
+     * Retrieves the course model of current page.
      */
-    private String retrieveCourseId() {
+    private Course retrieveCourse() {
         CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
         if (courseViewActivity != null) {
             return courseViewActivity.getCourse();
         } else {
-            return "";
+            return new Course("0", "0");
         }
     }
 

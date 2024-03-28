@@ -132,7 +132,7 @@ public class MyCoursesVerticalFragment extends Fragment {
                                             public void onClick(View v) {
                                                 // Start new activity and pass course id
                                                 Intent intent = new Intent(getActivity(), CourseViewActivity.class);
-                                                intent.putExtra("courseId", course.courseToString()); // Assuming getId() returns the id of the course
+                                                intent.putExtra("course", course.courseToString()); // Assuming getId() returns the id of the course
                                                 startActivity(intent);
                                             }
                                         });

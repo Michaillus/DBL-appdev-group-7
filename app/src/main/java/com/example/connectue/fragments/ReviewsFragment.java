@@ -23,6 +23,7 @@ import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.managers.CourseReviewManager;
 import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.CourseReview;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -44,7 +45,7 @@ public class ReviewsFragment extends Fragment {
     /**
      * Class tag for logs.
      */
-    private static final String TAG = "ReviewFragment";
+    private static final String TAG = "ReviewsFragment";
 
     private FragmentReviewsBinding binding;
 
@@ -69,9 +70,9 @@ public class ReviewsFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     /**
-     * Database id of the course of the opened page.
+     * Course model of the opened page.
      */
-    String courseId;
+    Course course;
 
     public ReviewsFragment() {
         // Default constructor
@@ -97,8 +98,8 @@ public class ReviewsFragment extends Fragment {
                 CourseReview.COURSE_REVIEW_COLLECTION_NAME, CourseReview.COURSE_REVIEW_LIKE_COLLECTION_NAME,
                 CourseReview.COURSE_REVIEW_DISLIKE_COLLECTION_NAME, CourseReview.COURSE_REVIEW_COMMENT_COLLECTION_NAME);
 
-        // Initialize course id.
-        courseId = retrieveCourseId();
+        // Initialize the course.
+        course = retrieveCourse();
 
         // Initializing the list of posts in the feed.
         List<CourseReview> courseReviewList = new ArrayList<>();
@@ -128,7 +129,7 @@ public class ReviewsFragment extends Fragment {
     private void loadReviews(List<CourseReview> courseReviewList) {
         int reviewsPerChunk = 6;
 
-        courseReviewManager.downloadRecent(courseId, reviewsPerChunk, new ItemDownloadCallback<List<CourseReview>>() {
+        courseReviewManager.downloadRecent(course.getId(), reviewsPerChunk, new ItemDownloadCallback<List<CourseReview>>() {
             @Override
             public void onSuccess(List<CourseReview> data) {
                 courseReviewList.addAll(data);
@@ -153,7 +154,7 @@ public class ReviewsFragment extends Fragment {
                     Log.i(TAG, "User is allowed to add a review");
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-                        intent.putExtra("courseId", courseId);
+                        intent.putExtra("course", course.courseToString());
                         startActivity(intent);
                     });
                     addReviewBtn.setVisibility(View.VISIBLE);
@@ -176,7 +177,7 @@ public class ReviewsFragment extends Fragment {
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
                     // User is a student
-                    courseReviewManager.hasUserReviewedCourse(courseId, userId, new ItemExistsCallback() {
+                    courseReviewManager.hasUserReviewedCourse(course.getId(), userId, new ItemExistsCallback() {
                         @Override
                         public void onSuccess(boolean exists) {
                             if (!exists) {
@@ -232,14 +233,14 @@ public class ReviewsFragment extends Fragment {
     }
 
     /**
-     * Retrieves the id of the course of current page.
+     * Retrieves the course model of current page.
      */
-    private String retrieveCourseId() {
+    private Course retrieveCourse() {
         CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
         if (courseViewActivity != null) {
             return courseViewActivity.getCourse();
         } else {
-            return "";
+            return new Course("0", "0");
         }
     }
 

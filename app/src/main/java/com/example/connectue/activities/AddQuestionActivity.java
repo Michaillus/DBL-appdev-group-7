@@ -8,7 +8,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.connectue.managers.QuestionManager;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.Question;
+import com.example.connectue.utils.ActivityUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +33,10 @@ public class AddQuestionActivity extends AppCompatActivity {
     FloatingActionButton backBtn;
     String text;
 
-    private String courseId;
+    /**
+     * Course for which question is added.
+     */
+    private Course course;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,16 +55,8 @@ public class AddQuestionActivity extends AppCompatActivity {
         publishQuestionBtn = findViewById(R.id.publishReviewBtn);
         backBtn = findViewById(R.id.back_Btn);
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                courseId= "";
-            } else {
-                courseId= extras.getString("courseId");
-            }
-        } else {
-            courseId = (String) savedInstanceState.getSerializable("courseId");
-        }
+        // Retrieve course model passed from the previous activity / fragment.
+        course = ActivityUtils.getCourse(this, savedInstanceState);
 
         publishQuestionBtn.setOnClickListener(v -> publishQuestion());
         backBtn.setOnClickListener(v -> finish());
@@ -75,7 +72,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Question question = new Question(publisherId, text, courseId);
+        Question question = new Question(publisherId, text, course.getId());
 
         questionManager.upload(question, new ItemUploadCallback() {
             @Override
