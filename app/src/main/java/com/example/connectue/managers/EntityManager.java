@@ -2,9 +2,12 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.User2;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,8 +71,7 @@ public abstract class EntityManager<T> {
                         callback.onSuccess(deserialize(documentSnapshot));
                     } else {
                         Exception e = new NoSuchElementException("Document does not exit");
-                        Log.e(tag, "Document does not exits",
-                                e);
+                        Log.e(tag, "Document does not exits", e);
                         callback.onFailure(e);
                     }
                 }).addOnFailureListener(e -> {
@@ -93,13 +95,11 @@ public abstract class EntityManager<T> {
 
     protected void downloadRecentWithQuery(Query basicQuery, int amount,
                                          ItemDownloadCallback<List<T>> callback) {
-
         Query query = basicQuery.orderBy("timestamp", Query.Direction.DESCENDING);
         if (lastRetrieved != null) {
             query = query.startAfter(lastRetrieved);
         }
         query = query.limit(amount);
-
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot snapshot = task.getResult();
@@ -107,9 +107,12 @@ public abstract class EntityManager<T> {
                     lastRetrieved = snapshot.getDocuments().get(task.getResult().size() - 1);
                     List<T> data = deserializeList(task.getResult());
                     callback.onSuccess(data);
+                } else {
+                    Log.i(tag, "No documents found");
                 }
             } else {
                 Log.e(tag, "Error getting documents", task.getException());
+                callback.onFailure(task.getException());
             }
         });
     }

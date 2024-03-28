@@ -19,15 +19,12 @@ import com.example.connectue.managers.MaterialManager;
 import com.example.connectue.model.Course;
 import com.example.connectue.model.Material;
 import com.example.connectue.utils.ActivityUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -80,7 +77,7 @@ public class AddMaterialActivity extends AppCompatActivity {
         // Retrieve course model passed from the previous activity / fragment.
         course = ActivityUtils.getCourse(this, savedInstanceState);
 
-        title.setText(course.getCourseCode());
+        title.setText(course.getCode());
 
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override

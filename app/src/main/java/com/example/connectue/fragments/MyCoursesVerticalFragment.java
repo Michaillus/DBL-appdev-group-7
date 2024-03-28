@@ -27,7 +27,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -124,7 +123,7 @@ public class MyCoursesVerticalFragment extends Fragment {
                                         layoutParams.bottomMargin = 35;
                                         textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-                                        textView.setText(course.getCourseCode());
+                                        textView.setText(course.getCode());
                                         cardView.setLayoutParams(layoutParams);
                                         scrollViewLayout.addView(cardView);
                                         cardView.setOnClickListener(new View.OnClickListener() {

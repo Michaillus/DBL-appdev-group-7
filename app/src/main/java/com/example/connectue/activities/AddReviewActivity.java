@@ -39,22 +39,21 @@ public class AddReviewActivity extends AppCompatActivity {
     Long stars;
     String text;
 
-    /**
-     * Course for which review is added.
-     */
-    private Course course;
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_review);
 
+        // Retrieve study unit passed from the previous activity / fragment.
+        Course course = ActivityUtils.getCourse(this, savedInstanceState);
+
         // Initializing review manager
-        courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(), CourseReview.COURSE_REVIEW_COLLECTION_NAME,
-                CourseReview.COURSE_REVIEW_LIKE_COLLECTION_NAME,
-                CourseReview.COURSE_REVIEW_DISLIKE_COLLECTION_NAME,
-                CourseReview.COURSE_REVIEW_COMMENT_COLLECTION_NAME);
+        courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(),
+                course.getReviewCollectionName(),
+                course.getReviewLikeCollectionName(),
+                course.getReviewDislikeCollectionName(),
+                course.getReviewCommentCollectionName());
 
         reviewDescription = findViewById(R.id.reviewDescription);
         publishReviewBtn = findViewById(R.id.publishReviewBtn);
@@ -66,9 +65,6 @@ public class AddReviewActivity extends AppCompatActivity {
         star_4 = findViewById(R.id.star4);
         star_5 = findViewById(R.id.star5);
 
-        // Retrieve course model passed from the previous activity / fragment.
-        course = ActivityUtils.getCourse(this, savedInstanceState);
-
         // Set listeners for star rating buttons
         star_1.setOnClickListener(v -> selectStarRating(1));
         star_2.setOnClickListener(v -> selectStarRating(2));
@@ -76,7 +72,7 @@ public class AddReviewActivity extends AppCompatActivity {
         star_4.setOnClickListener(v -> selectStarRating(4));
         star_5.setOnClickListener(v -> selectStarRating(5));
 
-        publishReviewBtn.setOnClickListener(v -> publishReview());
+        publishReviewBtn.setOnClickListener(v -> publishReview(course));
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,14 +127,14 @@ public class AddReviewActivity extends AppCompatActivity {
 
     }
 
-    private void publishReview() {
+    private void publishReview(Course course) {
         publishReviewBtn.setEnabled(false);
         reviewDescription.setEnabled(false);
         text = reviewDescription.getText().toString().trim();
         // Check if the user has selected a star rating
         if (stars != null) {
             // Upload the review to Firestore
-            uploadToFirestore(text, stars);
+            uploadToFirestore(text, stars, course);
             // Pass the selected star rating back to ReviewsFragment
 
         } else {
@@ -150,11 +146,11 @@ public class AddReviewActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadToFirestore(String text, Long stars) {
+    private void uploadToFirestore(String text, Long stars, Course course) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         CourseReview courseReview = new CourseReview(publisherId, text, stars, course.getId());
 
-        courseReviewManager.addReview(courseReview, new ItemUploadCallback() {
+        courseReviewManager.addReview(courseReview, course, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "Review is added successfully");

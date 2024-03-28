@@ -198,7 +198,7 @@ public class QuestionsFragment extends Fragment {
         if (courseViewActivity != null) {
             return courseViewActivity.getCourse();
         } else {
-            return new Course("0", "0");
+            return new Course("0", "0", Course.StudyUnitType.COURSE);
         }
     }
 

@@ -6,26 +6,6 @@ import java.util.Date;
  * Class that defines the model for a review of a course.
  */
 public class CourseReview extends Interactable{
-    
-    /**
-     * Name of review collection in the database.
-     */
-    public static final String COURSE_REVIEW_COLLECTION_NAME = "reviews";
-
-    /**
-     * Name of review likes collection in the database.
-     */
-    public static final String COURSE_REVIEW_LIKE_COLLECTION_NAME = "review-likes";
-
-    /**
-     * Name of review dislikes collection in the database.
-     */
-    public static final String COURSE_REVIEW_DISLIKE_COLLECTION_NAME = "review-dislikes";
-
-    /**
-     * Name of review comments collection in the database.
-     */
-    public static final String COURSE_REVIEW_COMMENT_COLLECTION_NAME = "review-comments";
 
     /**
      * Name of stars field in the course reviews collection
@@ -35,7 +15,7 @@ public class CourseReview extends Interactable{
     /**
      * Name of parent course id field in the course reviews collection
      */
-    public static final String PARENT_COURSE_ID_ATTRIBUTE = "parentCourseId";
+    public static final String PARENT_COURSE_ID_ATTRIBUTE = "parentId";
     
     /**
      * Rating in terms of number of stars from 1 to 5, that was given in the review.
@@ -54,7 +34,7 @@ public class CourseReview extends Interactable{
         this.setParentCourseId(parentCourseId);
 
         // Setting class tag for logs.
-        tag = "Review Model";
+        tag = "CourseReview";
     }
 
     public CourseReview(String reviewId, String publisherId, String text, Long stars,

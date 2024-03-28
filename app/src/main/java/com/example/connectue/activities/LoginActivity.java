@@ -94,20 +94,20 @@ public class LoginActivity extends AppCompatActivity {
                         // Get the value of isVerified
                         verifiedObject = document.get("isVerified");
                         if (verifiedObject != null) {
-                            Log.d(TAG, "Value of field 'isVerified': " + verifiedObject.toString());
+                            Log.i(TAG, "Value of field 'isVerified': " + verifiedObject.toString());
                         } else {
-                            Log.d(TAG, "Field 'isVerified' is null.");
+                            Log.i(TAG, "Field 'isVerified' is null.");
                         }
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.e(TAG, "No such document");
                     }
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    Log.e(TAG, "get failed with ", task.getException());
                 }
             }
         });
         if (verifiedObject == null) {
-            Log.d(TAG, "Field 'isVerified' is null.");
+            Log.e(TAG, "Field 'isVerified' is null.");
             return false;
         } else if (verifiedObject.equals(true)) {
             return true;
@@ -129,6 +129,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         isVerified = checkUserIsVerified(user);
                         if(!isVerified) {
+                            Toast.makeText(LoginActivity.this,
+                                    "Email is not verified", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         // Sign in success, update UI with the signed-in user's information

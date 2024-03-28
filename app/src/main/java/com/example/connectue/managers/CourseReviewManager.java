@@ -49,7 +49,7 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
      * @param callback Callback to pass list of retrieved reviews or an error message.
      */
     public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<CourseReview>> callback) {
-        Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
+        Query basicQuery = collection.whereEqualTo(CourseReview.PARENT_COURSE_ID_ATTRIBUTE, courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
 
@@ -60,13 +60,13 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
      * @param callback Callback that is called when the upload of review is finished or an
      *                 error occurred.
      */
-    public void addReview(CourseReview courseReview, ItemUploadCallback callback) {
+    public void addReview(CourseReview courseReview, Course course, ItemUploadCallback callback) {
         upload(courseReview, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
-                        Course.COURSE_COLLECTION_NAME);
-                courseManager.addRating(courseReview, new ItemUploadCallback() {
+                        course.getStudyUnitCollectionName());
+                courseManager.addRating(course, courseReview, new ItemUploadCallback() {
                     @Override
                     public void onSuccess() {
                         callback.onSuccess();
@@ -97,8 +97,8 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
      *                 through the {@code onFailure} method.
      */
     public void hasUserReviewedCourse(String courseId, String userId, ItemExistsCallback callback) {
-        Query query = collection.whereEqualTo("parentCourseId", courseId)
-                .whereEqualTo("publisher", userId);
+        Query query = collection.whereEqualTo(CourseReview.PARENT_COURSE_ID_ATTRIBUTE, courseId)
+                .whereEqualTo(CourseReview.PUBLISHER_ID_ATTRIBUTE, userId);
         AggregateQuery countQuery = query.count();
         countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

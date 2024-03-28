@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.example.connectue.R;
 import com.example.connectue.activities.AddReviewActivity;
 import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.activities.StudyUnitViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.databinding.FragmentReviewsBinding;
 import com.example.connectue.interfaces.ConditionCheckCallback;
@@ -90,16 +91,18 @@ public class ReviewsFragment extends Fragment {
         binding = FragmentReviewsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Initialize the course.
+        course = retrieveCourse();
+
         // Define reviews recycler view.
         RecyclerView rewievsRecyclerView = binding.recyclerViewReview;
 
         // Initialize database post manager.
         courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(),
-                CourseReview.COURSE_REVIEW_COLLECTION_NAME, CourseReview.COURSE_REVIEW_LIKE_COLLECTION_NAME,
-                CourseReview.COURSE_REVIEW_DISLIKE_COLLECTION_NAME, CourseReview.COURSE_REVIEW_COMMENT_COLLECTION_NAME);
-
-        // Initialize the course.
-        course = retrieveCourse();
+                course.getReviewCollectionName(),
+                course.getReviewLikeCollectionName(),
+                course.getReviewDislikeCollectionName(),
+                course.getReviewCommentCollectionName());
 
         // Initializing the list of posts in the feed.
         List<CourseReview> courseReviewList = new ArrayList<>();
@@ -120,7 +123,7 @@ public class ReviewsFragment extends Fragment {
     }
 
     private void initRecyclerView(List<CourseReview> courseReviewList, RecyclerView reviewsRecyclerview) {
-        reviewAdapter = new ReviewAdapter(courseReviewList, fragmentManager);
+        reviewAdapter = new ReviewAdapter(courseReviewList, fragmentManager, course);
         reviewsRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
         reviewsRecyclerview.setHasFixedSize(false);
         reviewsRecyclerview.setAdapter(reviewAdapter);
@@ -154,6 +157,7 @@ public class ReviewsFragment extends Fragment {
                     Log.i(TAG, "User is allowed to add a review");
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                        Log.e(TAG, course.courseToString());
                         intent.putExtra("course", course.courseToString());
                         startActivity(intent);
                     });
@@ -236,11 +240,11 @@ public class ReviewsFragment extends Fragment {
      * Retrieves the course model of current page.
      */
     private Course retrieveCourse() {
-        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
+        StudyUnitViewActivity courseViewActivity = (StudyUnitViewActivity) getActivity();
         if (courseViewActivity != null) {
             return courseViewActivity.getCourse();
         } else {
-            return new Course("0", "0");
+            return new Course("0", "0", Course.StudyUnitType.COURSE);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.connectue.fragments;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -13,9 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.connectue.R;
+import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.activities.MajorViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
-import com.example.connectue.managers.MajorManager;
-import com.example.connectue.model.Major;
+import com.example.connectue.managers.CourseManager;
+import com.example.connectue.model.Course;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 
@@ -59,14 +62,14 @@ public class MajorsVerticalScrollingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_majors_vertical_scrolling, container, false);
         LinearLayout scrollViewLayout = view.findViewById(R.id.majorsScrollViewLayout);
 
-        MajorManager majorManager = new MajorManager(FirebaseFirestore.getInstance(),
-                Major.MAJOR_COLLECTION_NAME);
+        CourseManager majorManager = new CourseManager(FirebaseFirestore.getInstance(),
+                Course.MAJOR_COLLECTION_NAME);
 
-        majorManager.downloadAll(new ItemDownloadCallback<List<Major>>() {
+        majorManager.downloadAll(new ItemDownloadCallback<List<Course>>() {
             @Override
-            public void onSuccess(List<Major> majors) {
+            public void onSuccess(List<Course> majors) {
                 Log.i(TAG, "Majors are retrieved successfully");
-                for (Major major : majors) {
+                for (Course major : majors) {
                     //Remember: inflater is used to instantiate layout XML files into their
                     //corresponding View objects in the app's user interface.
                     View cardView = inflater.inflate(R.layout.clickable_course, null);
@@ -81,8 +84,18 @@ public class MajorsVerticalScrollingFragment extends Fragment {
                     );
                     layoutParams.bottomMargin = 35;
                     textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    textView.setText(major.getMajorName());
+                    textView.setText(major.getName());
                     cardView.setLayoutParams(layoutParams);
+
+                    cardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Start new activity and pass course id
+                            Intent intent = new Intent(getActivity(), MajorViewActivity.class);
+                            intent.putExtra("course", major.courseToString());
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
         });

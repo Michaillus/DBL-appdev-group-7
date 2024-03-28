@@ -1,5 +1,7 @@
 package com.example.connectue.managers;
 
+import android.util.Log;
+
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Course;
@@ -17,6 +19,8 @@ public class CourseManager extends EntityManager<Course> {
      */
     private static final String TAG = "CourseManager";
 
+    private Course.StudyUnitType type;
+
     /**
      * Constructor for course manager given instance of  FireStore database and the name of
      * courses collection in that database.
@@ -26,30 +30,26 @@ public class CourseManager extends EntityManager<Course> {
      */
     public CourseManager(FirebaseFirestore db, String collectionName) {
         super(db, collectionName);
+        if (collectionName.equals(Course.COURSE_COLLECTION_NAME)) {
+            this.type = Course.StudyUnitType.COURSE;
+        } else {
+            this.type = Course.StudyUnitType.MAJOR;
+        }
     }
 
-    public void addRating(CourseReview courseReview, ItemUploadCallback callback) {
-        downloadOne(courseReview.getParentCourseId(), new ItemDownloadCallback<Course>() {
+    public void addRating(Course course, CourseReview courseReview, ItemUploadCallback callback) {
+
+        course.setRatingSum(course.getRatingSum() + courseReview.getStars());
+        course.setRatingNumber(course.getRatingNumber() + 1);
+        set(course, course.getId(), new ItemUploadCallback() {
             @Override
-            public void onSuccess(Course course) {
-
-                course.setRatingSum(course.getRatingSum() + courseReview.getStars());
-                course.setRatingNumber(course.getRatingNumber() + 1);
-                set(course, course.getId(), new ItemUploadCallback() {
-                    @Override
-                    public void onSuccess() {
-                        callback.onSuccess();
-                    }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                        callback.onFailure(e);
-                    }
-                });
+            public void onSuccess() {
+                callback.onSuccess();
             }
 
             @Override
             public void onFailure(Exception e) {
+                Log.e(TAG, "Error while changing rating of a course");
                 callback.onFailure(e);
             }
         });
@@ -57,20 +57,22 @@ public class CourseManager extends EntityManager<Course> {
 
     @Override
     protected Course deserialize(DocumentSnapshot document) {
+
         return new Course(
                 document.getId(),
-                document.getString(Course.COURSE_NAME_ATTRIBUTE),
-                document.getString(Course.COURSE_CODE_ATTRIBUTE),
+                document.getString(Course.NAME_ATTRIBUTE),
+                document.getString(Course.CODE_ATTRIBUTE),
                 document.getLong(Course.RATING_SUM_ATTRIBUTE).longValue(),
-                document.getLong(Course.RATING_NUMBER_ATTRIBUTE).longValue());
+                document.getLong(Course.RATING_NUMBER_ATTRIBUTE).longValue(),
+                type);
     }
 
     @Override
     protected Map<String, Object> serialize(Course course) {
         Map<String, Object> majorData = new HashMap<>();
 
-        majorData.put(Course.COURSE_NAME_ATTRIBUTE, course.getCourseName());
-        majorData.put(Course.COURSE_CODE_ATTRIBUTE, course.getCourseCode());
+        majorData.put(Course.NAME_ATTRIBUTE, course.getName());
+        majorData.put(Course.CODE_ATTRIBUTE, course.getCode());
         majorData.put(Course.RATING_SUM_ATTRIBUTE, course.getRatingSum());
         majorData.put(Course.RATING_NUMBER_ATTRIBUTE, course.getRatingNumber());
 

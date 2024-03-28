@@ -75,7 +75,8 @@ public class SearchActivity extends AppCompatActivity {
                                     long ratingNumber = document.getLong("ratingNumber");
 
                                     foundCourses.add(new Course(document.getId(), courseName,
-                                            courseCode, ratingSum, ratingNumber));
+                                            courseCode, ratingSum, ratingNumber,
+                                            Course.StudyUnitType.COURSE));
                                     // replace the text in card view by course code of the found course
                                     courseTextView.setText(courseCode);
                                 }

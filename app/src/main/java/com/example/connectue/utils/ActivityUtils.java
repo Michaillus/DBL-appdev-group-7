@@ -19,7 +19,7 @@ public class ActivityUtils {
         if (savedInstanceState == null) {
             Bundle extras = activity.getIntent().getExtras();
             if(extras == null) {
-                courseAsString= "0#0#0#0#0";
+                courseAsString= "0#0#0#0#0#course";
                 Log.e(TAG, "No course passed to the activity");
             } else {
                 courseAsString= extras.getString("course");
@@ -28,7 +28,7 @@ public class ActivityUtils {
             courseAsString= (String) savedInstanceState.getSerializable("course");
         }
         if (courseAsString == null) {
-            courseAsString = "0#0#0#0#0";
+            courseAsString = "0#0#0#0#0#0course";
             Log.e(TAG, "No course passed to the activity");
         }
         return Course.stringToCourse(courseAsString);

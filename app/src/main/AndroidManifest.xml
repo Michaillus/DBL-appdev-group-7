@@ -36,6 +36,9 @@
             android:name=".activities.CourseViewActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.MajorViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AdminActivity"
             android:exported="false" />
         <activity

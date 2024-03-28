@@ -18,6 +18,7 @@ import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.managers.CourseReviewManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.CourseReview;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
@@ -35,10 +36,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     private FragmentManager fragmentManager;
     private CourseReviewManager courseReviewManager;
 
+    /**
+     * Study unit of the current page.
+     */
+    private final Course course;
 
-    public ReviewAdapter(List<CourseReview> courseReviewList, FragmentManager fragmentManager) {
+    public ReviewAdapter(List<CourseReview> courseReviewList, FragmentManager fragmentManager,
+                         Course course) {
         this.courseReviewList = courseReviewList;
         this.fragmentManager = fragmentManager;
+        this.course = course;
     }
 
     @NonNull
@@ -98,10 +105,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             db = FirebaseFirestore.getInstance();
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
-            courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(), CourseReview.COURSE_REVIEW_COLLECTION_NAME,
-                    CourseReview.COURSE_REVIEW_LIKE_COLLECTION_NAME, CourseReview.COURSE_REVIEW_DISLIKE_COLLECTION_NAME,
-                    CourseReview.COURSE_REVIEW_COMMENT_COLLECTION_NAME);
-
+            courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(),
+                    course.getReviewCollectionName(),
+                    course.getReviewLikeCollectionName(),
+                    course.getReviewDislikeCollectionName(),
+                    course.getReviewCommentCollectionName());
         }
 
         public void bind(CourseReview courseReview) {

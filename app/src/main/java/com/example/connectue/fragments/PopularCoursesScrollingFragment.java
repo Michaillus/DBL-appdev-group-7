@@ -19,15 +19,8 @@ import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.CourseManager;
 import com.example.connectue.model.Course;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,6 +56,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
         courseManager.downloadAll(new ItemDownloadCallback<List<Course>>() {
             @Override
             public void onSuccess(List<Course> courses) {
+                Log.i(TAG, "Courses are retrieved successfully");
                 //add fetched courses to list of Course observers
                 for (Course course : courses) {
                     //Remember: inflater is used to instantiate layout XML files into their
@@ -79,7 +73,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
                     );
                     layoutParams.rightMargin = 35;
                     textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    textView.setText(course.getCourseCode());
+                    textView.setText(course.getCode());
                     cardView.setLayoutParams(layoutParams);
 
                     cardView.setOnClickListener(new View.OnClickListener() {
@@ -87,8 +81,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
                         public void onClick(View v) {
                             // Start new activity and pass course id
                             Intent intent = new Intent(getActivity(), CourseViewActivity.class);
-                            Log.e(TAG, course.courseToString());
-                            intent.putExtra("course", course.courseToString()); // Assuming getId() returns the id of the course
+                            intent.putExtra("course", course.courseToString());
                             startActivity(intent);
                         }
                     });
