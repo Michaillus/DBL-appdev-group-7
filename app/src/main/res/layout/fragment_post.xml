@@ -59,9 +59,10 @@
         <!-- Post Image -->
         <ImageView
             android:id="@+id/postImageInPostImageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/publishTimePostTextView"
             android:adjustViewBounds="true"/>
 

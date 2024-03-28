@@ -12,16 +12,16 @@
         android:layout_height="wrap_content"
         android:background="@color/Design4"
         android:padding="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/title"
             android:text="@string/home"
-            android:textSize="32sp"
             android:textColor="@color/Design2"
-            />
+            android:textSize="32sp" />
 
     </RelativeLayout>
 

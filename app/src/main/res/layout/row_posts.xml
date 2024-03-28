@@ -17,7 +17,8 @@
     app:cardUseCompatPadding="true"
     app:cardBackgroundColor="#FFFFFF"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:layout_gravity="center_horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,13 +28,14 @@
 
             <ImageView
                 android:id="@+id/pImageIv"
-                android:layout_width="match_parent"
+                android:layout_width="360dp"
                 android:layout_height="250dp"
                 android:adjustViewBounds="true"
                 android:background="#FFFFFF"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="centerCrop"
+                android:layout_gravity="center"
                 app:imageUrl="@{post.getImageUrl()}" />
 
             <LinearLayout
