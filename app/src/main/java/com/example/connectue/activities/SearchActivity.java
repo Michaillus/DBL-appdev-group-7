@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.connectue.R;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.managers.StudyUnitManager;
 import com.example.connectue.model.StudyUnit;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,21 +66,19 @@ public class SearchActivity extends AppCompatActivity {
                     public void onSuccess(List<Object> results) {
                         List<StudyUnit> foundCourses = new ArrayList<>();
 
+                        StudyUnitManager courseManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
+                                StudyUnit.COURSE_COLLECTION_NAME);
+
                         // deal with the results
                         for (Object result : results) {
                             if (result instanceof QuerySnapshot) {
                                 QuerySnapshot querySnapshot = (QuerySnapshot) result;
                                 for (QueryDocumentSnapshot document : querySnapshot) {
-                                    String courseCode = document.getString("courseCode");
-                                    String courseName = document.getString("courseName");
-                                    long ratingSum = document.getLong("ratingSum");
-                                    long ratingNumber = document.getLong("ratingNumber");
+                                    StudyUnit course = courseManager.deserialize(document);
 
-                                    foundCourses.add(new StudyUnit(document.getId(), courseName,
-                                            courseCode, ratingSum, ratingNumber,
-                                            StudyUnit.StudyUnitType.COURSE));
+                                    foundCourses.add(course);
                                     // replace the text in card view by course code of the found course
-                                    courseTextView.setText(courseCode);
+                                    courseTextView.setText(course.getCode());
                                 }
                             }
                         }
@@ -87,16 +87,16 @@ public class SearchActivity extends AppCompatActivity {
                         if (!foundCourses.isEmpty()) {
                             foundCourse.setText("Found Courses:");
 
-                            // By clicking the card view, go to the course review page
                             courseCardView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     // Start new activity and pass course id
                                     Intent intent = new Intent(SearchActivity.this, CourseViewActivity.class);
-                                    intent.putExtra("courseId", foundCourses.get(0).getId()); // Assuming getId() returns the id of the course
+                                    intent.putExtra("course", foundCourses.get(0).studyUnitToString());
                                     startActivity(intent);
                                 }
                             });
+
                         } else {
                             foundCourse.setText("No matching courses found.");
                             // if no course is found, set the card view invisible

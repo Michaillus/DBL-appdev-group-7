@@ -53,7 +53,7 @@ public class QuestionManager extends InteractableManager<Question> {
      * @return Instance of the question model.
      */
     @Override
-    protected Question deserialize(DocumentSnapshot document) {
+    public Question deserialize(DocumentSnapshot document) {
         return new Question(
                 document.getId(),
                 document.getString("publisher"),
@@ -72,7 +72,7 @@ public class QuestionManager extends InteractableManager<Question> {
      * @return Map for uploading to question collection.
      */
     @Override
-    protected Map<String, Object> serialize(Question question) {
+    public Map<String, Object> serialize(Question question) {
         Map<String, Object> questionData = new HashMap<>();
 
         questionData.put("publisher", question.getPublisherId());

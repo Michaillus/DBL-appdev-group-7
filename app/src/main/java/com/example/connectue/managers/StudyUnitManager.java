@@ -73,7 +73,7 @@ public class StudyUnitManager extends EntityManager<StudyUnit> {
      * @return Instance of the study unit corresponding to the document.
      */
     @Override
-    protected StudyUnit deserialize(DocumentSnapshot document) {
+    public StudyUnit deserialize(DocumentSnapshot document) {
 
         return new StudyUnit(
                 document.getId(),
@@ -90,7 +90,7 @@ public class StudyUnitManager extends EntityManager<StudyUnit> {
      * @return Map for uploading the study unit to the database.
      */
     @Override
-    protected Map<String, Object> serialize(StudyUnit studyUnit) {
+    public Map<String, Object> serialize(StudyUnit studyUnit) {
         Map<String, Object> majorData = new HashMap<>();
 
         majorData.put(StudyUnit.NAME_ATTRIBUTE, studyUnit.getName());

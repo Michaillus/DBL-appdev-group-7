@@ -48,7 +48,7 @@ public class CommentManager extends EntityManager<Comment> {
      * @return Instance of the comment model.
      */
     @Override
-    protected Comment deserialize(DocumentSnapshot document) {
+    public Comment deserialize(DocumentSnapshot document) {
         return new Comment(
                 document.getId(),
                 document.getString(Comment.PUBLISHER_ID),
@@ -64,7 +64,7 @@ public class CommentManager extends EntityManager<Comment> {
      * @return Map for uploading to a comment collection.
      */
     @Override
-    protected Map<String, Object> serialize(Comment comment) {
+    public Map<String, Object> serialize(Comment comment) {
         Map<String, Object> questionData = new HashMap<>();
 
         questionData.put(Comment.PUBLISHER_ID, comment.getPublisherId());

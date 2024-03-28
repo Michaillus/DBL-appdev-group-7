@@ -1,8 +1,5 @@
 package com.example.connectue.managers;
 
-import android.util.Log;
-
-import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.User2;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,7 +31,7 @@ public class UserManager extends EntityManager<User2> {
      * @return Instance of the user model.
      */
     @Override
-    protected User2 deserialize(DocumentSnapshot document) {
+    public User2 deserialize(DocumentSnapshot document) {
         return new User2(
                 document.getId(),
                 document.getString("firstName"),
@@ -56,7 +53,7 @@ public class UserManager extends EntityManager<User2> {
      * @return Map for uploading to user collection.
      */
     @Override
-    protected Map<String, Object> serialize(User2 user) {
+    public Map<String, Object> serialize(User2 user) {
         Map<String, Object> userData = new HashMap<>();
 
         userData.put("timestamp", new Timestamp(new Date()));

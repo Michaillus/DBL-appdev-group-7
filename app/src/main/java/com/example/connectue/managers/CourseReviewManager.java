@@ -118,7 +118,7 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
      * @return Instance of the course review model.
      */
     @Override
-    protected CourseReview deserialize(DocumentSnapshot document) {
+    public CourseReview deserialize(DocumentSnapshot document) {
         return new CourseReview(
                 document.getId(),
                 document.getString(CourseReview.PUBLISHER_ID_ATTRIBUTE),
@@ -139,7 +139,7 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
      * @return Map for uploading to course review collection.
      */
     @Override
-    protected Map<String, Object> serialize(CourseReview courseReview) {
+    public Map<String, Object> serialize(CourseReview courseReview) {
         Map<String, Object> reviewData = new HashMap<>();
 
 

@@ -36,7 +36,7 @@ public class PostManager extends InteractableManager<Post> {
      * @return Instance of the post model.
      */
     @Override
-    protected Post deserialize(DocumentSnapshot document) {
+    public Post deserialize(DocumentSnapshot document) {
         // TODO: implement dislikes for posts.
         Log.i(tag, "TODO: implement dislikes for posts");
         return new Post(
@@ -57,7 +57,7 @@ public class PostManager extends InteractableManager<Post> {
      * @return Map for uploading to post collection.
      */
     @Override
-    protected Map<String, Object> serialize(Post post) {
+    public Map<String, Object> serialize(Post post) {
         Map<String, Object> postData = new HashMap<>();
 
         postData.put("text", post.getText());

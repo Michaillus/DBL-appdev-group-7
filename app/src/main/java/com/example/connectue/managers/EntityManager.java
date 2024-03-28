@@ -2,12 +2,8 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
-import com.example.connectue.model.User2;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -214,7 +210,7 @@ public abstract class EntityManager<T> {
      * @param document FireBase document snapshot to be converted.
      * @return Instance of the model corresponding to the document.
      */
-    protected abstract T deserialize(DocumentSnapshot document);
+    public abstract T deserialize(DocumentSnapshot document);
 
     /**
      * Converts an instance of the model {@code T} to the corresponding map for uploading to the
@@ -222,5 +218,5 @@ public abstract class EntityManager<T> {
      * @param object Instance of the model.
      * @return Map for uploading to {@code collection}.
      */
-    protected abstract Map<String, Object> serialize(T object);
+    public abstract Map<String, Object> serialize(T object);
 }

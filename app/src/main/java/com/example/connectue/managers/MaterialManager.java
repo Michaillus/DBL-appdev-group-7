@@ -33,7 +33,7 @@ public class MaterialManager extends InteractableManager<Material>{
     }
 
     @Override
-    protected Material deserialize(DocumentSnapshot document) {
+    public Material deserialize(DocumentSnapshot document) {
         return new Material(
                 document.getId(),
                 document.getString("publisher"),
@@ -48,7 +48,7 @@ public class MaterialManager extends InteractableManager<Material>{
     }
 
     @Override
-    protected Map<String, Object> serialize(Material material) {
+    public Map<String, Object> serialize(Material material) {
         Map<String, Object> postData = new HashMap<>();
 
 
