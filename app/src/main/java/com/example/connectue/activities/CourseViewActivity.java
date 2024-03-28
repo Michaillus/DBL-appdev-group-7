@@ -38,7 +38,10 @@ import java.util.Map;
 public class CourseViewActivity extends AppCompatActivity {
 
     private String courseId = "";
-    private String TAG = "CourseViewUtil";
+
+    private Course course;
+
+    private static final String TAG = "CourseViewActivity";
     FirebaseFirestore db;
 
     TextView title;
@@ -47,8 +50,6 @@ public class CourseViewActivity extends AppCompatActivity {
     LinearLayout followButton;
     ImageView backbtn;
     FirebaseUser user;
-    Float averageRating = 0f;
-    Course course;
 
     ActivityCourseViewBinding binding;
     @Override
@@ -98,16 +99,24 @@ public class CourseViewActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
+        String courseAsString;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
-                courseId= "";
+                courseAsString= "0#0#0#0#0";
             } else {
-                courseId= extras.getString("courseId");
+                courseAsString= extras.getString("courseId");
             }
         } else {
-            courseId= (String) savedInstanceState.getSerializable("courseId");
+            courseAsString= (String) savedInstanceState.getSerializable("course");
         }
+        if (courseAsString == null) {
+            courseAsString = "0#0#0#0#0";
+        }
+        Log.e(TAG, courseAsString);
+        course = Course.stringToCourse(courseAsString);
+        Log.e(TAG, courseAsString);
+
 
         db.collection("users")
                 .document(user.getUid())
@@ -119,7 +128,7 @@ public class CourseViewActivity extends AppCompatActivity {
                                 DocumentSnapshot documentSnapshot = task.getResult();
                                 if (documentSnapshot.exists()) {
                                     List<String> userCourses = (List<String>) documentSnapshot.get("userCourses");
-                                    if (userCourses.contains(courseId)) {
+                                    if (userCourses.contains(course.getId())) {
                                         followIcon.setImageDrawable(getResources().getDrawable(R.drawable.baseline_check_circle_24));
                                     } else {
                                         followIcon.setImageDrawable(getResources().getDrawable(R.drawable.baseline_add_circle_outline_24));
@@ -145,10 +154,10 @@ public class CourseViewActivity extends AppCompatActivity {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             if (documentSnapshot.exists()) {
                                 List<String> userCourses = (List<String>) documentSnapshot.get("userCourses");
-                                if (userCourses.contains(courseId)) {
-                                    userCourses.remove(courseId);
+                                if (userCourses.contains(course.getId())) {
+                                    userCourses.remove(course.getId());
                                 } else {
-                                    userCourses.add(courseId);
+                                    userCourses.add(course.getId());
                                 }
                                 Map<String, Object> newList = new HashMap<>();
                                 newList.put("userCourses", userCourses);
@@ -156,7 +165,7 @@ public class CourseViewActivity extends AppCompatActivity {
                                 db.collection("users").document(user.getUid()).update(newList).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
-                                        if (userCourses.contains(courseId)) {
+                                        if (userCourses.contains(course.getId())) {
                                             followIcon.setImageDrawable(getResources().getDrawable(R.drawable.baseline_check_circle_24));
                                             Toast.makeText(CourseViewActivity.this, "Course followed", Toast.LENGTH_SHORT).show();
                                         } else {
@@ -190,47 +199,19 @@ public class CourseViewActivity extends AppCompatActivity {
     }
 
     private void loadCourseDetails() {
-        if (courseId == null || courseId == "") {
-            Log.d(TAG, "FBEINHIs");
+        if (course.getId() == null || course.getId().equals("0")) {
+            Log.e(TAG, "Null course");
         }
-        db.collection("courses").document(courseId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String courseCode = (String) document.get("courseCode");
-                        String courseName = (String) document.get("courseName");
-                        List<Long> ratings = (List<Long>) document.get("courseRating");
 
-                        course = new Course(courseName, courseCode, courseId);
-                        int count = 0;
+        ratingBar.setIsIndicator(true);
+        // Set stars to the average rating
+        ratingBar.setRating(course.getAverageRating());
+        // Set average rating
+        ratingIndicator.setText(String.format("%.1f", course.getAverageRating()) + " / 5");
+        // Set course code
+        title.setText(course.getCourseCode());
+        title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-                        for (Long ratingValue : ratings) {
-                            Log.d(TAG, ratingValue.toString());
-                            int intValue = ratingValue.intValue(); // Convert Long to int
-                            course.addRating(intValue);
-                            averageRating += ratingValue.floatValue();
-                            count += 1;
-                            Log.d(TAG, "Rating: " + intValue);
-                        }
-
-                        averageRating /= count;
-
-                    } else {
-                        Log.d(TAG, "Course doesn't exist");
-                    }
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-
-                ratingBar.setIsIndicator(true);
-                ratingBar.setRating(averageRating);
-                ratingIndicator.setText(averageRating.toString() + "/5");
-                title.setText(course.getCourseCode());
-                title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-            }
-        });
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -241,6 +222,6 @@ public class CourseViewActivity extends AppCompatActivity {
     }
 
     public String getCourse() {
-        return courseId;
+        return course.getId();
     }
 }

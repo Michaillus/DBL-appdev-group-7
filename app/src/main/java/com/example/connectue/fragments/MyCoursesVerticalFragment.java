@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.managers.CourseManager;
 import com.example.connectue.model.Course;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,10 +39,6 @@ public class MyCoursesVerticalFragment extends Fragment {
 
     FirebaseUser user;
     FirebaseFirestore db;
-
-    List<Course> userCourses;
-    Object courseName;
-    Object courseCode;
 
     Object ratingObject;
     private String TAG = "MyCoursesVerticalFragUtil: ";
@@ -93,8 +91,6 @@ public class MyCoursesVerticalFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        userCourses = new ArrayList<>();
-
         DocumentReference userDoc = db.collection("users").document(user.getUid());
 
         userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -105,68 +101,41 @@ public class MyCoursesVerticalFragment extends Fragment {
                     if (document.exists()) {
                         // Retrieve the value of userCourses
                         List<String> userCoursesObj = (List<String>) document.get("userCourses");
-                        Log.d(TAG, userCoursesObj.toString());
                         if (userCoursesObj != null && userCoursesObj.size() != 0) {
                             for (String courseId: userCoursesObj) {
-                                Log.d(TAG, courseId);
-                                db.collection("courses").document(courseId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                                CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
+                                        Course.COURSE_COLLECTION_NAME);
+                                courseManager.downloadOne(courseId, new ItemDownloadCallback<Course>() {
                                     @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot documentSnapshot = task.getResult();
-                                            if (documentSnapshot.exists()) {
-                                                courseName = documentSnapshot.get("courseName");
-                                                courseCode = documentSnapshot.get("courseCode");
-                                                ratingObject = documentSnapshot.get("courseRating");
-                                                Course course = new Course(courseName.toString(), courseCode.toString(), courseId);
-                                                if (ratingObject instanceof List<?>) {
-                                                    //Number value from json is converted into Long through unbounded wild card "?"
-                                                    List<Long> ratingList = (List<Long>) ratingObject;
-                                                    for (Long ratingValue : ratingList) {
-                                                        int intValue = ratingValue.intValue(); // Convert Long to int
-                                                        course.addRating(intValue);
-                                                        Log.d(TAG, "Rating: " + intValue);
-                                                        // Add rating processing logic here
-                                                    }
-                                                } else {
-                                                    Log.d(TAG, "Rating is not a list");
-                                                    // Handle the case where the rating is not a list
-                                                }
-                                                userCourses.add(course);
-                                                Log.d(TAG, course.getCourseCode());
-                                                //Remember: inflater is used to instantiate layout XML files into their
-                                                //corresponding View objects in the app's user interface.
-                                                View cardView = inflater.inflate(R.layout.clickable_course, null);
+                                    public void onSuccess(Course course) {
+                                        //Remember: inflater is used to instantiate layout XML files into their
+                                        //corresponding View objects in the app's user interface.
+                                        View cardView = inflater.inflate(R.layout.clickable_course, null);
 
 
-                                                TextView textView = cardView.findViewById(R.id.courseCardText);
+                                        TextView textView = cardView.findViewById(R.id.courseCardText);
 
-                                                //give layout parameters to each course card.
-                                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                                        LinearLayout.LayoutParams.MATCH_PARENT,
-                                                        LinearLayout.LayoutParams.MATCH_PARENT
-                                                );
-                                                layoutParams.bottomMargin = 35;
-                                                textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                                        //give layout parameters to each course card.
+                                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                                LinearLayout.LayoutParams.MATCH_PARENT
+                                        );
+                                        layoutParams.bottomMargin = 35;
+                                        textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-                                                textView.setText(course.getCourseCode());
-                                                cardView.setLayoutParams(layoutParams);
-                                                scrollViewLayout.addView(cardView);
-                                                cardView.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        // Start new activity and pass course id
-                                                        Intent intent = new Intent(getActivity(), CourseViewActivity.class);
-                                                        intent.putExtra("courseId", course.getCourseId()); // Assuming getId() returns the id of the course
-                                                        startActivity(intent);
-                                                    }
-                                                });
-                                                Log.d(TAG, userCourses.toString());
+                                        textView.setText(course.getCourseCode());
+                                        cardView.setLayoutParams(layoutParams);
+                                        scrollViewLayout.addView(cardView);
+                                        cardView.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                // Start new activity and pass course id
+                                                Intent intent = new Intent(getActivity(), CourseViewActivity.class);
+                                                intent.putExtra("courseId", course.courseToString()); // Assuming getId() returns the id of the course
+                                                startActivity(intent);
                                             }
-                                        } else {
-                                            Log.d(TAG, "Error getting documents: ", task.getException());
-                                        }
-                                        Log.d(TAG, "Field Value: " + userCoursesObj.toString());
+                                        });
                                     }
                                 });
                             }

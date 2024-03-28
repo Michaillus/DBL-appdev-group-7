@@ -18,7 +18,7 @@ import java.util.Map;
 public class MajorReviewManager extends InteractableManager<MajorReview> {
 
     /**
-     * Constructor for a manager of reviews of courses.
+     * Constructor for a manager of reviews of majors.
      *
      * @param db             Instance of a FireStore database.
      * @param collectionName Name of the collection that stores posts in the database.
@@ -51,13 +51,13 @@ public class MajorReviewManager extends InteractableManager<MajorReview> {
 
     /**
      * Checks and returns through the callback if the user have a review on the major.
-     * @param majorId Course to check.
+     * @param majorId Major to check.
      * @param userId User to check.
      * @param callback Returns if the user has a review on the major through the {@code onSuccess}
      *                 method, if database request is successful. Otherwise, returns exception
      *                 through the {@code onFailure} method.
      */
-    public void hasUserReviewedCourse(String majorId, String userId, ItemExistsCallback callback) {
+    public void hasUserReviewedMajor(String majorId, String userId, ItemExistsCallback callback) {
         Query query = collection.whereEqualTo(MajorReview.PARENT_MAJOR_ID_ATTRIBUTE, majorId)
                 .whereEqualTo(MajorReview.PUBLISHER_ID_ATTRIBUTE, userId);
         AggregateQuery countQuery = query.count();

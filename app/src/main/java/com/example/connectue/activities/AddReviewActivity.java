@@ -23,6 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddReviewActivity extends AppCompatActivity {
 
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "AddReviewActivity";
+
     CourseReviewManager courseReviewManager;
     EditText reviewDescription;
     Button publishReviewBtn;
@@ -154,10 +159,10 @@ public class AddReviewActivity extends AppCompatActivity {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         CourseReview courseReview = new CourseReview(publisherId, text, stars, courseId);
 
-        courseReviewManager.upload(courseReview, new ItemUploadCallback() {
+        courseReviewManager.addReview(courseReview, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
-                Log.i("Upload review", "Review is uploaded successfully");
+                Log.i(TAG, "Review is added successfully");
                 Toast.makeText(AddReviewActivity.this,
                         "Review is published successfully", Toast.LENGTH_SHORT).show();
 
@@ -166,7 +171,7 @@ public class AddReviewActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e("Upload review", "Failed to upload the review: " + e.getMessage());
+                Log.e(TAG, "Failed to upload the review: ", e);
                 Toast.makeText(AddReviewActivity.this,
                         "Failed to upload", Toast.LENGTH_SHORT).show();
             }

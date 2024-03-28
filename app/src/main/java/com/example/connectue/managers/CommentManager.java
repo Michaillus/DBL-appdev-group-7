@@ -22,7 +22,7 @@ public class CommentManager extends EntityManager<Comment> {
     public CommentManager(FirebaseFirestore db, String collectionName) {
         super(db, collectionName);
 
-        tag = "CommentManager class: ";
+        tag = "CommentManager";
     }
 
     /**

@@ -71,8 +71,11 @@ public class SearchActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot document : querySnapshot) {
                                     String courseCode = document.getString("courseCode");
                                     String courseName = document.getString("courseName");
+                                    long ratingSum = document.getLong("ratingSum");
+                                    long ratingNumber = document.getLong("ratingNumber");
 
-                                    foundCourses.add(new Course(courseName.toString(), courseCode.toString(), document.getId()));
+                                    foundCourses.add(new Course(document.getId(), courseName,
+                                            courseCode, ratingSum, ratingNumber));
                                     // replace the text in card view by course code of the found course
                                     courseTextView.setText(courseCode);
                                 }
@@ -89,7 +92,7 @@ public class SearchActivity extends AppCompatActivity {
                                 public void onClick(View v) {
                                     // Start new activity and pass course id
                                     Intent intent = new Intent(SearchActivity.this, CourseViewActivity.class);
-                                    intent.putExtra("courseId", foundCourses.get(0).getCourseId()); // Assuming getId() returns the id of the course
+                                    intent.putExtra("courseId", foundCourses.get(0).getId()); // Assuming getId() returns the id of the course
                                     startActivity(intent);
                                 }
                             });

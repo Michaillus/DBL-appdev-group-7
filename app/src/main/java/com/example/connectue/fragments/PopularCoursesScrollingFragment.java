@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 
 import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.managers.CourseManager;
 import com.example.connectue.model.Course;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,72 +58,43 @@ public class PopularCoursesScrollingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_popular_courses_scrolling, container, false);
         LinearLayout scrollViewLayout = view.findViewById(R.id.scrollViewLayout);
 
-        db = FirebaseFirestore.getInstance();
+        CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
+                Course.COURSE_COLLECTION_NAME);
+        courseManager.downloadAll(new ItemDownloadCallback<List<Course>>() {
+            @Override
+            public void onSuccess(List<Course> courses) {
+                //add fetched courses to list of Course observers
+                for (Course course : courses) {
+                    //Remember: inflater is used to instantiate layout XML files into their
+                    //corresponding View objects in the app's user interface.
+                    View cardView = inflater.inflate(R.layout.clickable_course, null);
+                    scrollViewLayout.addView(cardView);
 
-        courses = new ArrayList<>();
+                    TextView textView = cardView.findViewById(R.id.courseCardText);
 
-        db.collection("courses")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                courseName = document.get("courseName");
-                                courseCode = document.get("courseCode");
-                                ratingObject = document.get("courseRating");
-                                Course course = new Course(courseName.toString(), courseCode.toString(), document.getId());
-                                if (ratingObject instanceof List<?>) {
-                                    //Number value from json is converted into Long through unbounded wild card "?"
-                                    List<Long> ratingList = (List<Long>) ratingObject;
-                                    for (Long ratingValue : ratingList) {
-                                        int intValue = ratingValue.intValue(); // Convert Long to int
-                                        course.addRating(intValue);
-                                        Log.d(TAG, "Rating: " + intValue);
-                                        // Add rating processing logic here
-                                    }
-                                } else {
-                                    Log.d(TAG, "Rating is not a list");
-                                    // Handle the case where the rating is not a list
-                                }
+                    //give layout parameters to each course card.
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            250,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    );
+                    layoutParams.rightMargin = 35;
+                    textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                    textView.setText(course.getCourseCode());
+                    cardView.setLayoutParams(layoutParams);
 
-                                courses.add(course);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
+                    cardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Start new activity and pass course id
+                            Intent intent = new Intent(getActivity(), CourseViewActivity.class);
+                            Log.e(TAG, course.courseToString());
+                            intent.putExtra("courseId", course.courseToString()); // Assuming getId() returns the id of the course
+                            startActivity(intent);
                         }
-                        //add fetched courses to list of Course observers
-                        for (Course course : courses) {
-                            //Remember: inflater is used to instantiate layout XML files into their
-                            //corresponding View objects in the app's user interface.
-                            View cardView = inflater.inflate(R.layout.clickable_course, null);
-                            scrollViewLayout.addView(cardView);
-
-                            TextView textView = cardView.findViewById(R.id.courseCardText);
-
-                            //give layout parameters to each course card.
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                    250,
-                                    LinearLayout.LayoutParams.MATCH_PARENT
-                            );
-                            layoutParams.rightMargin = 35;
-                            textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                            textView.setText(course.getCourseCode());
-                            cardView.setLayoutParams(layoutParams);
-
-                            cardView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // Start new activity and pass course id
-                                    Intent intent = new Intent(getActivity(), CourseViewActivity.class);
-                                    intent.putExtra("courseId", course.getCourseId()); // Assuming getId() returns the id of the course
-                                    startActivity(intent);
-                                }
-                            });
-                        }
-                    }
-                });
-
+                    });
+                }
+            }
+        });
 
         return view;
 

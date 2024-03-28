@@ -1,7 +1,11 @@
 package com.example.connectue.managers;
 
+import android.util.Log;
+
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
+import com.example.connectue.model.Course;
 import com.example.connectue.model.CourseReview;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.AggregateQuery;
@@ -47,6 +51,41 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
     public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<CourseReview>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
+    }
+
+    /**
+     * Adds a course review to the database and changes the average rating of the course
+     * respectively.
+     * @param courseReview Course review to upload.
+     * @param callback Callback that is called when the upload of review is finished or an
+     *                 error occurred.
+     */
+    public void addReview(CourseReview courseReview, ItemUploadCallback callback) {
+        upload(courseReview, new ItemUploadCallback() {
+            @Override
+            public void onSuccess() {
+                CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
+                        Course.COURSE_COLLECTION_NAME);
+                courseManager.addRating(courseReview, new ItemUploadCallback() {
+                    @Override
+                    public void onSuccess() {
+                        callback.onSuccess();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(tag, "Error while updating course rating");
+                        callback.onFailure(e);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(tag, "Error while uploading course review");
+                callback.onFailure(e);
+            }
+        });
     }
 
     /**

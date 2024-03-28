@@ -24,7 +24,7 @@ public class UserManager extends EntityManager<User2> {
     public UserManager(FirebaseFirestore db, String collectionName) {
         super(db, collectionName);
 
-        tag = "UserManager class: ";
+        tag = "UserManager";
     }
 
     /**
