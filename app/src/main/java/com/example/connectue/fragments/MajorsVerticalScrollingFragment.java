@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.example.connectue.R;
 import com.example.connectue.activities.MajorViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
-import com.example.connectue.managers.CourseManager;
+import com.example.connectue.managers.StudyUnitManager;
 import com.example.connectue.model.StudyUnit;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
@@ -61,7 +61,7 @@ public class MajorsVerticalScrollingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_majors_vertical_scrolling, container, false);
         LinearLayout scrollViewLayout = view.findViewById(R.id.majorsScrollViewLayout);
 
-        CourseManager majorManager = new CourseManager(FirebaseFirestore.getInstance(),
+        StudyUnitManager majorManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
                 StudyUnit.MAJOR_COLLECTION_NAME);
 
         majorManager.downloadAll(new ItemDownloadCallback<List<StudyUnit>>() {

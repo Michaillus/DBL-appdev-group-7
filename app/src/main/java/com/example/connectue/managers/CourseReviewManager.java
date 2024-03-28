@@ -64,9 +64,9 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
         upload(courseReview, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
-                CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
+                StudyUnitManager studyUnitManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
                         course.getStudyUnitCollectionName());
-                courseManager.addRating(course, courseReview, new ItemUploadCallback() {
+                studyUnitManager.addRating(course, courseReview, new ItemUploadCallback() {
                     @Override
                     public void onSuccess() {
                         callback.onSuccess();

@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
-import com.example.connectue.managers.CourseManager;
+import com.example.connectue.managers.StudyUnitManager;
 import com.example.connectue.model.StudyUnit;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -51,7 +51,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_popular_courses_scrolling, container, false);
         LinearLayout scrollViewLayout = view.findViewById(R.id.scrollViewLayout);
 
-        CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
+        StudyUnitManager courseManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
                 StudyUnit.COURSE_COLLECTION_NAME);
         courseManager.downloadAll(new ItemDownloadCallback<List<StudyUnit>>() {
             @Override

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
-import com.example.connectue.managers.CourseManager;
+import com.example.connectue.managers.StudyUnitManager;
 import com.example.connectue.model.StudyUnit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -103,7 +103,7 @@ public class MyCoursesVerticalFragment extends Fragment {
                         if (userCoursesObj != null && userCoursesObj.size() != 0) {
                             for (String courseId: userCoursesObj) {
 
-                                CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
+                                StudyUnitManager courseManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
                                         StudyUnit.COURSE_COLLECTION_NAME);
                                 courseManager.downloadOne(courseId, new ItemDownloadCallback<StudyUnit>() {
                                     @Override
