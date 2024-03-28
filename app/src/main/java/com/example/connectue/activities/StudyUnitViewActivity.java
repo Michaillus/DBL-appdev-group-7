@@ -18,16 +18,27 @@ import com.example.connectue.R;
 import com.example.connectue.fragments.ReviewsFragment;
 import com.example.connectue.model.StudyUnit;
 import com.example.connectue.utils.ActivityUtils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Abstract activity for showing the data (reviews, questions, materials, ratings)
+ * connected to a study unit - major or course.
+ */
 public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
+    /**
+     * Instance of a study unit.
+     */
     protected StudyUnit studyUnit;
 
+    /**
+     * Class tag for logs.
+     */
     private static final String TAG = "StudyUnitViewActivity";
 
+    /**
+     * Instance of a FireStore database.
+     */
     protected FirebaseFirestore db;
 
     protected TextView title;
@@ -38,9 +49,7 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
     protected LinearLayout followButton;
 
-    protected ImageView backbtn;
-
-    protected FirebaseUser user;
+    protected ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,37 +59,34 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
         replaceFragment(new ReviewsFragment());
 
-        ratingBar = findViewById(R.id.courseRating);
+        ratingBar = findViewById(R.id.studyUnitRating);
         ratingIndicator = findViewById(R.id.rating);
         followButton = findViewById(R.id.followButton);
         db = FirebaseFirestore.getInstance();
 
-        title = findViewById(R.id.titleCourse);
+        title = findViewById(R.id.studyUnitTitle);
 
-        backbtn = findViewById(R.id.back_btn);
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+        backButton = findViewById(R.id.back_btn);
 
         studyUnit = ActivityUtils.getCourse(this, savedInstanceState);
 
-        backbtn.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
 
-        loadCourseDetails();
+        loadStudyUnitDetails();
 
 
     }
 
     protected abstract void setBinding();
 
-    protected void loadCourseDetails() {
+    protected void loadStudyUnitDetails() {
         if (studyUnit.getId() == null || studyUnit.getId().equals("0")) {
-            Log.e(TAG, "Null course");
+            Log.e(TAG, "Null study unit");
         }
 
         ratingBar.setIsIndicator(true);
@@ -88,7 +94,7 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
         ratingBar.setRating(studyUnit.getAverageRating());
         // Set average rating
         ratingIndicator.setText(String.format("%.1f", studyUnit.getAverageRating()) + " / 5");
-        // Set course code
+        // Set code of the study unit as a title
         title.setText(studyUnit.getCode());
         title.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
@@ -101,7 +107,11 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public StudyUnit getCourse() {
+    /**
+     * Getter for the study unit of the activity.
+     * @return Study unit.
+     */
+    public StudyUnit getStudyUnit() {
         return studyUnit;
     }
 }

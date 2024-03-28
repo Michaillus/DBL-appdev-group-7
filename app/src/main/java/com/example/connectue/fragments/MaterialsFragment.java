@@ -197,7 +197,7 @@ public class MaterialsFragment extends Fragment {
     private StudyUnit retrieveCourse() {
         CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
         if (courseViewActivity != null) {
-            return courseViewActivity.getCourse();
+            return courseViewActivity.getStudyUnit();
         } else {
             return new StudyUnit("0", "0", StudyUnit.StudyUnitType.COURSE);
         }

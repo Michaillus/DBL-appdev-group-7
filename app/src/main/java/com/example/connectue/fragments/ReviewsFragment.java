@@ -241,7 +241,7 @@ public class ReviewsFragment extends Fragment {
     private StudyUnit retrieveCourse() {
         StudyUnitViewActivity courseViewActivity = (StudyUnitViewActivity) getActivity();
         if (courseViewActivity != null) {
-            return courseViewActivity.getCourse();
+            return courseViewActivity.getStudyUnit();
         } else {
             return new StudyUnit("0", "0", StudyUnit.StudyUnitType.COURSE);
         }
