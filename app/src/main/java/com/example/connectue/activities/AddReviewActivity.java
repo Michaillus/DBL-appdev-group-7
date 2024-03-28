@@ -10,8 +10,8 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.example.connectue.model.Review;
 import com.example.connectue.model.StudyUnit;
-import com.example.connectue.model.CourseReview;
 import com.example.connectue.utils.ActivityUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.Nullable;
@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemUploadCallback;
-import com.example.connectue.managers.CourseReviewManager;
+import com.example.connectue.managers.ReviewManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,7 +30,7 @@ public class AddReviewActivity extends AppCompatActivity {
      */
     private static final String TAG = "AddReviewActivity";
 
-    CourseReviewManager courseReviewManager;
+    ReviewManager reviewManager;
     EditText reviewDescription;
     Button publishReviewBtn;
     FloatingActionButton backBtn;
@@ -49,7 +49,7 @@ public class AddReviewActivity extends AppCompatActivity {
         StudyUnit studyUnit = ActivityUtils.getCourse(this, savedInstanceState);
 
         // Initializing review manager
-        courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(),
+        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
                 studyUnit.getReviewCollectionName(),
                 studyUnit.getReviewLikeCollectionName(),
                 studyUnit.getReviewDislikeCollectionName(),
@@ -148,9 +148,9 @@ public class AddReviewActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text, Long stars, StudyUnit studyUnit) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        CourseReview courseReview = new CourseReview(publisherId, text, stars, studyUnit.getId());
+        Review review = new Review(publisherId, text, stars, studyUnit.getId());
 
-        courseReviewManager.addReview(courseReview, studyUnit, new ItemUploadCallback() {
+        reviewManager.addReview(review, studyUnit, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "Review is added successfully");

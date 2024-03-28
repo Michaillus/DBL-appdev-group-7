@@ -21,10 +21,10 @@ import com.example.connectue.databinding.FragmentReviewsBinding;
 import com.example.connectue.interfaces.ConditionCheckCallback;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
-import com.example.connectue.managers.CourseReviewManager;
+import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.Review;
 import com.example.connectue.model.StudyUnit;
-import com.example.connectue.model.CourseReview;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A fragment for the home page with the post feed and add a post button.
+ * A fragment that shows a feed of reviews of a study unit (course or major) and add a study unit
+ * button.
  */
 public class ReviewsFragment extends Fragment {
 
@@ -50,14 +51,14 @@ public class ReviewsFragment extends Fragment {
     private FragmentReviewsBinding binding;
 
     /**
-     * Adapter that is responsible for outputting posts to UI.
+     * Adapter that is responsible for outputting review list to UI.
      */
     private ReviewAdapter reviewAdapter;
 
     /**
-     * Manager for database requests for posts collection.
+     * Manager for database requests for study unit's reviews collection.
      */
-    private CourseReviewManager courseReviewManager;
+    private ReviewManager reviewManager;
 
     /**
      * Indicates if posts are currently loading from database.
@@ -97,44 +98,44 @@ public class ReviewsFragment extends Fragment {
         RecyclerView rewievsRecyclerView = binding.recyclerViewReview;
 
         // Initialize database post manager.
-        courseReviewManager = new CourseReviewManager(FirebaseFirestore.getInstance(),
+        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
                 course.getReviewCollectionName(),
                 course.getReviewLikeCollectionName(),
                 course.getReviewDislikeCollectionName(),
                 course.getReviewCommentCollectionName());
 
         // Initializing the list of posts in the feed.
-        List<CourseReview> courseReviewList = new ArrayList<>();
+        List<Review> reviewList = new ArrayList<>();
 
         //Initialize RecyclerView
-        initRecyclerView(courseReviewList, rewievsRecyclerView);
+        initRecyclerView(reviewList, rewievsRecyclerView);
 
         // Upload from database and display first chunk of posts
-        loadReviews(courseReviewList);
+        loadReviews(reviewList);
 
         // Display the createPostBtn only for verified users
         displayAddReviewButton(root);
 
         // Add a scroll listener to the RecyclerView
-        getPostsOnScroll(courseReviewList, rewievsRecyclerView);
+        getPostsOnScroll(reviewList, rewievsRecyclerView);
 
         return root;
     }
 
-    private void initRecyclerView(List<CourseReview> courseReviewList, RecyclerView reviewsRecyclerview) {
-        reviewAdapter = new ReviewAdapter(courseReviewList, fragmentManager, course);
+    private void initRecyclerView(List<Review> reviewList, RecyclerView reviewsRecyclerview) {
+        reviewAdapter = new ReviewAdapter(reviewList, fragmentManager, course);
         reviewsRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
         reviewsRecyclerview.setHasFixedSize(false);
         reviewsRecyclerview.setAdapter(reviewAdapter);
     }
 
-    private void loadReviews(List<CourseReview> courseReviewList) {
+    private void loadReviews(List<Review> reviewList) {
         int reviewsPerChunk = 6;
 
-        courseReviewManager.downloadRecent(course.getId(), reviewsPerChunk, new ItemDownloadCallback<List<CourseReview>>() {
+        reviewManager.downloadRecent(course.getId(), reviewsPerChunk, new ItemDownloadCallback<List<Review>>() {
             @Override
-            public void onSuccess(List<CourseReview> data) {
-                courseReviewList.addAll(data);
+            public void onSuccess(List<Review> data) {
+                reviewList.addAll(data);
                 reviewAdapter.notifyDataSetChanged();
                 isLoading = false;
             }
@@ -180,7 +181,7 @@ public class ReviewsFragment extends Fragment {
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
                     // User is a student
-                    courseReviewManager.hasUserReviewedCourse(course.getId(), userId, new ItemExistsCallback() {
+                    reviewManager.hasUserReviewedStudyUnit(course.getId(), userId, new ItemExistsCallback() {
                         @Override
                         public void onSuccess(boolean exists) {
                             if (!exists) {
@@ -212,7 +213,7 @@ public class ReviewsFragment extends Fragment {
         });
     }
 
-    private void getPostsOnScroll(List<CourseReview> courseReviewList, RecyclerView reviewsRecyclerView) {
+    private void getPostsOnScroll(List<Review> reviewList, RecyclerView reviewsRecyclerView) {
         reviewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -229,7 +230,7 @@ public class ReviewsFragment extends Fragment {
                     // Assuming PAGE_SIZE is the number of items to load per page
                     // Load more items
                     isLoading = true;
-                    loadReviews(courseReviewList);
+                    loadReviews(reviewList);
                 }
             }
         });

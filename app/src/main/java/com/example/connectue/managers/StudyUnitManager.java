@@ -3,8 +3,8 @@ package com.example.connectue.managers;
 import android.util.Log;
 
 import com.example.connectue.interfaces.ItemUploadCallback;
+import com.example.connectue.model.Review;
 import com.example.connectue.model.StudyUnit;
-import com.example.connectue.model.CourseReview;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -49,7 +49,7 @@ public class StudyUnitManager extends EntityManager<StudyUnit> {
      * @param callback Callback that is called when the method is finished - successfully or
      *                 with an error.
      */
-    public void addRating(StudyUnit studyUnit, CourseReview studyUnitReview, ItemUploadCallback callback) {
+    public void addRating(StudyUnit studyUnit, Review studyUnitReview, ItemUploadCallback callback) {
 
         studyUnit.setRatingSum(studyUnit.getRatingSum() + studyUnitReview.getStars());
         studyUnit.setRatingNumber(studyUnit.getRatingNumber() + 1);
