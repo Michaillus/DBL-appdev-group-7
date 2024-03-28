@@ -68,7 +68,7 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
         backButton = findViewById(R.id.back_btn);
 
-        studyUnit = ActivityUtils.getCourse(this, savedInstanceState);
+        studyUnit = ActivityUtils.getStudyUnit(this, savedInstanceState);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

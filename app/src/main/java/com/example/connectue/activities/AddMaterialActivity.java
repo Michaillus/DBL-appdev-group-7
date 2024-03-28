@@ -75,7 +75,7 @@ public class AddMaterialActivity extends AppCompatActivity {
                 Material.MATERIAL_COMMENT_COLLECTION_NAME);
 
         // Retrieve course model passed from the previous activity / fragment.
-        course = ActivityUtils.getCourse(this, savedInstanceState);
+        course = ActivityUtils.getStudyUnit(this, savedInstanceState);
 
         title.setText(course.getCode());
 

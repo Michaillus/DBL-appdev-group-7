@@ -56,7 +56,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.back_Btn);
 
         // Retrieve course model passed from the previous activity / fragment.
-        course = ActivityUtils.getCourse(this, savedInstanceState);
+        course = ActivityUtils.getStudyUnit(this, savedInstanceState);
 
         publishQuestionBtn.setOnClickListener(v -> publishQuestion());
         backBtn.setOnClickListener(v -> finish());

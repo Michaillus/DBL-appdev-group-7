@@ -39,13 +39,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     /**
      * Study unit of the current page.
      */
-    private final StudyUnit course;
+    private final StudyUnit studyUnit;
 
     public ReviewAdapter(List<Review> reviewList, FragmentManager fragmentManager,
-                         StudyUnit course) {
+                         StudyUnit studyUnit) {
         this.reviewList = reviewList;
         this.fragmentManager = fragmentManager;
-        this.course = course;
+        this.studyUnit = studyUnit;
     }
 
     @NonNull
@@ -54,14 +54,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         // This is where we inflate the layout (Giving a look to our rows)
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.course_review_row, parent, false);
+        View view = inflater.inflate(R.layout.study_unit_review_row, parent, false);
         return new ReviewAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ReviewAdapter.MyViewHolder holder, int position) {
 
-        // assign values to the views we created in the course_review_row file
+        // assign values to the views we created in the study_unit_review_row file
         // based on the position of the recycler view
         Review review = reviewList.get(position);
         holder.bind(review);
@@ -78,7 +78,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        // grab the views from course_review_row file
+        // grab the views from study_unit_review_row file
         private ImageView reviewLike, reviewDislike;
         private TextView reviewerName, description, date;
         private TextView likeNumber, dislikeNumber;
@@ -106,10 +106,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
             reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
-                    course.getReviewCollectionName(),
-                    course.getReviewLikeCollectionName(),
-                    course.getReviewDislikeCollectionName(),
-                    course.getReviewCommentCollectionName());
+                    studyUnit.getReviewCollectionName(),
+                    studyUnit.getReviewLikeCollectionName(),
+                    studyUnit.getReviewDislikeCollectionName(),
+                    studyUnit.getReviewCommentCollectionName());
         }
 
         public void bind(Review review) {

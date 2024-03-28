@@ -46,7 +46,7 @@ public class AddReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_review);
 
         // Retrieve study unit passed from the previous activity / fragment.
-        StudyUnit studyUnit = ActivityUtils.getCourse(this, savedInstanceState);
+        StudyUnit studyUnit = ActivityUtils.getStudyUnit(this, savedInstanceState);
 
         // Initializing review manager
         reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
@@ -123,7 +123,7 @@ public class AddReviewActivity extends AppCompatActivity {
                 break;
         }
 
-        //update the ratings for each course review
+        //update the ratings for each study unit review
 
     }
 

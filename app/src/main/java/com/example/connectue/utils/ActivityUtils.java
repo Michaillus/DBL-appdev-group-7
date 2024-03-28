@@ -14,7 +14,7 @@ public class ActivityUtils {
      */
     private static final String TAG = "ActivityUtils";
 
-    public static StudyUnit getCourse(AppCompatActivity activity, Bundle savedInstanceState) {
+    public static StudyUnit getStudyUnit(AppCompatActivity activity, Bundle savedInstanceState) {
         String courseAsString;
         if (savedInstanceState == null) {
             Bundle extras = activity.getIntent().getExtras();

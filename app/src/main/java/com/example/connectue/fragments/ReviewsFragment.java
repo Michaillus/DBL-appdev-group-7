@@ -71,9 +71,9 @@ public class ReviewsFragment extends Fragment {
     private FragmentManager fragmentManager;
 
     /**
-     * Course model of the opened page.
+     * Study unit model of the opened page.
      */
-    StudyUnit course;
+    StudyUnit studyUnit;
 
     public ReviewsFragment() {
         // Default constructor
@@ -91,18 +91,18 @@ public class ReviewsFragment extends Fragment {
         binding = FragmentReviewsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Initialize the course.
-        course = retrieveCourse();
+        // Initialize the study unit.
+        studyUnit = retrieveStudyUnit();
 
         // Define reviews recycler view.
         RecyclerView rewievsRecyclerView = binding.recyclerViewReview;
 
         // Initialize database post manager.
         reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
-                course.getReviewCollectionName(),
-                course.getReviewLikeCollectionName(),
-                course.getReviewDislikeCollectionName(),
-                course.getReviewCommentCollectionName());
+                studyUnit.getReviewCollectionName(),
+                studyUnit.getReviewLikeCollectionName(),
+                studyUnit.getReviewDislikeCollectionName(),
+                studyUnit.getReviewCommentCollectionName());
 
         // Initializing the list of posts in the feed.
         List<Review> reviewList = new ArrayList<>();
@@ -123,7 +123,7 @@ public class ReviewsFragment extends Fragment {
     }
 
     private void initRecyclerView(List<Review> reviewList, RecyclerView reviewsRecyclerview) {
-        reviewAdapter = new ReviewAdapter(reviewList, fragmentManager, course);
+        reviewAdapter = new ReviewAdapter(reviewList, fragmentManager, studyUnit);
         reviewsRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
         reviewsRecyclerview.setHasFixedSize(false);
         reviewsRecyclerview.setAdapter(reviewAdapter);
@@ -132,7 +132,7 @@ public class ReviewsFragment extends Fragment {
     private void loadReviews(List<Review> reviewList) {
         int reviewsPerChunk = 6;
 
-        reviewManager.downloadRecent(course.getId(), reviewsPerChunk, new ItemDownloadCallback<List<Review>>() {
+        reviewManager.downloadRecent(studyUnit.getId(), reviewsPerChunk, new ItemDownloadCallback<List<Review>>() {
             @Override
             public void onSuccess(List<Review> data) {
                 reviewList.addAll(data);
@@ -157,8 +157,8 @@ public class ReviewsFragment extends Fragment {
                     Log.i(TAG, "User is allowed to add a review");
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-                        Log.e(TAG, course.studyUnitToString());
-                        intent.putExtra("course", course.studyUnitToString());
+                        Log.e(TAG, studyUnit.studyUnitToString());
+                        intent.putExtra("course", studyUnit.studyUnitToString());
                         startActivity(intent);
                     });
                     addReviewBtn.setVisibility(View.VISIBLE);
@@ -181,14 +181,14 @@ public class ReviewsFragment extends Fragment {
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
                     // User is a student
-                    reviewManager.hasUserReviewedStudyUnit(course.getId(), userId, new ItemExistsCallback() {
+                    reviewManager.hasUserReviewedStudyUnit(studyUnit.getId(), userId, new ItemExistsCallback() {
                         @Override
                         public void onSuccess(boolean exists) {
                             if (!exists) {
-                                // User is a student and has no reviews on the course
+                                // User is a student and has no reviews on the study unit
                                 callback.onSuccess(true);
                             } else {
-                                // User has a review on the course
+                                // User has a review on the study unit
                                 callback.onSuccess(false);
                             }
                         }
@@ -237,12 +237,12 @@ public class ReviewsFragment extends Fragment {
     }
 
     /**
-     * Retrieves the course model of current page.
+     * Retrieves the study unit model of current page.
      */
-    private StudyUnit retrieveCourse() {
-        StudyUnitViewActivity courseViewActivity = (StudyUnitViewActivity) getActivity();
-        if (courseViewActivity != null) {
-            return courseViewActivity.getStudyUnit();
+    private StudyUnit retrieveStudyUnit() {
+        StudyUnitViewActivity studyUnitViewActivity = (StudyUnitViewActivity) getActivity();
+        if (studyUnitViewActivity != null) {
+            return studyUnitViewActivity.getStudyUnit();
         } else {
             return new StudyUnit("0", "0", StudyUnit.StudyUnitType.COURSE);
         }
