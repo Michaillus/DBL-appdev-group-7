@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 
 public class ActivityUtils {
 
@@ -14,7 +14,7 @@ public class ActivityUtils {
      */
     private static final String TAG = "ActivityUtils";
 
-    public static Course getCourse(AppCompatActivity activity, Bundle savedInstanceState) {
+    public static StudyUnit getCourse(AppCompatActivity activity, Bundle savedInstanceState) {
         String courseAsString;
         if (savedInstanceState == null) {
             Bundle extras = activity.getIntent().getExtras();
@@ -31,6 +31,6 @@ public class ActivityUtils {
             courseAsString = "0#0#0#0#0#0course";
             Log.e(TAG, "No course passed to the activity");
         }
-        return Course.stringToCourse(courseAsString);
+        return StudyUnit.stringToStudyUnit(courseAsString);
     }
 }

@@ -18,7 +18,7 @@ import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.managers.CourseReviewManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.ItemDownloadCallback;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.CourseReview;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
@@ -39,10 +39,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     /**
      * Study unit of the current page.
      */
-    private final Course course;
+    private final StudyUnit course;
 
     public ReviewAdapter(List<CourseReview> courseReviewList, FragmentManager fragmentManager,
-                         Course course) {
+                         StudyUnit course) {
         this.courseReviewList = courseReviewList;
         this.fragmentManager = fragmentManager;
         this.course = course;

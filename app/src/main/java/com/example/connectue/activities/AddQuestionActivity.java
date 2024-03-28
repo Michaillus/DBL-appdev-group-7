@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.connectue.managers.QuestionManager;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.Question;
 import com.example.connectue.utils.ActivityUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,7 +36,7 @@ public class AddQuestionActivity extends AppCompatActivity {
     /**
      * Course for which question is added.
      */
-    private Course course;
+    private StudyUnit course;
 
     @SuppressLint("MissingInflatedId")
     @Override

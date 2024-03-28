@@ -1,6 +1,9 @@
 package com.example.connectue.model;
 
-public class Course {
+/**
+ * Model for a study unit, there are two types of study units - courses and majors.
+ */
+public class StudyUnit {
 
     /**
      * Name of courses collection in the database.
@@ -8,22 +11,22 @@ public class Course {
     public static final String COURSE_COLLECTION_NAME = "courses";
 
     /**
-     * Name of review collection in the database.
+     * Name of study unit review collection in the database.
      */
     private static final String COURSE_REVIEW_COLLECTION_NAME = "course-reviews";
 
     /**
-     * Name of review likes collection in the database.
+     * Name of course review likes collection in the database.
      */
     private static final String COURSE_REVIEW_LIKE_COLLECTION_NAME = "course-reviews-likes";
 
     /**
-     * Name of review dislikes collection in the database.
+     * Name of course review dislikes collection in the database.
      */
     private static final String COURSE_REVIEW_DISLIKE_COLLECTION_NAME = "course-reviews-dislikes";
 
     /**
-     * Name of review comments collection in the database.
+     * Name of course review comments collection in the database.
      */
     private static final String COURSE_REVIEW_COMMENT_COLLECTION_NAME = "course-reviews-comments";
 
@@ -35,69 +38,69 @@ public class Course {
     public static final String MAJOR_COLLECTION_NAME = "majors";
 
     /**
-     * Name of review collection in the database.
+     * Name of major review collection in the database.
      */
     private static final String MAJOR_REVIEW_COLLECTION_NAME = "major-reviews";
 
     /**
-     * Name of review likes collection in the database.
+     * Name of major review likes collection in the database.
      */
     private static final String MAJOR_REVIEW_LIKE_COLLECTION_NAME = "major-reviews-likes";
 
     /**
-     * Name of review dislikes collection in the database.
+     * Name of major review dislikes collection in the database.
      */
     private static final String MAJOR_REVIEW_DISLIKE_COLLECTION_NAME = "major-reviews-dislikes";
 
     /**
-     * Name of review comments collection in the database.
+     * Name of major review comments collection in the database.
      */
     private static final String MAJOR_REVIEW_COMMENT_COLLECTION_NAME = "major-reviews-comments";
 
 
 
     /**
-     * Name of course name attribute in the courses collection.
+     * Name of study unit name attribute in the courses collection.
      */
     public static final String NAME_ATTRIBUTE = "name";
 
     /**
-     * Name of course code attribute in the courses collection.
+     * Name of study code attribute in the courses collection.
      */
     public static final String CODE_ATTRIBUTE = "code";
 
     /**
-     * Name of rating sum attribute in the courses collection.
+     * Name of study unit rating sum attribute in the courses collection.
      */
     public static final String RATING_SUM_ATTRIBUTE = "ratingSum";
 
     /**
-     * Name of rating number attribute in the courses collection.
+     * Name of study unit rating number attribute in the courses collection.
      */
     public static final String RATING_NUMBER_ATTRIBUTE = "ratingNumber";
 
     /**
-     * Id of the course.
+     * Id of the study unit.
      */
     private String id;
 
     /**
-     * Full name of the course.
+     * Full name of the study unit.
      */
     private String name;
 
     /**
-     * Code (abbreviation) of the course.
+     * Code (abbreviation) of the study unit.
      */
     private String code;
 
     /**
-     * Sum of stars over all ratings of the course.
+     * Sum of stars over all ratings of the study unit.
      */
     private long ratingSum;
 
     /**
-     * Number of ratings on the course.
+     * Number of ratings on the study unit.
      */
     private long ratingNumber;
 
@@ -113,12 +116,27 @@ public class Course {
      */
     private StudyUnitType type;
 
-    public Course(String name, String code, StudyUnitType type) {
+    /**
+     * Constructor for a study unit that does not (yet) exist in the database.
+     * @param name Name of the study unit.
+     * @param code Code (abbreviation) of the study unit.
+     * @param type Type of the study unit.
+     */
+    public StudyUnit(String name, String code, StudyUnitType type) {
         this("0", name, code, 0L, 0L, type);
     }
 
-    public Course(String id, String name, String code, Long ratingSum,
-                  Long ratingNumber, StudyUnitType type) {
+    /**
+     * Constructor for a study unit existing in the database.
+     * @param id Database id of the study unit.
+     * @param name Name of the study unit.
+     * @param code Code (abbreviation) of the study unit.
+     * @param ratingSum Sum of the star ratings for the study unit.
+     * @param ratingNumber Number of ratings given to the study unit.
+     * @param type Type of the study unit - course or major.
+     */
+    public StudyUnit(String id, String name, String code, Long ratingSum,
+                     Long ratingNumber, StudyUnitType type) {
         this.name = name;
         this.code = code;
         this.id = id;
@@ -128,7 +146,7 @@ public class Course {
     }
 
     /**
-     * Returns the id of the course.
+     * Returns the id of the study unit.
      * @return courseId.
      */
     public String getId() {
@@ -136,7 +154,7 @@ public class Course {
     }
 
     /**
-     * Returns the name of the course.
+     * Returns the name of the study unit.
      * @return courseName.
      */
     public String getName() {
@@ -144,7 +162,7 @@ public class Course {
     }
 
     /**
-     * Returns the code of the course.
+     * Returns the code of the study unit.
      * @return courseCode;
      */
     public String getCode() {
@@ -152,7 +170,7 @@ public class Course {
     }
 
     /**
-     * Getter for sum of ratings of the course.
+     * Getter for sum of ratings of the study unit.
      * @return Sum of ratings.
      */
     public long getRatingSum() {
@@ -160,7 +178,7 @@ public class Course {
     }
 
     /**
-     * Setter for sum of ratings of the course.
+     * Setter for sum of ratings of the study unit.
      * @ratingSum Sum of ratings.
      */
     public void setRatingSum(long ratingSum) {
@@ -168,7 +186,7 @@ public class Course {
     }
 
     /**
-     * Getter for number of ratings of the course.
+     * Getter for number of ratings of the study unit.
      * @return Number of ratings.
      */
     public long getRatingNumber() {
@@ -176,7 +194,7 @@ public class Course {
     }
 
     /**
-     * Setter for number of ratings of the course.
+     * Setter for number of ratings of the study unit.
      * @param ratingNumber Number of ratings.
      */
     public void setRatingNumber(long ratingNumber) {
@@ -184,8 +202,8 @@ public class Course {
     }
 
     /**
-     * Calculates average rating of the course.
-     * @return Average rating of the course.
+     * Calculates average rating of the study unit.
+     * @return Average rating.
      */
     public Float getAverageRating() {
         if (ratingNumber == 0) {
@@ -204,10 +222,10 @@ public class Course {
     }
 
     /**
-     * Converts course model to a string.
-     * @return String representing the course.
+     * Converts study unit model to a string.
+     * @return String representing the study unit.
      */
-    public String courseToString() {
+    public String studyUnitToString() {
         String s = id + "#" + name + "#" + code + "#" + ratingSum + "#" + ratingNumber + "#";
         if (type == StudyUnitType.MAJOR) {
             s += "major";
@@ -218,11 +236,11 @@ public class Course {
     }
 
     /**
-     * Converts string representing a course to the course model.
-     * @param string String representing a course.
-     * @return Course model.
+     * Converts string representing a study unit to the study unit model.
+     * @param string String representing a study unit.
+     * @return Study unit model.
      */
-    public static Course stringToCourse(String string) {
+    public static StudyUnit stringToStudyUnit(String string) {
         String[] parts = string.split("#");
         String id = parts[0];
         String name = parts[1];
@@ -235,9 +253,13 @@ public class Course {
         } else {
             type = StudyUnitType.MAJOR;
         }
-        return new Course(id, name, code, ratingSum, ratingNumber, type);
+        return new StudyUnit(id, name, code, ratingSum, ratingNumber, type);
     }
 
+    /**
+     * Getter for the name of collection in the database that stores study units of {@code type}.
+     * @return Name of collection of the study unit.
+     */
     public String getStudyUnitCollectionName() {
         if (type == StudyUnitType.COURSE) {
             return COURSE_COLLECTION_NAME;
@@ -246,6 +268,11 @@ public class Course {
         }
     }
 
+    /**
+     * Getter for the name of review collection in the database that stores reviews for
+     * study units of {@code type}.
+     * @return Name of collection of reviews of the study unit.
+     */
     public String getReviewCollectionName() {
         if (type == StudyUnitType.COURSE) {
             return COURSE_REVIEW_COLLECTION_NAME;
@@ -254,6 +281,11 @@ public class Course {
         }
     }
 
+    /**
+     * Getter for the name of like collection in the database that stores likes for
+     * study units of {@code type}.
+     * @return Name of collection of likes of the study unit.
+     */
     public String getReviewLikeCollectionName() {
         if (type == StudyUnitType.COURSE) {
             return COURSE_REVIEW_LIKE_COLLECTION_NAME;
@@ -262,6 +294,11 @@ public class Course {
         }
     }
 
+    /**
+     * Getter for the name of dislike collection in the database that stores dislikes for
+     * study units of {@code type}.
+     * @return Name of collection of dislikes of the study unit.
+     */
     public String getReviewDislikeCollectionName() {
         if (type == StudyUnitType.COURSE) {
             return COURSE_REVIEW_DISLIKE_COLLECTION_NAME;
@@ -270,6 +307,11 @@ public class Course {
         }
     }
 
+    /**
+     * Getter for the name of comment collection in the database that stores comments for
+     * study units of {@code type}.
+     * @return Name of collection of comments of the study unit.
+     */
     public String getReviewCommentCollectionName() {
         if (type == StudyUnitType.COURSE) {
             return COURSE_REVIEW_COMMENT_COLLECTION_NAME;

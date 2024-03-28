@@ -31,7 +31,7 @@
             android:id="@+id/materialCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="I made some course notes for 2IT80!"
+            android:text="I made some studyUnit notes for 2IT80!"
             android:layout_below="@+id/uName"
             android:layout_marginTop="10dp"/>
 

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.connectue.R;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
@@ -62,7 +62,7 @@ public class SearchActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
                     @Override
                     public void onSuccess(List<Object> results) {
-                        List<Course> foundCourses = new ArrayList<>();
+                        List<StudyUnit> foundCourses = new ArrayList<>();
 
                         // deal with the results
                         for (Object result : results) {
@@ -74,9 +74,9 @@ public class SearchActivity extends AppCompatActivity {
                                     long ratingSum = document.getLong("ratingSum");
                                     long ratingNumber = document.getLong("ratingNumber");
 
-                                    foundCourses.add(new Course(document.getId(), courseName,
+                                    foundCourses.add(new StudyUnit(document.getId(), courseName,
                                             courseCode, ratingSum, ratingNumber,
-                                            Course.StudyUnitType.COURSE));
+                                            StudyUnit.StudyUnitType.COURSE));
                                     // replace the text in card view by course code of the found course
                                     courseTextView.setText(courseCode);
                                 }

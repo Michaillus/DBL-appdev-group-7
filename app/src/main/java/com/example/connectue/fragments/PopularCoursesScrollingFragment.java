@@ -18,7 +18,7 @@ import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.CourseManager;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
 
     FirebaseFirestore db;
 
-    List<Course> courses;
+    List<StudyUnit> courses;
 
     Object courseName;
 
@@ -52,13 +52,13 @@ public class PopularCoursesScrollingFragment extends Fragment {
         LinearLayout scrollViewLayout = view.findViewById(R.id.scrollViewLayout);
 
         CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
-                Course.COURSE_COLLECTION_NAME);
-        courseManager.downloadAll(new ItemDownloadCallback<List<Course>>() {
+                StudyUnit.COURSE_COLLECTION_NAME);
+        courseManager.downloadAll(new ItemDownloadCallback<List<StudyUnit>>() {
             @Override
-            public void onSuccess(List<Course> courses) {
+            public void onSuccess(List<StudyUnit> courses) {
                 Log.i(TAG, "Courses are retrieved successfully");
                 //add fetched courses to list of Course observers
-                for (Course course : courses) {
+                for (StudyUnit course : courses) {
                     //Remember: inflater is used to instantiate layout XML files into their
                     //corresponding View objects in the app's user interface.
                     View cardView = inflater.inflate(R.layout.clickable_course, null);
@@ -81,7 +81,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
                         public void onClick(View v) {
                             // Start new activity and pass course id
                             Intent intent = new Intent(getActivity(), CourseViewActivity.class);
-                            intent.putExtra("course", course.courseToString());
+                            intent.putExtra("course", course.studyUnitToString());
                             startActivity(intent);
                         }
                     });

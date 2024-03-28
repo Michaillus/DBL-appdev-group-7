@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.managers.MaterialManager;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.Material;
 import com.example.connectue.utils.ActivityUtils;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,7 +46,7 @@ public class AddMaterialActivity extends AppCompatActivity {
     /**
      * Course for which material is added.
      */
-    private Course course;
+    private StudyUnit course;
 
     private FirebaseFirestore db;
     private Uri selectedPdfUri;

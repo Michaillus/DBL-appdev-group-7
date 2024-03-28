@@ -18,7 +18,7 @@ import com.example.connectue.R;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.CourseManager;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -104,10 +104,10 @@ public class MyCoursesVerticalFragment extends Fragment {
                             for (String courseId: userCoursesObj) {
 
                                 CourseManager courseManager = new CourseManager(FirebaseFirestore.getInstance(),
-                                        Course.COURSE_COLLECTION_NAME);
-                                courseManager.downloadOne(courseId, new ItemDownloadCallback<Course>() {
+                                        StudyUnit.COURSE_COLLECTION_NAME);
+                                courseManager.downloadOne(courseId, new ItemDownloadCallback<StudyUnit>() {
                                     @Override
-                                    public void onSuccess(Course course) {
+                                    public void onSuccess(StudyUnit course) {
                                         //Remember: inflater is used to instantiate layout XML files into their
                                         //corresponding View objects in the app's user interface.
                                         View cardView = inflater.inflate(R.layout.clickable_course, null);
@@ -131,7 +131,7 @@ public class MyCoursesVerticalFragment extends Fragment {
                                             public void onClick(View v) {
                                                 // Start new activity and pass course id
                                                 Intent intent = new Intent(getActivity(), CourseViewActivity.class);
-                                                intent.putExtra("course", course.courseToString()); // Assuming getId() returns the id of the course
+                                                intent.putExtra("course", course.studyUnitToString()); // Assuming getId() returns the id of the course
                                                 startActivity(intent);
                                             }
                                         });

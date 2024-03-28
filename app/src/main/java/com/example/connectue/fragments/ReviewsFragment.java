@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.example.connectue.R;
 import com.example.connectue.activities.AddReviewActivity;
-import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.activities.StudyUnitViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.databinding.FragmentReviewsBinding;
@@ -24,7 +23,7 @@ import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.managers.CourseReviewManager;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.CourseReview;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -73,7 +72,7 @@ public class ReviewsFragment extends Fragment {
     /**
      * Course model of the opened page.
      */
-    Course course;
+    StudyUnit course;
 
     public ReviewsFragment() {
         // Default constructor
@@ -157,8 +156,8 @@ public class ReviewsFragment extends Fragment {
                     Log.i(TAG, "User is allowed to add a review");
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-                        Log.e(TAG, course.courseToString());
-                        intent.putExtra("course", course.courseToString());
+                        Log.e(TAG, course.studyUnitToString());
+                        intent.putExtra("course", course.studyUnitToString());
                         startActivity(intent);
                     });
                     addReviewBtn.setVisibility(View.VISIBLE);
@@ -239,12 +238,12 @@ public class ReviewsFragment extends Fragment {
     /**
      * Retrieves the course model of current page.
      */
-    private Course retrieveCourse() {
+    private StudyUnit retrieveCourse() {
         StudyUnitViewActivity courseViewActivity = (StudyUnitViewActivity) getActivity();
         if (courseViewActivity != null) {
             return courseViewActivity.getCourse();
         } else {
-            return new Course("0", "0", Course.StudyUnitType.COURSE);
+            return new StudyUnit("0", "0", StudyUnit.StudyUnitType.COURSE);
         }
     }
 

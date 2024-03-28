@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.CourseReview;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.AggregateQuery;
@@ -60,7 +60,7 @@ public class CourseReviewManager extends InteractableManager<CourseReview> {
      * @param callback Callback that is called when the upload of review is finished or an
      *                 error occurred.
      */
-    public void addReview(CourseReview courseReview, Course course, ItemUploadCallback callback) {
+    public void addReview(CourseReview courseReview, StudyUnit course, ItemUploadCallback callback) {
         upload(courseReview, new ItemUploadCallback() {
             @Override
             public void onSuccess() {

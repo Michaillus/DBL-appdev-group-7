@@ -14,11 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.connectue.R;
-import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.activities.MajorViewActivity;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.CourseManager;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 
@@ -63,13 +62,13 @@ public class MajorsVerticalScrollingFragment extends Fragment {
         LinearLayout scrollViewLayout = view.findViewById(R.id.majorsScrollViewLayout);
 
         CourseManager majorManager = new CourseManager(FirebaseFirestore.getInstance(),
-                Course.MAJOR_COLLECTION_NAME);
+                StudyUnit.MAJOR_COLLECTION_NAME);
 
-        majorManager.downloadAll(new ItemDownloadCallback<List<Course>>() {
+        majorManager.downloadAll(new ItemDownloadCallback<List<StudyUnit>>() {
             @Override
-            public void onSuccess(List<Course> majors) {
+            public void onSuccess(List<StudyUnit> majors) {
                 Log.i(TAG, "Majors are retrieved successfully");
-                for (Course major : majors) {
+                for (StudyUnit major : majors) {
                     //Remember: inflater is used to instantiate layout XML files into their
                     //corresponding View objects in the app's user interface.
                     View cardView = inflater.inflate(R.layout.clickable_course, null);
@@ -92,7 +91,7 @@ public class MajorsVerticalScrollingFragment extends Fragment {
                         public void onClick(View v) {
                             // Start new activity and pass course id
                             Intent intent = new Intent(getActivity(), MajorViewActivity.class);
-                            intent.putExtra("course", major.courseToString());
+                            intent.putExtra("course", major.studyUnitToString());
                             startActivity(intent);
                         }
                     });

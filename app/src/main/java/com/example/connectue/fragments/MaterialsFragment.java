@@ -21,7 +21,7 @@ import com.example.connectue.databinding.FragmentMaterialsBinding;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.MaterialManager;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.model.Course;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.Material;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -70,7 +70,7 @@ public class MaterialsFragment extends Fragment {
     /**
      * Course model of the opened page.
      */
-    Course course;
+    StudyUnit course;
 
     public MaterialsFragment() {
         // Default constructor
@@ -153,7 +153,7 @@ public class MaterialsFragment extends Fragment {
                 if (data.isVerified()) {
                     addQuestionBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddMaterialActivity.class);
-                        intent.putExtra("course", course.courseToString());
+                        intent.putExtra("course", course.studyUnitToString());
                         startActivity(intent);
                     });
                 } else {
@@ -194,12 +194,12 @@ public class MaterialsFragment extends Fragment {
     /**
      * Retrieves the course model of current page.
      */
-    private Course retrieveCourse() {
+    private StudyUnit retrieveCourse() {
         CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
         if (courseViewActivity != null) {
             return courseViewActivity.getCourse();
         } else {
-            return new Course("0", "0", Course.StudyUnitType.COURSE);
+            return new StudyUnit("0", "0", StudyUnit.StudyUnitType.COURSE);
         }
     }
 
