@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/pageHeader"
         android:layout_alignParentTop="true"
-        android:background="@color/Design4"
+        style="@style/headerBackground"
         android:paddingLeft="30dp"
         android:paddingRight="30dp">
         >
@@ -33,7 +33,7 @@
             android:layout_below="@+id/Channel_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Design4"
+            style="@style/headerBackground"
             app:tabTextColor="@color/Design2"
             app:tabSelectedTextColor="@color/Design2"
             app:tabIndicatorColor="@color/Design2"
@@ -62,6 +62,7 @@
 
         <TextView
             android:id="@+id/popular"
+            style="@style/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchEditText"
@@ -69,6 +70,7 @@
             android:textSize="17dp"
             android:text="@string/popular"/>
         <TextView
+            style="@style/textColor"
             android:id="@+id/majors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,6 +94,7 @@
 
         <TextView
             android:id="@+id/mycourses"
+            style="@style/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/fragmentContainerViewPopCourses"
@@ -123,7 +126,7 @@
             android:id="@+id/search_button"
             android:layout_width="95dp"
             android:layout_height="40dp"
-            style="@style/buttonColor"
+            style="@style/buttonStyle"
             android:layout_above="@+id/searchEditText"
             android:layout_marginLeft="0dp"
             android:layout_marginBottom="-62dp"

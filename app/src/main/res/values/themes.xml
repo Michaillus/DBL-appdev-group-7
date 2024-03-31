@@ -20,12 +20,25 @@
     <style name="Theme.ConnecTue" parent="Base.Theme.ConnecTue">
     </style>
 
-    <style name="buttonColor">
+    <style name="buttonStyle">
         <item name="android:backgroundTint">#FF928E</item>
+        <item name="android:textColor">@color/Design2</item>
     </style>
     <style name="background"><item name="android:background">#FFFAF1</item></style>
     <style name="cardBackground">
         <item name="strokeColor">@color/Design4</item>
         <item name="cardBackgroundColor">@color/Design4</item>
+    </style>
+
+    <style name="headerBackground">
+        <item name="android:background">@color/Design4</item>
+    </style>
+
+    <style name="textColor">
+        <item name="android:textColor">#3E3E3E</item>
+    </style>
+
+    <style name="imageColor">
+
     </style>
 </resources>
