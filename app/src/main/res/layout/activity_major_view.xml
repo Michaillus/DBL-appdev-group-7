@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Design2"
+    style="@style/background"
     tools:context=".activities.CourseViewActivity">
 
     <FrameLayout
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/Design4"
+        style="@style/headerBackground"
         android:paddingTop="15dp">
 
         <RatingBar
@@ -82,7 +82,7 @@
             android:layout_below="@+id/rating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Design4"
+            style="@style/headerBackground"
             app:tabTextColor="@color/Design2"
             app:tabSelectedTextColor="@color/Design2"
             app:tabIndicatorColor="@color/Design2"
@@ -107,7 +107,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/baseline_arrow_back_ios_new_24"
         android:layout_alignParentBottom="true"
-        style="@style/buttonColor"
+        style="@style/buttonStyle"
         app:tint="@color/Design2"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"

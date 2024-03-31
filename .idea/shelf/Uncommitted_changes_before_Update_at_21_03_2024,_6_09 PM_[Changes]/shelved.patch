@@ -1,0 +1,256 @@
+Index: app/src/main/res/layout/fragment_channels.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    tools:context=\".ChannelsFragment\"\n    style=\"@style/background\"\n    android:padding=\"30dp\">\n    <TextView\n        android:id=\"@+id/popular\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@+id/searchEditText\"\n        android:layout_marginTop=\"35dp\"\n        android:textSize=\"17dp\"\n        android:text=\"@string/popular\"/>\n    <TextView\n        android:id=\"@+id/majors\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@+id/searchEditText\"\n        android:layout_marginTop=\"35dp\"\n        android:textSize=\"17dp\"\n        android:text=\"@string/majors\"/>\n    <androidx.fragment.app.FragmentContainerView\n        android:layout_below=\"@+id/majors\"\n        android:layout_marginTop=\"10dp\"\n        android:id=\"@+id/fragmentContainerViewMajors\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\" />\n\n    <androidx.fragment.app.FragmentContainerView\n        android:layout_below=\"@+id/popular\"\n        android:id=\"@+id/fragmentContainerViewPopCourses\"\n        android:layout_width=\"match_parent\"\n        android:layout_marginTop=\"10dp\"\n        android:layout_height=\"100dp\"/>\n\n    <TextView\n        android:id=\"@+id/mycourses\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@+id/fragmentContainerViewPopCourses\"\n        android:layout_marginTop=\"20dp\"\n        android:textSize=\"17dp\"\n        android:text=\"@string/my_courses\"/>\n\n    <androidx.fragment.app.FragmentContainerView\n        android:id=\"@+id/fragmentContainerViewMyCourses\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:layout_below=\"@+id/mycourses\"\n        android:layout_marginTop=\"10dp\" />\n\n    <EditText\n        android:id=\"@+id/searchEditText\"\n        style=\"@android:style/Widget.AutoCompleteTextView\"\n        android:layout_width=\"200dp\"\n        android:layout_height=\"50dp\"\n        android:layout_below=\"@+id/Channel_title\"\n        android:layout_marginStart=\"16dp\"\n        android:layout_marginTop=\"16dp\"\n        android:layout_marginEnd=\"16dp\"\n        android:layout_marginBottom=\"16dp\"\n        android:hint=\"Search...\"\n        android:inputType=\"text\" />\n\n\n    <Button\n        android:id=\"@+id/search_button\"\n        android:layout_width=\"95dp\"\n        android:layout_height=\"40dp\"\n        android:layout_above=\"@+id/searchEditText\"\n        android:layout_marginLeft=\"0dp\"\n        android:layout_marginBottom=\"-62dp\"\n        android:textColor=\"@android:color/background_light\"\n        android:layout_toRightOf=\"@id/searchEditText\"\n        android:text=\"Search\"/>\n\n    <ListView\n        android:id=\"@+id/searchListView\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:layout_below=\"@id/searchEditText\"\n        android:labelFor=\"@+id/searchEditText\"\n        android:visibility=\"gone\" />\n\n\n    <TextView\n        android:id=\"@+id/Channel_title\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentTop=\"true\"\n        android:text=\"@string/channels\"\n        android:textSize=\"32sp\"\n        android:layout_marginTop=\"20dp\" />\n\n    <com.google.android.material.bottomnavigation.BottomNavigationView\n        android:id=\"@+id/coursemenu\"\n        android:layout_width=\"160dp\"\n        android:layout_height=\"70dp\"\n        android:layout_alignParentTop=\"true\"\n        style=\"@style/background\"\n        android:layout_alignParentRight=\"true\"\n        app:menu=\"@menu/courses_major_nav\" >\n\n    </com.google.android.material.bottomnavigation.BottomNavigationView>\n\n\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_channels.xml b/app/src/main/res/layout/fragment_channels.xml
+--- a/app/src/main/res/layout/fragment_channels.xml	
++++ b/app/src/main/res/layout/fragment_channels.xml	
+@@ -4,108 +4,157 @@
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+-    tools:context=".ChannelsFragment"
+-    style="@style/background"
+-    android:padding="30dp">
+-    <TextView
+-        android:id="@+id/popular"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_below="@+id/searchEditText"
+-        android:layout_marginTop="35dp"
+-        android:textSize="17dp"
+-        android:text="@string/popular"/>
+-    <TextView
+-        android:id="@+id/majors"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_below="@+id/searchEditText"
+-        android:layout_marginTop="35dp"
+-        android:textSize="17dp"
+-        android:text="@string/majors"/>
+-    <androidx.fragment.app.FragmentContainerView
+-        android:layout_below="@+id/majors"
+-        android:layout_marginTop="10dp"
+-        android:id="@+id/fragmentContainerViewMajors"
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent" />
++    tools:context=".fragmets.ChannelsFragment"
++    style="@style/background">
++
++    <RelativeLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:id="@+id/pageHeader"
++        android:layout_alignParentTop="true"
++        android:background="@color/Design4"
++        android:paddingLeft="30dp"
++        android:paddingRight="30dp">
++        >
++
++        <TextView
++            android:id="@+id/Channel_title"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_alignParentTop="true"
++            android:textColor="@color/Design2"
++            android:text="@string/channels"
++            android:textSize="32sp"
++            android:paddingBottom="10dp"
++            android:layout_marginTop="20dp" />
++
++        <com.google.android.material.tabs.TabLayout
++            android:id="@+id/tablayout_channel_menu"
++            android:layout_below="@+id/Channel_title"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:background="@color/Design4"
++            app:tabTextColor="@color/Design2"
++            app:tabSelectedTextColor="@color/Design2"
++            app:tabIndicatorColor="@color/Design2"
++            app:tabMode="fixed"
++            app:tabGravity="fill">
++            <com.google.android.material.tabs.TabItem
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="Courses"
++
++                />
++            <com.google.android.material.tabs.TabItem
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="Majors"
++
++                />
++        </com.google.android.material.tabs.TabLayout>
++    </RelativeLayout>
++
++    <RelativeLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:layout_below="@id/pageHeader"
++        android:padding="30dp">
++
++        <TextView
++            android:id="@+id/popular"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_below="@+id/searchEditText"
++            android:layout_marginTop="35dp"
++            android:textSize="17dp"
++            android:text="@string/popular"/>
++        <TextView
++            android:id="@+id/majors"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_below="@+id/searchEditText"
++            android:layout_marginTop="35dp"
++            android:textSize="17dp"
++            android:text="@string/majors"/>
++        <androidx.fragment.app.FragmentContainerView
++            android:layout_below="@+id/majors"
++            android:layout_marginTop="10dp"
++            android:id="@+id/fragmentContainerViewMajors"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent" />
+ 
+-    <androidx.fragment.app.FragmentContainerView
+-        android:layout_below="@+id/popular"
+-        android:id="@+id/fragmentContainerViewPopCourses"
+-        android:layout_width="match_parent"
+-        android:layout_marginTop="10dp"
+-        android:layout_height="100dp"/>
++        <androidx.fragment.app.FragmentContainerView
++            android:layout_below="@+id/popular"
++            android:id="@+id/fragmentContainerViewPopCourses"
++            android:layout_width="match_parent"
++            android:layout_marginTop="10dp"
++            android:layout_height="100dp"/>
+ 
+-    <TextView
+-        android:id="@+id/mycourses"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_below="@+id/fragmentContainerViewPopCourses"
+-        android:layout_marginTop="20dp"
+-        android:textSize="17dp"
+-        android:text="@string/my_courses"/>
++        <TextView
++            android:id="@+id/mycourses"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_below="@+id/fragmentContainerViewPopCourses"
++            android:layout_marginTop="20dp"
++            android:textSize="17dp"
++            android:text="@string/my_courses"/>
+ 
+-    <androidx.fragment.app.FragmentContainerView
+-        android:id="@+id/fragmentContainerViewMyCourses"
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:layout_below="@+id/mycourses"
+-        android:layout_marginTop="10dp" />
++        <androidx.fragment.app.FragmentContainerView
++            android:id="@+id/fragmentContainerViewMyCourses"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:layout_below="@+id/mycourses"
++            android:layout_marginTop="10dp" />
+ 
+-    <EditText
+-        android:id="@+id/searchEditText"
+-        style="@android:style/Widget.AutoCompleteTextView"
+-        android:layout_width="200dp"
+-        android:layout_height="50dp"
+-        android:layout_below="@+id/Channel_title"
+-        android:layout_marginStart="16dp"
+-        android:layout_marginTop="16dp"
+-        android:layout_marginEnd="16dp"
+-        android:layout_marginBottom="16dp"
+-        android:hint="Search..."
+-        android:inputType="text" />
++        <EditText
++            android:id="@+id/searchEditText"
++            style="@android:style/Widget.AutoCompleteTextView"
++            android:layout_width="200dp"
++            android:layout_height="50dp"
++            android:layout_marginStart="16dp"
++            android:layout_marginTop="16dp"
++            android:layout_marginEnd="16dp"
++            android:layout_marginBottom="16dp"
++            android:hint="Search..."
++            android:inputType="text" />
+ 
+ 
+-    <Button
+-        android:id="@+id/search_button"
+-        android:layout_width="95dp"
+-        android:layout_height="40dp"
+-        android:layout_above="@+id/searchEditText"
+-        android:layout_marginLeft="0dp"
+-        android:layout_marginBottom="-62dp"
+-        android:textColor="@android:color/background_light"
+-        android:layout_toRightOf="@id/searchEditText"
+-        android:text="Search"/>
++        <Button
++            android:id="@+id/search_button"
++            android:layout_width="95dp"
++            android:layout_height="40dp"
++            style="@style/buttonColor"
++            android:layout_above="@+id/searchEditText"
++            android:layout_marginBottom="-62dp"
++            android:textColor="@android:color/background_light"
++            android:layout_toRightOf="@id/searchEditText"
++            android:text="Search"/>
+ 
+     <ListView
+         android:id="@+id/searchListView"
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
+         android:layout_below="@id/searchEditText"
+         android:labelFor="@+id/searchEditText"
+-        android:visibility="gone" />
++        android:visibility="gone"
++        android:background="@color/Design2"/>
++
+ 
+ 
+-    <TextView
+-        android:id="@+id/Channel_title"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_alignParentTop="true"
+-        android:text="@string/channels"
+-        android:textSize="32sp"
+-        android:layout_marginTop="20dp" />
+ 
+-    <com.google.android.material.bottomnavigation.BottomNavigationView
+-        android:id="@+id/coursemenu"
+-        android:layout_width="160dp"
+-        android:layout_height="70dp"
+-        android:layout_alignParentTop="true"
+-        style="@style/background"
+-        android:layout_alignParentRight="true"
+-        app:menu="@menu/courses_major_nav" >
++<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
++<!--            android:id="@+id/coursemenu"-->
++<!--            android:layout_width="160dp"-->
++<!--            android:layout_height="70dp"-->
++<!--            android:layout_alignParentTop="true"-->
++<!--            style="@style/background"-->
++<!--            android:layout_alignParentRight="true"-->
++<!--            app:menu="@menu/courses_major_nav" >-->
+ 
+-    </com.google.android.material.bottomnavigation.BottomNavigationView>
++<!--        </com.google.android.material.bottomnavigation.BottomNavigationView>-->
++    </RelativeLayout>
++
++
+ 
+ 
+ </RelativeLayout>
+\ No newline at end of file
