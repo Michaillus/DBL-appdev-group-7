@@ -201,19 +201,24 @@ public class CourseViewActivity extends AppCompatActivity {
                     if (document.exists()) {
                         String courseCode = (String) document.get("courseCode");
                         String courseName = (String) document.get("courseName");
-                        List<Long> ratings = (List<Long>) document.get("courseRating");
+                        List<Long> ratings = (List<Long>) document.get("courseRatings");
 
                         course = new Course(courseName, courseCode, courseId);
                         int count = 0;
 
-                        for (Long ratingValue : ratings) {
-                            Log.d(TAG, ratingValue.toString());
-                            int intValue = ratingValue.intValue(); // Convert Long to int
-                            course.addRating(intValue);
-                            averageRating += ratingValue.floatValue();
-                            count += 1;
-                            Log.d(TAG, "Rating: " + intValue);
+                        if (ratings != null) {
+                            for (Long ratingValue : ratings) {
+                                Log.d(TAG, ratingValue.toString());
+                                int intValue = ratingValue.intValue(); // Convert Long to int
+                                course.addRating(intValue);
+                                averageRating += ratingValue.floatValue();
+                                count += 1;
+                                Log.d(TAG, "Rating: " + intValue);
+                            }
+                        } else {
+                            averageRating = 0f;
                         }
+
 
                         averageRating /= count;
 

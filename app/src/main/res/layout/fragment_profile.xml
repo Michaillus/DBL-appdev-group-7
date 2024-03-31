@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".fragments.ProfileFragment"
+    style="@style/background">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -18,19 +19,20 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:text="@string/profile_title"
+            style="@style/textColor"
             android:layout_alignParentTop="true"
             android:gravity="left|center"
             android:textSize="32sp" />
 
         <Button
+            style="@style/buttonStyle"
             android:id="@+id/btn_logout"
             android:layout_width="130dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:text="@string/Log_out"
-            android:textColor="@color/textLightMode"
-            android:background="@android:color/transparent"
             android:drawableLeft="@drawable/baseline_exit_to_app_24"
+            android:drawableTint="@color/Design2"
             android:drawablePadding="8dp"/>
     </RelativeLayout>
 
@@ -39,9 +41,10 @@
         android:layout_width="match_parent"
         android:layout_height="290dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/round_profile_card">
+        style="@style/background">
 
         <ImageView
+            style="@style/imageColor"
             android:id="@+id/profilePic"
             android:layout_width="135dp"
             android:layout_height="135dp"
@@ -50,6 +53,7 @@
             android:src="@drawable/baseline_person_24" />
 
         <EditText
+            style="@style/textColor"
             android:id="@+id/text_firstName"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -59,7 +63,6 @@
             android:autofillHints="name"
             android:inputType=""
             android:hint="@string/firstName"
-            android:textColor="@color/textLightMode"
             android:textSize="17sp" />
 
         <EditText
@@ -71,12 +74,13 @@
             android:autofillHints="name"
             android:inputType=""
             android:hint="@string/lastName"
-            android:textColor="@color/textLightMode"
+            style="@style/textColor"
             android:textSize="17sp" />
 
         <TextView
             android:id="@+id/major_title"
             android:layout_width="wrap_content"
+            style="@style/textColor"
             android:layout_height="40dp"
             android:layout_below="@id/text_firstName"
             android:layout_marginStart="10dp"
@@ -95,6 +99,7 @@
             android:layout_marginEnd="6dp"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="6dp"
+            style="@style/textColor"
             android:drawableLeft="@drawable/baseline_email_24"
             android:drawablePadding="8dp"
             android:gravity="center"
@@ -111,7 +116,7 @@
             android:autofillHints=""
             android:hint="@string/email_hint"
             android:editable="false"
-            android:textColor="@color/textLightMode"
+            style="@style/textColor"
             android:textSize="16sp" />
 
         <TextView
@@ -121,6 +126,7 @@
             android:layout_below="@+id/email_title"
             android:layout_marginTop="5dp"
             android:layout_marginStart="8dp"
+            style="@style/textColor"
             android:drawableLeft="@drawable/baseline_call_24"
             android:drawablePadding="8dp"
             android:gravity="center"
@@ -137,7 +143,7 @@
             android:autofillHints="phone"
             android:inputType="phone"
             android:hint="@string/phone_hint"
-            android:textColor="@color/textLightMode"
+            style="@style/textColor"
             android:textSize="16sp" />
 
         <Button
@@ -146,17 +152,18 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            style="@style/textColor"
             android:background="@android:color/transparent"
             android:drawableLeft="@drawable/baseline_edit_24"
             android:text="@string/Edit_button"
-            android:textSize="13sp"
-            android:textColor="@color/textLightMode" />
+            android:textSize="13sp"/>
 
         <Spinner
             android:id="@+id/majorSpinner"
             android:layout_width="110dp"
             android:layout_height="40dp"
             android:textAlignment="textStart"
+            style="@style/textColor"
             android:layout_below="@id/text_firstName"
             android:layout_toEndOf="@+id/major_title" />
 
@@ -165,6 +172,7 @@
             android:layout_width="110dp"
             android:layout_height="40dp"
             android:textAlignment="textStart"
+            style="@style/textColor"
             android:layout_below="@id/majorSpinner"
             android:layout_toEndOf="@+id/major_title"
             />
@@ -177,7 +185,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/post_history"
-        android:textColor="@color/textLightMode"
+        style="@style/textColor"
         android:textSize="16sp"
         android:gravity="left"
         android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
@@ -189,7 +197,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/review_history"
-        android:textColor="@color/textLightMode"
+        style="@style/textColor"
         android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
         android:textSize="16sp"
         android:gravity="left"
@@ -197,14 +205,18 @@
 
 
     <Button
+        android:layout_marginTop="90dp"
         android:id="@+id/btn_deleteAccount"
         android:layout_width="match_parent"
+        style="@style/buttonStyle"
         android:layout_height="wrap_content"
         android:text="@string/delete_account" />
 
     <Button
+        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/buttonStyle"
         android:text="Switch To SUPERMAN mode(I am admin)"
         android:id="@+id/btn_admmin"/>
 

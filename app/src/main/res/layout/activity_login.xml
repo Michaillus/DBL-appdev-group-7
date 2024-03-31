@@ -15,6 +15,7 @@
 
         <EditText
             android:id="@+id/emailETL"
+
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="@string/email"
@@ -39,7 +40,7 @@
     </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:id="@+id/buttonlgn"
-
+        style="@style/buttonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -48,7 +49,7 @@
         android:text="@string/LoginBtnStr"/>
     <Button
         android:id="@+id/buttonregister"
-
+        style="@style/buttonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -61,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:textAlignment="center"
+        style="@style/textColor"
         android:layout_marginBottom="100dp"
         android:text="@string/RegisterTextAccQuery" />
     <TextView
@@ -68,6 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:text="@string/LoginBtnStr"
+        style="@style/textColor"
         android:textSize="32sp"
         android:layout_marginTop="20dp" />
 
@@ -77,6 +80,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/LoginInfo"
         android:textSize="15sp"
+        style="@style/textColor"
         android:layout_marginTop="70dp" />
 
 

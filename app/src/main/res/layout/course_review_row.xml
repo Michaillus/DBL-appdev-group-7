@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:strokeColor="@color/Design2"
+    android:layout_margin="10dp"
     >
 
 
@@ -24,25 +24,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Augustin"
+                style="@style/textColor"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
             <RatingBar
                 android:id="@+id/star"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_toRightOf="@+id/reviewerName"
+                android:background="@null"
                 android:progressTint="@color/Design4"
-                app:srcCompat="@drawable/star"
                 android:scaleX=".6"
-                android:scaleY=".6" />
+                android:scaleY=".6"
+                app:srcCompat="@drawable/star" />
 
             <TextView
                 android:id="@+id/reviewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="16/03/2024" />
+                android:text="16/03/2024"
+                style="@style/textColor"/>
 
         </RelativeLayout>
 
@@ -58,7 +62,8 @@
                 android:id="@+id/reviewDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="I like all courses" />
+                android:text="I like all courses"
+                style="@style/textColor"/>
 
         </LinearLayout>
 
@@ -71,6 +76,7 @@
             >
 
             <ImageButton
+                style="@style/imageColor"
                 android:id="@+id/reviewLikeBtn"
                 android:layout_width="25dp"
                 android:layout_height="45dp"
@@ -84,11 +90,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    style="@style/textColor"
                     android:text="0">
 
             </TextView>
 
             <ImageButton
+                android:layout_marginLeft="10dp"
+                style="@style/imageColor"
                 android:id="@+id/reviewDislikeBtn"
                 android:layout_width="29dp"
                 android:layout_height="match_parent"
@@ -101,11 +110,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                style="@style/textColor"
                 android:text="0">
 
             </TextView>
         </LinearLayout>
-
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_below="@id/visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
 
