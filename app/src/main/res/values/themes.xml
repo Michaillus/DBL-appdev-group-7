@@ -25,6 +25,7 @@
         <item name="android:textColor">@color/Design2</item>
     </style>
     <style name="background"><item name="android:background">#FFFAF1</item></style>
+    <style name="rail_background"><item name="android:background">#FF7557</item></style>
     <style name="cardBackground">
         <item name="strokeColor">@color/Design4</item>
         <item name="cardBackgroundColor">@color/Design4</item>

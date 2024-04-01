@@ -2,6 +2,7 @@ package com.example.connectue.activities;
 
 import androidx.annotation.NonNull;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.connectue.databinding.ActivityCourseViewBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigationrail.NavigationRailView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +42,17 @@ public class CourseViewActivity extends StudyUnitViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTabListener();
+        int orientation = getResources().getConfiguration().orientation;
+        // Inflate layout based on orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setTabListener();
+        } else {
+            setRailListener();
+        }
+
+
+
+
 
         ImageView followIcon = findViewById(R.id.followIcon);
 
@@ -48,6 +60,8 @@ public class CourseViewActivity extends StudyUnitViewActivity {
 
         setFollowIcon(followIcon);
     }
+
+
 
     protected void setBinding() {
         ActivityCourseViewBinding binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
@@ -82,6 +96,26 @@ public class CourseViewActivity extends StudyUnitViewActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+    }
+
+    private void setRailListener() {
+        NavigationRailView navigationRailView = findViewById(R.id.navigation_rail);
+        navigationRailView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_reviews) {
+                replaceFragment(new ReviewsFragment());
+                return true;
+            } else if (item.getItemId() == R.id.nav_questions) {
+                replaceFragment(new QuestionsFragment());
+                return true;
+            } else if (item.getItemId() == R.id.nav_materials) {
+                replaceFragment(new MaterialsFragment());
+                return true;
+            } else {
+                replaceFragment(new ReviewsFragment());
+                return true;
+            }
+        });
+
     }
 
     protected void setFollowButtonListener(ImageView followIcon) {

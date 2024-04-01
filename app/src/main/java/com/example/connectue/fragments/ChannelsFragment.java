@@ -1,6 +1,7 @@
 package com.example.connectue.fragments;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.util.TypedValue;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,6 +28,8 @@ import com.example.connectue.activities.SearchActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigationrail.NavigationRailView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -96,8 +100,20 @@ public class ChannelsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_channels, container, false);
-
+        View view;
+        int orientation = getResources().getConfiguration().orientation;
+        // Inflate layout based on orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Inflate portrait layout
+            view = inflater.inflate(R.layout.fragment_channels, container, false);
+            TabLayout tabLayout = view.findViewById(R.id.tablayout_channel_menu);
+            setupTabLayout(tabLayout);
+        } else {
+            // Inflate landscape layout
+            view = inflater.inflate(R.layout.fragment_channels_land, container, false);
+            NavigationRailView navigationRailView = view.findViewById(R.id.navigation_rail);
+            setupNavigationRail(navigationRailView);
+        }
         popularText = view.findViewById(R.id.popular);
         myCoursesText = view.findViewById(R.id.mycourses);
         majorsText = view.findViewById(R.id.majors);
@@ -125,8 +141,18 @@ public class ChannelsFragment extends Fragment {
         myCoursesVerticalFragment = new MyCoursesVerticalFragment();
         showCoursesView();
 
-        TabLayout tabLayout = view.findViewById(R.id.tablayout_channel_menu);
-        Log.d(TAG, tabLayout.toString());
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainerViewPopCourses, horizontalScroller);
+        transaction.replace(R.id.fragmentContainerViewMyCourses, myCoursesVerticalFragment);
+        transaction.replace(R.id.fragmentContainerViewMajors, majorsVerticalScrollingFragment);
+        transaction.commit();
+        // Inflate the layout for this fragment
+        return view;
+    }
+
+    private void setupTabLayout(TabLayout tabLayout) {
+        // Setup tab layout for portrait orientation
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -141,23 +167,33 @@ public class ChannelsFragment extends Fragment {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabUnselected(TabLayout.Tab tab) {}
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+    }
 
+    private void setupNavigationRail(NavigationRailView navigationRailView) {
+        // Setup navigation rail for landscape orientation
+        navigationRailView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_courses) {
+                    Log.d(TAG, "courses");
+                    showCoursesView();
+                    return true;
+                } else if (item.getItemId() == R.id.nav_majors) {
+                    Log.d(TAG, "majors");
+                    showMajorsView();
+                    return true;
+                } else {
+                    Log.d(TAG, "courses");
+                    showCoursesView();
+                    return true;
+                }
             }
         });
-
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainerViewPopCourses, horizontalScroller);
-        transaction.replace(R.id.fragmentContainerViewMyCourses, myCoursesVerticalFragment);
-        transaction.replace(R.id.fragmentContainerViewMajors, majorsVerticalScrollingFragment);
-        transaction.commit();
-        // Inflate the layout for this fragment
-        return view;
     }
 
     private void showCoursesView() {
