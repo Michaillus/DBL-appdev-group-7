@@ -16,7 +16,7 @@
         app:icon="@drawable/baseline_arrow_circle_down_24"
         app:iconTint="@color/Design2"
         android:textColor="@color/Design2"
-        style="@style/buttonColor"
+        style="@style/buttonStyle"
         />
 
 
