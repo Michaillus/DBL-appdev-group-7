@@ -30,9 +30,20 @@ public class LoginActivity extends AppCompatActivity {
     //views
     Button mRegisterBtn, mLoginBtn;
     private boolean isVerified;
+
+    /**
+     * Instance of a FireStore authentication database.
+     */
     private FirebaseAuth mAuth;
+
+    /**
+     * Instance of a FireBase FireStore database.
+     */
     private FirebaseFirestore db;
 
+    /**
+     * Class tag for logs.
+     */
     private static final String TAG = "LoginActivity";
 
     private Boolean verifiedObject;
