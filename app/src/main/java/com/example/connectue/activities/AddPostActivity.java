@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.view.View;
 import android.widget.Button;
@@ -207,13 +208,19 @@ public class AddPostActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == IMAGE_PICK_CAMERA_CODE) {
                 //image picked from camera
-                addImageBtn.setImageURI(imageUri);
+                postImage.setImageURI(imageUri);
+                postImage.setVisibility(View.VISIBLE);
+                postImage.setOnClickListener(v -> showImagePickDialog());
+                addImageBtn.setVisibility(View.GONE);
             }
             else if (requestCode == IMAGE_PICK_GALLERY_CODE) {
                 //image picked from gallery
                 imageUri = data.getData();
 
-                addImageBtn.setImageURI(imageUri);
+                postImage.setImageURI(imageUri);
+                postImage.setVisibility(View.VISIBLE);
+                postImage.setOnClickListener(v -> showImagePickDialog());
+                addImageBtn.setVisibility(View.GONE);
             }
         }
     }
