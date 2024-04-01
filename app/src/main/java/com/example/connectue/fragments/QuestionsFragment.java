@@ -5,6 +5,8 @@ import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.connectue.R;
 import com.example.connectue.activities.AddQuestionActivity;
 import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.activities.StudyUnitViewActivity;
 import com.example.connectue.adapters.QuestionAdapter;
 import com.example.connectue.databinding.FragmentQuestionsBinding;
 import com.example.connectue.interfaces.ItemDownloadCallback;
@@ -72,6 +75,11 @@ public class QuestionsFragment extends Fragment {
      */
     StudyUnit course;
 
+    /**
+     * Activity result launcher for launching the reload method on finish add question activity.
+     */
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
     public QuestionsFragment() {
         // Default constructor
     }
@@ -87,6 +95,21 @@ public class QuestionsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentQuestionsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        // Defines listener for reloading the study unit view activity when user returns from
+        // add question activity page.
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Log.e(TAG, "Does this work?");
+                    StudyUnitViewActivity studyUnitViewActivity = (StudyUnitViewActivity) getActivity();
+                    if (studyUnitViewActivity != null) {
+                        studyUnitViewActivity.reload();
+                    } else {
+                        Log.e(TAG, "Unable to get Study unit view activity");
+                    }
+
+                });
 
         // Define reviews recycler view.
         RecyclerView questionsRecyclerView = binding.recyclerViewQuestion;
@@ -154,7 +177,8 @@ public class QuestionsFragment extends Fragment {
                     addQuestionButton.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddQuestionActivity.class);
                         intent.putExtra("course", course.studyUnitToString());
-                        startActivity(intent);
+
+                        activityResultLauncher.launch(intent);
                     });
                     addQuestionButton.setVisibility(View.VISIBLE);
                 } else {

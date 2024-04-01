@@ -79,7 +79,7 @@ public class ReviewsFragment extends Fragment {
     StudyUnit studyUnit;
 
     /**
-     * Launches a method on finish add review activity.
+     * Activity result launcher for launching the reload method on finish add review activity.
      */
     ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -99,6 +99,8 @@ public class ReviewsFragment extends Fragment {
         binding = FragmentReviewsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Defines listener for reloading the study unit view activity when user returns from
+        // add review activity page.
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -179,8 +181,6 @@ public class ReviewsFragment extends Fragment {
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
                         intent.putExtra("course", studyUnit.studyUnitToString());
-
-
 
                         activityResultLauncher.launch(intent);
                     });

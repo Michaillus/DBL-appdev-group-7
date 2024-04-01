@@ -5,6 +5,8 @@ import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.connectue.R;
 import com.example.connectue.activities.AddMaterialActivity;
 import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.activities.StudyUnitViewActivity;
 import com.example.connectue.adapters.MaterialAdapter;
 import com.example.connectue.databinding.FragmentMaterialsBinding;
 import com.example.connectue.interfaces.ItemDownloadCallback;
@@ -72,6 +75,11 @@ public class MaterialsFragment extends Fragment {
      */
     StudyUnit course;
 
+    /**
+     * Activity result launcher for launching the reload method on finish add material activity.
+     */
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
     public MaterialsFragment() {
         // Default constructor
     }
@@ -86,6 +94,21 @@ public class MaterialsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentMaterialsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        // Defines listener for reloading the study unit view activity when user returns from
+        // add material activity page.
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Log.e(TAG, "Does this work?");
+                    StudyUnitViewActivity studyUnitViewActivity = (StudyUnitViewActivity) getActivity();
+                    if (studyUnitViewActivity != null) {
+                        studyUnitViewActivity.reload();
+                    } else {
+                        Log.e(TAG, "Unable to get Study unit view activity");
+                    }
+
+                });
 
         // Define reviews recycler view.
         RecyclerView materialsRecyclerView = binding.recyclerViewMaterials;
@@ -154,9 +177,10 @@ public class MaterialsFragment extends Fragment {
                     addQuestionBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddMaterialActivity.class);
                         intent.putExtra("course", course.studyUnitToString());
-                        startActivity(intent);
-                        addQuestionBtn.setVisibility(View.VISIBLE);
+
+                        activityResultLauncher.launch(intent);
                     });
+                    addQuestionBtn.setVisibility(View.VISIBLE);
                 } else {
                     Log.i(TAG, "User is not allowed to add a material");
                     addQuestionBtn.setVisibility(View.INVISIBLE);
