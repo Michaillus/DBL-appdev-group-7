@@ -26,7 +26,7 @@ public class ActivityUtils {
                 Log.d(TAG, "course passed to activity");
             }
         } else {
-            courseAsString= (String) savedInstanceState.getSerializable("course");
+            courseAsString= activity.getIntent().getStringExtra("course");
         }
         if (courseAsString == null) {
             courseAsString = "0#0#0#0#0#0course";
