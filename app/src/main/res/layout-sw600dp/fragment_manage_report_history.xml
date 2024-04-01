@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
-                android:text="studyUnit review"
+                android:text="course review"
                 android:textSize="25sp"/>
 
         </LinearLayout>
