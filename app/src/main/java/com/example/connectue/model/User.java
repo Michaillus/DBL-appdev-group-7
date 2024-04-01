@@ -1,6 +1,6 @@
 package com.example.connectue.model;
 
-public class User2 {
+public class User {
 
     /**
      * Class tag for logs.
@@ -32,9 +32,9 @@ public class User2 {
 
     protected int role;
 
-    public User2(String userId, String firstName, String lastName, boolean isVerified,
-                 String email, String phoneNumber, String profilePicUrl,
-                 String program, int role) {
+    public User(String userId, String firstName, String lastName, boolean isVerified,
+                String email, String phoneNumber, String profilePicUrl,
+                String program, int role) {
         setId(userId);
         setFirstName(firstName);
         setLastName(lastName);

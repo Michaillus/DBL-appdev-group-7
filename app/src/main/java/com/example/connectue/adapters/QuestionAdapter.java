@@ -20,7 +20,7 @@ import com.example.connectue.R;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -86,9 +86,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         public void bind(Question question) {
 
             // Set publisher name
-            userManager.downloadOne(question.getPublisherId(), new ItemDownloadCallback<User2>() {
+            userManager.downloadOne(question.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override
-                public void onSuccess(User2 user) {
+                public void onSuccess(User user) {
                     publisherName.setText(user.getFullName());
                 }
 
