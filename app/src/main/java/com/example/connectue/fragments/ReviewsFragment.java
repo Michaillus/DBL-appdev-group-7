@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -28,7 +27,7 @@ import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Review;
 import com.example.connectue.model.StudyUnit;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -200,9 +199,9 @@ public class ReviewsFragment extends Fragment {
 
     public void checkUserAllowedAddReview(String userId, ConditionCheckCallback callback) {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
-        userManager.downloadOne(userId, new ItemDownloadCallback<User2>() {
+        userManager.downloadOne(userId, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User2 data) {
+            public void onSuccess(User data) {
                 if (data.isVerified()) {
                     // User is a student
                     reviewManager.hasUserReviewedStudyUnit(studyUnit.getId(), userId, new ItemExistsCallback() {

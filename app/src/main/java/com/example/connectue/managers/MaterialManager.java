@@ -32,6 +32,12 @@ public class MaterialManager extends InteractableManager<Material>{
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
 
+    /**
+     * Converts a FireBase document snapshot of a material collection into an instance
+     * of material model.
+     * @param document FireBase document snapshot of the material collection.
+     * @return Instance of the material model.
+     */
     @Override
     public Material deserialize(DocumentSnapshot document) {
         return new Material(
@@ -47,6 +53,12 @@ public class MaterialManager extends InteractableManager<Material>{
         );
     }
 
+    /**
+     * Converts an instance of the material model to a corresponding map for uploading to the
+     * material collection.
+     * @param material Instance of the material model.
+     * @return Map for uploading to material collection.
+     */
     @Override
     public Map<String, Object> serialize(Material material) {
         Map<String, Object> postData = new HashMap<>();

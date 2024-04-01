@@ -22,7 +22,7 @@ import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.General;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -136,9 +136,9 @@ public class HomeFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ImageButton addPostBtn = root.findViewById(R.id.addPostBtn);
-        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User2 data) {
+            public void onSuccess(User data) {
                 if (data.getRole() == General.STUDENT || data.getRole() == General.ADMIN) {
                     addPostBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddPostActivity.class);
