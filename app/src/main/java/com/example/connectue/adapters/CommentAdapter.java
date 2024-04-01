@@ -106,7 +106,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
                 }
             });
 
-            publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
+            publishTime.setText(TimeUtils.getTimeAgo(comment.getDatetime()));
             commentDescription.setText(comment.getText());
 
             userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User2>() {
