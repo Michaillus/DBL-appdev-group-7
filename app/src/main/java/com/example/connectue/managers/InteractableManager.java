@@ -38,6 +38,8 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      */
     protected CommentManager commentManager;
 
+    protected ReplyManager replyManager;
+
     /**
      * Constructor for manager of interactables.
      *

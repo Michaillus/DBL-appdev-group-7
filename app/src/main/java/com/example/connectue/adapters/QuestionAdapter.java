@@ -1,10 +1,13 @@
 package com.example.connectue.adapters;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.connectue.R;
+import com.example.connectue.fragments.ReplyFragment;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Question;
@@ -46,6 +50,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         this.fragmentManager = fragmentManager;
     }
 
+    public QuestionAdapter(Context context, List<Question> questionList) {
+    }
+
     @NonNull
     @Override
     public QuestionAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -65,8 +72,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView questionLike;
-        TextView publisherName, description, likeNumber, date;
+        ImageView questionLike, replyQuestionBtn;
+        TextView publisherName, description, likeNumber, date, replyQuestionNum;
         UserManager userManager;
 
 
@@ -78,6 +85,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             description = itemView.findViewById(R.id.question);
             questionLike = itemView.findViewById(R.id.questionLike);
             likeNumber = itemView.findViewById(R.id.questionLikeNum);
+            replyQuestionBtn = itemView.findViewById(R.id.replyQuestionBtn);
+            replyQuestionNum = itemView.findViewById(R.id.replyQuestionNum);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
 
@@ -103,6 +112,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             date.setText(TimeUtils.getTimeAgo(question.getDatetime()));
             // Set like number
             likeNumber.setText(String.valueOf(question.getLikeNumber()));
+            replyQuestionNum.setText(String.valueOf(question.getCommentNumber()));
 
             questionLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -169,6 +179,27 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
                 }
             });
+
+            replyQuestionBtn.setOnClickListener(v -> {
+                Log.d(TAG, "onClick: card clicked");
+                navigateToQuestionsFragment(question.getId());
+            });
+
+        }
+
+        private void navigateToQuestionsFragment(String questionId) {
+            if (getSupportFragmentManager() != null) {
+                ReplyFragment replyFragment = new ReplyFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("questionId", questionId);
+                replyFragment.setArguments(bundle);
+
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.frame_layout, replyFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+
         }
     }
 }

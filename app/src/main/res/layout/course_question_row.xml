@@ -76,6 +76,25 @@
 
                 </TextView>
 
+                <ImageButton
+                    android:id="@+id/replyQuestionBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="45dp"
+                    android:background="@null"
+                    android:contentDescription="Reply"
+                    android:layout_marginLeft="10dp"
+                    app:srcCompat="@drawable/comment_icon" />
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:id="@+id/replyQuestionNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="12">
+
+                </TextView>
+
             </LinearLayout>
 
         </LinearLayout>

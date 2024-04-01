@@ -2,6 +2,7 @@ package com.example.connectue.managers;
 
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Question;
+import com.example.connectue.model.Reply;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,6 +45,11 @@ public class QuestionManager extends InteractableManager<Question> {
     public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<Question>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
+    }
+
+    public void downloadRecentReplies(String parentId, int amount,
+                                      ItemDownloadCallback<List<Reply>> callback) {
+        replyManager.downloadRecent(parentId, amount, callback);
     }
 
     /**
