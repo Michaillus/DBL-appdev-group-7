@@ -2,9 +2,10 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:strokeColor="@color/Design2"
+    style="@style/background"
     android:id="@+id/materialCard"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp">
 
     <RelativeLayout
         android:padding="10dp"
@@ -44,6 +45,7 @@
             >
 
             <ImageButton
+                style="@style/imageColor"
                 android:id="@+id/likePostBtn"
                 android:layout_width="25dp"
                 android:layout_height="45dp"
@@ -62,6 +64,7 @@
             </TextView>
 
             <ImageButton
+                style="@style/imageColor"
                 android:id="@+id/dislikeReview"
                 android:layout_width="29dp"
                 android:layout_height="match_parent"

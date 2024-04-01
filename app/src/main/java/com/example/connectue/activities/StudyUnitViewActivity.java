@@ -1,5 +1,6 @@
 package com.example.connectue.activities;
 
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,10 +51,17 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
     protected LinearLayout followButton;
 
     protected ImageView backButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int orientation = getResources().getConfiguration().orientation;
+        // Inflate layout based on orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_course_view);
+        } else {
+            setContentView(R.layout.activity_course_view_land);
+        }
 
         setBinding();
 

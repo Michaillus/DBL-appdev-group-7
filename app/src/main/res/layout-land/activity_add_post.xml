@@ -12,75 +12,80 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toTopOf="@+id/postDescription"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:text="Write a caption!"
         android:textSize="25dp"
         style="@style/textColor"
         android:textStyle="bold"
         />
+
     <EditText
         android:id="@+id/postDescription"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="244dp"
         android:background="@null"
         android:ems="10"
         android:gravity="start"
         android:hint="Type here..."
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        style="@style/textColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/imageAdd"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:text="Select a photo!"
         android:textSize="25dp"
-        style="@style/textColor"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageAdd"
+        app:layout_constraintStart_toStartOf="parent"
         />
+
+
     <RelativeLayout
         android:id="@+id/imageAdd"
         android:layout_width="match_parent"
         android:layout_height="85dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="52dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/postDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/postDescription">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/postImage"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/addPostImageBtn"
             style="@style/imageColor"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_toEndOf="@id/postImage"
             app:srcCompat="@drawable/ic_add_black" />
+
     </RelativeLayout>
 
     <Button
-        style="@style/buttonStyle"
         android:id="@+id/publishPostBtn"
+        style="@style/buttonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="28dp"
         android:text="Publish"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postDescription" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/backBtn"

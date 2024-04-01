@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.connectue.R;
+import com.example.connectue.interfaces.VerificationCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
-    private Object verifiedObject;
+    private Boolean verifiedObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private Boolean checkUserIsVerified(FirebaseUser user) {
+    private Boolean checkUserIsVerified(FirebaseUser user, final VerificationCallback callback) {
         DocumentReference userDoc = db.collection("users").document(user.getUid());
         userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -92,16 +93,20 @@ public class LoginActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         // Get the value of isVerified
-                        verifiedObject = document.get("isVerified");
+                        verifiedObject = document.getBoolean("isVerified");
                         if (verifiedObject != null) {
+                            callback.onVerificationCallback(verifiedObject);
                             Log.i(TAG, "Value of field 'isVerified': " + verifiedObject.toString());
                         } else {
+                            callback.onVerificationCallback(false);
                             Log.i(TAG, "Field 'isVerified' is null.");
                         }
                     } else {
+                        callback.onVerificationCallback(false);
                         Log.e(TAG, "No such document");
                     }
                 } else {
+                    callback.onVerificationCallback(false);
                     Log.e(TAG, "get failed with ", task.getException());
                 }
             }
@@ -127,19 +132,24 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                        isVerified = checkUserIsVerified(user);
-                        if(!isVerified) {
-                            Toast.makeText(LoginActivity.this,
-                                    "Email is not verified", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success");
-                        Toast.makeText(LoginActivity.this, "Login Success",
-                                Toast.LENGTH_SHORT).show();
-                        Intent login = new Intent(LoginActivity.this, MainActivity.class);
-                        LoginActivity.this.startActivity(login);
-                        LoginActivity.this.finish();
+                        isVerified = checkUserIsVerified(user, new VerificationCallback() {
+                            @Override
+                            public void onVerificationCallback(boolean isVerified) {
+                                if(!isVerified) {
+                                    Toast.makeText(LoginActivity.this,
+                                            "Email is not verified", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                Toast.makeText(LoginActivity.this, "Login Success",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent login = new Intent(LoginActivity.this, MainActivity.class);
+                                LoginActivity.this.startActivity(login);
+                                LoginActivity.this.finish();
+                            }
+                        });
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());

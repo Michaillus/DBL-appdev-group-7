@@ -28,33 +28,21 @@
             android:paddingBottom="10dp"
             android:layout_marginTop="20dp" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayout_channel_menu"
-            android:layout_below="@+id/Channel_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/headerBackground"
-            app:tabTextColor="@color/Design2"
-            app:tabSelectedTextColor="@color/Design2"
-            app:tabIndicatorColor="@color/Design2"
-            app:tabMode="fixed"
-            app:tabGravity="fill">
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Courses"
 
-                />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Majors"
 
-                />
-        </com.google.android.material.tabs.TabLayout>
+
     </RelativeLayout>
 
+    <com.google.android.material.navigationrail.NavigationRailView
+        android:layout_below="@id/pageHeader"
+        style="@style/rail_background"
+        android:id="@+id/navigation_rail"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/channels_navigation_rail_menu" />
+
     <RelativeLayout
+        android:layout_toEndOf="@id/navigation_rail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/pageHeader"
@@ -66,7 +54,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchEditText"
-            android:layout_marginTop="35dp"
             android:textSize="17dp"
             android:text="@string/popular"/>
         <TextView
@@ -75,7 +62,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchEditText"
-            android:layout_marginTop="35dp"
             android:textSize="17dp"
             android:text="@string/majors"/>
         <androidx.fragment.app.FragmentContainerView
@@ -88,7 +74,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:layout_below="@+id/popular"
             android:id="@+id/fragmentContainerViewPopCourses"
-            android:layout_width="match_parent"
+            android:layout_width="280dp"
             android:layout_marginTop="10dp"
             android:layout_height="100dp"/>
 
@@ -97,22 +83,25 @@
             style="@style/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/fragmentContainerViewPopCourses"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_below="@id/searchEditText"
+            android:layout_toEndOf="@+id/fragmentContainerViewPopCourses"
             android:textSize="17dp"
             android:text="@string/my_courses"/>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerViewMyCourses"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="280dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toEndOf="@id/fragmentContainerViewPopCourses"
+            android:layout_height="100dp"
             android:layout_below="@+id/mycourses"
             android:layout_marginTop="10dp" />
 
         <EditText
             android:id="@+id/searchEditText"
             style="@android:style/Widget.AutoCompleteTextView"
-            android:layout_width="200dp"
+            android:layout_width="400dp"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -134,28 +123,28 @@
             android:layout_toRightOf="@id/searchEditText"
             android:text="Search"/>
 
-    <ListView
-        android:id="@+id/searchListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/searchEditText"
-        android:labelFor="@+id/searchEditText"
-        android:visibility="gone"
-        android:background="@color/Design2"/>
+        <ListView
+            android:id="@+id/searchListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/searchEditText"
+            android:labelFor="@+id/searchEditText"
+            android:visibility="gone"
+            android:background="@color/Design2"/>
 
 
 
 
-<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--            android:id="@+id/coursemenu"-->
-<!--            android:layout_width="160dp"-->
-<!--            android:layout_height="70dp"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            style="@style/background"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            app:menu="@menu/courses_major_nav" >-->
+        <!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+        <!--            android:id="@+id/coursemenu"-->
+        <!--            android:layout_width="160dp"-->
+        <!--            android:layout_height="70dp"-->
+        <!--            android:layout_alignParentTop="true"-->
+        <!--            style="@style/background"-->
+        <!--            android:layout_alignParentRight="true"-->
+        <!--            app:menu="@menu/courses_major_nav" >-->
 
-<!--        </com.google.android.material.bottomnavigation.BottomNavigationView>-->
+        <!--        </com.google.android.material.bottomnavigation.BottomNavigationView>-->
     </RelativeLayout>
 
 

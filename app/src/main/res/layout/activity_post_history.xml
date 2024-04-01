@@ -6,15 +6,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
+    style="@style/background"
     tools:context=".activities.PostHistoryActivity">
 
     <TextView
         android:id="@+id/title"
+        style="@style/textColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="115dp"
         android:minHeight="48dp"
+        android:gravity="center"
         android:orientation="horizontal"
         android:text="Post History"
         android:textStyle="bold"
@@ -27,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        style="@style/buttonStyle"
         android:text="back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +39,7 @@
         android:id="@+id/postList_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

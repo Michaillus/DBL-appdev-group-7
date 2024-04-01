@@ -9,6 +9,7 @@
 
     <FrameLayout
         android:id="@id/frame_layout"
+        android:layout_toEndOf="@id/navigation_rail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/pageHeader"
@@ -66,14 +67,14 @@
                 android:textColor="@color/Design2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/follow"-->
-<!--                android:textColor="@color/Design2"-->
-<!--                android:textSize="17dp"-->
-<!--                android:layout_below="@+id/textView4"-->
-<!--                />-->
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="@string/follow"-->
+            <!--                android:textColor="@color/Design2"-->
+            <!--                android:textSize="17dp"-->
+            <!--                android:layout_below="@+id/textView4"-->
+            <!--                />-->
 
             <ImageView
                 android:id="@+id/followIcon"
@@ -87,38 +88,17 @@
                 app:tint="@color/Design2" />
         </LinearLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayout_course_menu"
-            android:layout_below="@+id/rating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/headerBackground"
-            app:tabTextColor="@color/Design2"
-            app:tabSelectedTextColor="@color/Design2"
-            app:tabIndicatorColor="@color/Design2"
-            app:tabMode="fixed"
-            app:tabGravity="fill">
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reviews"
 
-                />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Questions"
-
-                />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Material"
-
-                />
-        </com.google.android.material.tabs.TabLayout>
 
     </RelativeLayout>
+
+    <com.google.android.material.navigationrail.NavigationRailView
+        android:layout_below="@id/pageHeader"
+        style="@style/rail_background"
+        android:id="@+id/navigation_rail"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/course_navigation_rail_menu" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -131,7 +111,7 @@
         style="@style/buttonStyle"
         app:tint="@color/Design2"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="13dp"
 
         />
 
@@ -142,20 +122,11 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-
+        android:layout_toEndOf="@id/navigation_rail"
         android:id="@+id/recyclerView_review"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_marginTop="160dp" />
-
-    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/coursemenu2"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_marginTop="80dp"
-        android:background="@color/Design2"
-        android:layout_alignParentRight="true"
-        app:menu="@menu/course_view_menu_bar" />-->
 
 
 
