@@ -42,10 +42,12 @@ public class PostHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_history);
         String collectionName = getIntent().getStringExtra("collection");
 
-        db = FirebaseFirestore.getInstance();
-        postRef = db.collection(collectionName);
-        postList = new ArrayList<>();
-        loadUserPost(collectionName);
+        if (collectionName != null) {
+            db = FirebaseFirestore.getInstance();
+            postRef = db.collection(collectionName);
+            postList = new ArrayList<>();
+            loadUserPost(collectionName);
+        }
 
 //        recyclerView = findViewById(R.id.postList_rv);
 //        recyclerView.setHasFixedSize(true);
@@ -76,6 +78,7 @@ public class PostHistoryActivity extends AppCompatActivity {
                                         document.getLong("likes"),
                                         document.getLong("comments"),
                                         document.getTimestamp("timestamp").toDate());
+
                                 postList.add(post);
                             }
                         } else {

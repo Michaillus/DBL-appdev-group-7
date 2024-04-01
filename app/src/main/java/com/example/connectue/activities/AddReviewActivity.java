@@ -150,7 +150,7 @@ public class AddReviewActivity extends AppCompatActivity {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Review review = new Review(publisherId, text, stars, studyUnit.getId());
 
-        reviewManager.addReview(review, studyUnit, new ItemUploadCallback() {
+        reviewManager.addReview(review, studyUnit.getType(), new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "Review is added successfully");

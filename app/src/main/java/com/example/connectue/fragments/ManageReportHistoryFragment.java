@@ -23,6 +23,11 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.connectue.interfaces.ItemDeleteCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
+import com.example.connectue.managers.ReviewManager;
+import com.example.connectue.managers.StudyUnitManager;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ReportItemCallback;
@@ -86,6 +91,11 @@ public class ManageReportHistoryFragment extends Fragment {
     private static final String TAG_load_content = "loadContent";
     private static final String TAG_Load_report = "reportLoad";
     private static final String TAG_delete = "delete";
+
+    /**
+     * Id of the content to delete.
+     */
+    String contentId;
 
     public ManageReportHistoryFragment() {
         // Required empty public constructor
@@ -183,7 +193,7 @@ public class ManageReportHistoryFragment extends Fragment {
     }
 
     private void loadContentToWorkBench(QueryDocumentSnapshot content) {
-        String contentId = content.getString(General.REPORTCONTENTID);
+        contentId = content.getString(General.REPORTCONTENTID);
         if (contentId == null || contentId.equals("")) {
             Log.i(TAG_load_content, "contentId is null ");
             return;
@@ -326,21 +336,56 @@ public class ManageReportHistoryFragment extends Fragment {
     }
 
     private void deleteFromCollection() {
-        currentContentReference.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        removeRequest();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext()
-                                , "Remove content from it collection failed, check log"
-                                , Toast.LENGTH_SHORT).show();
-                    }
-                });
+        if (currentChannel.equals(StudyUnit.COURSE_REVIEW_COLLECTION_NAME) ||
+                currentChannel.equals(StudyUnit.MAJOR_REVIEW_COLLECTION_NAME)) {
+            // Deleting course or major review through the study unit manager
+            StudyUnit.StudyUnitType studyUnitType;
+            // Finds the type of study unit of the content
+            if (currentChannel.equals(StudyUnit.COURSE_REVIEW_COLLECTION_NAME)) {
+                studyUnitType = StudyUnit.StudyUnitType.COURSE;
+            } else {
+                studyUnitType = StudyUnit.StudyUnitType.MAJOR;
+            }
+            // Initialize review manager for deletion
+            ReviewManager reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
+                    StudyUnit.getReviewCollectionName(studyUnitType),
+                    StudyUnit.getReviewLikeCollectionName(studyUnitType),
+                    StudyUnit.getReviewDislikeCollectionName(studyUnitType),
+                    StudyUnit.getReviewCommentCollectionName(studyUnitType));
+            // Delete the review
+            reviewManager.deleteReview(contentId, studyUnitType,
+                    new ItemDeleteCallback() {
+                @Override
+                public void onSuccess() {
+                    // Remove the report if review is deleted successfully
+                    removeRequest();
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(getContext(),
+                            "Remove content from it collection failed, check log",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            // Deleting post or comment directly
+            currentContentReference.delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            removeRequest();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),
+                                    "Remove content from it collection failed, check log",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     private void keepContent() {
