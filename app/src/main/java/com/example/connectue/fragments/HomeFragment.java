@@ -18,7 +18,7 @@ import com.example.connectue.R;
 import com.example.connectue.activities.AddPostActivity;
 import com.example.connectue.adapters.PostAdapter;
 import com.example.connectue.databinding.FragmentHomeBinding;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     /**
      * Class tag for logs.
      */
-    private static final String tag = "HomeFragment";
+    private static final String TAG = "HomeFragment";
 
     private FragmentHomeBinding binding;
 
@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
 
     private void loadPosts(List<Post> postList) {
         int postsPerChunk = 4;
-        postManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Post>>() {
+        postManager.downloadRecent(postsPerChunk, new ItemDownloadCallback<List<Post>>() {
             @Override
             public void onSuccess(List<Post> data) {
                 postList.addAll(data);
@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while downloading posts", e);
+                Log.e(TAG, "Error while downloading posts", e);
             }
         });
     }
@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ImageButton addPostBtn = root.findViewById(R.id.addPostBtn);
-        userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.getRole() == General.STUDENT || data.getRole() == General.ADMIN) {
@@ -151,7 +151,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while retrieving user from the database", e);
+                Log.e(TAG, "Error while retrieving user from the database", e);
             }
         });
     }
@@ -161,7 +161,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager layoutManager = (LinearLayoutManager) binding.postsRecyclerView.getLayoutManager();
+                LinearLayoutManager layoutManager = (LinearLayoutManager) postRecyclerView.getLayoutManager();
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();

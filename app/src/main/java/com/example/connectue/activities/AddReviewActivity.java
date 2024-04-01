@@ -7,22 +7,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.example.connectue.model.Review;
+import com.example.connectue.model.StudyUnit;
+import com.example.connectue.utils.ActivityUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.managers.ReviewManager;
-import com.example.connectue.model.Review;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddReviewActivity extends AppCompatActivity {
+
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "AddReviewActivity";
 
     ReviewManager reviewManager;
     EditText reviewDescription;
@@ -33,19 +39,21 @@ public class AddReviewActivity extends AppCompatActivity {
     Long stars;
     String text;
 
-    private String courseId;
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_review);
 
+        // Retrieve study unit passed from the previous activity / fragment.
+        StudyUnit studyUnit = ActivityUtils.getStudyUnit(this, savedInstanceState);
+
         // Initializing review manager
-        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), Review.REVIEW_COLLECTION_NAME,
-                Review.REVIEW_LIKE_COLLECTION_NAME,
-                Review.REVIEW_DISLIKE_COLLECTION_NAME,
-                Review.REVIEW_COMMENT_COLLECTION_NAME);
+        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
+                studyUnit.getReviewCollectionName(),
+                studyUnit.getReviewLikeCollectionName(),
+                studyUnit.getReviewDislikeCollectionName(),
+                studyUnit.getReviewCommentCollectionName());
 
         reviewDescription = findViewById(R.id.reviewDescription);
         publishReviewBtn = findViewById(R.id.publishReviewBtn);
@@ -57,19 +65,6 @@ public class AddReviewActivity extends AppCompatActivity {
         star_4 = findViewById(R.id.star4);
         star_5 = findViewById(R.id.star5);
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                courseId= "";
-            } else {
-                courseId= extras.getString("courseId");
-            }
-        } else {
-            courseId= (String) savedInstanceState.getSerializable("courseId");
-        }
-
-
-
         // Set listeners for star rating buttons
         star_1.setOnClickListener(v -> selectStarRating(1));
         star_2.setOnClickListener(v -> selectStarRating(2));
@@ -77,7 +72,7 @@ public class AddReviewActivity extends AppCompatActivity {
         star_4.setOnClickListener(v -> selectStarRating(4));
         star_5.setOnClickListener(v -> selectStarRating(5));
 
-        publishReviewBtn.setOnClickListener(v -> publishReview());
+        publishReviewBtn.setOnClickListener(v -> publishReview(studyUnit));
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,18 +123,18 @@ public class AddReviewActivity extends AppCompatActivity {
                 break;
         }
 
-        //update the ratings for each course review
+        //update the ratings for each study unit review
 
     }
 
-    private void publishReview() {
+    private void publishReview(StudyUnit studyUnit) {
         publishReviewBtn.setEnabled(false);
         reviewDescription.setEnabled(false);
         text = reviewDescription.getText().toString().trim();
         // Check if the user has selected a star rating
         if (stars != null) {
             // Upload the review to Firestore
-            uploadToFirestore(text, stars);
+            uploadToFirestore(text, stars, studyUnit);
             // Pass the selected star rating back to ReviewsFragment
 
         } else {
@@ -151,14 +146,14 @@ public class AddReviewActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadToFirestore(String text, Long stars) {
+    private void uploadToFirestore(String text, Long stars, StudyUnit studyUnit) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Review review = new Review(publisherId, text, stars, courseId);
+        Review review = new Review(publisherId, text, stars, studyUnit.getId());
 
-        reviewManager.upload(review, new FireStoreUploadCallback() {
+        reviewManager.addReview(review, studyUnit, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
-                Log.i("Upload review", "Review is uploaded successfully");
+                Log.i(TAG, "Review is added successfully");
                 Toast.makeText(AddReviewActivity.this,
                         "Review is published successfully", Toast.LENGTH_SHORT).show();
 
@@ -167,7 +162,7 @@ public class AddReviewActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e("Upload review", "Failed to upload the review: " + e.getMessage());
+                Log.e(TAG, "Failed to upload the review: ", e);
                 Toast.makeText(AddReviewActivity.this,
                         "Failed to upload", Toast.LENGTH_SHORT).show();
             }

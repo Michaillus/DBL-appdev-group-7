@@ -2,8 +2,8 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -11,7 +11,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,7 @@ public abstract class EntityManager<T> {
      * @param documentId Id of the document to retrieve from {@code collection}.
      * @param callback Callback to pass model object of the retrieved document or an error message.
      */
-    public void downloadOne(String documentId, FireStoreDownloadCallback<T> callback) {
+    public void downloadOne(String documentId, ItemDownloadCallback<T> callback) {
         collection.document(documentId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
@@ -68,8 +67,7 @@ public abstract class EntityManager<T> {
                         callback.onSuccess(deserialize(documentSnapshot));
                     } else {
                         Exception e = new NoSuchElementException("Document does not exit");
-                        Log.e(tag, "Document does not exits",
-                                e);
+                        Log.e(tag, "Document does not exits", e);
                         callback.onFailure(e);
                     }
                 }).addOnFailureListener(e -> {
@@ -87,19 +85,17 @@ public abstract class EntityManager<T> {
      * @param callback Callback to pass list of models of the retrieved documents or
      *                 an error message.
      */
-    public void downloadRecent(int amount, FireStoreDownloadCallback<List<T>> callback) {
+    public void downloadRecent(int amount, ItemDownloadCallback<List<T>> callback) {
         downloadRecentWithQuery(collection, amount, callback);
     }
 
     protected void downloadRecentWithQuery(Query basicQuery, int amount,
-                                         FireStoreDownloadCallback<List<T>> callback) {
-
+                                         ItemDownloadCallback<List<T>> callback) {
         Query query = basicQuery.orderBy("timestamp", Query.Direction.DESCENDING);
         if (lastRetrieved != null) {
             query = query.startAfter(lastRetrieved);
         }
         query = query.limit(amount);
-
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot snapshot = task.getResult();
@@ -107,11 +103,39 @@ public abstract class EntityManager<T> {
                     lastRetrieved = snapshot.getDocuments().get(task.getResult().size() - 1);
                     List<T> data = deserializeList(task.getResult());
                     callback.onSuccess(data);
+                } else {
+                    Log.i(tag, "No documents found");
                 }
+            } else {
+                Log.e(tag, "Error getting documents", task.getException());
+                callback.onFailure(task.getException());
+            }
+        });
+    }
+
+    /**
+     * Asynchronously downloads all the documents in the {@code collection}
+     * and passes list of their models through {@code onSuccess} method of {@code callback}.
+     * If download of the documents has failed, passes the error message through {@code onFailure}
+     * method of the {@code callback}.
+     * @param callback Callback to pass list of models of the retrieved documents or
+     *                 an error message.
+     */
+    public void downloadAll(ItemDownloadCallback<List<T>> callback) {
+        downloadAllWithQuery(collection, callback);
+    }
+
+    protected void downloadAllWithQuery(Query basicQuery, ItemDownloadCallback<List<T>> callback) {
+
+        basicQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<T> data = deserializeList(task.getResult());
+                callback.onSuccess(data);
             } else {
                 Log.e(tag, "Error getting documents", task.getException());
             }
         });
+
     }
 
     /**
@@ -142,9 +166,9 @@ public abstract class EntityManager<T> {
      * If upload of the documents has failed, passes the error message
      * through {@code callback.onFailure}
      * @param object Object to upload to the database.
-     * @param callback Callback to call when object is uploaded or the upload has failed.
+     * @param callback Callback that is called when object is uploaded or the upload has failed.
      */
-    public void upload(T object, FireStoreUploadCallback callback) {
+    public void upload(T object, ItemUploadCallback callback) {
         Map<String, Object> data = serialize(object);
         collection.add(data)
                 .addOnSuccessListener(documentReference -> {
@@ -156,8 +180,26 @@ public abstract class EntityManager<T> {
                 });
     }
 
+    /**
+     * Set (uploads) an instance of the model to the specifies id in the collection in database.
+     * @param object instance of the model to set on id
+     * @param objectId Id of the object in the database
+     * @param callback Callback that is called when the document is set.
+     */
+    public void set(T object, String objectId, ItemUploadCallback callback) {
+        Map<String, Object> data = serialize(object);
+        collection.document(objectId).set(data)
+                .addOnSuccessListener(documentReference -> {
+                    Log.i(tag, "Document is successfully set to FireStore");
+                    callback.onSuccess();
+                }).addOnFailureListener(e -> {
+                    Log.e(tag, "Failed to set document to FireStore", e);
+                    callback.onFailure(e);
+                });
+    }
+
     protected void update(String documentId, String field, Object value,
-                          FireStoreUploadCallback callback) {
+                          ItemUploadCallback callback) {
         collection.document(documentId).update(field, value)
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure(e));
@@ -168,7 +210,7 @@ public abstract class EntityManager<T> {
      * @param document FireBase document snapshot to be converted.
      * @return Instance of the model corresponding to the document.
      */
-    protected abstract T deserialize(DocumentSnapshot document);
+    public abstract T deserialize(DocumentSnapshot document);
 
     /**
      * Converts an instance of the model {@code T} to the corresponding map for uploading to the
@@ -176,5 +218,5 @@ public abstract class EntityManager<T> {
      * @param object Instance of the model.
      * @return Map for uploading to {@code collection}.
      */
-    protected abstract Map<String, Object> serialize(T object);
+    public abstract Map<String, Object> serialize(T object);
 }

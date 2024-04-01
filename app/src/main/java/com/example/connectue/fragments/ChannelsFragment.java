@@ -91,10 +91,6 @@ public class ChannelsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
     }
 
     @Override
@@ -105,7 +101,6 @@ public class ChannelsFragment extends Fragment {
         popularText = view.findViewById(R.id.popular);
         myCoursesText = view.findViewById(R.id.mycourses);
         majorsText = view.findViewById(R.id.majors);
-//        navigationView = view.findViewById(R.id.coursemenu);
 
         searchBtn = view.findViewById(R.id.search_button);
         searchEt = view.findViewById(R.id.searchEditText);
@@ -129,20 +124,6 @@ public class ChannelsFragment extends Fragment {
         majorsVerticalScrollingFragment = new MajorsVerticalScrollingFragment();
         myCoursesVerticalFragment = new MyCoursesVerticalFragment();
         showCoursesView();
-//        navigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                // Handle item selection
-//                int itemId = item.getItemId();
-//                if (itemId == R.id.coursesClick) {
-//                    showCoursesView();
-//                } else if (itemId == R.id.majorsClick) {
-//                    showMajorsView();
-//                }
-//
-//                return true;
-//            }
-//        });
 
         TabLayout tabLayout = view.findViewById(R.id.tablayout_channel_menu);
         Log.d(TAG, tabLayout.toString());
@@ -233,16 +214,16 @@ public class ChannelsFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // get the text content from search edit text
-                Log.i("query", "text change detected" + s);
+                Log.i(TAG, "text change detected" + s);
                 String searchText = s.toString().trim();
                 searchText = searchText.toUpperCase();
 
                 if (searchText.isEmpty()) {
                     searchListView.setAdapter(null);
-                    Log.i("query", "without following query");
+                    Log.i(TAG, "without following query");
                     return;
                 }
-                Log.i("query", "go on query");
+                Log.i(TAG, "go on query");
 
                 searchListView.setVisibility(View.VISIBLE);
 

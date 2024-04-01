@@ -1,8 +1,7 @@
 package com.example.connectue.managers;
 
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.Review;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,7 +28,7 @@ public class QuestionManager extends InteractableManager<Question> {
                        String commentCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
 
-        tag = "QuestionManager class: ";
+        tag = "QuestionManager";
     }
 
     /**
@@ -42,7 +41,7 @@ public class QuestionManager extends InteractableManager<Question> {
      * @param amount number of reviews to retrieve.
      * @param callback Callback to pass list of retrieved questions or an error message.
      */
-    public void downloadRecent(String courseId, int amount, FireStoreDownloadCallback<List<Question>> callback) {
+    public void downloadRecent(String courseId, int amount, ItemDownloadCallback<List<Question>> callback) {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
@@ -54,7 +53,7 @@ public class QuestionManager extends InteractableManager<Question> {
      * @return Instance of the question model.
      */
     @Override
-    protected Question deserialize(DocumentSnapshot document) {
+    public Question deserialize(DocumentSnapshot document) {
         return new Question(
                 document.getId(),
                 document.getString("publisher"),
@@ -73,7 +72,7 @@ public class QuestionManager extends InteractableManager<Question> {
      * @return Map for uploading to question collection.
      */
     @Override
-    protected Map<String, Object> serialize(Question question) {
+    public Map<String, Object> serialize(Question question) {
         Map<String, Object> questionData = new HashMap<>();
 
         questionData.put("publisher", question.getPublisherId());

@@ -14,17 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.utils.General;
 import com.example.connectue.fragments.PostFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.RowPostsBinding;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User2;
-import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -36,7 +35,7 @@ import java.util.Objects;
  */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
-    private static final String tag = "AdapterPosts";
+    private static final String TAG = "AdapterPosts";
 
     List<Post> postList;
 
@@ -59,24 +58,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+
         Post post = postList.get(position);
-
-        holder.userManager.downloadOne(post.getPublisherId(),
-                new FireStoreDownloadCallback<User2>() {
-            @Override
-            public void onSuccess(User2 user) {
-                holder.publisherName.setText(user.getFullName());
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Log.e(tag, "Error getting the user", e);
-            }});
-        holder.description.setText(post.getText());
-        holder.likeNumber.setText(String.valueOf(post.getLikeNumber()));
-        holder.commentNumber.setText(String.valueOf(post.getCommentNumber()));
-        holder.publishTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
         holder.bind(post);
+
     }
 
     @Override
@@ -89,7 +74,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
         private RowPostsBinding binding;
 
-        TextView publisherName, description, likeNumber, commentNumber, publishTime;
+        ImageView pImage;
+
+        TextView publisherName, description, likeNumber, commentNumber;
 
         UserManager userManager;
         PostManager postManager;
@@ -104,7 +91,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             description = itemView.findViewById(R.id.pDescriptionTv);
             likeNumber = itemView.findViewById(R.id.pLikesTv);
             commentNumber = itemView.findViewById(R.id.pCommentTv);
-            publishTime = itemView.findViewById(R.id.PublishTimePost);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
 
@@ -114,6 +100,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         }
 
         public void bind(Post post) {
+
+            // Set publisher name
+            userManager.downloadOne(post.getPublisherId(),
+                new ItemDownloadCallback<User2>() {
+                    @Override
+                    public void onSuccess(User2 user) {
+                        publisherName.setText(user.getFullName());
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(TAG, "Error getting the user", e);
+                    }});
+
+            // Set post text
+            description.setText(post.getText());
+            // Set like number
+            likeNumber.setText(String.valueOf(post.getLikeNumber()));
+            // Set comment number
+            commentNumber.setText(String.valueOf(post.getCommentNumber()));
+
             binding.setPost(post);
             binding.executePendingBindings();
 
@@ -121,7 +128,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
                     .getCurrentUser()).getUid();
 
             // Display like button depending on whether the post is liked
-            postManager.isLiked(post.getId(), currentUid, new FireStoreLikeCallback() {
+            postManager.isLiked(post.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
@@ -140,7 +147,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             binding.likePostBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    postManager.likeOrUnlike(post, currentUid, new FireStoreLikeCallback() {
+                    postManager.likeOrUnlike(post, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {
@@ -157,28 +164,24 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
                 }
             });
 
-            // Initialize report button for verified users
-            userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
+            binding.reportBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onSuccess(User2 data) {
-                    if (data.getRole() == General.GUEST) {
-                        binding.reportBtn.setVisibility(View.GONE);
-                    } else {
-                        binding.reportBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
-                            }
-                        });
-                    }
+                public void onClick(View v) {
+                    General.reportOperation(itemView.getContext(), General.POSTCOLLECTION, post.getId());
                 }
+            });
+
+            // Click a comment button to jump to post details page
+            binding.commentPostBtn.setOnClickListener(v -> {
+                Log.d(TAG, "onClick: card clicked");
+                navigateToPostFragment(post.getId());
             });
         }
 
         // Click a post card to jump to post details page
         @Override
         public void onClick(View v) {
-            Log.d(tag, "onClick: card clicked");
+            Log.d(TAG, "onClick: card clicked");
             int position = getBindingAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 String postId = postList.get(position).getId();

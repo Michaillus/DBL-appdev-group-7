@@ -2,8 +2,8 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.interfaces.ItemLikeCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -44,9 +44,9 @@ public class LikeManager {
      * @param callback Callback that returns True if the interactable is now liked by the user and
      *                 False otherwise.
      */
-    public void likeOrUnlike(String documentId, String userId, FireStoreLikeCallback callback) {
+    public void likeOrUnlike(String documentId, String userId, ItemLikeCallback callback) {
 
-        obtainLike(documentId, userId, new FireStoreDownloadCallback<String>() {
+        obtainLike(documentId, userId, new ItemDownloadCallback<String>() {
             @Override
             public void onSuccess(String likeId) {
                 if (likeId == null) {
@@ -87,9 +87,9 @@ public class LikeManager {
      *                 is liked by the user.
      */
     public void isLiked(String documentId, String userId,
-                             FireStoreLikeCallback callback) {
+                             ItemLikeCallback callback) {
 
-        obtainLike(documentId, userId, new FireStoreDownloadCallback<String>() {
+        obtainLike(documentId, userId, new ItemDownloadCallback<String>() {
             @Override
             public void onSuccess(String data) {
                 callback.onSuccess(data != null);
@@ -113,7 +113,7 @@ public class LikeManager {
      *                 is no like.
      */
     private void obtainLike(String documentId, String userId,
-                            FireStoreDownloadCallback<String> callback) {
+                            ItemDownloadCallback<String> callback) {
         Query query = likeCollection.whereEqualTo("parentId", documentId)
                 .whereEqualTo("userId", userId);
 

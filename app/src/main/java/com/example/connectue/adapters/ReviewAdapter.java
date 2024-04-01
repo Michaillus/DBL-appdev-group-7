@@ -14,11 +14,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.FireStoreLikeCallback;
+import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Review;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.User2;
 import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,10 +36,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     private FragmentManager fragmentManager;
     private ReviewManager reviewManager;
 
+    /**
+     * Study unit of the current page.
+     */
+    private final StudyUnit studyUnit;
 
-    public ReviewAdapter(List<Review> reviewList, FragmentManager fragmentManager) {
+    public ReviewAdapter(List<Review> reviewList, FragmentManager fragmentManager,
+                         StudyUnit studyUnit) {
         this.reviewList = reviewList;
         this.fragmentManager = fragmentManager;
+        this.studyUnit = studyUnit;
     }
 
     @NonNull
@@ -46,28 +53,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
     public ReviewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // This is where we inflate the layout (Giving a look to our rows)
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_review_row, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.study_unit_review_row, parent, false);
         return new ReviewAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ReviewAdapter.MyViewHolder holder, int position) {
-        // assign values to the views we created in the course_review_row file
+
+        // assign values to the views we created in the study_unit_review_row file
         // based on the position of the recycler view
         Review review = reviewList.get(position);
-
-        holder.userManager.downloadOne(review.getPublisherId(),
-                new FireStoreDownloadCallback<User2>() {
-            @Override
-            public void onSuccess(User2 user) {
-                holder.reviewerName.setText(user.getFullName());
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                Log.e(TAG, "Error getting the user", e);
-            }
-        });
         holder.bind(review);
         holder.ratingBar.setIsIndicator(true);
         holder.ratingBar.setRating(review.getStars());
@@ -82,10 +78,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        // grab the views from course_review_row file
+        // grab the views from study_unit_review_row file
         private ImageView reviewLike, reviewDislike;
-        private TextView reviewerName, reviewDescription, reviewDate;
-        private TextView reviewLikeNum, reviewDislikeNum;
+        private TextView reviewerName, description, date;
+        private TextView likeNumber, dislikeNumber;
         private RatingBar ratingBar;
         UserManager userManager;
 
@@ -98,42 +94,65 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             super(itemView);
 
             reviewerName = itemView.findViewById(R.id.reviewerName);
-            reviewDate = itemView.findViewById(R.id.reviewDate);
+            date = itemView.findViewById(R.id.reviewDate);
             ratingBar = itemView.findViewById(R.id.star);
-            reviewDescription = itemView.findViewById(R.id.reviewDescription);
+            description = itemView.findViewById(R.id.reviewDescription);
             reviewLike = itemView.findViewById(R.id.reviewLikeBtn);
-            reviewLikeNum = itemView.findViewById(R.id.reviewLikeNum);
+            likeNumber = itemView.findViewById(R.id.reviewLikeNum);
             reviewDislike = itemView.findViewById(R.id.reviewDislikeBtn);
-            reviewDislikeNum = itemView.findViewById(R.id.reviewDislikeNum);
+            dislikeNumber = itemView.findViewById(R.id.reviewDislikeNum);
 
             db = FirebaseFirestore.getInstance();
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
-            reviewManager = new ReviewManager(FirebaseFirestore.getInstance(), Review.REVIEW_COLLECTION_NAME,
-                    Review.REVIEW_LIKE_COLLECTION_NAME, Review.REVIEW_DISLIKE_COLLECTION_NAME,
-                    Review.REVIEW_COMMENT_COLLECTION_NAME);
-
+            reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
+                    studyUnit.getReviewCollectionName(),
+                    studyUnit.getReviewLikeCollectionName(),
+                    studyUnit.getReviewDislikeCollectionName(),
+                    studyUnit.getReviewCommentCollectionName());
         }
 
         public void bind(Review review) {
 
-            reviewDescription.setText(review.getText());
-            reviewDate.setText(TimeUtils.getTimeAgo(review.getDatetime()));
-            reviewLikeNum.setText(String.valueOf(review.getLikeNumber()));
-            reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
+            // Set publisher name
+            userManager.downloadOne(review.getPublisherId(), new ItemDownloadCallback<User2>() {
+                @Override
+                public void onSuccess(User2 user) {
+                    reviewerName.setText(user.getFullName());
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Log.e(TAG, "Error getting the user", e);
+                }});
+
+            // Set review text
+            description.setText(review.getText());
+            // Set publication date
+            date.setText(TimeUtils.getTimeAgo(review.getDatetime()));
+            // Set like number
+            likeNumber.setText(String.valueOf(review.getLikeNumber()));
+            // Set dislike number
+            dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
 
             currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
                     .getCurrentUser()).getUid();
 
 
 
-            reviewManager.isLiked(review.getId(), currentUid, new FireStoreLikeCallback() {
+            reviewManager.isLiked(review.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
                         reviewLike.setImageResource(R.drawable.like_icon);
+//                        reviewLike.setEnabled(true);
+//                        reviewDislike.setEnabled(true);
+                        reviewDislike.setVisibility(View.VISIBLE);
+                        dislikeNumber.setVisibility(View.VISIBLE);
                     } else {
                         reviewLike.setImageResource(R.drawable.liked_icon);
+                        likeNumber.setVisibility(View.VISIBLE);
+                        reviewDislike.setEnabled(false);
                     }
                 }
 
@@ -145,15 +164,21 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reviewManager.likeOrUnlike(review, currentUid, new FireStoreLikeCallback() {
+                    reviewManager.likeOrUnlike(review, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isLiked) {
                             if (!isLiked) {
                                 reviewLike.setImageResource(R.drawable.like_icon);
+                                reviewLike.setEnabled(true);
+                                reviewDislike.setEnabled(true);
+                                reviewDislike.setVisibility(View.VISIBLE);
+                                dislikeNumber.setVisibility(View.VISIBLE);
                             } else {
                                 reviewLike.setImageResource(R.drawable.liked_icon);
+                                likeNumber.setVisibility(View.VISIBLE);
+                                reviewDislike.setEnabled(false);
                             }
-                            reviewLikeNum.setText(String.valueOf(review.getLikeNumber()));
+                            likeNumber.setText(String.valueOf(review.getLikeNumber()));
                         }
 
                         @Override
@@ -164,13 +189,19 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
 
 
-            reviewManager.isDisliked(review.getId(), currentUid, new FireStoreLikeCallback() {
+            reviewManager.isDisliked(review.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isDisliked) {
                     if (!isDisliked) {
                         reviewDislike.setImageResource(R.drawable.dislike_empty);
+//                        reviewLike.setEnabled(true);
+//                        reviewDislike.setEnabled(true);
+                        reviewLike.setVisibility(View.VISIBLE);
+                        likeNumber.setVisibility(View.VISIBLE);
                     } else {
                         reviewDislike.setImageResource(R.drawable.dislike_filled);
+                        dislikeNumber.setVisibility(View.VISIBLE);
+                        reviewLike.setEnabled(false);
                     }
                 }
 
@@ -182,15 +213,21 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             reviewDislike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    reviewManager.dislikeOrUndislike(review, currentUid, new FireStoreLikeCallback() {
+                    reviewManager.dislikeOrUndislike(review, currentUid, new ItemLikeCallback() {
                         @Override
                         public void onSuccess(Boolean isDisliked) {
                             if (!isDisliked) {
                                 reviewDislike.setImageResource(R.drawable.dislike_empty);
+                                reviewLike.setEnabled(true);
+                                reviewDislike.setEnabled(true);
+                                reviewLike.setVisibility(View.VISIBLE);
+                                likeNumber.setVisibility(View.VISIBLE);
                             } else {
                                 reviewDislike.setImageResource(R.drawable.dislike_filled);
+                                dislikeNumber.setVisibility(View.VISIBLE);
+                                reviewLike.setEnabled(false);
                             }
-                            reviewDislikeNum.setText(String.valueOf(review.getDislikeNumber()));
+                            dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
                         }
 
                         @Override

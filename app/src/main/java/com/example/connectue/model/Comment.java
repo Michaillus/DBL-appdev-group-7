@@ -2,9 +2,6 @@ package com.example.connectue.model;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.CommentCreateCallback;
-import com.google.firebase.firestore.DocumentSnapshot;
-
 import java.util.Date;
 
 public class Comment {

@@ -2,8 +2,6 @@ package com.example.connectue.model;
 
 import android.util.Log;
 
-import com.google.firebase.firestore.CollectionReference;
-
 import java.util.Date;
 
 public abstract class Interactable {
@@ -11,53 +9,119 @@ public abstract class Interactable {
     /**
      * Class tag for logs.
      */
-    protected String TAG = "Interactable class: ";
+    protected String tag = "Interactable model";
 
+    /**
+     * Name of publisher id field in a collection of any interactable
+     */
+    public static final String PUBLISHER_ID_ATTRIBUTE = "publisher";
+
+    /**
+     * Name of the main text field in a collection of any interactable
+     */
+    public static final String TEXT_ATTRIBUTE = "text";
+
+    /**
+     * Name of like number field in a collection of any interactable
+     */
+    public static final String LIKE_NUMBER_ATTRIBUTE = "likes";
+
+    /**
+     * Name of dislike number field in a collection of any interactable
+     */
+    public static final String DISLIKE_NUMBER_ATTRIBUTE = "dislikes";
+
+    /**
+     * Name of comment number field in a collection of any interactable
+     */
+    public static final String COMMENT_NUMBER_ATTRIBUTE = "comments";
+
+    /**
+     * Name of date and time field in a collection of any interactable
+     */
+    public static final String DATETIME_ATTRIBUTE = "timestamp";
+
+    /**
+     * Id of the interactable in a corresponding table in the database.
+     */
     protected String interactableId;
 
+    /**
+     * Id of the publisher of interactable in the user collection in the database.
+     */
     protected String publisherId;
 
+    /**
+     * Main text of the interactable.
+     */
     protected String text;
 
+    /**
+     * Number of likes on the interactable.
+     */
     protected long likeNumber;
 
+    /**
+     * Number of dislikes on the interactable.
+     */
     protected long dislikeNumber;
 
+    /**
+     * Number of comments on the interactable.
+     */
     protected long commentNumber;
 
+    /**
+     * Date and time of publishing of the interactable.
+     */
     protected Date datetime;
 
+    /**
+     * Constructor for an interactable that is not yet in the database.
+     * @param publisherId Database id of the publisher.
+     * @param text Main text of the interactable.
+     */
     public Interactable(String publisherId, String text) {
         this(null, publisherId, text, 0L, 0L, 0L, new Date());
     }
 
+    /**
+     * Constructor for an interactable that is taken from the database.
+     * @param interactableId Database id of the interactable.
+     * @param publisherId Database id of the publisher.
+     * @param text Main text.
+     * @param likeNumber Number of likes.
+     * @param dislikeNumber Number of dislikes.
+     * @param commentNumber Number of comments.
+     * @param datetime Date and time of publication.
+     */
     public Interactable(String interactableId, String publisherId, String text,
                         Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime) {
 
         // Handling null parameters
         if (publisherId == null) {
             String m = "ID of the publisher should not be null";
-            Log.e(TAG, m);
+            Log.e(tag, m);
             throw new IllegalArgumentException(m);
         }
         if (text == null) {
             String m = "Post text should not be null";
-            Log.e(TAG, m);
+            Log.e(tag, m);
             throw new IllegalArgumentException(m);
         }
         if (likeNumber == null) {
             String m = "Like number should not be null";
-            Log.e(TAG, m);
+            Log.e(tag, m);
             throw new IllegalArgumentException(m);
         }
         if (dislikeNumber == null) {
             String m = "Dislike number should not be null";
-            Log.e(TAG, m);
+            Log.e(tag, m);
             throw new IllegalArgumentException(m);
         }
         if (commentNumber == null) {
             String m = "Comment number should not be null";
-            Log.e(TAG, m);
+            Log.e(tag, m);
             throw new IllegalArgumentException(m);
         }
 
@@ -68,10 +132,6 @@ public abstract class Interactable {
         this.setDislikeNumber(dislikeNumber);
         this.setCommentNumber(commentNumber);
         this.setDatetime(datetime);
-    }
-
-    public static CollectionReference getCollection() {
-        return null;
     }
 
 

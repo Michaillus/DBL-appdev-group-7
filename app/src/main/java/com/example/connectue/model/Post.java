@@ -18,11 +18,6 @@ import java.util.Date;
 public class Post extends Interactable {
 
     /**
-     * Class tag for logs.
-     */
-    private static final String TAG = "Post class: ";
-
-    /**
      * Name of post collection in the database.
      */
     public static final String POST_COLLECTION_NAME = "posts";
@@ -42,12 +37,18 @@ public class Post extends Interactable {
      */
     public static final String POST_COMMENT_COLLECTION_NAME = "post-comments";
 
+    /**
+     * Url of the post image in the database.
+     */
     private String imageUrl;
 
     public Post(String publisherId, String text, String imageUrl) {
         super(publisherId, text);
 
         this.setImageUrl(imageUrl);
+
+        // Setting class tag for logs.
+        tag = "Post Model";
     }
 
     // Constructor
@@ -58,6 +59,8 @@ public class Post extends Interactable {
 
         this.setImageUrl(imageUrl);
 
+        // Setting class tag for logs.
+        tag = "Post Model";
     }
 
     /**

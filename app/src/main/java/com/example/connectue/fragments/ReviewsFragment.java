@@ -15,13 +15,16 @@ import android.view.ViewGroup;
 
 import com.example.connectue.R;
 import com.example.connectue.activities.AddReviewActivity;
-import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.activities.StudyUnitViewActivity;
 import com.example.connectue.adapters.ReviewAdapter;
 import com.example.connectue.databinding.FragmentReviewsBinding;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.ConditionCheckCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.managers.ReviewManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Review;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,24 +38,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A fragment for the home page with the post feed and add a post button.
+ * A fragment that shows a feed of reviews of a study unit (course or major) and add a study unit
+ * button.
  */
 public class ReviewsFragment extends Fragment {
 
     /**
      * Class tag for logs.
      */
-    private static final String tag = "ReviewFragment";
+    private static final String TAG = "ReviewsFragment";
 
     private FragmentReviewsBinding binding;
 
     /**
-     * Adapter that is responsible for outputting posts to UI.
+     * Adapter that is responsible for outputting review list to UI.
      */
     private ReviewAdapter reviewAdapter;
 
     /**
-     * Manager for database requests for posts collection.
+     * Manager for database requests for study unit's reviews collection.
      */
     private ReviewManager reviewManager;
 
@@ -65,6 +69,11 @@ public class ReviewsFragment extends Fragment {
      * Indicates if posts are currently loading from database.
      */
     private FragmentManager fragmentManager;
+
+    /**
+     * Study unit model of the opened page.
+     */
+    StudyUnit studyUnit;
 
     public ReviewsFragment() {
         // Default constructor
@@ -82,13 +91,18 @@ public class ReviewsFragment extends Fragment {
         binding = FragmentReviewsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // Initialize the study unit.
+        studyUnit = retrieveStudyUnit();
+
         // Define reviews recycler view.
         RecyclerView rewievsRecyclerView = binding.recyclerViewReview;
 
         // Initialize database post manager.
         reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
-                Review.REVIEW_COLLECTION_NAME, Review.REVIEW_LIKE_COLLECTION_NAME,
-                Review.REVIEW_DISLIKE_COLLECTION_NAME, Review.REVIEW_COMMENT_COLLECTION_NAME);
+                studyUnit.getReviewCollectionName(),
+                studyUnit.getReviewLikeCollectionName(),
+                studyUnit.getReviewDislikeCollectionName(),
+                studyUnit.getReviewCommentCollectionName());
 
         // Initializing the list of posts in the feed.
         List<Review> reviewList = new ArrayList<>();
@@ -109,19 +123,16 @@ public class ReviewsFragment extends Fragment {
     }
 
     private void initRecyclerView(List<Review> reviewList, RecyclerView reviewsRecyclerview) {
-        reviewAdapter = new ReviewAdapter(reviewList, fragmentManager);
+        reviewAdapter = new ReviewAdapter(reviewList, fragmentManager, studyUnit);
         reviewsRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
         reviewsRecyclerview.setHasFixedSize(false);
         reviewsRecyclerview.setAdapter(reviewAdapter);
     }
 
     private void loadReviews(List<Review> reviewList) {
-        int reviewsPerChunk = 4;
+        int reviewsPerChunk = 6;
 
-
-        String courseId = retrieveCourseId();
-
-        reviewManager.downloadRecent(courseId, reviewsPerChunk, new FireStoreDownloadCallback<List<Review>>() {
+        reviewManager.downloadRecent(studyUnit.getId(), reviewsPerChunk, new ItemDownloadCallback<List<Review>>() {
             @Override
             public void onSuccess(List<Review> data) {
                 reviewList.addAll(data);
@@ -131,41 +142,74 @@ public class ReviewsFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while downloading reviews", e);
+                Log.e(TAG, "Error while downloading reviews", e);
             }
         });
     }
 
-    private String retrieveCourseId() {
-        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
-        if (courseViewActivity != null) {
-            return courseViewActivity.getCourse();
-        } else {
-            return "";
-        }
-    }
-
     private void displayAddReviewButton(View root) {
-        UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addReviewBtn = root.findViewById(R.id.addReviewBtn);
-        userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
+        checkUserAllowedAddReview(currentUid, new ConditionCheckCallback() {
             @Override
-            public void onSuccess(User2 data) {
-                if (data.isVerified()) {
+            public void onSuccess(boolean conditionSatisfied) {
+                if (conditionSatisfied) {
+                    Log.i(TAG, "User is allowed to add a review");
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
+                        Log.e(TAG, studyUnit.studyUnitToString());
+                        intent.putExtra("course", studyUnit.studyUnitToString());
                         startActivity(intent);
                     });
+                    addReviewBtn.setVisibility(View.VISIBLE);
                 } else {
-                    addReviewBtn.setVisibility(View.GONE);
+                    Log.i(TAG, "User is not allowed to add a review");
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while retrieving user from the database", e);
+                Log.e(TAG, "Error while checking if user allowed to add a review", e);
             }
+        });
+    }
+
+    public void checkUserAllowedAddReview(String userId, ConditionCheckCallback callback) {
+        UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
+        userManager.downloadOne(userId, new ItemDownloadCallback<User2>() {
+            @Override
+            public void onSuccess(User2 data) {
+                if (data.isVerified()) {
+                    // User is a student
+                    reviewManager.hasUserReviewedStudyUnit(studyUnit.getId(), userId, new ItemExistsCallback() {
+                        @Override
+                        public void onSuccess(boolean exists) {
+                            if (!exists) {
+                                // User is a student and has no reviews on the study unit
+                                callback.onSuccess(true);
+                            } else {
+                                // User has a review on the study unit
+                                callback.onSuccess(false);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            callback.onFailure(e);
+                        }
+
+                    });
+                } else {
+                    // User is not a student
+                    callback.onSuccess(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onFailure(e);
+            }
+
         });
     }
 
@@ -190,6 +234,18 @@ public class ReviewsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves the study unit model of current page.
+     */
+    private StudyUnit retrieveStudyUnit() {
+        StudyUnitViewActivity studyUnitViewActivity = (StudyUnitViewActivity) getActivity();
+        if (studyUnitViewActivity != null) {
+            return studyUnitViewActivity.getStudyUnit();
+        } else {
+            return new StudyUnit("0", "0", StudyUnit.StudyUnitType.COURSE);
+        }
     }
 
     @Override

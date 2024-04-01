@@ -18,11 +18,11 @@ import com.example.connectue.activities.AddQuestionActivity;
 import com.example.connectue.activities.CourseViewActivity;
 import com.example.connectue.adapters.QuestionAdapter;
 import com.example.connectue.databinding.FragmentQuestionsBinding;
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.QuestionManager;
 import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.Review;
 import com.example.connectue.model.User2;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,6 +67,11 @@ public class QuestionsFragment extends Fragment {
      */
     private FragmentManager fragmentManager;
 
+    /**
+     * Course model of the opened page.
+     */
+    StudyUnit course;
+
     public QuestionsFragment() {
         // Default constructor
     }
@@ -90,6 +95,9 @@ public class QuestionsFragment extends Fragment {
         questionManager = new QuestionManager(FirebaseFirestore.getInstance(),
                 Question.QUESTION_COLLECTION_NAME, Question.QUESTION_LIKE_COLLECTION_NAME,
                 Question.QUESTION_DISLIKE_COLLECTION_NAME, Question.QUESTION_COMMENT_COLLECTION_NAME);
+
+        // Initialize course id.
+        course = retrieveCourse();
 
         // Initializing the list of posts in the feed.
         List<Question> questionList = new ArrayList<>();
@@ -119,10 +127,7 @@ public class QuestionsFragment extends Fragment {
     private void loadQuestions(List<Question> questionList) {
         int questionsPerChunk = 4;
 
-
-        String courseId = retrieveCourseId();
-
-        questionManager.downloadRecent(courseId, questionsPerChunk, new FireStoreDownloadCallback<List<Question>>() {
+        questionManager.downloadRecent(course.getId(), questionsPerChunk, new ItemDownloadCallback<List<Question>>() {
             @Override
             public void onSuccess(List<Question> data) {
                 questionList.addAll(data);
@@ -137,25 +142,17 @@ public class QuestionsFragment extends Fragment {
         });
     }
 
-    private String retrieveCourseId() {
-        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
-        if (courseViewActivity != null) {
-            return courseViewActivity.getCourse();
-        } else {
-            return "";
-        }
-    }
-
     private void displayAddQuestionButton(View root) {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addQuestionButton = root.findViewById(R.id.addQuestionBtn);
-        userManager.downloadOne(currentUid, new FireStoreDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
                     addQuestionButton.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddQuestionActivity.class);
+                        intent.putExtra("course", course.studyUnitToString());
                         startActivity(intent);
                     });
                 } else {
@@ -191,6 +188,18 @@ public class QuestionsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    /**
+     * Retrieves the course model of current page.
+     */
+    private StudyUnit retrieveCourse() {
+        CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();
+        if (courseViewActivity != null) {
+            return courseViewActivity.getStudyUnit();
+        } else {
+            return new StudyUnit("0", "0", StudyUnit.StudyUnitType.COURSE);
+        }
     }
 
     @Override

@@ -1,37 +1,21 @@
 package com.example.connectue.model;
 
-import com.google.firebase.firestore.PropertyName;
-
 import java.util.Date;
 
+/**
+ * Class that defines the model for a review of a course.
+ */
 public class Review extends Interactable{
 
     /**
-     * Class tag for logs.
+     * Name of stars field in the reviews collection
      */
-    private static final String TAG = "Review class: ";
-
-    
-    /**
-     * Name of review collection in the database.
-     */
-    public static final String REVIEW_COLLECTION_NAME = "reviews";
+    public static final String STARS_ATTRIBUTE = "stars";
 
     /**
-     * Name of review likes collection in the database.
+     * Name of parent course id field in the reviews collection
      */
-    public static final String REVIEW_LIKE_COLLECTION_NAME = "review-likes";
-
-    /**
-     * Name of review dislikes collection in the database.
-     */
-    public static final String REVIEW_DISLIKE_COLLECTION_NAME = "review-dislikes";
-
-    /**
-     * Name of review comments collection in the database.
-     */
-    public static final String REVIEW_COMMENT_COLLECTION_NAME = "review-comments";
-
+    public static final String PARENT_ID_ATTRIBUTE = "parentId";
     
     /**
      * Rating in terms of number of stars from 1 to 5, that was given in the review.
@@ -39,24 +23,30 @@ public class Review extends Interactable{
     protected long stars;
 
     /**
-     * Id of the course for which review is written.
+     * Id of the study unit for which review is written.
      */
-    protected String parentCourseId;
+    protected String parentId;
 
-    public Review(String publisherId, String text, Long stars, String parentCourseId) {
+    public Review(String publisherId, String text, Long stars, String parentId) {
         super(publisherId, text);
 
         this.setStars(stars);
-        this.setParentCourseId(parentCourseId);
+        this.setParentId(parentId);
+
+        // Setting class tag for logs.
+        tag = "Review model";
     }
 
     public Review(String reviewId, String publisherId, String text, Long stars,
-                Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime, String parentCourseId)
+                  Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime, String parentId)
             throws IllegalArgumentException {
 
         super(reviewId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
-        this.parentCourseId = parentCourseId;
+        this.parentId = parentId;
         this.setStars(stars);
+
+        // Setting class tag for logs.
+        tag = "Review model";
 
     }
 
@@ -72,13 +62,13 @@ public class Review extends Interactable{
     }
 
     /**
-     * Getters and setters for parent course id.
+     * Getters and setters for parent study unit id.
      */
-    public String getParentCourseId() {
-        return parentCourseId;
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setParentCourseId(String parentCourseId) {
-        this.parentCourseId = parentCourseId;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

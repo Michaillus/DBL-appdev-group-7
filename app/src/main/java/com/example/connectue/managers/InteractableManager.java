@@ -2,9 +2,9 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
-import com.example.connectue.interfaces.FireStoreLikeCallback;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.interfaces.ItemLikeCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Interactable;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,8 +68,8 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param interactable Interactable to like or unlike.
      * @param userId Id of the user who likes or unlikes the interactable.
      */
-    public void likeOrUnlike(T interactable, String userId, FireStoreLikeCallback callback) {
-        likeManager.likeOrUnlike(interactable.getId(), userId, new FireStoreLikeCallback() {
+    public void likeOrUnlike(T interactable, String userId, ItemLikeCallback callback) {
+        likeManager.likeOrUnlike(interactable.getId(), userId, new ItemLikeCallback() {
             @Override
             public void onSuccess(Boolean isLiked) {
                 if (isLiked) {
@@ -99,7 +99,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param userId Id of the user.
      * @param callback Callback to return if interactable is liked.
      */
-    public void isLiked(String interactableId, String userId, FireStoreLikeCallback callback) {
+    public void isLiked(String interactableId, String userId, ItemLikeCallback callback) {
         likeManager.isLiked(interactableId, userId, callback);
     }
 
@@ -109,8 +109,8 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param interactable Interactable to dislike or undislike.
      * @param userId Id of the user who likes or unlikes the interactable.
      */
-    public void dislikeOrUndislike(T interactable, String userId, FireStoreLikeCallback callback) {
-        dislikeManager.likeOrUnlike(interactable.getId(), userId, new FireStoreLikeCallback() {
+    public void dislikeOrUndislike(T interactable, String userId, ItemLikeCallback callback) {
+        dislikeManager.likeOrUnlike(interactable.getId(), userId, new ItemLikeCallback() {
             @Override
             public void onSuccess(Boolean isDisliked) {
                 if (isDisliked) {
@@ -140,7 +140,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param userId Id of the user.
      * @param callback Callback to return if interactable is disliked.
      */
-    public void isDisliked(String interactableId, String userId, FireStoreLikeCallback callback) {
+    public void isDisliked(String interactableId, String userId, ItemLikeCallback callback) {
         dislikeManager.isLiked(interactableId, userId, callback);
     }
 
@@ -153,7 +153,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      *                 or passes the error message on failure.
      */
     public void downloadRecentComments(String parentId, int amount,
-                                       FireStoreDownloadCallback<List<Comment>> callback) {
+                                       ItemDownloadCallback<List<Comment>> callback) {
         commentManager.downloadRecent(parentId, amount, callback);
     }
 
@@ -162,7 +162,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param comment Instance of a comment to publish.
      * @param callback Callback that is called when the upload process is finished.
      */
-    public void uploadComment(Comment comment, FireStoreUploadCallback callback) {
+    public void uploadComment(Comment comment, ItemUploadCallback callback) {
         commentManager.upload(comment, callback);
     }
 }

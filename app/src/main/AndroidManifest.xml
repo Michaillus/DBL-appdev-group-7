@@ -27,13 +27,16 @@
             android:name=".activities.AddQuestionActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MaterialUploadActivity"
+            android:name=".activities.AddMaterialActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MaterialPDFActivity"
             android:exported="false" />
         <activity
             android:name=".activities.CourseViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MajorViewActivity"
             android:exported="false" />
         <activity
             android:name=".activities.AdminActivity"

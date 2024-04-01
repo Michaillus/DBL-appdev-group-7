@@ -7,13 +7,6 @@ import java.util.Date;
 public class Question extends Interactable{
 
     /**
-     * Class tag for logs.
-     */
-    private static final String TAG = "Question class: ";
-    protected String publisherName;
-
-
-    /**
      * Name of question collection in the database.
      */
     public static final String QUESTION_COLLECTION_NAME = "questions";
@@ -43,6 +36,9 @@ public class Question extends Interactable{
         super(publisherId, text);
 
         setParentCourseId(parentCourseId);
+
+        // Setting class tag for logs.
+        tag = "Question Model";
     }
 
     public Question(String questionId, String publisherId, String text, Long likeNumber,
@@ -52,6 +48,9 @@ public class Question extends Interactable{
         super(questionId, publisherId, text, likeNumber, dislikeNumber, commentNumber, datetime);
 
         setParentCourseId(parentCourseId);
+
+        // Setting class tag for logs.
+        tag = "Question Model";
     }
 
     /**

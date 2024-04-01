@@ -1,8 +1,6 @@
 package com.example.connectue.managers;
 
-import android.util.Log;
-
-import com.example.connectue.interfaces.FireStoreDownloadCallback;
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Comment;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,7 +22,7 @@ public class CommentManager extends EntityManager<Comment> {
     public CommentManager(FirebaseFirestore db, String collectionName) {
         super(db, collectionName);
 
-        tag = "CommentManager class: ";
+        tag = "CommentManager";
     }
 
     /**
@@ -38,7 +36,7 @@ public class CommentManager extends EntityManager<Comment> {
      * @param callback Callback to pass list of models of the retrieved documents or
      *                 an error message.
      */
-    public void downloadRecent(String parentId, int amount, FireStoreDownloadCallback<List<Comment>> callback) {
+    public void downloadRecent(String parentId, int amount, ItemDownloadCallback<List<Comment>> callback) {
         Query basicQuery = collection.whereEqualTo(Comment.PARENT_ID, parentId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
@@ -50,7 +48,7 @@ public class CommentManager extends EntityManager<Comment> {
      * @return Instance of the comment model.
      */
     @Override
-    protected Comment deserialize(DocumentSnapshot document) {
+    public Comment deserialize(DocumentSnapshot document) {
         return new Comment(
                 document.getId(),
                 document.getString(Comment.PUBLISHER_ID),
@@ -66,7 +64,7 @@ public class CommentManager extends EntityManager<Comment> {
      * @return Map for uploading to a comment collection.
      */
     @Override
-    protected Map<String, Object> serialize(Comment comment) {
+    public Map<String, Object> serialize(Comment comment) {
         Map<String, Object> questionData = new HashMap<>();
 
         questionData.put(Comment.PUBLISHER_ID, comment.getPublisherId());

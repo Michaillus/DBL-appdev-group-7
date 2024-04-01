@@ -8,13 +8,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.connectue.managers.QuestionManager;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.Question;
+import com.example.connectue.utils.ActivityUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.connectue.R;
-import com.example.connectue.interfaces.FireStoreUploadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,7 +33,10 @@ public class AddQuestionActivity extends AppCompatActivity {
     FloatingActionButton backBtn;
     String text;
 
-    private String courseId;
+    /**
+     * Course for which question is added.
+     */
+    private StudyUnit course;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -50,16 +55,8 @@ public class AddQuestionActivity extends AppCompatActivity {
         publishQuestionBtn = findViewById(R.id.publishReviewBtn);
         backBtn = findViewById(R.id.back_Btn);
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                courseId= "";
-            } else {
-                courseId= extras.getString("courseId");
-            }
-        } else {
-            courseId = (String) savedInstanceState.getSerializable("courseId");
-        }
+        // Retrieve course model passed from the previous activity / fragment.
+        course = ActivityUtils.getStudyUnit(this, savedInstanceState);
 
         publishQuestionBtn.setOnClickListener(v -> publishQuestion());
         backBtn.setOnClickListener(v -> finish());
@@ -75,9 +72,9 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     private void uploadToFirestore(String text) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Question question = new Question(publisherId, text, courseId);
+        Question question = new Question(publisherId, text, course.getId());
 
-        questionManager.upload(question, new FireStoreUploadCallback() {
+        questionManager.upload(question, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 Log.i(tag, "Question is uploaded successfully");

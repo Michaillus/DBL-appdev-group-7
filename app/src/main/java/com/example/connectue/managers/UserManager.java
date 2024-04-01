@@ -5,6 +5,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class UserManager extends EntityManager<User2> {
     public UserManager(FirebaseFirestore db, String collectionName) {
         super(db, collectionName);
 
-        tag = "UserManager class: ";
+        tag = "UserManager";
     }
 
     /**
@@ -30,13 +31,14 @@ public class UserManager extends EntityManager<User2> {
      * @return Instance of the user model.
      */
     @Override
-    protected User2 deserialize(DocumentSnapshot document) {
+    public User2 deserialize(DocumentSnapshot document) {
         return new User2(
                 document.getId(),
                 document.getString("firstName"),
                 document.getString("lastName"),
                 document.getBoolean("isVerified"),
-                document.getString("password"),
+                //document.getString("password"),
+                document.getString("email"),
                 document.getString("phone"),
                 document.getString("profilePicURL"),
                 document.getString("program"),
@@ -51,18 +53,21 @@ public class UserManager extends EntityManager<User2> {
      * @return Map for uploading to user collection.
      */
     @Override
-    protected Map<String, Object> serialize(User2 user) {
+    public Map<String, Object> serialize(User2 user) {
         Map<String, Object> userData = new HashMap<>();
 
         userData.put("timestamp", new Timestamp(new Date()));
         userData.put("firstName", user.getFirstName());
         userData.put("lastName", user.getLastName());
         userData.put("isVerified", user.isVerified());
-        userData.put("password", user.getPassword());
+        //userData.put("password", user.getPassword());
+        userData.put("email", user.getEmail());
         userData.put("phone", user.getPhoneNumber());
         userData.put("profilePicUrl", user.getProfilePicUrl());
         userData.put("program", user.getProgram());
         userData.put("role", user.getRole());
+
+        userData.put("userCourses", new ArrayList<String>());
 
         return userData;
     }
