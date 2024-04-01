@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="10dp"
+    style="@style/background">
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -25,6 +26,7 @@
 
         <!-- Publisher Name -->
         <TextView
+            style="@style/textColor"
             android:id="@+id/publisherNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,6 +38,7 @@
 
         <!-- Publish Time -->
         <TextView
+            style="@style/textColor"
             android:id="@+id/publishTimePostTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -88,6 +91,7 @@
             android:padding="8dp">
 
             <ImageButton
+                style="@style/imageColor"
                 android:id="@+id/likeAPostBtn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
