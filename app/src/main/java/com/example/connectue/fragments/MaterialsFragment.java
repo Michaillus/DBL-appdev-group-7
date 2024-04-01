@@ -159,7 +159,7 @@ public class MaterialsFragment extends Fragment {
                     });
                 } else {
                     Log.i(TAG, "User is not allowed to add a material");
-                    addQuestionBtn.setVisibility(View.GONE);
+                    addQuestionBtn.setVisibility(View.INVISIBLE);
                 }
             }
 

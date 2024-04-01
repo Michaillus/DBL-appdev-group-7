@@ -187,7 +187,7 @@ public class ReviewsFragment extends Fragment {
                     addReviewBtn.setVisibility(View.VISIBLE);
                 } else {
                     Log.i(TAG, "User is not allowed to add a review");
-                    addReviewBtn.setVisibility(View.GONE);
+                    addReviewBtn.setVisibility(View.INVISIBLE);
                 }
             }
 

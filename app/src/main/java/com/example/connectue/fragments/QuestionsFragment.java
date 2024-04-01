@@ -159,7 +159,7 @@ public class QuestionsFragment extends Fragment {
                     addQuestionButton.setVisibility(View.VISIBLE);
                 } else {
                     Log.i(TAG, "User is not allowed to add a question");
-                    addQuestionButton.setVisibility(View.GONE);
+                    addQuestionButton.setVisibility(View.INVISIBLE);
                 }
             }
 
