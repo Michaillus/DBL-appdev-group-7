@@ -6,6 +6,7 @@ import static com.example.connectue.utils.General.PROFILEPICTURE;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -368,41 +369,54 @@ public class ProfileFragment extends Fragment {
     private void initDeleteButton() {
         deleteBtn.setText("DELETE ACCOUNT");
 
-        CollectionReference reviewsRef = db.collection("reviews");
-        CollectionReference postsRef = db.collection("posts");
-        CollectionReference commentsRef = db.collection("post-comments");
+//        CollectionReference reviewsRef = db.collection("reviews");
+//        CollectionReference reviewsRef = db.collection(General.COURSEREVIEWCOLLECTION);
+////        CollectionReference postsRef = db.collection("posts");
+//        CollectionReference postsRef = db.collection(General.POSTCOLLECTION);
+////        CollectionReference commentsRef = db.collection("post-comments");
+//        CollectionReference commentsRef = db.collection(General.COMMENTCOLLECTION);
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                signoutDeletePopup(false);
 
                 // Firstly, delete all posts and reviews posted by this user
-                deleteUserContents(reviewsRef);
-                deleteUserContents(postsRef);
-                deleteUserContents(commentsRef);
-
-                db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        FirebaseAuth.getInstance().signOut();
-                                        toOtherActivity(LoadingActivity.class);
-                                    }
-                                });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "Delete failed",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
+//                deleteUserContents(reviewsRef);
+//                deleteUserContents(postsRef);
+//                deleteUserContents(commentsRef);
+//
+//                db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
+//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void unused) {
+//                                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        FirebaseAuth.getInstance().signOut();
+//                                        toOtherActivity(LoadingActivity.class);
+//                                    }
+//                                });
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Toast.makeText(getActivity(), "Delete failed",
+//                                        Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
             }
         });
+    }
+
+    private void deleteUserContents() {
+        CollectionReference reviewsRef = db.collection(General.COURSEREVIEWCOLLECTION);
+        CollectionReference postsRef = db.collection(General.POSTCOLLECTION);
+        CollectionReference commentsRef = db.collection(General.COMMENTCOLLECTION);
+        deleteUserContents(reviewsRef);
+        deleteUserContents(postsRef);
+        deleteUserContents(commentsRef);
     }
 
     private void deleteUserContents(CollectionReference collectionRef) {
@@ -461,10 +475,64 @@ public class ProfileFragment extends Fragment {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                toOtherActivity(LoadingActivity.class);
+                signoutDeletePopup(true);
             }
         });
+    }
+
+    private void signoutDeletePopup(boolean isSignout) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        if (isSignout) {
+            builder.setTitle("Logout");
+            builder.setMessage("Do you want to sign out?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    FirebaseAuth.getInstance().signOut();
+                    dialog.dismiss();
+                    toOtherActivity(LoadingActivity.class);
+                }
+            });
+        } else {
+            builder.setTitle("Delete");
+            builder.setMessage("ARE YOU SURE YOU WANT TO DELETE?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteUserContents();
+
+                    db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            FirebaseAuth.getInstance().signOut();
+                                            toOtherActivity(LoadingActivity.class);
+                                        }
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), "Delete failed",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            });
+        }
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
     }
 
     private void toOtherActivity(Class activity) {
