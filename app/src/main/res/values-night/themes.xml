@@ -1,13 +1,40 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ConnecTue" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="colorPrimary">#0E375A</item>
+        <item name="colorPrimary">#980F0F</item>
         
     </style>
     
     <style name="background"><item name="android:background">#222222</item></style>
     <style name="cardBackground">
-        <item name="strokeColor">#113F67</item>
-        <item name="cardBackgroundColor">#113F67</item>
+        <item name="strokeColor">#980F0F</item>
+        <item name="cardBackgroundColor">#980F0F</item>
+    </style>
+
+    <style name="textColor">
+        <item name="android:textColor">@color/Design2</item>
+        <item name="android:drawableTint">@color/Design2</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorPrimary">#980F0F</item>
+        <item name="colorOnPrimary">@color/Design2</item>
+    </style>
+
+
+    <style name="Theme.ConnecTue" parent="Base.Theme.ConnecTue">
+    </style>
+
+    <style name="buttonStyle">
+        <item name="android:backgroundTint">#CA0926</item>
+        <item name="android:textColor">@color/Design2</item>
+    </style>
+
+    <style name="headerBackground">
+        <item name="android:background">#980F0F</item>
+    </style>
+
+    <style name="imageColor">
+        <item name="android:tint">@color/Design2</item>
     </style>
 </resources>

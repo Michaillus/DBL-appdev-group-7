@@ -4,9 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="16dp"
+    style="@style/background">
 
     <ImageView
+        style="@style/imageColor"
         android:id="@+id/profilePicCommentIv"
         android:src="@drawable/baseline_person_24"
         android:layout_width="24dp"
@@ -14,6 +16,7 @@
         android:layout_alignParentStart="true"/>
 
     <TextView
+        style="@style/textColor"
         android:id="@+id/publisherNameCommentTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,6 +36,7 @@
         android:text="Publish time" />
 
     <TextView
+        style="@style/textColor"
         android:id="@+id/commentDescriptionTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,6 +46,7 @@
         android:text="Comment content" />
 
     <ImageButton
+        style="@style/imageColor"
         android:id="@+id/reportCommentBtn"
         android:layout_width="48dp"
         android:layout_height="48dp"

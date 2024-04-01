@@ -31,7 +31,7 @@
             <ImageView
                 android:id="@+id/pImageIv"
                 android:layout_width="360dp"
-                android:layout_height="400dp"
+                android:layout_height="450dp"
                 android:adjustViewBounds="true"
                 style="@style/background"
                 android:clickable="true"

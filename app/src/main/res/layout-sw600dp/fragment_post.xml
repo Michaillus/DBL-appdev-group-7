@@ -17,7 +17,6 @@
 
         <!-- Publisher Profile Pic -->
         <ImageView
-            style="@style/imageColor"
             android:id="@+id/profilePicPostImageView"
             android:layout_width="45dp"
             android:layout_height="45dp"
@@ -65,7 +64,7 @@
         <ImageView
             android:id="@+id/postImageInPostImageView"
             android:layout_width="wrap_content"
-            android:layout_height="500dp"
+            android:layout_height="700dp"
             android:layout_marginHorizontal="10dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/publishTimePostTextView"
@@ -74,7 +73,6 @@
 
         <!-- Post Description -->
         <TextView
-            style="@style/textColor"
             android:id="@+id/postDescriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

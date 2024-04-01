@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_reviews"
+        android:enabled="true"
+        android:icon="@drawable/baseline_reviews_24"
+        android:title="Reviews"/>
+    <item
+        android:id="@+id/nav_questions"
+        android:enabled="true"
+        android:icon="@drawable/baseline_question_answer_24"
+        android:title="Questions"/>
+    <item
+        android:id="@+id/nav_materials"
+        android:enabled="true"
+        android:icon="@drawable/baseline_book_24"
+        android:title="Materials"/>
+</menu>
