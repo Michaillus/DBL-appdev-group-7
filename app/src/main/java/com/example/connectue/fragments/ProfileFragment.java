@@ -201,7 +201,10 @@ public class ProfileFragment extends Fragment {
                         Log.i(TAG,"document fetched");
                         Log.i(TAG, document.toString());
                         parseDocument();
-                        initComponents(view);
+                        if (getContext() != null) {
+                            initComponents(view);
+                        }
+//                        initComponents(view);
                     } else {
                         Log.d(TAG, "No such user document");
                     }
@@ -253,34 +256,36 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                getContext(),
-                R.array.programs_array,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (getContext() != null) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                    getContext(),
+                    R.array.programs_array,
+                    android.R.layout.simple_spinner_item
+            );
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        majorSpinner.setAdapter(adapter);
-        majorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-            }
+            majorSpinner.setAdapter(adapter);
+            majorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
 
-        majorSpinner2.setAdapter(adapter);
-        majorSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-            }
+            majorSpinner2.setAdapter(adapter);
+            majorSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+        }
 
 
     }
@@ -296,9 +301,14 @@ public class ProfileFragment extends Fragment {
         email_fld.setText(emailStr);
         phone_fld.setText(phoneStr);
 
-        String[] items = getResources().getStringArray(R.array.programs_array);
-        setSpinner(items, spinnerStr, majorSpinner);
-        setSpinner(items, spinnerStr2, majorSpinner2);
+        if (getContext() != null) {
+            String[] items = getResources().getStringArray(R.array.programs_array);
+            setSpinner(items, spinnerStr, majorSpinner);
+            setSpinner(items, spinnerStr2, majorSpinner2);
+        }
+//        String[] items = getResources().getStringArray(R.array.programs_array);
+//        setSpinner(items, spinnerStr, majorSpinner);
+//        setSpinner(items, spinnerStr2, majorSpinner2);
     }
 
     private void setSpinner(String[] items, String spinnerString, Spinner spinner) {
