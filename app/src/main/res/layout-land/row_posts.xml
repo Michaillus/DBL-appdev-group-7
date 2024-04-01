@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<data>
-    <variable
-        name="post"
-        type="com.example.connectue.model.Post" />
-</data>
+    <data>
+        <variable
+            name="post"
+            type="com.example.connectue.model.Post" />
+    </data>
 
-<androidx.cardview.widget.CardView
-    android:id="@+id/postCardView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="3dp"
-    app:contentPadding="5dp"
-    app:cardUseCompatPadding="true"
-    android:clickable="true"
-    android:focusable="true"
-    android:layout_gravity="center_horizontal"
-    style="@style/background"
-    app:cardBackgroundColor="#FFFAF1">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/postCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        app:contentPadding="5dp"
+        app:cardUseCompatPadding="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="center_horizontal"
+        style="@style/background"
+        app:cardBackgroundColor="#FFFAF1">
 
         <LinearLayout
             style="@style/background"
@@ -31,7 +31,7 @@
             <ImageView
                 android:id="@+id/pImageIv"
                 android:layout_width="360dp"
-                android:layout_height="400dp"
+                android:layout_height="250dp"
                 android:adjustViewBounds="true"
                 style="@style/background"
                 android:clickable="true"
