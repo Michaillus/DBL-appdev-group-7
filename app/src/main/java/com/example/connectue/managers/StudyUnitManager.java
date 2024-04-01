@@ -2,6 +2,7 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Review;
 import com.example.connectue.model.StudyUnit;
@@ -49,22 +50,33 @@ public class StudyUnitManager extends EntityManager<StudyUnit> {
      * @param callback Callback that is called when the method is finished - successfully or
      *                 with an error.
      */
-    public void addRating(StudyUnit studyUnit, Review studyUnitReview, ItemUploadCallback callback) {
+    public void addRating(String studyUnitId, Review studyUnitReview, ItemUploadCallback callback) {
 
-        studyUnit.setRatingSum(studyUnit.getRatingSum() + studyUnitReview.getStars());
-        studyUnit.setRatingNumber(studyUnit.getRatingNumber() + 1);
-        set(studyUnit, studyUnit.getId(), new ItemUploadCallback() {
+        downloadOne(studyUnitId, new ItemDownloadCallback<StudyUnit>() {
             @Override
-            public void onSuccess() {
-                callback.onSuccess();
+            public void onSuccess(StudyUnit studyUnit) {
+                studyUnit.setRatingSum(studyUnit.getRatingSum() + studyUnitReview.getStars());
+                studyUnit.setRatingNumber(studyUnit.getRatingNumber() + 1);
+                set(studyUnit, studyUnit.getId(), new ItemUploadCallback() {
+                    @Override
+                    public void onSuccess() {
+                        callback.onSuccess();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(TAG, "Error while changing rating of a study unit");
+                        callback.onFailure(e);
+                    }
+                });
             }
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(TAG, "Error while changing rating of a study unit");
                 callback.onFailure(e);
             }
         });
+
     }
 
     /**
