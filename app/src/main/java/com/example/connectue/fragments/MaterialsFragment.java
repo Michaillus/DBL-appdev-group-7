@@ -83,7 +83,6 @@ public class MaterialsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         binding = FragmentMaterialsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -151,12 +150,15 @@ public class MaterialsFragment extends Fragment {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
+                    Log.i(TAG, "User is allowed to add a material");
                     addQuestionBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddMaterialActivity.class);
                         intent.putExtra("course", course.studyUnitToString());
                         startActivity(intent);
+                        addQuestionBtn.setVisibility(View.VISIBLE);
                     });
                 } else {
+                    Log.i(TAG, "User is not allowed to add a material");
                     addQuestionBtn.setVisibility(View.GONE);
                 }
             }

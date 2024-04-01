@@ -43,7 +43,7 @@ public class QuestionsFragment extends Fragment {
     /**
      * Class tag for logs.
      */
-    private static final String tag = "QuestionsFragment";
+    private static final String TAG = "QuestionsFragment";
 
     private FragmentQuestionsBinding binding;
 
@@ -137,7 +137,7 @@ public class QuestionsFragment extends Fragment {
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while downloading question", e);
+                Log.e(TAG, "Error while downloading question", e);
             }
         });
     }
@@ -150,19 +150,22 @@ public class QuestionsFragment extends Fragment {
             @Override
             public void onSuccess(User2 data) {
                 if (data.isVerified()) {
+                    Log.i(TAG, "User is allowed to add a question");
                     addQuestionButton.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddQuestionActivity.class);
                         intent.putExtra("course", course.studyUnitToString());
                         startActivity(intent);
                     });
+                    addQuestionButton.setVisibility(View.VISIBLE);
                 } else {
+                    Log.i(TAG, "User is not allowed to add a question");
                     addQuestionButton.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(tag, "Error while retrieving user from the database", e);
+                Log.e(TAG, "Error while retrieving user from the database", e);
             }
         });
     }
