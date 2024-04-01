@@ -341,17 +341,17 @@ public class ManageReportHistoryFragment extends Fragment {
             // Deleting course or major review through the study unit manager
             StudyUnit.StudyUnitType studyUnitType;
             // Finds the type of study unit of the content
-            if (currentChannel.equals(StudyUnit.COURSE_COLLECTION_NAME)) {
+            if (currentChannel.equals(StudyUnit.COURSE_REVIEW_COLLECTION_NAME)) {
                 studyUnitType = StudyUnit.StudyUnitType.COURSE;
             } else {
                 studyUnitType = StudyUnit.StudyUnitType.MAJOR;
             }
             // Initialize review manager for deletion
             ReviewManager reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
-                    StudyUnit.getCollectionName(studyUnitType),
                     StudyUnit.getReviewCollectionName(studyUnitType),
                     StudyUnit.getReviewLikeCollectionName(studyUnitType),
-                    StudyUnit.getReviewDislikeCollectionName(studyUnitType));
+                    StudyUnit.getReviewDislikeCollectionName(studyUnitType),
+                    StudyUnit.getReviewCommentCollectionName(studyUnitType));
             // Delete the review
             reviewManager.deleteReview(contentId, studyUnitType,
                     new ItemDeleteCallback() {
