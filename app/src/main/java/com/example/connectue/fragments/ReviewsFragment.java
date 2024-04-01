@@ -5,7 +5,10 @@ import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -75,6 +78,11 @@ public class ReviewsFragment extends Fragment {
      */
     StudyUnit studyUnit;
 
+    /**
+     * Launches a method on finish add review activity.
+     */
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
     public ReviewsFragment() {
         // Default constructor
     }
@@ -90,6 +98,19 @@ public class ReviewsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentReviewsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Log.e(TAG, "Does this work?");
+                    StudyUnitViewActivity studyUnitViewActivity = (StudyUnitViewActivity) getActivity();
+                    if (studyUnitViewActivity != null) {
+                        studyUnitViewActivity.reload();
+                    } else {
+                        Log.e(TAG, "Unable to get Study unit view activity");
+                    }
+
+                });
 
         // Initialize the study unit.
         studyUnit = retrieveStudyUnit();
@@ -157,9 +178,11 @@ public class ReviewsFragment extends Fragment {
                     Log.i(TAG, "User is allowed to add a review");
                     addReviewBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddReviewActivity.class);
-                        Log.e(TAG, studyUnit.studyUnitToString());
                         intent.putExtra("course", studyUnit.studyUnitToString());
-                        startActivity(intent);
+
+
+
+                        activityResultLauncher.launch(intent);
                     });
                     addReviewBtn.setVisibility(View.VISIBLE);
                 } else {
