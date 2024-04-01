@@ -23,6 +23,7 @@ public class ActivityUtils {
                 Log.e(TAG, "No course passed to the activity");
             } else {
                 courseAsString= extras.getString("course");
+                Log.d(TAG, "course passed to activity");
             }
         } else {
             courseAsString= (String) savedInstanceState.getSerializable("course");
@@ -31,6 +32,7 @@ public class ActivityUtils {
             courseAsString = "0#0#0#0#0#0course";
             Log.e(TAG, "No course passed to the activity");
         }
+        Log.d(TAG, courseAsString);
         return StudyUnit.stringToStudyUnit(courseAsString);
     }
 }

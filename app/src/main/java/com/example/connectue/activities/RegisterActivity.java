@@ -24,6 +24,7 @@ import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.User2;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity
     String selectedProgram;
     Button registerBtn;
     ProgressDialog progressDialog;
+
+    FloatingActionButton backBtn;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -52,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
 
         registerBtn = findViewById(R.id.buttonregister);
+        backBtn = findViewById(R.id.back_btn);
 
         Spinner spinner = (Spinner) findViewById(R.id.ProgramSpinner);
         emailEt = findViewById(R.id.emailET);
@@ -112,6 +116,13 @@ public class RegisterActivity extends AppCompatActivity
 
             }
         });
+
+        backBtn.setOnClickListener(v -> {
+           Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+           startActivity(intent);
+           RegisterActivity.this.finish();
+        });
+
     }
 
     @Override
