@@ -8,27 +8,25 @@
     tools:context=".fragments.ProfileFragment"
     style="@style/background">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="60dp">
 
         <TextView
             android:id="@+id/profile_title"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:text="@string/profile_title"
             style="@style/textColor"
             android:layout_alignParentTop="true"
             android:gravity="left|center"
-            android:textSize="50sp" />
+            android:textSize="40sp" />
 
         <Button
             style="@style/buttonStyle"
             android:id="@+id/btn_logout"
             android:layout_width="180dp"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:text="@string/Log_out"
             android:textSize="25dp"
@@ -40,15 +38,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
         android:layout_marginTop="10dp"
         style="@style/background">
 
         <ImageView
             style="@style/imageColor"
             android:id="@+id/profilePic"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
             android:contentDescription="@string/profile"
             android:src="@drawable/baseline_person_24" />
 
@@ -63,7 +61,7 @@
             android:autofillHints="name"
             android:inputType=""
             android:hint="@string/firstName"
-            android:textSize="40sp" />
+            android:textSize="35sp" />
 
         <EditText
             android:id="@+id/text_lastName"
@@ -75,13 +73,13 @@
             android:inputType=""
             android:hint="@string/lastName"
             style="@style/textColor"
-            android:textSize="40sp" />
+            android:textSize="35sp" />
 
         <TextView
             android:id="@+id/major_title"
             android:layout_width="wrap_content"
             style="@style/textColor"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_below="@id/text_firstName"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/profilePic"
@@ -155,12 +153,12 @@
             android:background="@android:color/transparent"
             android:drawableLeft="@drawable/baseline_edit_24"
             android:text="@string/Edit_button"
-            android:textSize="30sp"/>
+            android:textSize="25sp"/>
 
         <Spinner
             android:id="@+id/majorSpinner"
             android:layout_width="140dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:textAlignment="textStart"
             style="@style/textColor"
             android:layout_below="@id/text_firstName"
@@ -169,7 +167,7 @@
         <Spinner
             android:id="@+id/majorSpinner2"
             android:layout_width="140dp"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:textAlignment="textStart"
             style="@style/textColor"
             android:layout_below="@id/majorSpinner"
@@ -185,7 +183,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/post_history"
         style="@style/textColor"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:gravity="left"
         android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
         android:background="@android:color/transparent" />
@@ -198,27 +196,27 @@
         android:text="@string/review_history"
         style="@style/textColor"
         android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:gravity="left"
         android:background="@android:color/transparent" />
 
 
     <Button
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:id="@+id/btn_deleteAccount"
         android:layout_width="match_parent"
         style="@style/buttonStyle"
         android:layout_height="wrap_content"
         android:text="@string/delete_account"
-        android:textSize="30dp"/>
+        android:textSize="25dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/buttonStyle"
         android:text="Switch To admin mode"
-        android:layout_marginTop="20dp"
-        android:textSize="30dp"
+        android:layout_marginTop="5dp"
+        android:textSize="25dp"
         android:id="@+id/btn_admmin"/>
 
 
