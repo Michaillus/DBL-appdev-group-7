@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/background"
+    tools:context=".activities.CourseViewActivity">
+
+    <FrameLayout
+        android:id="@id/frame_layout"
+        android:layout_toEndOf="@id/navigation_rail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/pageHeader"
+        >
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/pageHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        style="@style/headerBackground"
+        android:paddingTop="15dp">
+
+        <RatingBar
+            android:id="@+id/studyUnitRating"
+            android:layout_width="wrap_content"
+            android:layout_height="53dp"
+            android:layout_marginTop="-5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="-22dp"
+            android:progressBackgroundTint="#FF8181"
+            android:progressTint="@color/Design2"
+            android:scaleX=".6"
+            android:scaleY=".6" />
+
+        <TextView
+            android:id="@+id/rating"
+            android:layout_marginRight="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating 0/5"
+            android:layout_below="@+id/studyUnitRating"
+            android:textColor="@color/Design2"
+            android:layout_alignParentEnd="true"/>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/followButton"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/studyUnitTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="course_code"
+                android:textSize="30dp"
+                android:layout_marginLeft="30dp"
+                android:textColor="@color/Design2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="@string/follow"-->
+            <!--                android:textColor="@color/Design2"-->
+            <!--                android:textSize="17dp"-->
+            <!--                android:layout_below="@+id/textView4"-->
+            <!--                />-->
+
+            <ImageView
+                android:id="@+id/followIcon"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView"
+
+
+                android:src="@drawable/baseline_add_circle_outline_24"
+                app:tint="@color/Design2" />
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+    <com.google.android.material.navigationrail.NavigationRailView
+        android:layout_below="@id/pageHeader"
+        style="@style/rail_background"
+        android:id="@+id/navigation_rail"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/course_navigation_rail_menu" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/baseline_arrow_back_ios_new_24"
+        android:layout_alignParentBottom="true"
+        style="@style/buttonStyle"
+        app:tint="@color/Design2"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="13dp"
+
+        />
+
+
+
+
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_toEndOf="@id/navigation_rail"
+        android:id="@+id/recyclerView_review"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="160dp" />
+
+
+
+</RelativeLayout>

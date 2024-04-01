@@ -4,31 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/background"
+    android:padding="30dp"
     tools:context=".activities.AddPostActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/postDescription"
+        android:layout_marginBottom="20dp"
+        android:text="Write a caption!"
+        android:textSize="25dp"
+        style="@style/textColor"
+        android:textStyle="bold"
+        />
     <EditText
         android:id="@+id/postDescription"
-        android:layout_width="296dp"
+        android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="300dp"
         android:background="@null"
         android:ems="10"
         android:gravity="start"
         android:hint="Type here..."
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imageAdd"
+        android:layout_marginBottom="20dp"
+        android:text="Select a photo!"
+        android:textSize="25dp"
+        style="@style/textColor"
+        android:textStyle="bold"
+        />
     <RelativeLayout
-        android:layout_width="296dp"
+        android:id="@+id/imageAdd"
+        android:layout_width="match_parent"
         android:layout_height="85dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="60dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postDescription">
+        app:layout_constraintBottom_toTopOf="@+id/postDescription">
 
         <ImageView
             android:id="@+id/postImage"
@@ -38,33 +65,31 @@
 
         <ImageView
             android:id="@+id/addPostImageBtn"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
+            style="@style/imageColor"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
             android:layout_toEndOf="@id/postImage"
             app:srcCompat="@drawable/ic_add_black" />
     </RelativeLayout>
 
     <Button
+        style="@style/buttonStyle"
         android:id="@+id/publishPostBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginTop="15dp"
         android:text="Publish"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/postDescription" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/Design4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_arrow_back_ios_new_24"
-        app:tint="@color/Design2"
+        style="@style/buttonStyle"
         app:maxImageSize="20dp"
         app:fabCustomSize="45dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.ChannelsFragment"
+    style="@style/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pageHeader"
+        android:layout_alignParentTop="true"
+        style="@style/headerBackground"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+        >
+
+        <TextView
+            android:id="@+id/Channel_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/Design2"
+            android:text="@string/channels"
+            android:textSize="32sp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="20dp" />
+
+
+
+
+    </RelativeLayout>
+
+    <com.google.android.material.navigationrail.NavigationRailView
+        android:layout_below="@id/pageHeader"
+        style="@style/rail_background"
+        android:id="@+id/navigation_rail"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/channels_navigation_rail_menu" />
+
+    <RelativeLayout
+        android:layout_toEndOf="@id/navigation_rail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/pageHeader"
+        android:padding="30dp">
+
+        <TextView
+            android:id="@+id/popular"
+            style="@style/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchEditText"
+            android:textSize="17dp"
+            android:text="@string/popular"/>
+        <TextView
+            style="@style/textColor"
+            android:id="@+id/majors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchEditText"
+            android:textSize="17dp"
+            android:text="@string/majors"/>
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_below="@+id/majors"
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragmentContainerViewMajors"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_below="@+id/popular"
+            android:id="@+id/fragmentContainerViewPopCourses"
+            android:layout_width="280dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="100dp"/>
+
+        <TextView
+            android:id="@+id/mycourses"
+            style="@style/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_below="@id/searchEditText"
+            android:layout_toEndOf="@+id/fragmentContainerViewPopCourses"
+            android:textSize="17dp"
+            android:text="@string/my_courses"/>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerViewMyCourses"
+            android:layout_width="280dp"
+            android:layout_marginLeft="30dp"
+            android:layout_toEndOf="@id/fragmentContainerViewPopCourses"
+            android:layout_height="100dp"
+            android:layout_below="@+id/mycourses"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/searchEditText"
+            style="@android:style/Widget.AutoCompleteTextView"
+            android:layout_width="400dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:hint="Search..."
+            android:inputType="text" />
+
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="95dp"
+            android:layout_height="40dp"
+            style="@style/buttonStyle"
+            android:layout_above="@+id/searchEditText"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="-62dp"
+            android:textColor="@android:color/background_light"
+            android:layout_toRightOf="@id/searchEditText"
+            android:text="Search"/>
+
+        <ListView
+            android:id="@+id/searchListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/searchEditText"
+            android:labelFor="@+id/searchEditText"
+            android:visibility="gone"
+            android:background="@color/Design2"/>
+
+
+
+
+        <!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+        <!--            android:id="@+id/coursemenu"-->
+        <!--            android:layout_width="160dp"-->
+        <!--            android:layout_height="70dp"-->
+        <!--            android:layout_alignParentTop="true"-->
+        <!--            style="@style/background"-->
+        <!--            android:layout_alignParentRight="true"-->
+        <!--            app:menu="@menu/courses_major_nav" >-->
+
+        <!--        </com.google.android.material.bottomnavigation.BottomNavigationView>-->
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

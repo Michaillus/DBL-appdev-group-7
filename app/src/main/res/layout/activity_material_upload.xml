@@ -8,10 +8,10 @@
     style="@style/background">
 
     <RelativeLayout
+        style="@style/headerBackground"
         android:id="@+id/pageHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/Design4">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/courseName"
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_margin="20dp"
-        style="@style/buttonColor"
+        style="@style/buttonStyle"
         >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -94,7 +94,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/Design4"
-        android:text="Submit"
-        android:textColor="@color/Design2" />
+        style="@style/buttonStyle"
+        android:text="Submit"/>
 </RelativeLayout>

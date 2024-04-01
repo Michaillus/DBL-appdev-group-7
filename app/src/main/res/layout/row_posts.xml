@@ -15,12 +15,12 @@
     app:cardElevation="3dp"
     app:contentPadding="5dp"
     app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="#FFFFFF"
     android:clickable="true"
     android:focusable="true"
     android:layout_gravity="center_horizontal">
 
         <LinearLayout
+            style="@style/background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -31,7 +31,7 @@
                 android:layout_width="360dp"
                 android:layout_height="250dp"
                 android:adjustViewBounds="true"
-                android:background="#FFFFFF"
+                style="@style/background"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="centerCrop"
@@ -75,6 +75,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
+                    style="@style/imageColor"
                     android:id="@+id/likePostBtn"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
@@ -83,12 +84,13 @@
                     app:srcCompat="@drawable/like_icon" />
 
                 <TextView
+                    style="@style/textColor"
                     android:id="@+id/pLikesTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#000000" />
+                    android:layout_height="wrap_content"/>
 
                 <ImageButton
+                    style="@style/imageColor"
                     android:id="@+id/commentPostBtn"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
@@ -97,10 +99,10 @@
                     app:srcCompat="@drawable/comment_icon" />
 
                 <TextView
+                    style="@style/textColor"
                     android:id="@+id/pCommentTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#000000" />
+                    android:layout_height="wrap_content"/>
 
                 <Space
                     android:layout_width="0dp"
@@ -108,6 +110,7 @@
                     android:layout_weight="1" />
 
                 <ImageButton
+                    style="@style/imageColor"
                     android:id="@+id/report_btn"
                     android:layout_width="48dp"
                     android:layout_height="48dp"

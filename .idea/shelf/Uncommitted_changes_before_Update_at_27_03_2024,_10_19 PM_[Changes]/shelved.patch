@@ -1,0 +1,486 @@
+Index: app/src/main/res/layout/course_review_row.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<com.google.android.material.card.MaterialCardView xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\"\n    app:strokeColor=\"@color/Design2\"\n    >\n\n\n    <RelativeLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        style=\"@style/background\"\n        android:padding=\"10dp\">\n\n<!--        <LinearLayout-->\n<!--            android:layout_width=\"match_parent\"-->\n<!--            android:layout_height=\"wrap_content\"-->\n<!--            android:orientation=\"vertical\">-->\n<!--            -->\n<!--        </LinearLayout>-->\n\n        <RelativeLayout\n            android:id=\"@+id/rounded\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\">\n\n            <TextView\n                android:id=\"@+id/uName\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"Augustin\"\n                android:textSize=\"20dp\"\n                android:textStyle=\"bold\" />\n\n            <ImageButton\n                android:id=\"@+id/star\"\n                android:layout_centerInParent=\"true\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:background=\"@null\"\n                app:srcCompat=\"@drawable/star\" />\n\n            <TextView\n                android:id=\"@+id/date\"\n                android:layout_alignParentEnd=\"true\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"16/03/2024\" />\n\n        </RelativeLayout>\n\n        <LinearLayout\n            android:layout_below=\"@+id/rounded\"\n            android:id=\"@+id/content\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"35dp\"\n            android:gravity=\"center_vertical\"\n            android:orientation=\"vertical\">\n\n            <TextView\n                android:id=\"@+id/review\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"I like all courses\" />\n\n        </LinearLayout>\n\n        <LinearLayout\n            android:layout_below=\"@+id/content\"\n            android:id=\"@+id/visible\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:orientation=\"horizontal\"\n            >\n\n            <ImageButton\n                android:id=\"@+id/likePostBtn\"\n                android:layout_width=\"25dp\"\n                android:layout_height=\"45dp\"\n                android:background=\"@null\"\n                android:contentDescription=\"Like\"\n                app:srcCompat=\"@drawable/like_icon\" />\n\n            <TextView\n                android:layout_gravity=\"center\"\n                android:id=\"@+id/likeNum\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:inputType=\"number\"\n                android:text=\"12\">\n\n            </TextView>\n\n            <ImageButton\n                android:id=\"@+id/dislikeReview\"\n                android:layout_width=\"29dp\"\n                android:layout_height=\"match_parent\"\n                android:background=\"@null\"\n                app:srcCompat=\"@drawable/dislike\" />\n\n            <TextView\n                android:layout_gravity=\"center\"\n                android:id=\"@+id/dislikeNum\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:inputType=\"number\"\n                android:text=\"0\">\n\n            </TextView>\n        </LinearLayout>\n        <com.google.android.material.divider.MaterialDivider\n            android:layout_below=\"@id/visible\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"/>\n\n\n\n    </RelativeLayout>\n</com.google.android.material.card.MaterialCardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/course_review_row.xml b/app/src/main/res/layout/course_review_row.xml
+--- a/app/src/main/res/layout/course_review_row.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/course_review_row.xml	(date 1711574343337)
+@@ -3,7 +3,6 @@
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+-    app:strokeColor="@color/Design2"
+     >
+ 
+ 
+@@ -36,9 +35,9 @@
+ 
+             <ImageButton
+                 android:id="@+id/star"
+-                android:layout_centerInParent="true"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
++                android:layout_centerInParent="true"
+                 android:background="@null"
+                 app:srcCompat="@drawable/star" />
+ 
+Index: app/src/main/res/values/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources xmlns:tools=\"http://schemas.android.com/tools\">\n    <!-- Base application theme. -->\n    <style name=\"Base.Theme.ConnecTue\" parent=\"Theme.Material3.DayNight.NoActionBar\">\n        <!-- Customize your light theme here. -->\n        <item name=\"android:textColorPrimary\">@color/Design4</item>\n        <item name=\"colorSecondary\">@color/Design2</item>\n        <item name=\"colorPrimary\">@color/Design4</item>\n        <item name=\"colorOnPrimary\">@color/Design2</item>\n    </style>\n\n    <style name=\"Widget.App.BottomNavigationView\" parent=\"Widget.MaterialComponents.BottomNavigationView.Colored\">\n        <item name=\"materialThemeOverlay\">@style/ThemeOverlay.App.BottomNavigationView</item>\n    </style>\n\n    <style name=\"ThemeOverlay.App.BottomNavigationView\" parent=\"\">\n        <item name=\"colorPrimary\">@color/Design4</item>\n        <item name=\"colorOnPrimary\">@color/Design2</item>\n    </style>\n\n    <style name=\"Theme.ConnecTue\" parent=\"Base.Theme.ConnecTue\">\n    </style>\n\n    <style name=\"buttonColor\">\n        <item name=\"android:backgroundTint\">#FF928E</item>\n    </style>\n    <style name=\"background\"><item name=\"android:background\">#FFFAF1</item></style>\n    <style name=\"cardBackground\">\n        <item name=\"strokeColor\">@color/Design4</item>\n        <item name=\"cardBackgroundColor\">@color/Design4</item>\n    </style>\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/themes.xml b/app/src/main/res/values/themes.xml
+--- a/app/src/main/res/values/themes.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/values/themes.xml	(date 1711574343601)
+@@ -20,12 +20,21 @@
+     <style name="Theme.ConnecTue" parent="Base.Theme.ConnecTue">
+     </style>
+ 
+-    <style name="buttonColor">
++    <style name="buttonStyle">
+         <item name="android:backgroundTint">#FF928E</item>
++        <item name="android:textColor">@color/Design2</item>
+     </style>
+     <style name="background"><item name="android:background">#FFFAF1</item></style>
+     <style name="cardBackground">
+         <item name="strokeColor">@color/Design4</item>
+         <item name="cardBackgroundColor">@color/Design4</item>
+     </style>
++
++    <style name="headerBackground">
++        <item name="android:background">#980F0F</item>
++    </style>
++
++    <style name="textColor">
++        <item name="android:textColor">#3E3E3E</item>
++    </style>
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/values-night/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources xmlns:tools=\"http://schemas.android.com/tools\">\n    <!-- Base application theme. -->\n    <style name=\"Base.Theme.ConnecTue\" parent=\"Theme.Material3.Dark.NoActionBar\">\n        <item name=\"colorPrimary\">#0E375A</item>\n        \n    </style>\n    \n    <style name=\"background\"><item name=\"android:background\">#222222</item></style>\n    <style name=\"cardBackground\">\n        <item name=\"strokeColor\">#113F67</item>\n        <item name=\"cardBackgroundColor\">#113F67</item>\n    </style>\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values-night/themes.xml b/app/src/main/res/values-night/themes.xml
+--- a/app/src/main/res/values-night/themes.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/values-night/themes.xml	(date 1711574343256)
+@@ -7,7 +7,29 @@
+     
+     <style name="background"><item name="android:background">#222222</item></style>
+     <style name="cardBackground">
+-        <item name="strokeColor">#113F67</item>
+-        <item name="cardBackgroundColor">#113F67</item>
++        <item name="strokeColor">#980F0F</item>
++        <item name="cardBackgroundColor">#980F0F</item>
++    </style>
++
++    <style name="textColor">
++        <item name="android:textColor">@color/Design2</item>
++    </style>
++
++    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
++        <item name="colorPrimary">#980F0F</item>
++        <item name="colorOnPrimary">@color/Design2</item>
++    </style>
++
++
++    <style name="Theme.ConnecTue" parent="Base.Theme.ConnecTue">
++    </style>
++
++    <style name="buttonStyle">
++        <item name="android:backgroundTint">#CA0926</item>
++        <item name="android:textColor">@color/Design2</item>
++    </style>
++
++    <style name="headerBackground">
++        <item name="android:background">#980F0F</item>
+     </style>
+ </resources>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_material_upload.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".activities.MaterialUploadActivity\"\n    style=\"@style/background\">\n\n    <RelativeLayout\n        android:id=\"@+id/pageHeader\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:background=\"@color/Design4\">\n        <TextView\n            android:id=\"@+id/courseName\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:layout_alignParentTop=\"true\"\n            android:textColor=\"@color/Design2\"\n            android:text=\"course_code\"\n            android:textStyle=\"bold\"\n            android:textSize=\"32sp\"\n            android:paddingBottom=\"10dp\"\n            android:layout_marginTop=\"20dp\"\n            android:layout_marginBottom=\"20dp\"\n            android:textAlignment=\"center\"\n            />\n    </RelativeLayout>\n    \n    <com.google.android.material.card.MaterialCardView\n        android:id=\"@+id/uploadMaterialBtn\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_below=\"@id/pageHeader\"\n        android:clickable=\"true\"\n        android:focusable=\"true\"\n        android:layout_margin=\"20dp\"\n        style=\"@style/buttonColor\"\n        >\n        <RelativeLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:padding=\"30dp\"\n            android:textAlignment=\"center\">\n\n            <TextView\n                android:layout_centerHorizontal=\"true\"\n                android:id=\"@+id/downloadText\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:textColor=\"@color/Design2\"\n                android:text=\"Upload\"\n                android:textSize=\"20dp\"\n                android:textStyle=\"bold\"/>\n\n            <ImageView\n                android:layout_width=\"50dp\"\n                android:layout_height=\"50dp\"\n                android:layout_below=\"@id/downloadText\"\n                android:id=\"@+id/downloadIcon\"\n                android:layout_centerInParent=\"true\"\n                android:layout_marginTop=\"20dp\"\n                android:outlineSpotShadowColor=\"#000000\"\n                android:src=\"@drawable/baseline_upload_file_24\"\n                app:tint=\"@color/Design2\" />\n        </RelativeLayout>\n\n\n\n    </com.google.android.material.card.MaterialCardView>\n    <com.google.android.material.textfield.TextInputLayout\n        android:layout_below=\"@+id/uploadMaterialBtn\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_margin=\"20dp\"\n        android:hint=\"Write your caption here...\">\n        <com.google.android.material.textfield.TextInputEditText\n            android:id=\"@+id/materialCaption\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:inputType=\"textMultiLine\"\n            >\n\n        </com.google.android.material.textfield.TextInputEditText>\n    </com.google.android.material.textfield.TextInputLayout>\n\n    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton\n        android:id=\"@+id/submitBtn\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentBottom=\"true\"\n        android:layout_marginStart=\"20dp\"\n        android:layout_marginTop=\"20dp\"\n        android:layout_marginEnd=\"20dp\"\n        android:layout_marginBottom=\"20dp\"\n        android:backgroundTint=\"@color/Design4\"\n        android:text=\"Submit\"\n        android:textColor=\"@color/Design2\" />\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_material_upload.xml b/app/src/main/res/layout/activity_material_upload.xml
+--- a/app/src/main/res/layout/activity_material_upload.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_material_upload.xml	(date 1711574343175)
+@@ -8,10 +8,10 @@
+     style="@style/background">
+ 
+     <RelativeLayout
++        style="@style/headerBackground"
+         android:id="@+id/pageHeader"
+         android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:background="@color/Design4">
++        android:layout_height="wrap_content">
+         <TextView
+             android:id="@+id/courseName"
+             android:layout_width="match_parent"
+@@ -36,7 +36,7 @@
+         android:clickable="true"
+         android:focusable="true"
+         android:layout_margin="20dp"
+-        style="@style/buttonColor"
++        style="@style/buttonStyle"
+         >
+         <RelativeLayout
+             android:layout_width="match_parent"
+@@ -94,7 +94,6 @@
+         android:layout_marginTop="20dp"
+         android:layout_marginEnd="20dp"
+         android:layout_marginBottom="20dp"
+-        android:backgroundTint="@color/Design4"
+-        android:text="Submit"
+-        android:textColor="@color/Design2" />
++        style="@style/buttonStyle"
++        android:text="Submit"/>
+ </RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_material_pdfactivity.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".activities.MaterialPDFActivity\"\n    style=\"@style/background\">\n\n    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:id=\"@+id/downloadBtn\"\n        android:text=\"Download File\"\n        android:layout_centerInParent=\"true\"\n        app:icon=\"@drawable/baseline_arrow_circle_down_24\"\n        app:iconTint=\"@color/Design2\"\n        android:textColor=\"@color/Design2\"\n        style=\"@style/buttonColor\"\n        />\n\n\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_material_pdfactivity.xml b/app/src/main/res/layout/activity_material_pdfactivity.xml
+--- a/app/src/main/res/layout/activity_material_pdfactivity.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_material_pdfactivity.xml	(date 1711574343615)
+@@ -16,7 +16,7 @@
+         app:icon="@drawable/baseline_arrow_circle_down_24"
+         app:iconTint="@color/Design2"
+         android:textColor="@color/Design2"
+-        style="@style/buttonColor"
++        style="@style/buttonStyle"
+         />
+ 
+ 
+Index: app/src/main/res/layout/activity_register.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".activities.RegisterActivity\"\n    android:background=\"@color/Design2\"\n    android:padding=\"30dp\">\n\n    <Button\n        android:id=\"@+id/buttonregister\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentBottom=\"true\"\n        android:layout_marginBottom=\"40dp\"\n        android:background=\"@drawable/button_drawable\"\n        android:text=\"@string/RegisterBtnStr\"/>\n    <com.google.android.material.textfield.TextInputLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"60dp\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_centerVertical=\"true\"\n        android:id=\"@+id/FirstNameTIL\"\n        android:layout_above=\"@+id/LastNameTIL\">\n        <EditText\n            android:id=\"@+id/FirstNameET\"\n            android:inputType=\"text\"\n            android:hint=\"@string/first_name\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"50dp\"\n            android:autofillHints=\"\" />\n    </com.google.android.material.textfield.TextInputLayout>\n\n    <com.google.android.material.textfield.TextInputLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"60dp\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_centerVertical=\"true\"\n        android:id=\"@+id/LastNameTIL\"\n        android:layout_above=\"@+id/emailTIL\">\n        <EditText\n            android:id=\"@+id/LastNameET\"\n            android:inputType=\"text\"\n            android:hint=\"@string/last_name\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"50dp\"\n            android:autofillHints=\"\" />\n    </com.google.android.material.textfield.TextInputLayout>\n\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:text=\"Program\"\n        android:layout_above=\"@id/ProgramSpinner\" />\n    <Spinner\n        android:id=\"@+id/ProgramSpinner\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"50dp\"\n        android:textAlignment=\"textStart\"\n        android:layout_above=\"@id/FirstNameTIL\"/>\n\n    <com.google.android.material.textfield.TextInputLayout\n        android:id=\"@+id/emailTIL\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"60dp\"\n        android:layout_centerInParent=\"true\">\n\n        <EditText\n            android:id=\"@+id/emailET\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"50dp\"\n            android:hint=\"@string/email\"\n            android:inputType=\"textEmailAddress\"\n            android:autofillHints=\"\" />\n    </com.google.android.material.textfield.TextInputLayout>\n\n    <com.google.android.material.textfield.TextInputLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"60dp\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_centerVertical=\"true\"\n        android:id=\"@+id/passwordTIL\"\n        android:layout_below=\"@+id/emailTIL\">\n        <EditText\n            android:id=\"@+id/passwordET\"\n            android:inputType=\"textPassword\"\n            android:hint=\"@string/password\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"50dp\"\n            android:autofillHints=\"\" />\n    </com.google.android.material.textfield.TextInputLayout>\n\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentTop=\"true\"\n        android:text=\"@string/RegisterBtnStr\"\n        android:textSize=\"32sp\"\n        android:layout_marginTop=\"20dp\" />\n\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentTop=\"true\"\n        android:text=\"@string/RegInfo\"\n        android:textSize=\"15sp\"\n        android:layout_marginTop=\"70dp\" />\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_register.xml b/app/src/main/res/layout/activity_register.xml
+--- a/app/src/main/res/layout/activity_register.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_register.xml	(date 1711574343312)
+@@ -4,7 +4,7 @@
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context=".activities.RegisterActivity"
+-    android:background="@color/Design2"
++    style="@style/background"
+     android:padding="30dp">
+ 
+     <Button
+@@ -13,7 +13,7 @@
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_marginBottom="40dp"
+-        android:background="@drawable/button_drawable"
++        style="@style/buttonStyle"
+         android:text="@string/RegisterBtnStr"/>
+     <com.google.android.material.textfield.TextInputLayout
+         android:layout_width="match_parent"
+@@ -92,6 +92,7 @@
+ 
+     <TextView
+         android:layout_width="match_parent"
++        style="@style/textColor"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:text="@string/RegisterBtnStr"
+@@ -101,6 +102,7 @@
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
++        style="@style/textColor"
+         android:layout_alignParentTop="true"
+         android:text="@string/RegInfo"
+         android:textSize="15sp"
+Index: app/src/main/res/layout/fragment_reviews.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    style=\"@style/background\"\n    tools:context=\".fragments.CourseReviewFragment\">\n\n\n    <androidx.recyclerview.widget.RecyclerView\n        android:id=\"@+id/recyclerView_review\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n         />\n\n    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:id=\"@+id/uploadMaterialBtn\"\n        app:icon=\"@drawable/add_post_icon\"\n        style=\"@style/buttonColor\"\n        android:text=\"Review\"\n        android:textSize=\"20dp\"\n        android:textColor=\"@color/Design2\"\n        android:textStyle=\"bold\"\n        app:iconTint=\"@color/Design2\"\n        android:layout_centerInParent=\"true\"\n        android:layout_alignParentBottom=\"true\"\n        android:layout_marginBottom=\"20dp\"\n        />\n\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_reviews.xml b/app/src/main/res/layout/fragment_reviews.xml
+--- a/app/src/main/res/layout/fragment_reviews.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/fragment_reviews.xml	(date 1711573259276)
+@@ -15,19 +15,17 @@
+          />
+ 
+     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
++        android:id="@+id/uploadMaterialBtn"
++        style="@style/buttonStyle"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:id="@+id/uploadMaterialBtn"
+-        app:icon="@drawable/add_post_icon"
+-        style="@style/buttonColor"
++        android:layout_alignParentBottom="true"
++        android:layout_centerInParent="true"
++        android:layout_marginBottom="20dp"
+         android:text="Review"
+         android:textSize="20dp"
+-        android:textColor="@color/Design2"
+         android:textStyle="bold"
+-        app:iconTint="@color/Design2"
+-        android:layout_centerInParent="true"
+-        android:layout_alignParentBottom="true"
+-        android:layout_marginBottom="20dp"
+-        />
++        app:icon="@drawable/add_post_icon"
++         />
+ 
+ </RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    style=\"@style/background\"\n    tools:context=\".activities.LoginActivity\"\n    android:padding=\"30dp\">\n    <com.google.android.material.textfield.TextInputLayout\n        android:id=\"@+id/emailTILL\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"60dp\"\n        android:layout_centerInParent=\"true\">\n\n        <EditText\n            android:id=\"@+id/emailETL\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"50dp\"\n            android:hint=\"@string/email\"\n            android:inputType=\"textEmailAddress\"\n            android:autofillHints=\"\" />\n    </com.google.android.material.textfield.TextInputLayout>\n\n    <com.google.android.material.textfield.TextInputLayout\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"60dp\"\n        android:layout_centerHorizontal=\"true\"\n        android:layout_centerVertical=\"true\"\n        android:id=\"@+id/passwordTIL\"\n        android:layout_below=\"@+id/emailTILL\">\n        <EditText\n            android:id=\"@+id/passwordETL\"\n            android:inputType=\"textPassword\"\n            android:hint=\"@string/password\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"50dp\"\n            android:autofillHints=\"\" />\n    </com.google.android.material.textfield.TextInputLayout>\n    <Button\n        android:id=\"@+id/buttonlgn\"\n\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentBottom=\"true\"\n        android:layout_marginBottom=\"200dp\"\n        android:textColor=\"@android:color/background_light\"\n        android:text=\"@string/LoginBtnStr\"/>\n    <Button\n        android:id=\"@+id/buttonregister\"\n\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentBottom=\"true\"\n        android:layout_marginBottom=\"40dp\"\n        android:textColor=\"@android:color/background_light\"\n        android:text=\"@string/RegisterBtnStr\"/>\n\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentBottom=\"true\"\n        android:textAlignment=\"center\"\n        android:layout_marginBottom=\"100dp\"\n        android:text=\"@string/RegisterTextAccQuery\" />\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentTop=\"true\"\n        android:text=\"@string/LoginBtnStr\"\n        android:textSize=\"32sp\"\n        android:layout_marginTop=\"20dp\" />\n\n    <TextView\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentTop=\"true\"\n        android:text=\"@string/LoginInfo\"\n        android:textSize=\"15sp\"\n        android:layout_marginTop=\"70dp\" />\n\n\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_login.xml b/app/src/main/res/layout/activity_login.xml
+--- a/app/src/main/res/layout/activity_login.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_login.xml	(date 1711574343547)
+@@ -15,6 +15,7 @@
+ 
+         <EditText
+             android:id="@+id/emailETL"
++
+             android:layout_width="match_parent"
+             android:layout_height="50dp"
+             android:hint="@string/email"
+@@ -39,7 +40,7 @@
+     </com.google.android.material.textfield.TextInputLayout>
+     <Button
+         android:id="@+id/buttonlgn"
+-
++        style="@style/buttonStyle"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+@@ -48,7 +49,7 @@
+         android:text="@string/LoginBtnStr"/>
+     <Button
+         android:id="@+id/buttonregister"
+-
++        style="@style/buttonStyle"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+@@ -61,6 +62,7 @@
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:textAlignment="center"
++        style="@style/textColor"
+         android:layout_marginBottom="100dp"
+         android:text="@string/RegisterTextAccQuery" />
+     <TextView
+@@ -68,6 +70,7 @@
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:text="@string/LoginBtnStr"
++        style="@style/textColor"
+         android:textSize="32sp"
+         android:layout_marginTop="20dp" />
+ 
+@@ -77,6 +80,7 @@
+         android:layout_alignParentTop="true"
+         android:text="@string/LoginInfo"
+         android:textSize="15sp"
++        style="@style/textColor"
+         android:layout_marginTop="70dp" />
+ 
+ 
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".activities.MainActivity\">\n\n    <FrameLayout\n        android:id=\"@+id/frame_layout\"\n        android:layout_width=\"0dp\"\n        android:layout_height=\"0dp\"\n        app:layout_constraintBottom_toTopOf=\"@+id/bottomNavigationView3\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <androidx.recyclerview.widget.RecyclerView\n        android:id=\"@+id/postsRecyclerview\"\n        android:layout_width=\"412dp\"\n        android:layout_height=\"608dp\"\n        android:layout_marginTop=\"20dp\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"parent\"/>\n\n\n    <com.google.android.material.bottomnavigation.BottomNavigationView\n        android:id=\"@+id/bottomNavigationView3\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        style=\"@style/Widget.App.BottomNavigationView\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:menu=\"@menu/bottom_nav_bar\"/>\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1711574343151)
+@@ -4,6 +4,7 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
++    style="@style/background"
+     tools:context=".activities.MainActivity">
+ 
+     <FrameLayout
+Index: app/src/main/res/layout/activity_course_review.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\">\n\n\n    <ImageButton\n        android:id=\"@+id/backIcon\"\n        android:layout_width=\"35dp\"\n        android:layout_height=\"37dp\"\n        android:layout_marginStart=\"20dp\"\n        android:layout_marginTop=\"20dp\"\n        android:layout_marginEnd=\"20dp\"\n        app:layout_constraintEnd_toStartOf=\"@+id/courseName\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        android:background=\"@android:color/transparent\"\n        app:srcCompat=\"@drawable/back_arrow\" />\n\n    <TextView\n        android:id=\"@+id/courseName\"\n        android:layout_width=\"91dp\"\n        android:layout_height=\"50dp\"\n        android:layout_marginTop=\"20dp\"\n        android:text=\"Course\"\n        android:textSize=\"25sp\"\n        app:layout_constraintEnd_toStartOf=\"@+id/ratingBar\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <RatingBar\n        android:id=\"@+id/ratingBar\"\n        android:layout_width=\"242dp\"\n        android:layout_height=\"48dp\"\n        android:layout_marginTop=\"28dp\"\n        android:layout_marginEnd=\"36dp\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <Button\n        android:id=\"@+id/Review_btn\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginStart=\"15dp\"\n        android:layout_marginEnd=\"15dp\"\n        android:layout_marginBottom=\"54dp\"\n        android:text=\"Reviews\"\n        app:layout_constraintBottom_toTopOf=\"@+id/scrollView1\"\n        app:layout_constraintEnd_toStartOf=\"@+id/Question_btn\"\n        app:layout_constraintStart_toStartOf=\"parent\" />\n\n    <Button\n        android:id=\"@+id/Question_btn\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginStart=\"15dp\"\n        android:layout_marginEnd=\"15dp\"\n        android:layout_marginBottom=\"54dp\"\n        android:text=\"Questions\"\n        app:layout_constraintBottom_toTopOf=\"@+id/scrollView1\"\n        app:layout_constraintEnd_toStartOf=\"@+id/Material_btn\"\n        app:layout_constraintStart_toEndOf=\"@+id/Review_btn\" />\n\n    <Button\n        android:id=\"@+id/Material_btn\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginStart=\"15dp\"\n        android:layout_marginEnd=\"15dp\"\n        android:layout_marginBottom=\"54dp\"\n        android:text=\"Materials\"\n        app:layout_constraintBottom_toTopOf=\"@+id/scrollView1\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toEndOf=\"@+id/Question_btn\" />\n\n    <Spinner\n        android:id=\"@+id/spinner1\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"0dp\"\n        android:layout_marginTop=\"15dp\"\n        android:layout_marginBottom=\"15dp\"\n        android:spinnerMode=\"dropdown\"\n        android:textAlignment=\"center\"\n        app:layout_constraintBottom_toTopOf=\"@+id/scrollView1\"\n        app:layout_constraintEnd_toStartOf=\"@+id/spinner2\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/Review_btn\" />\n\n\n    <Spinner\n        android:id=\"@+id/spinner2\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"0dp\"\n        android:layout_marginStart=\"15dp\"\n        android:layout_marginTop=\"15dp\"\n        android:layout_marginEnd=\"15dp\"\n        android:layout_marginBottom=\"15dp\"\n        android:spinnerMode=\"dropdown\"\n        android:textAlignment=\"center\"\n        app:layout_constraintBottom_toTopOf=\"@+id/scrollView1\"\n        app:layout_constraintEnd_toStartOf=\"@+id/spinner3\"\n        app:layout_constraintStart_toEndOf=\"@+id/spinner1\"\n        app:layout_constraintTop_toBottomOf=\"@+id/Question_btn\" />\n\n    <Spinner\n        android:id=\"@+id/spinner3\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"0dp\"\n        android:layout_marginStart=\"15dp\"\n        android:layout_marginTop=\"15dp\"\n        android:layout_marginEnd=\"15dp\"\n        android:layout_marginBottom=\"15dp\"\n        android:spinnerMode=\"dropdown\"\n        android:textAlignment=\"center\"\n        app:layout_constraintBottom_toTopOf=\"@+id/scrollView1\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toEndOf=\"@+id/spinner2\"\n        app:layout_constraintTop_toBottomOf=\"@+id/Material_btn\" />\n\n    <androidx.recyclerview.widget.RecyclerView\n        android:id=\"@+id/scrollView1\"\n        android:layout_width=\"409dp\"\n        android:layout_height=\"542dp\"\n        android:layout_marginTop=\"200dp\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\">\n\n\n    </androidx.recyclerview.widget.RecyclerView>\n\n    <com.google.android.material.floatingactionbutton.FloatingActionButton\n        android:id=\"@+id/fab\"\n        android:layout_width=\"78dp\"\n        android:layout_height=\"90dp\"\n        android:layout_margin=\"16dp\"\n        android:layout_marginStart=\"50dp\"\n        android:layout_marginEnd=\"50dp\"\n        android:layout_marginBottom=\"40dp\"\n\n        android:foreground=\"@drawable/add_post_icon\"\n        app:elevation=\"16dp\"\n        app:fabCustomSize=\"80dp\"\n        app:fabSize=\"normal\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.5\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:pressedTranslationZ=\"12dp\">\n\n\n    </com.google.android.material.floatingactionbutton.FloatingActionButton>\n\n\n\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_course_review.xml b/app/src/main/res/layout/activity_course_review.xml
+--- a/app/src/main/res/layout/activity_course_review.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_course_review.xml	(date 1711574343578)
+@@ -2,7 +2,8 @@
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+-    android:layout_height="match_parent">
++    android:layout_height="match_parent"
++    style="@style/background">
+ 
+ 
+     <ImageButton
+Index: app/src/main/res/layout/activity_post_history.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:orientation=\"vertical\"\n    android:padding=\"30dp\"\n    tools:context=\".activities.PostHistoryActivity\">\n\n    <TextView\n        android:id=\"@+id/title\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"8dp\"\n        android:layout_marginEnd=\"115dp\"\n        android:minHeight=\"48dp\"\n        android:orientation=\"horizontal\"\n        android:text=\"Post History\"\n        android:textStyle=\"bold\"\n        android:textSize=\"20sp\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <Button\n        android:id=\"@+id/btn_back\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"8dp\"\n        android:text=\"back\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <androidx.recyclerview.widget.RecyclerView\n        android:id=\"@+id/postList_rv\"\n        android:layout_width=\"0dp\"\n        android:layout_height=\"0dp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/title\" />\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_post_history.xml b/app/src/main/res/layout/activity_post_history.xml
+--- a/app/src/main/res/layout/activity_post_history.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_post_history.xml	(date 1711574343565)
+@@ -6,15 +6,18 @@
+     android:layout_height="match_parent"
+     android:orientation="vertical"
+     android:padding="30dp"
++    style="@style/background"
+     tools:context=".activities.PostHistoryActivity">
+ 
+     <TextView
+         android:id="@+id/title"
++        style="@style/textColor"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="8dp"
+         android:layout_marginEnd="115dp"
+         android:minHeight="48dp"
++        android:gravity="center"
+         android:orientation="horizontal"
+         android:text="Post History"
+         android:textStyle="bold"
+@@ -27,6 +30,7 @@
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="8dp"
++        style="@style/buttonStyle"
+         android:text="back"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+@@ -35,6 +39,7 @@
+         android:id="@+id/postList_rv"
+         android:layout_width="0dp"
+         android:layout_height="0dp"
++        android:layout_marginTop="30dp"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+Index: app/src/main/java/com/example/connectue/fragments/ReviewsFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.connectue.fragments;\n\nimport static android.nfc.tech.MifareUltralight.PAGE_SIZE;\n\nimport android.os.Bundle;\n\nimport androidx.annotation.NonNull;\nimport androidx.fragment.app.Fragment;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\n\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\n\nimport com.example.connectue.R;\nimport com.example.connectue.activities.CourseViewActivity;\nimport com.example.connectue.adapters.ReviewAdapter;\nimport com.example.connectue.managers.ReviewManager;\nimport com.example.connectue.managers.ReviewManager;\nimport com.example.connectue.interfaces.FireStoreDownloadCallback;\nimport com.example.connectue.model.Course;\nimport com.example.connectue.model.Review;\nimport com.google.firebase.firestore.FirebaseFirestore;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/**\n * A simple {@link Fragment} subclass.\n * Use the {@link ReviewsFragment#newInstance} factory method to\n * create an instance of this fragment.\n */\npublic class ReviewsFragment extends Fragment {\n\n    private static final String TAG = \"ReviewFragment class: \";\n\n    // TODO: Rename parameter arguments, choose names that match\n    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER\n    private static final String ARG_PARAM1 = \"param1\";\n    private static final String ARG_PARAM2 = \"param2\";\n\n    // TODO: Rename and change types of parameters\n    private String mParam1;\n    private String mParam2;\n\n    // List of posts to output in feed.\n    private List<Review> reviewList;\n\n    // Adapter that is responsible for outputting posts to UI.\n    private ReviewAdapter reviewAdapter;\n\n    // Number of posts loaded at once to the feed.\n    private final int postsPerChunk = 4;\n\n    // Manager for database requests for posts collection.\n    private ReviewManager reviewManager;\n\n    // Indicates if posts are currently loading from database\n    private Boolean isLoading = false;\n\n    private String courseId;\n\n\n\n    //private Context ReviewsFragment;\n\n    public ReviewsFragment() {\n        // Required empty public constructor\n    }\n\n    /**\n     * Use this factory method to create a new instance of\n     * this fragment using the provided parameters.\n     *\n     * @param param1 Parameter 1.\n     * @param param2 Parameter 2.\n     * @return A new instance of fragment ReviewsFragment.\n     */\n    // TODO: Rename and change types and number of parameters\n    public static ReviewsFragment newInstance(String param1, String param2) {\n        ReviewsFragment fragment = new ReviewsFragment();\n        Bundle args = new Bundle();\n        args.putString(ARG_PARAM1, param1);\n        args.putString(ARG_PARAM2, param2);\n        fragment.setArguments(args);\n        return fragment;\n    }\n\n    @Override\n    public void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        if (getArguments() != null) {\n            mParam1 = getArguments().getString(ARG_PARAM1);\n            mParam2 = getArguments().getString(ARG_PARAM2);\n        }\n    }\n\n    @Override\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\n                             Bundle savedInstanceState) {\n        View view = inflater.inflate(R.layout.fragment_reviews, container, false);\n\n        RecyclerView reviewRecyclerView = view.findViewById(R.id.recyclerView_review);\n\n        // Initialize database post manager.\n        reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),\n                Review.REVIEW_COLLECTION_NAME, Review.REVIEW_LIKE_COLLECTION_NAME,\n                Review.REVIEW_DISLIKE_COLLECTION_NAME, Review.REVIEW_COMMENT_COLLECTION_NAME);\n\n        // Initializing list of reviews\n        reviewList = new ArrayList<>();\n\n        reviewAdapter = new ReviewAdapter(getContext(), reviewList);\n        reviewRecyclerView.setAdapter(reviewAdapter);\n        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));\n\n        // Upload from database and display first chunk of posts\n        loadPosts();\n\n        // Add a scroll listener to the RecyclerView\n        reviewRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {\n            @Override\n            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {\n                super.onScrolled(recyclerView, dx, dy);\n                LinearLayoutManager layoutManager = (LinearLayoutManager) reviewRecyclerView.getLayoutManager();\n                int visibleItemCount = layoutManager.getChildCount();\n                int totalItemCount = layoutManager.getItemCount();\n                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();\n\n                // Check if end of the list is reached\n                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount\n                        && firstVisibleItemPosition >= 0\n                        && totalItemCount >= PAGE_SIZE) {\n                    // Assuming PAGE_SIZE is the number of items to load per page\n                    // Load more items\n                    isLoading = true;\n                    loadPosts();\n                }\n            }\n        });\n\n        // Inflate the layout for this fragment\n        return view;\n\n    }\n\n    public void loadPosts() {\n        reviewManager.downloadRecent(postsPerChunk, new FireStoreDownloadCallback<List<Review>>() {\n            @Override\n            public void onSuccess(List<Review> data) {\n                //check course of opened page\n                CourseViewActivity courseViewActivity = (CourseViewActivity) getActivity();\n                if (courseViewActivity != null) {\n                    courseId = courseViewActivity.getCourse();\n                } else {\n                    courseId = \"\";\n                }\n                //only add reviews linked to the opened course card\n\n                for(Review review: data) {\n                    Log.d(\"ALAL\", review.getParentCourseId());\n                    if (review.getParentCourseId().equals(courseId)) {\n                        reviewList.add(review);\n                    }\n                }\n                reviewAdapter.notifyDataSetChanged();\n                isLoading = false;\n            }\n\n            @Override\n            public void onFailure(Exception e) {\n                Log.e(TAG, \"Error while downloading reviews\", e);\n            }\n        });\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/connectue/fragments/ReviewsFragment.java b/app/src/main/java/com/example/connectue/fragments/ReviewsFragment.java
+--- a/app/src/main/java/com/example/connectue/fragments/ReviewsFragment.java	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/java/com/example/connectue/fragments/ReviewsFragment.java	(date 1711371466618)
+@@ -159,7 +159,7 @@
+                     courseId = "";
+                 }
+                 //only add reviews linked to the opened course card
+-
++                Log.d(TAG, data.toString());
+                 for(Review review: data) {
+                     Log.d("ALAL", review.getParentCourseId());
+                     if (review.getParentCourseId().equals(courseId)) {
+Index: app/src/main/res/layout/activity_course_view.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:background=\"@color/Design2\"\n    tools:context=\".activities.CourseViewActivity\">\n\n    <FrameLayout\n        android:id=\"@id/frame_layout\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"match_parent\"\n        android:layout_below=\"@id/pageHeader\"\n        >\n\n    </FrameLayout>\n\n    <RelativeLayout\n        android:id=\"@+id/pageHeader\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_alignParentTop=\"true\"\n        android:background=\"@color/Design4\"\n        android:paddingTop=\"15dp\">\n\n        <RatingBar\n            android:id=\"@+id/ratingBar\"\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"53dp\"\n            android:layout_marginTop=\"-5dp\"\n            android:layout_alignParentEnd=\"true\"\n            android:layout_marginEnd=\"-22dp\"\n            android:progressBackgroundTint=\"#FF8181\"\n            android:progressTint=\"@color/Design2\"\n            android:scaleX=\".6\"\n            android:scaleY=\".6\" />\n\n        <TextView\n            android:id=\"@+id/rating\"\n            android:layout_marginRight=\"30dp\"\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:text=\"Rating 0/5\"\n            android:layout_below=\"@+id/ratingBar\"\n            android:textColor=\"@color/Design2\"\n            android:layout_alignParentEnd=\"true\"/>\n\n\n\n        <LinearLayout\n            android:layout_width=\"wrap_content\"\n            android:layout_height=\"wrap_content\"\n            android:id=\"@+id/followButton\"\n            android:layout_marginTop=\"12dp\"\n            android:orientation=\"horizontal\"\n            android:gravity=\"center\"\n            >\n            <TextView\n                android:id=\"@+id/titleCourse\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"course_code\"\n                android:textSize=\"30dp\"\n                android:layout_marginLeft=\"30dp\"\n                android:textColor=\"@color/Design2\"\n                app:layout_constraintStart_toStartOf=\"parent\"\n                app:layout_constraintTop_toTopOf=\"parent\" />\n<!--            <TextView-->\n<!--                android:layout_width=\"wrap_content\"-->\n<!--                android:layout_height=\"wrap_content\"-->\n<!--                android:text=\"@string/follow\"-->\n<!--                android:textColor=\"@color/Design2\"-->\n<!--                android:textSize=\"17dp\"-->\n<!--                android:layout_below=\"@+id/textView4\"-->\n<!--                />-->\n\n            <ImageView\n                android:id=\"@+id/followIcon\"\n                android:layout_marginLeft=\"10dp\"\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:layout_below=\"@+id/textView\"\n\n\n                android:src=\"@drawable/baseline_add_circle_outline_24\"\n                app:tint=\"@color/Design2\" />\n        </LinearLayout>\n\n        <com.google.android.material.tabs.TabLayout\n            android:id=\"@+id/tablayout_course_menu\"\n            android:layout_below=\"@+id/rating\"\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"wrap_content\"\n            android:background=\"@color/Design4\"\n            app:tabTextColor=\"@color/Design2\"\n            app:tabSelectedTextColor=\"@color/Design2\"\n            app:tabIndicatorColor=\"@color/Design2\"\n            app:tabMode=\"fixed\"\n            app:tabGravity=\"fill\">\n            <com.google.android.material.tabs.TabItem\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"Reviews\"\n\n                />\n            <com.google.android.material.tabs.TabItem\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"Questions\"\n\n                />\n            <com.google.android.material.tabs.TabItem\n                android:layout_width=\"wrap_content\"\n                android:layout_height=\"wrap_content\"\n                android:text=\"Material\"\n\n                />\n        </com.google.android.material.tabs.TabLayout>\n\n    </RelativeLayout>\n\n\n    <com.google.android.material.floatingactionbutton.FloatingActionButton\n        android:id=\"@+id/back_btn\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        android:src=\"@drawable/baseline_arrow_back_ios_new_24\"\n        android:layout_alignParentBottom=\"true\"\n        style=\"@style/buttonColor\"\n        app:tint=\"@color/Design2\"\n        android:layout_marginBottom=\"20dp\"\n        android:layout_marginLeft=\"20dp\"\n\n        />\n\n\n\n\n\n\n\n    <androidx.recyclerview.widget.RecyclerView\n\n        android:id=\"@+id/recyclerView_review\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"500dp\"\n        android:layout_marginTop=\"160dp\" />\n\n    <!--<com.google.android.material.bottomnavigation.BottomNavigationView\n        android:id=\"@+id/coursemenu2\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"70dp\"\n        android:layout_marginTop=\"80dp\"\n        android:background=\"@color/Design2\"\n        android:layout_alignParentRight=\"true\"\n        app:menu=\"@menu/course_view_menu_bar\" />-->\n\n\n\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_course_view.xml b/app/src/main/res/layout/activity_course_view.xml
+--- a/app/src/main/res/layout/activity_course_view.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_course_view.xml	(date 1711573259286)
+@@ -4,7 +4,7 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    android:background="@color/Design2"
++    style="@style/background"
+     tools:context=".activities.CourseViewActivity">
+ 
+     <FrameLayout
+@@ -21,7 +21,7 @@
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+-        android:background="@color/Design4"
++        style="@style/headerBackground"
+         android:paddingTop="15dp">
+ 
+         <RatingBar
+@@ -92,7 +92,7 @@
+             android:layout_below="@+id/rating"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+-            android:background="@color/Design4"
++            style="@style/headerBackground"
+             app:tabTextColor="@color/Design2"
+             app:tabSelectedTextColor="@color/Design2"
+             app:tabIndicatorColor="@color/Design2"
+@@ -128,7 +128,7 @@
+         app:layout_constraintStart_toStartOf="parent"
+         android:src="@drawable/baseline_arrow_back_ios_new_24"
+         android:layout_alignParentBottom="true"
+-        style="@style/buttonColor"
++        style="@style/buttonStyle"
+         app:tint="@color/Design2"
+         android:layout_marginBottom="20dp"
+         android:layout_marginLeft="20dp"
+Index: app/src/main/res/layout/activity_search.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\">\n\n\n    <TextView\n        android:id=\"@+id/foundCourse\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginStart=\"10dp\"\n        android:layout_marginTop=\"30dp\"\n        android:layout_marginEnd=\"10dp\"\n        android:layout_marginBottom=\"10dp\"\n        android:text=\"no text\"\n        android:textSize=\"20sp\"\n        android:typeface=\"serif\" />\n\n    <androidx.cardview.widget.CardView\n        android:id=\"@+id/courseCard\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"100dp\"\n        android:layout_below=\"@id/foundCourse\"\n        android:layout_marginStart=\"10dp\"\n        android:layout_marginEnd=\"10dp\"\n        app:cardBackgroundColor=\"@color/Design4\"\n        app:cardElevation=\"4dp\"\n        app:cardCornerRadius=\"10dip\">\n\n        <RelativeLayout\n            android:layout_width=\"match_parent\"\n            android:layout_height=\"100dp\"\n            android:layout_centerInParent=\"true\"\n            android:layout_marginTop=\"5dp\">\n\n            <TextView\n                android:id=\"@+id/courseCardText\"\n                android:layout_width=\"match_parent\"\n                android:layout_height=\"match_parent\"\n                android:gravity=\"center\"\n                android:shadowColor=\"#A12B2929\"\n                android:shadowDx=\"3\"\n                android:shadowDy=\"3\"\n                android:shadowRadius=\"10\"\n                android:text=\"@string/_2wbb0\"\n                android:textColor=\"@color/Design2\"\n                android:textSize=\"25sp\" />\n        </RelativeLayout>\n    </androidx.cardview.widget.CardView>\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_search.xml b/app/src/main/res/layout/activity_search.xml
+--- a/app/src/main/res/layout/activity_search.xml	(revision 1d71177544b2cf4d4c6fcf1f206212f05c2c13c5)
++++ b/app/src/main/res/layout/activity_search.xml	(date 1711574343028)
+@@ -2,7 +2,8 @@
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_width="match_parent"
+-    android:layout_height="match_parent">
++    android:layout_height="match_parent"
++    style="@style/background">
+ 
+ 
+     <TextView
+@@ -14,6 +15,7 @@
+         android:layout_marginEnd="10dp"
+         android:layout_marginBottom="10dp"
+         android:text="no text"
++        style="@style/textColor"
+         android:textSize="20sp"
+         android:typeface="serif" />
+ 
