@@ -19,7 +19,7 @@
         android:minHeight="48dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:text="Post History"
+        android:text="History"
         android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
