@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -269,7 +271,19 @@ public class ProfileFragment extends Fragment {
             majorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+                    int deviceScreenSize = getResources().getConfiguration().screenLayout &
+                            Configuration.SCREENLAYOUT_SIZE_MASK;
+
+                    TextView textView = (TextView) parent.getChildAt(0);
+                    if (deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                            deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+                        // For tablets, set a larger font size
+                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                    } else {
+                        // For phones, set a smaller font size
+                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                    }
+                    textView.setTextColor(Color.BLACK);
                 }
 
                 @Override
@@ -280,7 +294,19 @@ public class ProfileFragment extends Fragment {
             majorSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+                    int deviceScreenSize = getResources().getConfiguration().screenLayout &
+                            Configuration.SCREENLAYOUT_SIZE_MASK;
+
+                    TextView textView = (TextView) parent.getChildAt(0);
+                    if (deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
+                            deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+                        // For tablets, set a larger font size
+                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                    } else {
+                        // For phones, set a smaller font size
+                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                    }
+                    textView.setTextColor(Color.BLACK);
                 }
 
                 @Override

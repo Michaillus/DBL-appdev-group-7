@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.connectue.R;
 import com.example.connectue.fragments.ReviewsFragment;
+import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.managers.StudyUnitManager;
 import com.example.connectue.model.StudyUnit;
 import com.example.connectue.utils.ActivityUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -121,5 +123,24 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
      */
     public StudyUnit getStudyUnit() {
         return studyUnit;
+    }
+
+    public void reload() {
+        StudyUnitManager studyUnitManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
+                studyUnit.getStudyUnitCollectionName());
+        studyUnitManager.downloadOne(studyUnit.getId(), new ItemDownloadCallback<StudyUnit>() {
+            @Override
+            public void onSuccess(StudyUnit unit) {
+                studyUnit = unit;
+                loadStudyUnitDetails();
+                replaceFragment(new ReviewsFragment());
+                Log.i(TAG, "StudyUnitViewActivity is reloaded successfully");
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Error while retrieving study unit");
+            }
+        });
     }
 }
