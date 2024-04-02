@@ -40,6 +40,10 @@ public class Reply {
 
     private Date timestamp;
 
+    public Reply(String publisherId, String text, String parentId) {
+        this(null, publisherId, text, parentId, new Date());
+    }
+
 
     public Reply(String replyId, String publisherId, String text, String parentId,
                    Date timestamp) throws IllegalArgumentException {

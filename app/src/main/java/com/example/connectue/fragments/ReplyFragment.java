@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
+import com.example.connectue.activities.MainActivity;
 import com.example.connectue.adapters.ReplyAdapter;
 import com.example.connectue.activities.StudyUnitViewActivity;
 import com.example.connectue.adapters.QuestionAdapter;
@@ -196,13 +197,13 @@ public class ReplyFragment extends Fragment{
                 Log.e(TAG, "Error getting post", e);
             }
         });
-        loadReplies(replyId);
+        loadReplies(questionId);
 
         // Back to questionFragment
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), StudyUnitViewActivity.class);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -210,13 +211,14 @@ public class ReplyFragment extends Fragment{
 
     public void loadReplies(String questionId) {
         Log.e("test", "test");
+        Log.d(TAG, "loadReplies: " + questionId);
         questionManager.downloadRecentReplies(questionId, repliesPerChunk,
                     new ItemDownloadCallback<List<Reply>>() {
 
                 @Override
-                public void onSuccess(List<Reply> replies) {
-                    Log.e("test", String.valueOf(replies.size()));
-                    replyList.addAll(replies);
+                public void onSuccess(List<Reply> reply) {
+                    Log.e("test", String.valueOf(reply.size()));
+                    replyList.addAll(reply);
                     replyAdapter.notifyDataSetChanged();
                 }
 
@@ -274,7 +276,7 @@ public class ReplyFragment extends Fragment{
 
                                 // Update comment number of current question.
                                 currentQuestion.incrementCommentNumber();
-                                questionRef.update("questions", currentQuestion.getCommentNumber());
+                                questionRef.update("comments", currentQuestion.getCommentNumber());
                             }
 
                             @Override

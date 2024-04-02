@@ -39,6 +39,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      */
     protected CommentManager commentManager;
 
+
     protected ReplyManager replyManager;
 
     /**
@@ -51,18 +52,23 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      *                           in the database.
      * @param dislikeCollectionName Name of collection that stores {@code T} model dislikes
      *                           in the database.
-     * @param replyCollectionName Name of collection that stores {@code T} model comments
+     * @param commentCollectionName Name of collection that stores {@code T} model comments
       *                           in the database.
      */
     public InteractableManager(FirebaseFirestore db, String collectionName,
                                String likeCollectionName, String dislikeCollectionName,
-                               String replyCollectionName) {
+                               String commentCollectionName) {
         super(db, collectionName);
         likeManager = new LikeManager(db, likeCollectionName);
         dislikeManager = new LikeManager(db, dislikeCollectionName);
-        replyManager = new ReplyManager(db, replyCollectionName);
+        if (commentCollectionName.equals("post-comments")) {
+            commentManager = new CommentManager(db, commentCollectionName);
+        } else {
+            replyManager = new ReplyManager(db, commentCollectionName);
+        }
         tag = "InteractableManager class: ";
     }
+
 
     /**
      * Likes the interactable, if it was not liked or removes the like from the interactable,
@@ -146,6 +152,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         dislikeManager.isLiked(interactableId, userId, callback);
     }
 
+
     /**
      * Retrieves {@code amount} of most recent comments of {@code parentId} interactable,
      * after the last uploaded one.
@@ -158,6 +165,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
                                        ItemDownloadCallback<List<Comment>> callback) {
         commentManager.downloadRecent(parentId, amount, callback);
     }
+
 
     public void downloadRecentReplies(String parentId, int amount,
                                       ItemDownloadCallback<List<Reply>> callback) {
