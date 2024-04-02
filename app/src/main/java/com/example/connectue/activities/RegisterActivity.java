@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -197,10 +197,10 @@ public class RegisterActivity extends AppCompatActivity
 
     private void addUserToFirestore(String uid, String email, String firstName, String lastName,
                                     String program, int role) {
-        User2 user = new User2(uid, firstName, lastName, false,
+        User user = new User(uid, firstName, lastName, false,
                 email, null, null, program, role);
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(),
-                User2.USER_COLLECTION_NAME);
+                User.USER_COLLECTION_NAME);
         userManager.set(user, uid, new ItemUploadCallback() {
             @Override
             public void onSuccess() {

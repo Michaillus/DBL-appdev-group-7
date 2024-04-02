@@ -41,15 +41,12 @@ public class CourseViewActivity extends StudyUnitViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         int orientation = getResources().getConfiguration().orientation;
-        // Inflate layout based on orientation
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setTabListener();
-        } else {
-            setRailListener();
-        }
+        // Check if saved instance state is not null
 
+        setTabListener();
+        // Set up UI elements
+        loadStudyUnitDetails();
 
 
 

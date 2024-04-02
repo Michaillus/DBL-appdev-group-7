@@ -17,7 +17,7 @@ import com.example.connectue.activities.MaterialPDFActivity;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Material;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -86,9 +86,9 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MyView
 
             // Set publisher name
             userManager.downloadOne(material.getPublisherId(),
-                    new ItemDownloadCallback<User2>() {
+                    new ItemDownloadCallback<User>() {
                         @Override
-                        public void onSuccess(User2 user) {
+                        public void onSuccess(User user) {
                             publisherName.setText(user.getFirstName());
                         }
 

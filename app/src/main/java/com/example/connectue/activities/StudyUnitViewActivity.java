@@ -53,21 +53,26 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
     protected LinearLayout followButton;
 
     protected ImageView backButton;
+
+    String courseCode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        int orientation = getResources().getConfiguration().orientation;
-        // Inflate layout based on orientation
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setContentView(R.layout.activity_course_view);
+        if (savedInstanceState != null) {
+            Log.i(TAG, "saved instance");
+            // Retrieve course code from saved instance state
+            studyUnit = ActivityUtils.getStudyUnit(StudyUnitViewActivity.this, savedInstanceState);
         } else {
-            setContentView(R.layout.activity_course_view_land);
+            Log.i(TAG, "intent");
+            // Retrieve course code from intent extras
+            courseCode = getIntent().getStringExtra("course");
+            studyUnit = StudyUnit.stringToStudyUnit(courseCode);
         }
-
-        setBinding();
-
+        Log.d(TAG, courseCode + "DWI");
+//        studyUnit = ActivityUtils.getStudyUnit(this, savedInstanceState);
+        Log.d(TAG, studyUnit.getCode());
         replaceFragment(new ReviewsFragment());
+        setBinding();
 
         ratingBar = findViewById(R.id.studyUnitRating);
         ratingIndicator = findViewById(R.id.rating);
@@ -78,8 +83,6 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
         backButton = findViewById(R.id.back_btn);
 
-        studyUnit = ActivityUtils.getStudyUnit(this, savedInstanceState);
-
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,9 +90,17 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
             }
         });
 
+
         loadStudyUnitDetails();
 
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save course code to the saved instance state bundle
+        outState.putString("course", courseCode);
     }
 
     protected abstract void setBinding();

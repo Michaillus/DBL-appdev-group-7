@@ -30,7 +30,7 @@ import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Post;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.General;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -196,9 +196,9 @@ public class PostFragment extends Fragment {
                 currentPost = post;
                 publisherTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
 
-                userManager.downloadOne(post.getPublisherId(), new ItemDownloadCallback<User2>() {
+                userManager.downloadOne(post.getPublisherId(), new ItemDownloadCallback<User>() {
                     @Override
-                    public void onSuccess(User2 publisher) {
+                    public void onSuccess(User publisher) {
                         publisherName.setText(publisher.getFullName());
                         // Load user profile picture
                         String imageUrl = publisher.getProfilePicUrl();
@@ -331,9 +331,9 @@ public class PostFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         // Update the UI to reflect the new comment
-                        userManager.downloadOne(userId, new ItemDownloadCallback<User2>() {
+                        userManager.downloadOne(userId, new ItemDownloadCallback<User>() {
                             @Override
-                            public void onSuccess(User2 user) {
+                            public void onSuccess(User user) {
 
                                 commentList.add(0, comment);
                                 // Notify the RecyclerView adapter about the dataset change
