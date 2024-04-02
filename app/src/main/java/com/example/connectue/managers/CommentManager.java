@@ -70,7 +70,7 @@ public class CommentManager extends EntityManager<Comment> {
         questionData.put(Comment.PUBLISHER_ID, comment.getPublisherId());
         questionData.put(Comment.CONTENT, comment.getText());
         questionData.put(Comment.PARENT_ID, comment.getParentId());
-        questionData.put(Comment.TIMESTAMP, new Timestamp(comment.getTimestamp()));
+        questionData.put(Comment.TIMESTAMP, new Timestamp(comment.getDatetime()));
 
         return questionData;
     }

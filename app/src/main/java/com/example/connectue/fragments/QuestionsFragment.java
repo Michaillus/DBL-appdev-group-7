@@ -28,7 +28,7 @@ import com.example.connectue.managers.QuestionManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -171,9 +171,9 @@ public class QuestionsFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addQuestionButton = root.findViewById(R.id.addQuestionBtn);
-        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User2 data) {
+            public void onSuccess(User data) {
                 if (data.isVerified()) {
                     Log.i(TAG, "User is allowed to add a question");
                     addQuestionButton.setOnClickListener(v -> {

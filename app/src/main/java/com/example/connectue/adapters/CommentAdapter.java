@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.General;
 import com.example.connectue.utils.TimeUtils;
 import com.example.connectue.model.Comment;
@@ -82,13 +82,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             reportBtn = itemView.findViewById(R.id.reportCommentBtn);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(),
-                    User2.USER_COLLECTION_NAME);
+                    User.USER_COLLECTION_NAME);
         }
 
         public void bind(Comment comment) {
-            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User2>() {
+            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override
-                public void onSuccess(User2 data) {
+                public void onSuccess(User data) {
                     // Load user name
                     publisherName.setText(data.getFullName());
                     String imageUrl = data.getProfilePicUrl();
@@ -106,12 +106,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
                 }
             });
 
-            publishTime.setText(TimeUtils.getTimeAgo(comment.getTimestamp()));
+            publishTime.setText(TimeUtils.getTimeAgo(comment.getDatetime()));
             commentDescription.setText(comment.getText());
 
-            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User2>() {
+            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override
-                public void onSuccess(User2 data) {
+                public void onSuccess(User data) {
                     // Set comment user name
                     publisherName.setText(data.getFullName());
                 }
@@ -119,9 +119,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
             // Initialize report button only for verified users
             currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
+            userManager.downloadOne(currentUid, new ItemDownloadCallback<User>() {
                 @Override
-                public void onSuccess(User2 data) {
+                public void onSuccess(User data) {
                     // Check current user role
                     if (data.getRole() == General.GUEST) {
                         reportBtn.setVisibility(View.GONE);

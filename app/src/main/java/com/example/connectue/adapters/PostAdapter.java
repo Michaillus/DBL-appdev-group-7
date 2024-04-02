@@ -23,7 +23,7 @@ import com.example.connectue.databinding.RowPostsBinding;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -103,9 +103,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
             // Set publisher name
             userManager.downloadOne(post.getPublisherId(),
-                new ItemDownloadCallback<User2>() {
+                new ItemDownloadCallback<User>() {
                     @Override
-                    public void onSuccess(User2 user) {
+                    public void onSuccess(User user) {
                         publisherName.setText(user.getFullName());
                     }
 
