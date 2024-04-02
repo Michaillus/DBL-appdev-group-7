@@ -12,6 +12,21 @@ public class User {
      */
     public static final String USER_COLLECTION_NAME = "users";
 
+    /**
+     * Guest user role number.
+     */
+    public static final int GUEST_USER_ROLE = 2;
+
+    /**
+     * Student user role number.
+     */
+    public static final int STUDENT_USER_ROLE = 1;
+
+    /**
+     * Admin user role number.
+     */
+    public static final int ADMIT_USER_ROLE = 0;
+
     protected String userId;
 
     protected String firstName;

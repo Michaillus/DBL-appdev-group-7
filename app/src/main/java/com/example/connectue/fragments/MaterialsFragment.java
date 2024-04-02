@@ -171,8 +171,8 @@ public class MaterialsFragment extends Fragment {
         ExtendedFloatingActionButton addQuestionBtn = root.findViewById(R.id.addQuestionBtn);
         userManager.downloadOne(currentUid, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User data) {
-                if (data.isVerified()) {
+            public void onSuccess(User user) {
+                if (user.getRole() == User.STUDENT_USER_ROLE || user.getRole() == User.ADMIT_USER_ROLE) {
                     Log.i(TAG, "User is allowed to add a material");
                     addQuestionBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddMaterialActivity.class);
