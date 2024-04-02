@@ -29,6 +29,8 @@ public class ReplyManager extends EntityManager<Reply> {
     }
 
 
+
+
     @Override
     public Reply deserialize(DocumentSnapshot document) {
         return null;

@@ -21,6 +21,7 @@ import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Review;
 import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.User2;
+import com.example.connectue.utils.General;
 import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -83,6 +84,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         private TextView reviewerName, description, date;
         private TextView likeNumber, dislikeNumber;
         private RatingBar ratingBar;
+        private ImageButton report;
+
         UserManager userManager;
 
         private ImageButton[] reviewStars;
@@ -101,6 +104,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             likeNumber = itemView.findViewById(R.id.reviewLikeNum);
             reviewDislike = itemView.findViewById(R.id.reviewDislikeBtn);
             dislikeNumber = itemView.findViewById(R.id.reviewDislikeNum);
+            report = itemView.findViewById(R.id.report_review_btn);
 
             db = FirebaseFirestore.getInstance();
 
@@ -137,6 +141,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
             currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
                     .getCurrentUser()).getUid();
+
+            report.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    General.reportOperation(itemView.getContext(), General.COURSEREVIEWCOLLECTION, review.getId());
+                }
+            });
 
 
 

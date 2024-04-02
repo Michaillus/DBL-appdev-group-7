@@ -135,8 +135,10 @@ public class ReplyFragment extends Fragment{
         assert bundle != null;
         questionId = bundle.getString("questionId");
 
-        questionList = new ArrayList<>();
-        questionAdapter = new QuestionAdapter(getContext(), questionList);
+        //questionList = new ArrayList<>();
+        //questionAdapter = new QuestionAdapter(getContext(), questionList);
+        replyList = new ArrayList<>();
+        replyAdapter = new ReplyAdapter(getContext(), replyList);
         db = FirebaseFirestore.getInstance();
         replyRef = FirebaseFirestore.getInstance().collection("questions-replies");
 

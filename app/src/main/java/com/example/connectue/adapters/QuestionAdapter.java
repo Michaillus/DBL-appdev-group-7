@@ -188,7 +188,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         }
 
         private void navigateToQuestionsFragment(String questionId) {
-            if (getSupportFragmentManager() != null) {
+
                 ReplyFragment replyFragment = new ReplyFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("questionId", questionId);
@@ -198,7 +198,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
                 transaction.replace(R.id.frame_layout, replyFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
-            }
+
 
         }
     }

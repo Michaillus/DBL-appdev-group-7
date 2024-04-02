@@ -7,6 +7,7 @@ import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Interactable;
+import com.example.connectue.model.Reply;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -50,17 +51,16 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      *                           in the database.
      * @param dislikeCollectionName Name of collection that stores {@code T} model dislikes
      *                           in the database.
-     * @param commentCollectionName Name of collection that stores {@code T} model comments
+     * @param replyCollectionName Name of collection that stores {@code T} model comments
       *                           in the database.
      */
     public InteractableManager(FirebaseFirestore db, String collectionName,
                                String likeCollectionName, String dislikeCollectionName,
-                               String commentCollectionName) {
+                               String replyCollectionName) {
         super(db, collectionName);
         likeManager = new LikeManager(db, likeCollectionName);
         dislikeManager = new LikeManager(db, dislikeCollectionName);
-        commentManager = new CommentManager(db, commentCollectionName);
-
+        replyManager = new ReplyManager(db, replyCollectionName);
         tag = "InteractableManager class: ";
     }
 
@@ -157,6 +157,11 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
     public void downloadRecentComments(String parentId, int amount,
                                        ItemDownloadCallback<List<Comment>> callback) {
         commentManager.downloadRecent(parentId, amount, callback);
+    }
+
+    public void downloadRecentReplies(String parentId, int amount,
+                                      ItemDownloadCallback<List<Reply>> callback) {
+        replyManager.downloadRecent(parentId, amount, callback);
     }
 
     /**

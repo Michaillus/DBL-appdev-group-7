@@ -26,10 +26,17 @@ public class QuestionManager extends InteractableManager<Question> {
      */
     public QuestionManager(FirebaseFirestore db, String collectionName,
                        String likeCollectionName, String dislikeCollectionName,
-                       String commentCollectionName) {
+                       String commentCollectionName, String replyCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
+        replyManager = new ReplyManager(db, replyCollectionName);
 
         tag = "QuestionManager";
+    }
+
+    public QuestionManager(FirebaseFirestore db, String collectionName,
+                           String likeCollectionName, String dislikeCollectionName,
+                           String replyCollectionName) {
+        super(db, collectionName, likeCollectionName, dislikeCollectionName, replyCollectionName);
     }
 
     /**
@@ -47,10 +54,10 @@ public class QuestionManager extends InteractableManager<Question> {
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
 
-    public void downloadRecentReplies(String parentId, int amount,
-                                      ItemDownloadCallback<List<Reply>> callback) {
-        replyManager.downloadRecent(parentId, amount, callback);
-    }
+//    public void downloadRecentReplies(String parentId, int amount,
+//                                      ItemDownloadCallback<List<Reply>> callback) {
+//        replyManager.downloadRecent(parentId, amount, callback);
+//    }
 
     /**
      * Converts a FireBase document snapshot of a question collection into an instance

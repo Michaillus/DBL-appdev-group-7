@@ -1,104 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="6dp">
+    android:layout_margin="10dp"
+    >
 
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        app:cardBackgroundColor="@color/Design2">
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/background"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:id="@+id/rounded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/questionerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Augustin"
+                style="@style/textColor"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/questionDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="16/03/2024"
+                style="@style/textColor"/>
+
+        </RelativeLayout>
 
         <LinearLayout
+            android:layout_below="@+id/rounded"
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/questionerName"
-                    android:layout_width="279dp"
-                    android:layout_height="wrap_content"
-                    android:text="Augustin"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/questionDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="16/03/2024" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/question"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="I like all courses" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/question"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/questionLike"
-                    android:layout_width="25dp"
-                    android:layout_height="45dp"
-                    android:background="@null"
-                    android:contentDescription="Like"
-                    app:srcCompat="@drawable/like_icon" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:id="@+id/questionLikeNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="12">
-
-                </TextView>
-
-                <ImageButton
-                    android:id="@+id/replyQuestionBtn"
-                    android:layout_width="25dp"
-                    android:layout_height="45dp"
-                    android:background="@null"
-                    android:contentDescription="Reply"
-                    android:layout_marginLeft="10dp"
-                    app:srcCompat="@drawable/comment_icon" />
-
-                <TextView
-                    android:layout_gravity="center"
-                    android:id="@+id/replyQuestionNum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="12">
-
-                </TextView>
-
-            </LinearLayout>
+                android:text="I like all courses"
+                style="@style/textColor"/>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_below="@+id/content"
+            android:id="@+id/visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
 
-    </androidx.cardview.widget.CardView>
-</RelativeLayout>
+            <ImageButton
+                style="@style/imageColor"
+                android:id="@+id/questionLike"
+                android:layout_width="25dp"
+                android:layout_height="45dp"
+                android:background="@null"
+                android:contentDescription="Like"
+                app:srcCompat="@drawable/like_icon" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/questionLikeNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                style="@style/textColor"
+                android:text="0">
+
+            </TextView>
+
+            <ImageButton
+                style="@style/imageColor"
+                android:id="@+id/replyQuestionBtn"
+                android:layout_width="25dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="7dp"
+                android:background="@null"
+                android:contentDescription="Reply"
+                app:srcCompat="@drawable/comment_icon" />
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/replyQuestionNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                style="@style/textColor"
+                android:text="0" />
+
+
+
+
+
+        </LinearLayout>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_below="@id/visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>
