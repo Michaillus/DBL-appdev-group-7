@@ -24,7 +24,7 @@ public class Question extends Interactable{
     /**
      * Name of question comments collection in the database.
      */
-    public static final String QUESTION_COMMENT_COLLECTION_NAME = "question-comments";
+    public static final String QUESTION_COMMENT_COLLECTION_NAME = "questions-replies";
 
     /**
      * Id of the course for which question is asked.

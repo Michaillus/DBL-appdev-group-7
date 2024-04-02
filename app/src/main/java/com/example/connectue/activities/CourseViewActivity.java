@@ -58,8 +58,6 @@ public class CourseViewActivity extends StudyUnitViewActivity {
         setFollowIcon(followIcon);
     }
 
-
-
     protected void setBinding() {
         ActivityCourseViewBinding binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -78,7 +76,7 @@ public class CourseViewActivity extends StudyUnitViewActivity {
                         break;
                     case "Questions":
                         Log.i(TAG, "Transferring to questions tag");
-                        replaceFragment(new QuestionsFragment());
+                        replaceFragment(new QuestionsFragment(getSupportFragmentManager()));
                         break;
                     case "Material":
                         Log.i(TAG, "Transferring to materials tab");

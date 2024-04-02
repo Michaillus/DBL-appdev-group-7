@@ -2,6 +2,7 @@ package com.example.connectue.managers;
 
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Question;
+import com.example.connectue.model.Reply;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,15 +22,24 @@ public class QuestionManager extends InteractableManager<Question> {
      * @param collectionName Name of the collection that stores questions in the database.
      * @param likeCollectionName Name of the collection that stores question likes in the database.
      * @param dislikeCollectionName Name of the collection that stores question dislikes in the database.
-     * @param commentCollectionName Name of the collection that stores question comments in the database.
+     * @param replyCollectionName Name of the collection that stores question comments in the database.
      */
-    public QuestionManager(FirebaseFirestore db, String collectionName,
-                       String likeCollectionName, String dislikeCollectionName,
-                       String commentCollectionName) {
-        super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
+//    public QuestionManager(FirebaseFirestore db, String collectionName,
+//                       String likeCollectionName, String dislikeCollectionName,
+//                       String commentCollectionName, String replyCollectionName) {
+//        super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
+//
+//
+//        tag = "QuestionManager";
+//    }
 
-        tag = "QuestionManager";
+    public QuestionManager(FirebaseFirestore db, String collectionName,
+                           String likeCollectionName, String dislikeCollectionName,
+                           String replyCollectionName) {
+        super(db, collectionName, likeCollectionName, dislikeCollectionName, replyCollectionName);
+        replyManager = new ReplyManager(db, replyCollectionName);
     }
+
 
     /**
      * Retrieves {@code amount} of latest questions on the {@code courseId} course
@@ -45,6 +55,11 @@ public class QuestionManager extends InteractableManager<Question> {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
+
+//    public void downloadRecentReplies(String parentId, int amount,
+//                                      ItemDownloadCallback<List<Reply>> callback) {
+//        replyManager.downloadRecent(parentId, amount, callback);
+//    }
 
     /**
      * Converts a FireBase document snapshot of a question collection into an instance
