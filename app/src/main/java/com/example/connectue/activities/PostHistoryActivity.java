@@ -101,15 +101,9 @@ public class PostHistoryActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toOtherActivity(MainActivity.class);
+                finish();
             }
         });
-    }
-
-    private void toOtherActivity(Class activity) {
-        Intent loading = new Intent(PostHistoryActivity.this, activity);
-        PostHistoryActivity.this.startActivity(loading);
-        PostHistoryActivity.this.finish();
     }
 
 
