@@ -45,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
 
         foundCourse = findViewById(R.id.foundCourse);
         db = FirebaseFirestore.getInstance();
-        coursesRef = db.collection("courses");
+        coursesRef = db.collection(StudyUnit.COURSE_COLLECTION_NAME);
 
         // get user input search text
         String searchText = getIntent().getStringExtra("searchText");
@@ -57,8 +57,8 @@ public class SearchActivity extends AppCompatActivity {
     private void searchCourse(String searchText) {
         String searchTextUpperCase = searchText.toUpperCase();
 
-        Query queryByCode = coursesRef.whereEqualTo("courseCode", searchTextUpperCase);
-        Query queryByName = coursesRef.whereEqualTo("courseName", searchText);
+        Query queryByCode = coursesRef.whereEqualTo(StudyUnit.CODE_ATTRIBUTE, searchTextUpperCase);
+        Query queryByName = coursesRef.whereEqualTo(StudyUnit.NAME_ATTRIBUTE, searchText);
 
         Tasks.whenAllSuccess(queryByCode.get(), queryByName.get())
                 .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
