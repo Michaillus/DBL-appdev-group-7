@@ -11,16 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Reply;
-import com.example.connectue.model.User2;
-import com.example.connectue.utils.General;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.TimeUtils;
-import com.example.connectue.model.Comment;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -78,13 +74,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyHolder>
             replyText = itemView.findViewById(R.id.replyText);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(),
-                    User2.USER_COLLECTION_NAME);
+                    User.USER_COLLECTION_NAME);
         }
 
         public void bind(Reply reply) {
-            userManager.downloadOne(reply.getPublisherId(), new ItemDownloadCallback<User2>() {
+            userManager.downloadOne(reply.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override
-                public void onSuccess(User2 data) {
+                public void onSuccess(User data) {
                     // Load user name
                     replierName.setText(data.getFullName());
                 }
@@ -93,9 +89,9 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyHolder>
             replyTime.setText(TimeUtils.getTimeAgo(reply.getTimestamp()));
             replyText.setText(reply.getText());
 
-            userManager.downloadOne(reply.getPublisherId(), new ItemDownloadCallback<User2>() {
+            userManager.downloadOne(reply.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override
-                public void onSuccess(User2 data) {
+                public void onSuccess(User data) {
                     // Set comment user name
                     replierName.setText(data.getFullName());
                 }

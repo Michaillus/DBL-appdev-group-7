@@ -32,7 +32,7 @@ import com.example.connectue.managers.ReplyManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Question;
 import com.example.connectue.model.Reply;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.TimeUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -179,9 +179,9 @@ public class ReplyFragment extends Fragment{
                 currentQuestion = question;
                 publisherTime.setText(TimeUtils.getTimeAgo(question.getDatetime()));
 
-                userManager.downloadOne(question.getPublisherId(), new ItemDownloadCallback<User2>() {
+                userManager.downloadOne(question.getPublisherId(), new ItemDownloadCallback<User>() {
                     @Override
-                    public void onSuccess(User2 publisher) {
+                    public void onSuccess(User publisher) {
                         publisherName.setText(publisher.getFullName());
                     }
 
@@ -266,9 +266,9 @@ public class ReplyFragment extends Fragment{
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         // Update the UI to reflect the new reply
-                        userManager.downloadOne(userId, new ItemDownloadCallback<User2>() {
+                        userManager.downloadOne(userId, new ItemDownloadCallback<User>() {
                             @Override
-                            public void onSuccess(User2 user) {
+                            public void onSuccess(User user) {
 
                                 replyList.add(0, reply);
                                 // Notify the RecyclerView adapter about the dataset change

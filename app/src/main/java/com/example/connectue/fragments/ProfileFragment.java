@@ -650,9 +650,9 @@ public class ProfileFragment extends Fragment {
 
     private void initProfileImageView() {
 
-        if (General.isGuest(role)) {
-            return;
-        }
+//        if (General.isGuest(role)) {
+//            return;
+//        }
 
         if (imageURL != null && !imageURL.equals("")) {
             Glide.with(getContext()).load(imageURL).into(profileIV);
