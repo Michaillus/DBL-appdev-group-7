@@ -132,10 +132,6 @@
                 android:background="@null"
                 app:srcCompat="@drawable/outline_report_24"/>
         </LinearLayout>
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_below="@id/visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
 
 
