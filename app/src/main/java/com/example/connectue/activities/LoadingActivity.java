@@ -31,6 +31,9 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
+        /**
+         * get the instances of firestore and fireauth.
+         */
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -41,6 +44,10 @@ public class LoadingActivity extends AppCompatActivity {
         if (user != null) {
             DocumentReference userDoc = db.collection("users").document(user.getUid());
             Log.d(TAG, user.getEmail());
+            /**
+             * the following snippet of code is used
+             * to determine whether or not the user is verified.
+             */
             userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
                 @Override

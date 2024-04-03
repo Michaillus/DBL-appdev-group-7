@@ -89,11 +89,26 @@ public class CourseViewActivity extends StudyUnitViewActivity {
                 }
             }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+                /**
+                 * This method is empty because there is
+                 * no behaviour when the tab is unselected,
+                 * however, the tab selected listener requires these super
+                 * methods to be overridden.
+                 */
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                /**
+                 * This method is empty because there is
+                 * no behaviour when the tab is reselected,
+                 * however, the tab selected listener requires these super
+                 * methods to be overridden.
+                 */
+            }
         });
     }
 
@@ -110,13 +125,18 @@ public class CourseViewActivity extends StudyUnitViewActivity {
             @Override
             public void onClick(View view) {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+                /**
+                 * get user details from database using primary key uid
+                 */
                 db.collection("users")
                     .document(firebaseUser.getUid())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            /**
+                             * if user successfully retrieved, get list of courses they follow.
+                             */
                             if (task.isSuccessful()) {
                                 DocumentSnapshot documentSnapshot = task.getResult();
                                 if (documentSnapshot.exists()) {
@@ -163,12 +183,25 @@ public class CourseViewActivity extends StudyUnitViewActivity {
             .document(firebaseUser.getUid())
             .get()
             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                /**
+                 * check for completion of data retrieval task.
+                 * @param task data retrieval task
+                 */
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    /**
+                     * if user is retrieved successfully, get list of courses they follow.
+                     */
                     if (task.isSuccessful()) {
+                        //if the user exists then get their followed courses.
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if (documentSnapshot.exists()) {
                             List<String> userCourses = (List<String>) documentSnapshot.get("userCourses");
+                            /**
+                             * if they follow the course, set the icon of the
+                             * follow button to a check mark,
+                             * otherwise set it to a plus button.
+                             */
                             if (userCourses.contains(studyUnit.getId())) {
                                 followIcon.setImageDrawable(getResources().getDrawable(R.drawable.baseline_check_circle_24));
                             } else {

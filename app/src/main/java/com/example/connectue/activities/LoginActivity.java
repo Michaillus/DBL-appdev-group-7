@@ -24,6 +24,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * The user can login to their account through this activity
+ */
 public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sh;
     EditText emailEt, passEt;
@@ -63,9 +66,12 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-
-
-
+        /**
+         * The user has the option to register a new account:
+         *
+         * set a click listener for the register button to
+         * direct the user to the registration page.
+         */
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,11 +81,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * If a user already has an account, they can login directly.
+         *
+         * set a click listener for the login button.
+         * Check that all input fields were filled in correctly.
+         */
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = emailEt.getText().toString().trim();
                 String password = passEt.getText().toString().trim();
+                 //fields must each be filled in.
                 if (TextUtils.isEmpty(emailEt.getText().toString().trim())) {
                     emailEt.setError("Must fill in all fields");
                     emailEt.setFocusable(true);
@@ -95,6 +108,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Helper function to check whether or not the user is verified.
+     * @param user the user to check
+     * @param callback call back to verification
+     * @return a boolean value.
+     */
     private Boolean checkUserIsVerified(FirebaseUser user, final VerificationCallback callback) {
         DocumentReference userDoc = db.collection("users").document(user.getUid());
         userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -102,6 +121,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    /**
+                     * if user exists, check verification status.
+                     * otherwise log an error.
+                     */
                     if (document.exists()) {
                         // Get the value of isVerified
                         verifiedObject = document.getBoolean("isVerified");
@@ -122,6 +145,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        /**
+         * redirect the user based on verification status.
+         */
         if (verifiedObject == null) {
             Log.e(TAG, "Field 'isVerified' is null.");
             return false;
@@ -135,6 +162,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * helper function to log user into application.
+     * @param email email of user.
+     * @param password password of user.
+     */
     private void loginUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -143,15 +175,29 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                        //check whether or not user is verified through helper function
                         isVerified = checkUserIsVerified(user, new VerificationCallback() {
+                            /**
+                             * Callback to check verification. checking verification
+                             * is an asynchronous process and requires callback.
+                             * @param isVerified the verificaiton status.
+                             */
                             @Override
                             public void onVerificationCallback(boolean isVerified) {
+                                /**
+                                 * if user isn't verified, notify them and end
+                                 * the callback function.
+                                 */
                                 if(!isVerified) {
                                     Toast.makeText(LoginActivity.this,
                                             "Email is not verified", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                // Sign in success, update UI with the signed-in user's information
+                                /**
+                                 *  Sign in success, update UI with the signed-in user's information.
+                                 *  Notify the user of login success and redirect
+                                 *  them to application home page.
+                                 */
                                 Log.d(TAG, "signInWithEmail:success");
                                 Toast.makeText(LoginActivity.this, "Login Success",
                                         Toast.LENGTH_SHORT).show();
@@ -161,6 +207,9 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
 
+                        /**
+                         * If the user entered incorrect login details, notify them
+                         */
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
