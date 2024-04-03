@@ -149,32 +149,6 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        Log.i(TAG, "start executing onCreate");
-//        db = FirebaseFirestore.getInstance();
-//        user = FirebaseAuth.getInstance().getCurrentUser();
-//        Log.i(TAG, user.getUid());
-//        DocumentReference documentReference = db.collection(General.USERCOLLECTION).document(user.getUid());
-//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//              @Override
-//              public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                  if (task.isSuccessful()) {
-//                      document = task.getResult();
-//
-//                      if (document.exists()) {
-//                          Log.i(TAG,"document fetched");
-//                          Log.i(TAG, document.toString());
-//                          parseDocument();
-//                          updateUIComponents();
-//                      } else {
-//                          Log.d(TAG, "No such user document");
-//                      }
-//                  } else {
-//                      Log.d(TAG, "get task failed with ", task.getException());
-//                  }
-//              }
-//        });
-//        Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
 
     @Override
@@ -185,10 +159,14 @@ public class ProfileFragment extends Fragment {
         Log.i(TAG, "start executing crete view");
         Log.i(TAG, "before: " + firstNameStr);
         initData(view);
-//        initComponents(view);
         return view;
     }
 
+    /**
+     * Fetch the user data from the Firebase Firestore, and then based on the data to initialize
+     *  all components on this page.
+     * @param view to fetch components on this page.
+     */
     private void initData(View view) {
         Log.i(TAG, "start executing onCreate");
         db = FirebaseFirestore.getInstance();
@@ -207,7 +185,6 @@ public class ProfileFragment extends Fragment {
                         if (getContext() != null) {
                             initComponents(view);
                         }
-//                        initComponents(view);
                     } else {
                         Log.d(TAG, "No such user document");
                     }
@@ -219,6 +196,10 @@ public class ProfileFragment extends Fragment {
         Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
 
+    /**
+     * The main function to initialize all function on this page.
+     * @param view to fetch components on this page.
+     */
     private void initComponents(View view) {
         firstName_fld = view.findViewById(R.id.text_firstName);
         lastName_fld = view.findViewById(R.id.text_lastName);
@@ -258,6 +239,9 @@ public class ProfileFragment extends Fragment {
         initProfileImageView();
     }
 
+    /**
+     * initialize 2 spinners for 2 majors.
+     */
     private void initSpinner() {
         if (getContext() != null) {
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -313,10 +297,13 @@ public class ProfileFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
         }
-
-
     }
 
+    /**
+     * Initialize all textfieds in the profile page, like first name, the second name, phone number
+     *  , and majors. Also, set all textfields uneditable.
+     * @param view
+     */
     private void initTextSection(View view) {
         setTestFields();
         switchTextFields(isEditing);
@@ -333,9 +320,6 @@ public class ProfileFragment extends Fragment {
             setSpinner(items, spinnerStr, majorSpinner);
             setSpinner(items, spinnerStr2, majorSpinner2);
         }
-//        String[] items = getResources().getStringArray(R.array.programs_array);
-//        setSpinner(items, spinnerStr, majorSpinner);
-//        setSpinner(items, spinnerStr2, majorSpinner2);
     }
 
     private void setSpinner(String[] items, String spinnerString, Spinner spinner) {
@@ -389,49 +373,15 @@ public class ProfileFragment extends Fragment {
                 majorSpinner2.setEnabled(!majorSpinner2.isEnabled());
             }
         });
-
     }
 
     private void initDeleteButton() {
         deleteBtn.setText("DELETE ACCOUNT");
 
-//        CollectionReference reviewsRef = db.collection("reviews");
-//        CollectionReference reviewsRef = db.collection(General.COURSEREVIEWCOLLECTION);
-////        CollectionReference postsRef = db.collection("posts");
-//        CollectionReference postsRef = db.collection(General.POSTCOLLECTION);
-////        CollectionReference commentsRef = db.collection("post-comments");
-//        CollectionReference commentsRef = db.collection(General.COMMENTCOLLECTION);
-
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signoutDeletePopup(false);
-
-                // Firstly, delete all posts and reviews posted by this user
-//                deleteUserContents(reviewsRef);
-//                deleteUserContents(postsRef);
-//                deleteUserContents(commentsRef);
-//
-//                db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void unused) {
-//                                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        FirebaseAuth.getInstance().signOut();
-//                                        toOtherActivity(LoadingActivity.class);
-//                                    }
-//                                });
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Toast.makeText(getActivity(), "Delete failed",
-//                                        Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
             }
         });
     }
@@ -476,7 +426,6 @@ public class ProfileFragment extends Fragment {
                     public void onFailure(@NonNull Exception e) {}
                 });
     }
-
 
     private void updateInfo() {
         Map<String, Object> uploadInfo = new HashMap<>();
@@ -597,16 +546,9 @@ public class ProfileFragment extends Fragment {
         if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
         if (document.get(General.LASTNAME) != null) {  lastNameStr = document.getString(General.LASTNAME);}
         if (document.get(General.EMAIL) != null) { emailStr = document.getString(General.EMAIL);}
-
         if (document.get(General.PHONE) != null) { phoneStr = document.getString(General.PHONE);}
-        if (document.get(General.ROLE) != null) {
-            role = document.getLong(General.ROLE);
-//            isAdmin = General.isAdmin(document.getLong(General.ROLE));
-//            Log.i(TAG, "" + isAdmin);
-        }
-        if (document.get(PROFILEPICTURE) != null) {
-            imageURL = document.getString(PROFILEPICTURE);
-        }
+        if (document.get(General.ROLE) != null) {role = document.getLong(General.ROLE);}
+        if (document.get(PROFILEPICTURE) != null) {imageURL = document.getString(PROFILEPICTURE);}
     }
 
     private void initPostHisButton() {
@@ -828,5 +770,4 @@ public class ProfileFragment extends Fragment {
                 });
         Log.i(TAG_Profile, "In updateProfilePicture, after upload");
     }
-
 }
