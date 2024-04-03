@@ -41,16 +41,9 @@ public class CourseViewActivity extends StudyUnitViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int orientation = getResources().getConfiguration().orientation;
-        // Check if saved instance state is not null
-
         setTabListener();
         // Set up UI elements
         loadStudyUnitDetails();
-
-
-
-
         ImageView followIcon = findViewById(R.id.followIcon);
 
         setFollowButtonListener(followIcon);
@@ -59,14 +52,23 @@ public class CourseViewActivity extends StudyUnitViewActivity {
     }
 
 
-
+    /**
+     * method to inflate layout of course view
+     */
     protected void setBinding() {
         ActivityCourseViewBinding binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
 
+    /**
+     * method to set listener for tab layout.
+     */
     protected void setTabListener() {
         TabLayout tabLayout = findViewById(R.id.tablayout_course_menu);
+        /**
+         * switch tabs based on the selected item in the tab layout
+         * utilizing switch case here for modularity.
+         */
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -95,26 +97,12 @@ public class CourseViewActivity extends StudyUnitViewActivity {
         });
     }
 
-    private void setRailListener() {
-        NavigationRailView navigationRailView = findViewById(R.id.navigation_rail);
-        navigationRailView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_reviews) {
-                replaceFragment(new ReviewsFragment());
-                return true;
-            } else if (item.getItemId() == R.id.nav_questions) {
-                replaceFragment(new QuestionsFragment());
-                return true;
-            } else if (item.getItemId() == R.id.nav_materials) {
-                replaceFragment(new MaterialsFragment());
-                return true;
-            } else {
-                replaceFragment(new ReviewsFragment());
-                return true;
-            }
-        });
-
-    }
-
+    /**
+     * method to set icon of follow button.
+     * This shows the user whether or not they
+     * are following a course
+     * @param followIcon the icon to set.
+     */
     protected void setFollowButtonListener(ImageView followIcon) {
 
         LinearLayout followButton = findViewById(R.id.followButton);

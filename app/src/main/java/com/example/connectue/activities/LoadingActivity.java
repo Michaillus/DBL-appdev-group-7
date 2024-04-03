@@ -17,6 +17,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * The application first opens on this page.
+ * Here we decide whether the user is logged in or not.
+ */
 public class LoadingActivity extends AppCompatActivity {
     FirebaseUser user;
     FirebaseFirestore db;
@@ -30,6 +34,10 @@ public class LoadingActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        /**
+         * Get user details in the event that a user
+         * has already logged into the application
+         */
         if (user != null) {
             DocumentReference userDoc = db.collection("users").document(user.getUid());
             Log.d(TAG, user.getEmail());
@@ -39,6 +47,9 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
+                        /**
+                         * Check if user has verified his email through email authentication.
+                         */
                         if (document.exists()) {
                             // Get the value of isVerified
                             isVerified = document.get("isVerified");
@@ -61,17 +72,29 @@ public class LoadingActivity extends AppCompatActivity {
 
 
         final Handler handler = new Handler();
+        /**
+         * handle page redirection for different user cases.
+         */
         handler.postDelayed(new Runnable() {
             public void run() {
+                /**
+                 * if user is verified redirect to home page
+                 */
                 if (isVerified == null) {
                     Intent mInHome = new Intent(LoadingActivity.this, LoginActivity.class);
                     LoadingActivity.this.startActivity(mInHome);
                     LoadingActivity.this.finish();
-
+                    /**
+                     * if user is not verified but has
+                     * an account, redirect to login page
+                      */
                 } else if (isVerified.equals(false)){
                     Intent mInHome = new Intent(LoadingActivity.this, LoginActivity.class);
                     LoadingActivity.this.startActivity(mInHome);
                     LoadingActivity.this.finish();
+                    /**
+                     * otherwise redirect to login page.
+                     */
                 } else {
                     Intent mInMain = new Intent(LoadingActivity.this, MainActivity.class);
                     LoadingActivity.this.startActivity(mInMain);

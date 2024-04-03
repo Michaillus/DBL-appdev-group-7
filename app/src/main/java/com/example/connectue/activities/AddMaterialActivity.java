@@ -61,6 +61,7 @@ public class AddMaterialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_upload);
 
+        //Get the instance of firebase
         db = FirebaseFirestore.getInstance();
 
         TextView title = findViewById(R.id.courseName);
@@ -79,6 +80,9 @@ public class AddMaterialActivity extends AppCompatActivity {
 
         title.setText(course.getCode());
 
+        /**
+         * set listener for upload button when it is clicked
+         */
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +90,7 @@ public class AddMaterialActivity extends AppCompatActivity {
                     // Launch file picker activity to select a PDF file
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("application/pdf");
+                    //start an activity result, behaviour defined in onActivityResult method
                     startActivityForResult(intent, REQUEST_PICK_PDF_FILE);
                 }
 
@@ -93,6 +98,9 @@ public class AddMaterialActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * set a listnener for when the submit button is clicked.
+         */
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,32 +117,50 @@ public class AddMaterialActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_PICK_PDF_FILE && resultCode == RESULT_OK) {
-            if (data != null && data.getData() != null) {
-                // Get the selected PDF file URI
-                selectedPdfUri = data.getData();
-                ImageView uploadIcon = findViewById(R.id.downloadIcon);
-                TextView downloadText = findViewById(R.id.downloadText);
-                downloadText.setText("Uploaded!");
-                uploadIcon.setImageResource(R.drawable.baseline_check_circle_24);
-                uploaded = true;
-                Toast.makeText(AddMaterialActivity.this, "PDF uploaded successfully", Toast.LENGTH_SHORT).show();
-            }
+        /**
+         * If correct request and result codes and data is not null,
+         * change icons of download button to indicate that a file was
+         * already uploaded.
+         */
+        if (requestCode == REQUEST_PICK_PDF_FILE && resultCode == RESULT_OK && notIsDataNull(data)) {
+            // Get the selected PDF file URI
+            selectedPdfUri = data.getData();
+            ImageView uploadIcon = findViewById(R.id.downloadIcon);
+            TextView downloadText = findViewById(R.id.downloadText);
+            downloadText.setText("Uploaded!");
+            uploadIcon.setImageResource(R.drawable.baseline_check_circle_24);
+            uploaded = true;
+            Toast.makeText(AddMaterialActivity.this, "PDF uploaded successfully", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private Boolean notIsDataNull(@Nullable Intent data) {
+        return data != null && data.getData() != null;
+    }
+
+
+    /**
+     * Helper method to uplaod pdf file to firebase storage
+     * @param pdfUri encoded uri of pdf document
+     */
     private void uploadPdfToFirebase(Uri pdfUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference("materialPdfDocuments")
                 .child(course.getId()); // Adjust path as needed
 
+        //get date of upload to make a new material instance
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.GERMANY);
         Date now = new Date();
         String fileName = formatter.format(now);
         StorageReference pdfRef = storageRef.child( fileName + ".pdf");
 
         UploadTask uploadTask = pdfRef.putFile(pdfUri);
+        //Start the upload task
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            /**
+             * if upload to storage task successful, upload to firestore.
+             * @param taskSnapshot snapshot of task
+             */
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // File uploaded successfully
@@ -145,6 +171,10 @@ public class AddMaterialActivity extends AppCompatActivity {
 
             }
         }).addOnFailureListener(new OnFailureListener() {
+            /**
+             * if uplaod unsuccessful, notify user.
+             * @param e exception raised.
+             */
             @Override
             public void onFailure(@NonNull Exception e) {
                 // Handle file upload failure
@@ -154,6 +184,11 @@ public class AddMaterialActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * helper function to upload pdf to firestore.
+     * @param caption caption of the material post
+     * @param pdfUri uri of the pdf file in storage
+     */
     private void uploadMaterialToDatabase(String caption, String pdfUri) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Material material = new Material(publisherId, caption, course.getId(), pdfUri);
