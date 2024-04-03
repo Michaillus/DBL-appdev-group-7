@@ -65,7 +65,7 @@ public class ChannelsFragment extends Fragment {
     private MyCoursesVerticalFragment myCoursesVerticalFragment;
 
     private Button searchBtn;
-    private EditText searchEt;
+    public EditText searchEt;
     private ListView searchListView;
 
     private String TAG = "ChannelsFragUtil: ";
@@ -120,6 +120,7 @@ public class ChannelsFragment extends Fragment {
 
         searchBtn = view.findViewById(R.id.search_button);
         searchEt = view.findViewById(R.id.searchEditText);
+
         searchListView = view.findViewById(R.id.searchListView);
 
         // Button to trigger to search activity
@@ -150,6 +151,7 @@ public class ChannelsFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
 
     private void setupTabLayout(TabLayout tabLayout) {
         // Setup tab layout for portrait orientation
@@ -241,7 +243,8 @@ public class ChannelsFragment extends Fragment {
         transaction.commit();
     }
 
-    private void showSearchListView() {
+    //Made public for test file access
+    public void showSearchListView() {
         searchEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
