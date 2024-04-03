@@ -35,10 +35,16 @@ public class AddReviewActivity extends AppCompatActivity {
     Button publishReviewBtn;
     FloatingActionButton backBtn;
     ImageButton star_1, star_2, star_3, star_4, star_5;
-    RatingBar ratingBar;
     Long stars;
     String text;
 
+    /**
+     * Method is called when the activity is created.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,24 +61,19 @@ public class AddReviewActivity extends AppCompatActivity {
                 studyUnit.getReviewDislikeCollectionName(),
                 studyUnit.getReviewCommentCollectionName());
 
-        reviewDescription = findViewById(R.id.reviewDescription);
-        publishReviewBtn = findViewById(R.id.publishReviewBtn);
-        ratingBar = findViewById(R.id.ratingBar);
-        backBtn = findViewById(R.id.back_Btn);
-        star_1 = findViewById(R.id.star1);
-        star_2 = findViewById(R.id.star2);
-        star_3 = findViewById(R.id.star3);
-        star_4 = findViewById(R.id.star4);
-        star_5 = findViewById(R.id.star5);
+        initializeViews();
 
-        // Set listeners for star rating buttons
+        // Set listeners for star rating buttons.
         star_1.setOnClickListener(v -> selectStarRating(1));
         star_2.setOnClickListener(v -> selectStarRating(2));
         star_3.setOnClickListener(v -> selectStarRating(3));
         star_4.setOnClickListener(v -> selectStarRating(4));
         star_5.setOnClickListener(v -> selectStarRating(5));
 
+        // Set listeners for publish a review button.
         publishReviewBtn.setOnClickListener(v -> publishReview(studyUnit));
+
+        // Set listeners for back button.
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +83,24 @@ public class AddReviewActivity extends AppCompatActivity {
 
     }
 
-    // Method to handle star rating selection
+    /**
+     * Initialize the UI components of the adding review page.
+     */
+    private void initializeViews() {
+        reviewDescription = findViewById(R.id.reviewDescription);
+        publishReviewBtn = findViewById(R.id.publishReviewBtn);
+        backBtn = findViewById(R.id.back_Btn);
+        star_1 = findViewById(R.id.star1);
+        star_2 = findViewById(R.id.star2);
+        star_3 = findViewById(R.id.star3);
+        star_4 = findViewById(R.id.star4);
+        star_5 = findViewById(R.id.star5);
+    }
+
+    /**
+     * Method to handle star rating selection after clicking on stars on the adding review page.
+     * @param rating The number of stars clicked
+     */
     private void selectStarRating(int rating) {
         stars = (long) rating;
         // Update UI to reflect the selected star rating
@@ -92,7 +110,6 @@ public class AddReviewActivity extends AppCompatActivity {
         star_3.setImageResource(R.drawable.star_empty);
         star_4.setImageResource(R.drawable.star_empty);
         star_5.setImageResource(R.drawable.star_empty);
-
 
         // Set selected star buttons based on the rating
         switch (rating) {
@@ -123,10 +140,13 @@ public class AddReviewActivity extends AppCompatActivity {
                 break;
         }
 
-        //update the ratings for each study unit review
-
     }
 
+    /**
+     * Method to publish a review and upload to database with stars. If no stars selected, a message
+     * called for selecting a star rating will be present.
+     * @param studyUnit The unit - review to be published to database.
+     */
     private void publishReview(StudyUnit studyUnit) {
         publishReviewBtn.setEnabled(false);
         reviewDescription.setEnabled(false);
@@ -146,6 +166,15 @@ public class AddReviewActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to upload the review to database. After publishing a review successfully, a message to
+     * present this situation will be present and the page will go to the review view page of the specific
+     * course. Also, the review is uploaded to database.
+     *
+     * @param text The text field for editing the contents of a review
+     * @param stars The rating stars selected
+     * @param studyUnit The unit - review.
+     */
     private void uploadToFirestore(String text, Long stars, StudyUnit studyUnit) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Review review = new Review(publisherId, text, stars, studyUnit.getId());
