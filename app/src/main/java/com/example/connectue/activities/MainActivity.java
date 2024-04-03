@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             pageIntent= (String) savedInstanceState.getSerializable("pageIntent");
         }
 
-        if (pageIntent == "channels") {
+        if (pageIntent.equals("channels")) {
             replaceFragment(new ChannelsFragment());
         } else {
             replaceFragment(new HomeFragment(getSupportFragmentManager()));
