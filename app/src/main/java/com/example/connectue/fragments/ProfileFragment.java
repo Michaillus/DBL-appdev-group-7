@@ -44,6 +44,7 @@ import com.example.connectue.R;
 import com.example.connectue.activities.AdminActivity;
 import com.example.connectue.activities.LoadingActivity;
 import com.example.connectue.activities.PostHistoryActivity;
+import com.example.connectue.utils.ProfilePageBasicInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -80,8 +81,6 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private static final String TAG = "Profile";
     private static final String TAG_Profile = "ProfilePic";
-    private static final String EDITON = "Save";
-    private static final String EDITOFF = "Edit";
     private static final String LOGOUT = "Logout";
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_STORAGE = 200;
@@ -117,6 +116,7 @@ public class ProfileFragment extends Fragment {
     ImageView profileIV;
     Spinner majorSpinner;
     Spinner majorSpinner2;
+    private ProfilePageBasicInfo basicInfo;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -156,8 +156,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        Log.i(TAG, "start executing crete view");
-        Log.i(TAG, "before: " + firstNameStr);
+//        Log.i(TAG, "start executing crete view");
+//        Log.i(TAG, "before: " + firstNameStr);
         initData(view);
         return view;
     }
@@ -183,6 +183,7 @@ public class ProfileFragment extends Fragment {
                         Log.i(TAG, document.toString());
                         parseDocument();
                         if (getContext() != null) {
+                            basicInfo = new ProfilePageBasicInfo(getContext(), view, document, getResources(), db, user);
                             initComponents(view);
                         }
                     } else {
@@ -193,7 +194,7 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-        Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
+//        Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
 
     /**
@@ -201,178 +202,24 @@ public class ProfileFragment extends Fragment {
      * @param view to fetch components on this page.
      */
     private void initComponents(View view) {
-        firstName_fld = view.findViewById(R.id.text_firstName);
-        lastName_fld = view.findViewById(R.id.text_lastName);
-        email_fld = view.findViewById(R.id.text_email);
-        phone_fld = view.findViewById(R.id.text_phone);
-
-        editBtn= view.findViewById(R.id.btn_edit);
         logoutBtn = view.findViewById(R.id.btn_logout);
         deleteBtn = view.findViewById(R.id.btn_deleteAccount);
         postHisBtn = view.findViewById(R.id.btn_postHistory);
         reviewHisBtn  = view.findViewById(R.id.btn_reviewHistory);
         adminBtn  = view.findViewById(R.id.btn_admmin);
         profileIV = view.findViewById(R.id.profilePic);
-        majorSpinner = view.findViewById(R.id.majorSpinner);
-        majorSpinner2 = view.findViewById(R.id.majorSpinner2);
-        majorTextView = view.findViewById(R.id.major_title);
-
-        majorSpinner.setEnabled(false);
-        majorSpinner2.setEnabled(false);
 
         if (General.isGuest(role)) {
             postHisBtn.setVisibility(View.GONE);
             reviewHisBtn.setVisibility(View.INVISIBLE);
-            majorTextView.setVisibility(View.INVISIBLE);
-            majorSpinner.setVisibility(View.INVISIBLE);
-            majorSpinner2.setVisibility(View.INVISIBLE);
         }
 
-        initSpinner();
-        initTextSection(view);
-        initEditButton();
         initSignoutButton();
         initDeleteButton();
         initPostHisButton();
         initReviewHisButton();
         initAdminButton();
         initProfileImageView();
-    }
-
-    /**
-     * initialize 2 spinners for 2 majors.
-     */
-    private void initSpinner() {
-        if (getContext() != null) {
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                    getContext(),
-                    R.array.programs_array,
-                    android.R.layout.simple_spinner_item
-            );
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            majorSpinner.setAdapter(adapter);
-            majorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int deviceScreenSize = getResources().getConfiguration().screenLayout &
-                            Configuration.SCREENLAYOUT_SIZE_MASK;
-
-                    TextView textView = (TextView) parent.getChildAt(0);
-                    if (deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                            deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-                        // For tablets, set a larger font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-                    } else {
-                        // For phones, set a smaller font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                    }
-                    textView.setTextColor(Color.BLACK);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
-
-            majorSpinner2.setAdapter(adapter);
-            majorSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int deviceScreenSize = getResources().getConfiguration().screenLayout &
-                            Configuration.SCREENLAYOUT_SIZE_MASK;
-
-                    TextView textView = (TextView) parent.getChildAt(0);
-                    if (deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                            deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-                        // For tablets, set a larger font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-                    } else {
-                        // For phones, set a smaller font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                    }
-                    textView.setTextColor(Color.BLACK);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
-        }
-    }
-
-    /**
-     * Initialize all textfieds in the profile page, like first name, the second name, phone number
-     *  , and majors. Also, set all textfields uneditable.
-     * @param view
-     */
-    private void initTextSection(View view) {
-        setTestFields();
-        switchTextFields(isEditing);
-    }
-
-    private void setTestFields() {
-        firstName_fld.setText(firstNameStr);
-        lastName_fld.setText(lastNameStr);
-        email_fld.setText(emailStr);
-        phone_fld.setText(phoneStr);
-
-        if (getContext() != null) {
-            String[] items = getResources().getStringArray(R.array.programs_array);
-            setSpinner(items, spinnerStr, majorSpinner);
-            setSpinner(items, spinnerStr2, majorSpinner2);
-        }
-    }
-
-    private void setSpinner(String[] items, String spinnerString, Spinner spinner) {
-        int position = -1;
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].equals(spinnerString)) {
-                position = i;
-                break;
-            }
-        }
-
-        if (position != -1) {
-            spinner.setSelection(position);
-        } else {}
-    }
-
-    private void switchTextFields(boolean onOff) {
-        firstName_fld.setEnabled(onOff);
-        lastName_fld.setEnabled(onOff);
-        email_fld.setEnabled(onOff);
-        phone_fld.setEnabled(onOff);
-    }
-
-    private void updateUIComponents() {
-        if (getContext() != null) {
-            setTestFields();
-            if (!isAdmin) {
-                adminBtn.setEnabled(false);
-                adminBtn.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
-    private void initEditButton() {
-        editBtn.setText(EDITOFF);
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isEditing) {
-                    editBtn.setText(EDITOFF);
-                    updateInfo();
-                } else {
-                    editBtn.setText(EDITON);
-                }
-
-                isEditing = !isEditing;
-                switchTextFields(isEditing);
-                setTestFields();
-
-                majorSpinner.setEnabled(!majorSpinner.isEnabled());
-                majorSpinner2.setEnabled(!majorSpinner2.isEnabled());
-            }
-        });
     }
 
     private void initDeleteButton() {
@@ -425,24 +272,6 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {}
                 });
-    }
-
-    private void updateInfo() {
-        Map<String, Object> uploadInfo = new HashMap<>();
-        firstNameStr = firstName_fld.getText().toString().trim();
-        lastNameStr = lastName_fld.getText().toString().trim();
-        emailStr = email_fld.getText().toString().trim();
-        phoneStr = phone_fld.getText().toString().trim();
-        spinnerStr = (String) majorSpinner.getSelectedItem();
-        spinnerStr2 = (String) majorSpinner2.getSelectedItem();
-
-        uploadInfo.put(General.FIRSTNAME, firstNameStr);
-        uploadInfo.put(General.LASTNAME, lastNameStr);
-        uploadInfo.put(General.PROGRAM, spinnerStr + " " + spinnerStr2);
-        uploadInfo.put(General.EMAIL, emailStr);
-        uploadInfo.put(General.PHONE, phoneStr);
-
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(uploadInfo);
     }
 
     private void initSignoutButton() {
@@ -517,38 +346,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void parseDocument() {
-        if (document.get(General.FIRSTNAME) != null) {
-            Log.i(TAG, "document-first name not null");
-            Log.i(TAG, "before: " + firstNameStr);
-            firstNameStr = (String) document.get(General.FIRSTNAME);
-            Log.i(TAG,"after: " + firstNameStr);
-        }
-        if (document.get(General.LASTNAME) != null) {  lastNameStr = (String) document.get(General.LASTNAME);}
-        if (document.get(General.EMAIL) != null) { emailStr = (String) document.get(General.EMAIL);}
-
-        if (document.get(General.PROGRAM) != null) {
-            String programString = (String) document.get(General.PROGRAM);
-            String[] majors = programString.split(" ");
-
-//            Log.i("print", majors[0] + majors[1]);
-            if(majors == null || majors.length == 0) {
-                spinnerStr = " ";
-                spinnerStr2 = " ";
-            } else if (majors.length == 1) {
-                spinnerStr = majors[0];
-                spinnerStr2 = " ";
-            } else {
-                spinnerStr = majors[0];
-                spinnerStr2 = majors[1];
-            }
-        }
-
-        if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
-        if (document.get(General.LASTNAME) != null) {  lastNameStr = document.getString(General.LASTNAME);}
-        if (document.get(General.EMAIL) != null) { emailStr = document.getString(General.EMAIL);}
-        if (document.get(General.PHONE) != null) { phoneStr = document.getString(General.PHONE);}
+        emailStr = document.getString(General.EMAIL) == null ? "": document.getString(General.EMAIL);
+        imageURL = document.getString(General.PROFILEPICTURE) == null ? "": document.getString(General.PROFILEPICTURE);
         if (document.get(General.ROLE) != null) {role = document.getLong(General.ROLE);}
-        if (document.get(PROFILEPICTURE) != null) {imageURL = document.getString(PROFILEPICTURE);}
     }
 
     private void initPostHisButton() {
