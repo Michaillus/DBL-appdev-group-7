@@ -33,15 +33,25 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
 
     List<Review> reviewList;
     private String currentUid;
-    private String TAG = "TestAdapterReviews";
     private FragmentManager fragmentManager;
     private ReviewManager reviewManager;
+
+    /**
+     *  Class tag for logs.
+     */
+    private String TAG = "TestAdapterReviews";
 
     /**
      * Study unit of the current page.
      */
     private final StudyUnit studyUnit;
 
+    /**
+     * Constructor of a review adapter with the provided data.
+     * @param reviewList The list of reviews to be displayed
+     * @param fragmentManager The fragment manager for handling fragments within the adapter
+     * @param studyUnit The study unit associated with the reviews
+     */
     public ReviewAdapter(List<Review> reviewList, FragmentManager fragmentManager,
                          StudyUnit studyUnit) {
         this.reviewList = reviewList;
@@ -49,6 +59,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         this.studyUnit = studyUnit;
     }
 
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent
+     * an item.
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public ReviewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,24 +77,37 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         return new ReviewAdapter.MyViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     * This method updates the contents of the ViewHolder to reflect the item at the given position.
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull ReviewAdapter.MyViewHolder holder, int position) {
-
         // assign values to the views we created in the study_unit_review_row file
         // based on the position of the recycler view
+
         Review review = reviewList.get(position);
         holder.bind(review);
         holder.ratingBar.setIsIndicator(true);
         holder.ratingBar.setRating(review.getStars());
-
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     * @return The total number of items in this adapter's data set.
+     */
     @Override
     public int getItemCount() {
         // the recycler view just wants to know the number of items you want to display
         return reviewList.size();
     }
 
+    /**
+     * The public class to grab the view contents, bind the views, and set the interaction.
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         // grab the views from study_unit_review_row file
@@ -85,14 +116,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
         private TextView likeNumber, dislikeNumber;
         private RatingBar ratingBar;
         private ImageButton report;
-
         UserManager userManager;
-
-        private ImageButton[] reviewStars;
-        private long currentRating;
-        private Review currentReview;
         private FirebaseFirestore db;
 
+        /**
+         * Constructor for the ViewHolder class, which represents each item in the RecyclerView.
+         * Also set up the database for loading data use.
+         * @param itemView The root view of the item layout.
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -109,6 +140,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             db = FirebaseFirestore.getInstance();
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
+
+            // Set up the reviewManager for loading data from the database of review collection.
             reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
                     studyUnit.getReviewCollectionName(),
                     studyUnit.getReviewLikeCollectionName(),
@@ -116,6 +149,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                     studyUnit.getReviewCommentCollectionName());
         }
 
+        /**
+         * Binds the data from a Review object to the views in the ViewHolder.
+         * Also sets up click listeners for various interactions as like, dislike, and reporting a review.
+         * @param review The Review object containing the data to be displayed.
+         */
         public void bind(Review review) {
 
             // Set publisher name
@@ -142,6 +180,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
             currentUid = Objects.requireNonNull(FirebaseAuth.getInstance()
                     .getCurrentUser()).getUid();
 
+            // Set report button for report inappropriate reviews
             report.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -149,18 +188,22 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 }
             });
 
-
-
+            // Set the dynamics of likes and dislikes of a review
+            // The difference with a click listener is this is to check the user's like history in the database.
             reviewManager.isLiked(review.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isLiked) {
                     if (!isLiked) {
+                        // If it is not liked by the user, it sets to like_icon(empty)
+                        // And the dislike button and number can be seen.
+
                         reviewLike.setImageResource(R.drawable.like_icon);
-//                        reviewLike.setEnabled(true);
-//                        reviewDislike.setEnabled(true);
                         reviewDislike.setVisibility(View.VISIBLE);
                         dislikeNumber.setVisibility(View.VISIBLE);
                     } else {
+                        // If it is liked by the user, it sets to liked_icon(filled)
+                        // And the dislike button is set to unable to click on.
+
                         reviewLike.setImageResource(R.drawable.liked_icon);
                         likeNumber.setVisibility(View.VISIBLE);
                         reviewDislike.setEnabled(false);
@@ -172,6 +215,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 }
             });
 
+            // Set up the click listener for the like button to like a review
             reviewLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -189,6 +233,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                                 likeNumber.setVisibility(View.VISIBLE);
                                 reviewDislike.setEnabled(false);
                             }
+                            // Set the number of likes to be present after clicking or de-liked.
                             likeNumber.setText(String.valueOf(review.getLikeNumber()));
                         }
 
@@ -198,18 +243,21 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 }
             });
 
-
-
+            // Set up the dynamics of likes and dislikes of a review
             reviewManager.isDisliked(review.getId(), currentUid, new ItemLikeCallback() {
                 @Override
                 public void onSuccess(Boolean isDisliked) {
                     if (!isDisliked) {
+                        // If it is not disliked by the user, it sets to dislike_empty
+                        // And the like button and number can be seen.
+
                         reviewDislike.setImageResource(R.drawable.dislike_empty);
-//                        reviewLike.setEnabled(true);
-//                        reviewDislike.setEnabled(true);
                         reviewLike.setVisibility(View.VISIBLE);
                         likeNumber.setVisibility(View.VISIBLE);
                     } else {
+                        // If it is disliked by the user, it sets to dislike_filled
+                        // And the like button is set to unable to click on.
+
                         reviewDislike.setImageResource(R.drawable.dislike_filled);
                         dislikeNumber.setVisibility(View.VISIBLE);
                         reviewLike.setEnabled(false);
@@ -221,6 +269,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                 }
             });
 
+            // Set up the click listener for the dislike button to dislike a review
             reviewDislike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -238,6 +287,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
                                 dislikeNumber.setVisibility(View.VISIBLE);
                                 reviewLike.setEnabled(false);
                             }
+                            // Set the number of dislikes to be present after clicking or de-disliked.
                             dislikeNumber.setText(String.valueOf(review.getDislikeNumber()));
                         }
 
