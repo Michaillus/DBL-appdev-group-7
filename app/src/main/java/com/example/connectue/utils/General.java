@@ -220,7 +220,7 @@ public class General {
         builder.show();
     }
 
-    private static List<String> toStringList(Object object) {
+    public static List<String> toStringList(Object object) {
         List<String> result = new ArrayList<>();
         if (object instanceof List) {
             for (Object item: (List<Object>) object) {
