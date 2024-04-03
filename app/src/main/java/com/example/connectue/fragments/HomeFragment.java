@@ -138,14 +138,15 @@ public class HomeFragment extends Fragment {
         ImageButton addPostBtn = root.findViewById(R.id.addPostBtn);
         userManager.downloadOne(currentUid, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User data) {
-                if (data.getRole() == General.STUDENT || data.getRole() == General.ADMIN) {
+            public void onSuccess(User user) {
+                if (user.getRole() == User.STUDENT_USER_ROLE || user.getRole() == User.ADMIT_USER_ROLE) {
                     addPostBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddPostActivity.class);
                         startActivity(intent);
                     });
+                    addPostBtn.setVisibility(View.VISIBLE);
                 } else {
-                    addPostBtn.setVisibility(View.GONE);
+                    addPostBtn.setVisibility(View.INVISIBLE);
                 }
             }
 

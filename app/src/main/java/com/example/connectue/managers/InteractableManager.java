@@ -7,6 +7,7 @@ import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Interactable;
+import com.example.connectue.model.Reply;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -38,6 +39,9 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      */
     protected CommentManager commentManager;
 
+
+    protected ReplyManager replyManager;
+
     /**
      * Constructor for manager of interactables.
      *
@@ -57,10 +61,14 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         super(db, collectionName);
         likeManager = new LikeManager(db, likeCollectionName);
         dislikeManager = new LikeManager(db, dislikeCollectionName);
-        commentManager = new CommentManager(db, commentCollectionName);
-
+        if (commentCollectionName.equals("post-comments")) {
+            commentManager = new CommentManager(db, commentCollectionName);
+        } else {
+            replyManager = new ReplyManager(db, commentCollectionName);
+        }
         tag = "InteractableManager class: ";
     }
+
 
     /**
      * Likes the interactable, if it was not liked or removes the like from the interactable,
@@ -144,6 +152,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         dislikeManager.isLiked(interactableId, userId, callback);
     }
 
+
     /**
      * Retrieves {@code amount} of most recent comments of {@code parentId} interactable,
      * after the last uploaded one.
@@ -155,6 +164,12 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
     public void downloadRecentComments(String parentId, int amount,
                                        ItemDownloadCallback<List<Comment>> callback) {
         commentManager.downloadRecent(parentId, amount, callback);
+    }
+
+
+    public void downloadRecentReplies(String parentId, int amount,
+                                      ItemDownloadCallback<List<Reply>> callback) {
+        replyManager.downloadRecent(parentId, amount, callback);
     }
 
     /**

@@ -141,9 +141,14 @@ public class MyCoursesVerticalFragment extends Fragment {
 
                         } else {
                             Log.d(TAG, "Field does not exist");
-                            TextView noCoursesTextView = new TextView(getContext());
-                            noCoursesTextView.setText("You have no courses, you can add some by hitting the follow button.");
-                            scrollViewLayout.addView(noCoursesTextView);
+                            if (getContext() != null) {
+                                TextView noCoursesTextView = new TextView(getContext());
+                                noCoursesTextView.setText("You have no courses, you can add some by hitting the follow button.");
+                                scrollViewLayout.addView(noCoursesTextView);
+                            }
+//                            TextView noCoursesTextView = new TextView(getContext());
+//                            noCoursesTextView.setText("You have no courses, you can add some by hitting the follow button.");
+//                            scrollViewLayout.addView(noCoursesTextView);
                         }
                     } else {
                         Log.d(TAG, "Document does not exist");

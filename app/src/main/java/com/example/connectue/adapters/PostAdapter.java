@@ -24,6 +24,7 @@ import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
 import com.example.connectue.model.User;
+import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -76,7 +77,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
         ImageView pImage;
 
-        TextView publisherName, description, likeNumber, commentNumber;
+        TextView publisherName, description, likeNumber, commentNumber, publishTime;
 
         UserManager userManager;
         PostManager postManager;
@@ -91,6 +92,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             description = itemView.findViewById(R.id.pDescriptionTv);
             likeNumber = itemView.findViewById(R.id.pLikesTv);
             commentNumber = itemView.findViewById(R.id.pCommentTv);
+            publishTime = itemView.findViewById(R.id.PublishTimePost);
 
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
 
@@ -120,6 +122,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             likeNumber.setText(String.valueOf(post.getLikeNumber()));
             // Set comment number
             commentNumber.setText(String.valueOf(post.getCommentNumber()));
+            // Set publish time
+            publishTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
 
             binding.setPost(post);
             binding.executePendingBindings();

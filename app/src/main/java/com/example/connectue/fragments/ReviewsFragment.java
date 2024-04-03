@@ -201,8 +201,8 @@ public class ReviewsFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         userManager.downloadOne(userId, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User data) {
-                if (data.isVerified()) {
+            public void onSuccess(User user) {
+                if (user.getRole() == User.STUDENT_USER_ROLE || user.getRole() == User.ADMIT_USER_ROLE) {
                     // User is a student
                     reviewManager.hasUserReviewedStudyUnit(studyUnit.getId(), userId, new ItemExistsCallback() {
                         @Override
