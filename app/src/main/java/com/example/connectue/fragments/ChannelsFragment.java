@@ -268,8 +268,8 @@ public class ChannelsFragment extends Fragment {
 
                 Query query = FirebaseFirestore.getInstance()
                         .collection("courses")
-                        .whereGreaterThanOrEqualTo("courseCode", searchText)
-                        .whereLessThan("courseCode", searchText + "\uf8ff");
+                        .whereGreaterThanOrEqualTo("code", searchText)
+                        .whereLessThan("code", searchText + "\uf8ff");
 
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -278,7 +278,7 @@ public class ChannelsFragment extends Fragment {
                             List<String> courseCodes = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // get course code and add it into the list
-                                String courseCode = document.getString("courseCode");
+                                String courseCode = document.getString("code");
                                 courseCodes.add(courseCode);
                             }
 
