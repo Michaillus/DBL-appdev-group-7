@@ -46,6 +46,7 @@ import com.example.connectue.activities.LoadingActivity;
 import com.example.connectue.activities.PostHistoryActivity;
 import com.example.connectue.utils.ProfilePageBasicInfo;
 import com.example.connectue.utils.ProfilePageHistoryFunction;
+import com.example.connectue.utils.ProfilePagePictureOperation;
 import com.example.connectue.utils.ProfilePageSignoutDelete;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -83,25 +84,15 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private static final String TAG = "Profile";
     private static final String TAG_Profile = "ProfilePic";
-    private static final int REQUEST_CAMERA = 100;
-    private static final int REQUEST_STORAGE = 200;
-
-    private static final int IMAGE_PICK_CAMERA_CODE = 300;
-    private static final int IMAGE_PICK_GALLERY_CODE = 400;
-
     private FirebaseUser user;
     private FirebaseFirestore db;
     private DocumentSnapshot document;
-    private String emailStr = "";
-    private String imageURL = "";
-    private Uri imageUri = null;
     private long role = 2;
     Button adminBtn;
-    ImageView profileIV;
     private ProfilePageBasicInfo basicInfo;
     private ProfilePageSignoutDelete signoutDeleteModule;
     private ProfilePageHistoryFunction profilePageHistoryFunction;
-
+    private ProfilePagePictureOperation profilePagePictureOperation;
     public ProfileFragment() {
     }
 
@@ -165,6 +156,7 @@ public class ProfileFragment extends Fragment {
                             basicInfo = new ProfilePageBasicInfo(getContext(), view, document, getResources(), db, user);
                             signoutDeleteModule = new ProfilePageSignoutDelete(getContext(), getActivity(), view, db, user);
                             profilePageHistoryFunction = new ProfilePageHistoryFunction(getContext(), getActivity(), view, document);
+                            profilePagePictureOperation = new ProfilePagePictureOperation(getContext(), getActivity(), ProfileFragment.this, view, document, db,user);
                             initComponents(view);
                         }
                     } else {
@@ -183,15 +175,10 @@ public class ProfileFragment extends Fragment {
      */
     private void initComponents(View view) {
         adminBtn  = view.findViewById(R.id.btn_admmin);
-        profileIV = view.findViewById(R.id.profilePic);
-
         initAdminButton();
-        initProfileImageView();
     }
 
     private void parseDocument() {
-        emailStr = document.getString(General.EMAIL) == null ? "": document.getString(General.EMAIL);
-        imageURL = document.getString(General.PROFILEPICTURE) == null ? "": document.getString(General.PROFILEPICTURE);
         if (document.get(General.ROLE) != null) {role = document.getLong(General.ROLE);}
     }
 
@@ -211,179 +198,15 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void initProfileImageView() {
-        if (imageURL != null && !imageURL.equals("")) {
-            Glide.with(getContext()).load(imageURL).into(profileIV);
-        }
-
-        profileIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pictureOperation();
-            }
-        });
-    }
-
-    private void pictureOperation(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Add Image");
-        builder.setItems(new CharSequence[]{"Pick from Gallery", "Capture from Camera"}, (dialog, which) -> {
-            switch (which) {
-                case 0:
-                    chooseLocalPicture();
-                    break;
-                case 1:
-                    takePicture();
-                    break;
-            }
-        });
-        builder.show();
-    }
-
-    private void chooseLocalPicture() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_MEDIA_IMAGES)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_MEDIA_IMAGES,
-                        Manifest.permission.READ_MEDIA_VIDEO}, REQUEST_STORAGE);
-            } else {
-                // Permission already granted, proceed with gallery operation
-                pickImageFromGallery();
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_STORAGE);
-                Log.d(TAG, "requestStoragePermission: requestStoragePermission");
-            } else {
-                // Permission already granted, proceed with gallery operation
-                pickImageFromGallery();
-            }
-        }
-    }
-
-    private void pickImageFromGallery() {
-        //intent to pick image from gallery
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
-    }
-
-    private void takePicture() {
-        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
-                    REQUEST_CAMERA);
-        } else {
-            // Permission already granted, proceed with camera operation
-            captureImageFromCamera();
-        }
-    }
-
-    private void captureImageFromCamera() {
-        //intent to pick image from camera
-        Log.i(TAG_Profile, "captureImageFromCamera entered ");
-        ContentValues cv = new ContentValues();
-        cv.put(MediaStore.Images.Media.TITLE, "Temp Pick");
-        cv.put(MediaStore.Images.Media.DESCRIPTION, "Temp Descr");
-        imageUri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG_Profile, "activity result entered ");
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
-                //image picked from gallery
-                imageUri = data.getData();
-            }
-            profileIV.setImageURI(imageUri);
-            profileIV.setVisibility(View.VISIBLE);
-            updateProfilePicture();
-        }
+        profilePagePictureOperation.onActivityResult(requestCode,resultCode,data);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Camera permission granted, proceed with camera operation
-                captureImageFromCamera();
-            } else {
-                // Camera permission denied, handle accordingly (e.g., show explanation, disable camera feature)
-                Toast.makeText(getContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == REQUEST_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Storage permission granted, proceed with gallery operation
-                pickImageFromGallery();
-            } else {
-                // Storage permission denied, handle accordingly (e.g., show explanation, disable gallery feature)
-                Toast.makeText(getContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void updateProfilePicture() {
-        Log.i(TAG_Profile, "updateProfilePicture entered");
-        if (imageUri == null) {
-            return;
-        }
-
-        if (imageURL != null && !imageURL.equals("")) {
-            StorageReference currentPicture = FirebaseStorage.getInstance().
-                    getReferenceFromUrl(imageURL);
-            currentPicture.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.i(TAG_Profile, "delete success");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i(TAG_Profile, "delete fail");
-                        }
-                    });
-        }
-
-        StorageReference filePath = FirebaseStorage.getInstance().getReference("profilePicture")
-                .child(emailStr + "." + General.getFileExtension(getContext(), imageUri));
-
-        filePath.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        //        TODO: update the profile URL in user data
-                                        String downLoadURL = uri.toString();
-                                        db.collection(General.USERCOLLECTION).document(user.getUid()).update(PROFILEPICTURE, downLoadURL);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getActivity(),
-                                                "Failed to upload", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG_Profile, "In updateProfilePicture, upload to storage failed");
-                    }
-                });
-        Log.i(TAG_Profile, "In updateProfilePicture, after upload");
+        profilePagePictureOperation.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
