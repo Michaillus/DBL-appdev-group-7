@@ -179,6 +179,11 @@ public class General {
         });
     }
 
+    public static void toOtherActivity(@NonNull Activity originalActivity, Class newActivity) {
+        Intent loading = new Intent(originalActivity, newActivity);
+        originalActivity.startActivity(loading);
+    }
+
 //    -----------helper function ---------
     private static void createAlreadyReportedWindow(@NonNull android.content.Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
