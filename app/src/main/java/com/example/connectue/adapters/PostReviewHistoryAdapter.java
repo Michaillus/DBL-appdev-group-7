@@ -24,6 +24,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
+/**
+ * The PostReviewHistoryAdapter class is responsible for managing the RecyclerView adapter
+ * to display post history in a RecyclerView.
+ * It provides functionality to delete posts and display post details.
+ */
 public class PostReviewHistoryAdapter extends RecyclerView.Adapter<PostReviewHistoryAdapter.MyViewHolder> {
     List<Interactable> postList;
     Context context;
@@ -31,6 +36,14 @@ public class PostReviewHistoryAdapter extends RecyclerView.Adapter<PostReviewHis
 
     private FirebaseFirestore db;
 
+    /**
+     * Constructs a new PostReviewHistoryAdapter with the given list of historical posts,
+     * context, and collection name.
+     *
+     * @param postList       a list of posts in post history of the user
+     * @param context        context reference
+     * @param collectionName the name of the collection in Firestore
+     */
     public PostReviewHistoryAdapter(List<Interactable> postList, Context context, String collectionName) {
         this.postList = postList;
         this.context = context;
@@ -38,6 +51,14 @@ public class PostReviewHistoryAdapter extends RecyclerView.Adapter<PostReviewHis
         this.collectionName = collectionName;
     }
 
+    /**
+     * Creates a new MyViewHolder instance by inflating the layout for each item in the RecyclerView.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new MyViewHolder that holds the inflated view.
+     */
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,12 +66,21 @@ public class PostReviewHistoryAdapter extends RecyclerView.Adapter<PostReviewHis
         return new MyViewHolder(view);
     }
 
+    /**
+     * Binds the data to the views in the RecyclerView.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Interactable post = postList.get(position);
         holder.postTxt.setText(post.getText());
 
         String index = String.valueOf(position);
+
+        // Set click listener for delete button
         holder.deletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +93,7 @@ public class PostReviewHistoryAdapter extends RecyclerView.Adapter<PostReviewHis
                                 Log.i("delete", "DocumentSnapshot successfully deleted!");
                                 Log.i("delete", "Delete content: " + post.getText());
                                 Log.i("delete", collectionName);
+                                // remove the deleted post from postList
                                 postList.remove(post);
                                 notifyDataSetChanged();
                             }
@@ -86,18 +117,30 @@ public class PostReviewHistoryAdapter extends RecyclerView.Adapter<PostReviewHis
         }
     }
 
+    /**
+     * Returns the total number of historical posts in the data set held by the adapter.
+     *
+     * @return The total number of historical posts.
+     */
     @Override
     public int getItemCount() {
         return postList.size();
     }
 
 
-    //reference to each row
+    /**
+     * Inner class to hold references to views within each item of the RecyclerView.
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView postPic;
         TextView postTxt;
         Button deletBtn;
 
+        /**
+         * Constructs a new MyViewHolder with the given itemView.
+         *
+         * @param itemView The view for each item in the RecyclerView.
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             postPic = itemView.findViewById(R.id.post_pic);

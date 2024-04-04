@@ -36,18 +36,35 @@ import java.util.Objects;
  */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
+    // tag for testing
     private static final String TAG = "AdapterPosts";
 
+    // list to hold posts
     List<Post> postList;
 
+    // uid of current user
     private String currentUid;
+
+    // fragmentManager to handle fragment transaction
     private FragmentManager fragmentManager;
 
+    /**
+     * Constructor of the CommentAdapter
+     * @param postList list that hold posts to be displayed
+     * @param fragmentManager fragmentManager to handle fragment transaction when clicking on a post
+     */
     public PostAdapter(List<Post> postList, FragmentManager fragmentManager) {
         this.postList = postList;
         this.fragmentManager = fragmentManager;
     }
 
+    /**
+     * Automatically called method for recyclerView to communicate with the items of the recyclerView
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return a post holder
+     */
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,6 +74,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         return new MyHolder(binding);
     }
 
+    /**
+     * Automatically called method for recyclerView to bind with the items of the recyclerView
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
 
@@ -65,6 +88,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
 
     }
 
+    /**
+     * method to get the number of items of the recyclerView
+     * @return the number of items of the commentList
+     */
     @Override
     public int getItemCount() {
         return postList.size();
@@ -82,6 +109,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
         UserManager userManager;
         PostManager postManager;
 
+        // Constructor
         public MyHolder(RowPostsBinding binding) {
             super(binding.getRoot());
 
@@ -101,6 +129,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
                     Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
         }
 
+        /**
+         * Setup views of the post
+         * @param post the post to be displayed
+         */
         public void bind(Post post) {
 
             // Set publisher name
@@ -168,6 +200,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
                 }
             });
 
+            // When the user report a post
             binding.reportBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -193,6 +226,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             }
         }
 
+        /**
+         * Navigate to the post detail page of the post with id postId
+         * @param postId the id of the post clicked by the user
+         */
         private void navigateToPostFragment(String postId) {
             PostFragment postFragment = new PostFragment();
             Bundle bundle = new Bundle();

@@ -30,18 +30,36 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentHolder>{
 
     private Context context;
+
+    // list to hold comments
     List<Comment> commentList;
+
+    // firebase instance
     private FirebaseFirestore db;
 
+    // uid of current user
     private String currentUid;
 
+    // tag for testing
     private String TAG = "TestAdapterComments";
 
+    /**
+     * Constructor of the CommentAdapter
+     * @param context current context
+     * @param commentList list that hold comments to be displayed
+     */
     public CommentAdapter(Context context, List<Comment> commentList) {
         this.context = context;
         this.commentList = commentList;
     }
 
+    /**
+     * Automatically called method for recyclerView to communicate with the items of the recyclerView
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return a commentHolder
+     */
     @NonNull
     @Override
     public CommentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,12 +68,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         return new CommentHolder(view);
     }
 
+    /**
+     * Automatically called method for recyclerView to bind with the items of the recyclerView
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull CommentHolder holder, int position) {
         Comment comment = commentList.get(position);
         holder.bind(comment);
     }
 
+    /**
+     * method to get the number of items of the recyclerView
+     * @return the number of items of the commentList
+     */
     @Override
     public int getItemCount() {
         return commentList.size();
@@ -66,12 +94,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
         UserManager userManager;
 
+        // views of the comment item
         private TextView publisherName;
         private ImageView profilePic;
         private TextView commentDescription;
         private TextView publishTime;
         private ImageButton reportBtn;
 
+        // Constructor
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -85,6 +115,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
                     User.USER_COLLECTION_NAME);
         }
 
+        /**
+         * Setup views of the comment
+         * @param comment the comment to be displayed
+         */
         public void bind(Comment comment) {
             userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override

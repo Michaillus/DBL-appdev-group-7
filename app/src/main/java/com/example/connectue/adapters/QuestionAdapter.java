@@ -45,14 +45,24 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
     private String currentUid;
     private FragmentManager fragmentManager;
 
+    /**
+     * Constructor of a question adapter with the provided data.
+     * @param questionList The list of questions to be displayed
+     * @param fragmentManager The fragment manager for handling fragments within the adapter.
+     */
     public QuestionAdapter(List<Question> questionList, FragmentManager fragmentManager) {
         this.questionList = questionList;
         this.fragmentManager = fragmentManager;
     }
 
-    public QuestionAdapter(Context context, List<Question> questionList) {
-    }
-
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent
+     * an item.
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public QuestionAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -60,23 +70,44 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         return new QuestionAdapter.MyViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     * This method updates the contents of the ViewHolder to reflect the item at the given position.
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull QuestionAdapter.MyViewHolder holder, int position) {
+        // assign values to the views we created in the row_questions file
+        // based on the position of the recycler view
         Question question = questionList.get(position);
         holder.bind(question);
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     * @return The total number of items in this adapter's data set.
+     */
     @Override
     public int getItemCount() {
         return questionList.size();
     }
 
+    /**
+     * The public class to grab the view contents, bind the views, and set the interaction.
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView questionLike, replyQuestionBtn;
         TextView publisherName, description, likeNumber, date, replyQuestionNum;
         UserManager userManager;
 
 
+        /**
+         * Constructor for the ViewHolder class, which represents each item in the RecyclerView.
+         * Also set up the database for loading data use.
+         * @param itemView The root view of the item layout.
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -92,6 +123,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
         }
 
+        /**
+         * Binds the data from a Question object to the views in the ViewHolder.
+         * Also sets up click listeners for various interactions as like, reply to a question.
+         * @param question The Question object containing the data to be displayed.
+         */
         public void bind(Question question) {
 
             // Set publisher name
@@ -112,8 +148,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             date.setText(TimeUtils.getTimeAgo(question.getDatetime()));
             // Set like number
             likeNumber.setText(String.valueOf(question.getLikeNumber()));
+            // Set reply number
             replyQuestionNum.setText(String.valueOf(question.getCommentNumber()));
 
+            // Set the click listener of like a question.
             questionLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -126,6 +164,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             db = FirebaseFirestore.getInstance();
             DocumentReference questionRef = db.collection("questions").document(question.getId());
 
+            // load from the questions collection of the database.
             questionRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     DocumentSnapshot questionDocument = task.getResult();
@@ -180,6 +219,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
                 }
             });
 
+            // Set the click listener of replying to a question button.
             replyQuestionBtn.setOnClickListener(v -> {
                 Log.d(TAG, "onClick: card clicked");
                 navigateToQuestionsFragment(question.getId());
@@ -187,17 +227,29 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
         }
 
+        /**
+         * Method is called when clicking on a reply button to reply to a question.
+         * After it will be redirected to the QuestionsFragment.
+         * @param questionId The Id to be checked foo referring to specific question.
+         */
         private void navigateToQuestionsFragment(String questionId) {
 
-                ReplyFragment replyFragment = new ReplyFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("questionId", questionId);
-                replyFragment.setArguments(bundle);
+            // Create a new instance of the ReplyFragment
+            ReplyFragment replyFragment = new ReplyFragment();
+            // Create a bundle to pass data to the fragment
+            Bundle bundle = new Bundle();
+            bundle.putString("questionId", questionId);
+            // Set the arguments bundle to the fragment
+            replyFragment.setArguments(bundle);
 
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.frame_layout, replyFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+            // Begin a new fragment transaction
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // Replace the current fragment with the replyFragment
+            transaction.replace(R.id.frame_layout, replyFragment);
+            // Add the transaction to the back stack
+            transaction.addToBackStack(null);
+            // Commit the transaction
+            transaction.commit();
 
 
         }
