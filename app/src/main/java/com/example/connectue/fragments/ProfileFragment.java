@@ -45,6 +45,7 @@ import com.example.connectue.activities.AdminActivity;
 import com.example.connectue.activities.LoadingActivity;
 import com.example.connectue.activities.PostHistoryActivity;
 import com.example.connectue.utils.ProfilePageBasicInfo;
+import com.example.connectue.utils.ProfilePageHistoryFunction;
 import com.example.connectue.utils.ProfilePageSignoutDelete;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -82,7 +83,6 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private static final String TAG = "Profile";
     private static final String TAG_Profile = "ProfilePic";
-    private static final String LOGOUT = "Logout";
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_STORAGE = 200;
 
@@ -96,14 +96,11 @@ public class ProfileFragment extends Fragment {
     private String imageURL = "";
     private Uri imageUri = null;
     private long role = 2;
-//    Button logoutBtn;
-//    Button deleteBtn;
-    Button postHisBtn;
-    Button reviewHisBtn;
     Button adminBtn;
     ImageView profileIV;
     private ProfilePageBasicInfo basicInfo;
     private ProfilePageSignoutDelete signoutDeleteModule;
+    private ProfilePageHistoryFunction profilePageHistoryFunction;
 
     public ProfileFragment() {
     }
@@ -140,8 +137,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-//        Log.i(TAG, "start executing crete view");
-//        Log.i(TAG, "before: " + firstNameStr);
         initData(view);
         return view;
     }
@@ -169,6 +164,7 @@ public class ProfileFragment extends Fragment {
                         if (getContext() != null) {
                             basicInfo = new ProfilePageBasicInfo(getContext(), view, document, getResources(), db, user);
                             signoutDeleteModule = new ProfilePageSignoutDelete(getContext(), getActivity(), view, db, user);
+                            profilePageHistoryFunction = new ProfilePageHistoryFunction(getContext(), getActivity(), view, document);
                             initComponents(view);
                         }
                     } else {
@@ -186,178 +182,17 @@ public class ProfileFragment extends Fragment {
      * @param view to fetch components on this page.
      */
     private void initComponents(View view) {
-//        logoutBtn = view.findViewById(R.id.btn_logout);
-//        deleteBtn = view.findViewById(R.id.btn_deleteAccount);
-        postHisBtn = view.findViewById(R.id.btn_postHistory);
-        reviewHisBtn  = view.findViewById(R.id.btn_reviewHistory);
         adminBtn  = view.findViewById(R.id.btn_admmin);
         profileIV = view.findViewById(R.id.profilePic);
 
-        if (General.isGuest(role)) {
-            postHisBtn.setVisibility(View.GONE);
-            reviewHisBtn.setVisibility(View.INVISIBLE);
-        }
-
-//        initSignoutButton();
-//        initDeleteButton();
-        initPostHisButton();
-        initReviewHisButton();
         initAdminButton();
         initProfileImageView();
-    }
-
-//    private void initDeleteButton() {
-//        deleteBtn.setText("DELETE ACCOUNT");
-//
-//        deleteBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                signoutDeletePopup(false);
-//            }
-//        });
-//    }
-
-//    private void deleteUserContents() {
-//        CollectionReference reviewsRef = db.collection(General.COURSEREVIEWCOLLECTION);
-//        CollectionReference postsRef = db.collection(General.POSTCOLLECTION);
-//        CollectionReference commentsRef = db.collection(General.COMMENTCOLLECTION);
-//        deleteUserContents(reviewsRef);
-//        deleteUserContents(postsRef);
-//        deleteUserContents(commentsRef);
-//    }
-
-//    private void deleteUserContents(CollectionReference collectionRef) {
-//
-//        collectionRef.whereEqualTo("publisher", user.getUid())
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        // delete posts posted by this user
-//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//                            documentSnapshot.getReference().delete();
-//
-//                            // delete photos of the post that are still stored in storage
-//                            String photoURL = documentSnapshot.getString("photoURL");
-//                            if (photoURL != null){
-//                                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(photoURL);
-//                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {}
-//                                }).addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {}
-//                                });
-//                            }
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {}
-//                });
-//    }
-
-//    private void initSignoutButton() {
-//        logoutBtn.setText(LOGOUT);
-//        logoutBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                signoutDeletePopup(true);
-//            }
-//        });
-//    }
-
-//    private void signoutDeletePopup(boolean isSignout) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//        if (isSignout) {
-//            builder.setTitle("Logout");
-//            builder.setMessage("Do you want to sign out?");
-//            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    FirebaseAuth.getInstance().signOut();
-//                    dialog.dismiss();
-//                    toOtherActivity(LoadingActivity.class);
-//                }
-//            });
-//        } else {
-//            builder.setTitle("Delete");
-//            builder.setMessage("ARE YOU SURE YOU WANT TO DELETE?");
-//            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    deleteUserContents();
-//
-//                    db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
-//                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                @Override
-//                                public void onSuccess(Void unused) {
-//                                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//                                            FirebaseAuth.getInstance().signOut();
-//                                            toOtherActivity(LoadingActivity.class);
-//                                        }
-//                                    });
-//                                }
-//                            })
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Toast.makeText(getActivity(), "Delete failed",
-//                                            Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                }
-//            });
-//        }
-//
-//        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        builder.show();
-//
-//    }
-
-    private void toOtherActivity(Class activity) {
-        Intent loading = new Intent(getActivity(), activity);
-        getActivity().startActivity(loading);
-//        getActivity().finish();
     }
 
     private void parseDocument() {
         emailStr = document.getString(General.EMAIL) == null ? "": document.getString(General.EMAIL);
         imageURL = document.getString(General.PROFILEPICTURE) == null ? "": document.getString(General.PROFILEPICTURE);
         if (document.get(General.ROLE) != null) {role = document.getLong(General.ROLE);}
-    }
-
-    private void initPostHisButton() {
-        postHisBtn.setText("Post History");
-        postHisBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
-                history.putExtra("collection", General.POSTCOLLECTION);
-//                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
-                getActivity().startActivity(history);
-            }
-        });
-    }
-
-    private void initReviewHisButton() {
-        reviewHisBtn.setText("Course Review History");
-        reviewHisBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
-                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
-                getActivity().startActivity(history);
-            }
-        });
     }
 
     private void initAdminButton() {
@@ -369,17 +204,14 @@ public class ProfileFragment extends Fragment {
         adminBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toOtherActivity(AdminActivity.class);
+                if (getActivity() != null) {
+                    General.toOtherActivity(getActivity(), AdminActivity.class);
+                }
             }
         });
     }
 
     private void initProfileImageView() {
-
-//        if (General.isGuest(role)) {
-//            return;
-//        }
-
         if (imageURL != null && !imageURL.equals("")) {
             Glide.with(getContext()).load(imageURL).into(profileIV);
         }
