@@ -22,12 +22,12 @@ public class Reply {
     public static final String CONTENT = "text";
 
     /**
-     * Name of parent interactable id field in comment collection.
+     * Name of parent interactable id field in reply collection.
      */
     public static final String PARENT_ID = "parentId";
 
     /**
-     * Name of timestamp field in comment collection.
+     * Name of timestamp field in reply collection.
      */
     public static final String TIMESTAMP = "timestamp";
     private String replyId;
@@ -50,22 +50,22 @@ public class Reply {
 
         // Handling documents with a null field
         if (publisherId == null) {
-            String m = "Comment publisher id should not be null";
+            String m = "Reply publisher id should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
         if (text == null) {
-            String m = "Comment text should not be null";
+            String m = "Reply text should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
         if (parentId == null) {
-            String m = "Parent of comment should not be null";
+            String m = "Parent of reply should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
         if (timestamp == null) {
-            String m = "Timestamps of comment should not be null";
+            String m = "Timestamps of reply should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }

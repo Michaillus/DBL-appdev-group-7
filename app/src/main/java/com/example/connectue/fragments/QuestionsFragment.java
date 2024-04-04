@@ -80,14 +80,33 @@ public class QuestionsFragment extends Fragment {
      */
     ActivityResultLauncher<Intent> activityResultLauncher;
 
+    /**
+     * Default constructor for this class.
+     */
     public QuestionsFragment() {
         // Default constructor
     }
 
+    /**
+     * Constructor of a question fragment
+     * @param fragmentManager The fragment manager for handling fragments within this fragment.
+     */
     public QuestionsFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
 
+    /**
+     * Called to have the fragment instantiate its UI view of question page.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return Return the view for the fragment's UI of the question page of s specific course, or null.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -140,21 +159,39 @@ public class QuestionsFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Initializes the recyclerView with the provided list of questions and sets up the adapter for views.
+     * @param questionList The list of questions to be displayed in the recyclerView.
+     * @param questionsRecyclerview The recyclerView instance to be initialized.
+     */
     private void initRecyclerView(List<Question> questionList, RecyclerView questionsRecyclerview) {
+        // Create a new instance of QuestionAdapter and set it as the adapter for the RecyclerView
         questionAdapter = new QuestionAdapter(questionList, fragmentManager);
+        // Set layout manager for RecyclerView
         questionsRecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
+        // Set whether the size of the RecyclerView will be affected by the adapter contents
         questionsRecyclerview.setHasFixedSize(false);
+        // Set the adapter for the RecyclerView
         questionsRecyclerview.setAdapter(questionAdapter);
     }
 
+    /**
+     * Loads questions from the database and adds them to the provided question list.
+     * This method is called to fetch a chunk of recent questions and update the RecyclerView.
+     * @param questionList The list of questions to which the fetched questions will be added.
+     */
     private void loadQuestions(List<Question> questionList) {
         int questionsPerChunk = 4;
 
+        // Download recent questions from the database
         questionManager.downloadRecent(course.getId(), questionsPerChunk, new ItemDownloadCallback<List<Question>>() {
             @Override
             public void onSuccess(List<Question> data) {
                 questionList.addAll(data);
+
+                // Notify the adapter that the data set has changed
                 questionAdapter.notifyDataSetChanged();
+                // Set isLoading to false indicating that the data loading process is complete
                 isLoading = false;
             }
 
@@ -165,6 +202,10 @@ public class QuestionsFragment extends Fragment {
         });
     }
 
+    /**
+     * Displays the "Add Question" button.
+     * @param root The view for checking the View object and use it it to find specific view to control.
+     */
     private void displayAddQuestionButton(View root) {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -194,6 +235,12 @@ public class QuestionsFragment extends Fragment {
         });
     }
 
+    /**
+     * Sets up a scroll listener for the RecyclerView to detect when the user has scrolled to
+     * the end of the list and triggers loading more questions.
+     * @param questionList The list of questions being displayed in the recyclerView.
+     * @param questionsRecyclerView The RecyclerView containing the questions.
+     */
     private void getPostsOnScroll(List<Question> questionList, RecyclerView questionsRecyclerView) {
         questionsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -229,6 +276,10 @@ public class QuestionsFragment extends Fragment {
         }
     }
 
+    /**
+     * Called when the fragment's view is being destroyed. It releases any resources associated with the view.
+     * This method should be overridden to clean up references to the view and prevent memory leaks.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

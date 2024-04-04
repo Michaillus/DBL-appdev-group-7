@@ -196,7 +196,7 @@ public class ReviewsFragment extends Fragment {
                 // Notify the adapter that the data set has changed
                 reviewAdapter.notifyDataSetChanged();
 
-                // Set isLoading to false indicating that the data loading process is complet
+                // Set isLoading to false indicating that the data loading process is complete
                 isLoading = false;
             }
 
@@ -301,7 +301,6 @@ public class ReviewsFragment extends Fragment {
      * @param reviewList The list of reviews being displayed in the recyclerView.
      * @param reviewsRecyclerView The RecyclerView containing the reviews.
      */
-
     private void getPostsOnScroll(List<Review> reviewList, RecyclerView reviewsRecyclerView) {
         reviewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
