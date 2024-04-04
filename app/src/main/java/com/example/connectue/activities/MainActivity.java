@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Default fragment is home page.
-        if (pageIntent.equals("channels")) {
+        if (pageIntent != null && pageIntent.equals("channels")) {
             replaceFragment(new ChannelsFragment());
         } else {
             replaceFragment(new HomeFragment(getSupportFragmentManager()));
