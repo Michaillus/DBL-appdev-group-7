@@ -81,14 +81,6 @@ public class General {
     public static final String REPORTCONTENTID = "contentId";
     public static final String REPORTCOUNTER = "count";
     public static final String REPORTEDBYUSERS = "reportedBy";
-
-
-
-    private static final int REQUEST_CAMERA = 100;
-    private static final int REQUEST_STORAGE = 200;
-
-    private static final int IMAGE_PICK_CAMERA_CODE = 300;
-    private static final int IMAGE_PICK_GALLERY_CODE = 400;
     private static final String TAG = "General";
     public static final String REPORTEDPROMPT = "Thanks for your report. Your report is being processing.";
     public static final String NONREPORTEDPROMPT = "Do you want to report the inappropriate content?";
@@ -103,17 +95,35 @@ public class General {
         return role != ADMIN && role!= STUDENT;
     }
 
-
+    /**
+     * To return the user's id in the Firebase authentication.
+     * @return the user id in the Firebase authentication.
+     */
     public static String getUid() {
         return FirebaseAuth.getInstance().getCurrentUser()
                 == null ? "":FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+    /**
+     * To return the extension of the file.
+     * @param context the current context of the activity.
+     * @param uri the instance of the Uri class.
+     * @return the extension of the file.
+     */
     public static String getFileExtension(android.content.Context context, Uri uri) {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(context.getContentResolver()
                 .getType(uri));
     }
 
+    /**
+     * Report an inappropriate content. It creates a popup window to ask users to if he really wants
+     * to report this content. If so, then it will generate a new document in the Firebase Firestore
+     * reported collection indicating which collection this content is in, its document id, and who
+     * reported this content.
+     * @param context the context where the popup window will show.
+     * @param collectionName which collection this content belongs to in the Firestore.
+     * @param contentId the id of the content.
+     */
     public static void reportOperation(@NonNull android.content.Context context,
                                        String collectionName, String contentId) {
         String uId = getUid();
@@ -179,12 +189,23 @@ public class General {
         });
     }
 
+    /**
+     * Given the original activity, and the target activity, the target activity will be activated from
+     *  the original activity.
+     * @param originalActivity the starting activity.
+     * @param newActivity the target activity.
+     */
     public static void toOtherActivity(@NonNull Activity originalActivity, Class newActivity) {
         Intent loading = new Intent(originalActivity, newActivity);
         originalActivity.startActivity(loading);
     }
 
 //    -----------helper function ---------
+
+    /**
+     * Create a popup window to indicate that this user has reported this content already.
+     * @param context the context where the popup window will show.
+     */
     private static void createAlreadyReportedWindow(@NonNull android.content.Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Report").setMessage(REPORTEDPROMPT)
@@ -197,6 +218,18 @@ public class General {
         builder.show();
     }
 
+    /**
+     * Helper function. To create a popup window when this user did not report this content before.
+     * @param context the context where the popup window will show.
+     * @param uId the id of the user
+     * @param collectionName the collection this content belongs to in the Firestore.
+     * @param contentId the id of the content.
+     * @param isReportExist if the report document of this content already exist.
+     * @param reportCollection the collection reference to the report collection in the Firestore.
+     * @param reportedList the list of users reported this content.
+     * @param document if the report document already exists, pass in its instance of DocumentSnapshot
+     *                 for updating, otherwise pass in null.
+     */
     private static void createReportWindow(@NonNull android.content.Context context
             , String uId, String collectionName, String contentId, boolean isReportExist
             , CollectionReference reportCollection, List<String> reportedList
@@ -225,6 +258,11 @@ public class General {
         builder.show();
     }
 
+    /**
+     * Convert an object to a list of String.
+     * @param object the object
+     * @return a list of string.
+     */
     public static List<String> toStringList(Object object) {
         List<String> result = new ArrayList<>();
         if (object instanceof List) {
@@ -235,6 +273,13 @@ public class General {
         return result;
     }
 
+    /**
+     * Create a new report document, and add it to the report collection.
+     * @param uId user id.
+     * @param collectionName the collection name that the content belongs to.
+     * @param contentId the id of the content.
+     * @param reportCollection the reference to the report collection.
+     */
     private static void createReportItem(String uId, String collectionName, String contentId
             , CollectionReference reportCollection){
         List<String> reportedUsers = new ArrayList<>();
@@ -249,6 +294,14 @@ public class General {
         reportCollection.add(reportItem);
     }
 
+    /**
+     * Push the reported content to Firestore.
+     * @param uId user id.
+     * @param reportedList list of users reported this content.
+     * @param collectionReport the reference to the report collection.
+     * @param document if the report document already exists, pass in its instance of DocumentSnapshot
+     *      *          for updating, otherwise pass in null.
+     */
     private static void updateReportedItem(String uId, List<String> reportedList
             , CollectionReference collectionReport, DocumentSnapshot document) {
         String docId = document.getId();

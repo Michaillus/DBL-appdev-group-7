@@ -87,11 +87,16 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseFirestore db;
     private DocumentSnapshot document;
+    // to store the role of the user such that profile page can display different contents based on different user roles.
     private long role = 2;
     Button adminBtn;
+    // user information display and interaction module.
     private ProfilePageBasicInfo basicInfo;
+    // user sign out and delete account module.
     private ProfilePageSignoutDelete signoutDeleteModule;
+    // user post history and course review function module.
     private ProfilePageHistoryFunction profilePageHistoryFunction;
+    // user profile picture and the interaction on the picture module.
     private ProfilePagePictureOperation profilePagePictureOperation;
     public ProfileFragment() {
     }
@@ -123,6 +128,20 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Initialization all components on the profile page. It will first fetch the
+     *  data of the user, and then fill in each field, and display proper components
+     *  based on the user data.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view, a view with buttons and profile pictures on this page.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -134,7 +153,12 @@ public class ProfileFragment extends Fragment {
 
     /**
      * Fetch the user data from the Firebase Firestore, and then based on the data to initialize
-     *  all components on this page.
+     *  all components on this page. To initialize the user information related components, the
+     *  program crete an instance of BasicInfo; to initialize the signout and delete account button,
+     *  the program create an instance of SignoutDeleteModule; to initialize the post history and
+     *  course review history button, the instance of ProfilePageHistoryFunction will be created;
+     *  to initialize the profile picture and add click listener on it, the instance of
+     *  ProfilePagePictureOperation will be created.
      * @param view to fetch components on this page.
      */
     private void initData(View view) {
@@ -170,7 +194,9 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * The main function to initialize all function on this page.
+     * The portal to initialize all components and functions on the profile page, except user infomation
+     *  module, history module, sign out and delete account module, and the profile picture operation
+     *  module.
      * @param view to fetch components on this page.
      */
     private void initComponents(View view) {
@@ -178,10 +204,16 @@ public class ProfileFragment extends Fragment {
         initAdminButton();
     }
 
+    /**
+     * To parse the user role using the instance of DocumentSnapshot.
+     */
     private void parseDocument() {
         if (document.get(General.ROLE) != null) {role = document.getLong(General.ROLE);}
     }
 
+    /**
+     * Initialize the administrator mode button.
+     */
     private void initAdminButton() {
         if (!General.isAdmin(role)) {
             adminBtn.setEnabled(false);
@@ -198,12 +230,34 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    /**
+     * Once the profile picture is updated, either through taking picture or choosing local pictures,
+     *  this method capture the result and pass the result to the instance profilePagePictureOperation.
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         profilePagePictureOperation.onActivityResult(requestCode,resultCode,data);
     }
 
+    /**
+     * When the first time updating the profile picture, this function will capture the user
+     *  choice, and pass the result to the instance of ProfilePagePictureOperation.
+     * @param requestCode The request code passed in {@link #requestPermissions(String[], int)}.
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
