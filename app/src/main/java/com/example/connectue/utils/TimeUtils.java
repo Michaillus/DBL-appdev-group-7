@@ -19,12 +19,16 @@ public class TimeUtils {
         if (difference < DateUtils.MINUTE_IN_MILLIS) {
             return "just now";
         } else if (difference < DateUtils.HOUR_IN_MILLIS) {
+            // x minutes ago
             return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS).toString();
         } else if (difference < DateUtils.DAY_IN_MILLIS) {
+            // x hours ago
             return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.HOUR_IN_MILLIS).toString();
         } else if (difference < DateUtils.WEEK_IN_MILLIS) {
+            // x days ago
             return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS).toString();
         } else {
+            // x weeks ago
             return DateUtils.getRelativeTimeSpanString(time, now, DateUtils.WEEK_IN_MILLIS).toString();
         }
     }
