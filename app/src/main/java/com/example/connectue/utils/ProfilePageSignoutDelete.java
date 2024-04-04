@@ -26,6 +26,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+/**
+ * This class will add sign out and delete account button to the ProfilePage fragment.
+ */
 public class ProfilePageSignoutDelete {
     private final Context context;
     private final Activity activity;
@@ -46,6 +49,10 @@ public class ProfilePageSignoutDelete {
         this.user = user;
         initComponent();
     }
+
+    /**
+     * The portal to initialize all components in this class.
+     */
     private void initComponent() {
         logoutBtn = view.findViewById(R.id.btn_logout);
         deleteBtn = view.findViewById(R.id.btn_deleteAccount);
@@ -53,6 +60,10 @@ public class ProfilePageSignoutDelete {
         initSignoutButton();
         initDeleteButton();
     }
+
+    /**
+     * Initialize sign out button and add sign out function.
+     */
     private void initSignoutButton() {
         logoutBtn.setText(LOGOUT);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +74,9 @@ public class ProfilePageSignoutDelete {
         });
     }
 
+    /**
+     * Initialize the delete button and add delete function.
+     */
     private void initDeleteButton() {
         deleteBtn.setText(DELTEBUTTON);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +87,10 @@ public class ProfilePageSignoutDelete {
         });
     }
 
+    /**
+     * The popup window when sign out button/delete button is clicked.
+     * @param isSignout is this for signOut button or not.
+     */
     private void signoutDeletePopup(boolean isSignout) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (isSignout) {
@@ -126,6 +144,9 @@ public class ProfilePageSignoutDelete {
         builder.show();
     }
 
+    /**
+     * Delete all user records in all collection of the FireStore.
+     */
     private void deleteUserContents() {
         CollectionReference reviewsRef = db.collection(General.COURSEREVIEWCOLLECTION);
         CollectionReference postsRef = db.collection(General.POSTCOLLECTION);
@@ -134,6 +155,11 @@ public class ProfilePageSignoutDelete {
         deleteUserContents(postsRef);
         deleteUserContents(commentsRef);
     }
+
+    /**
+     * Delete all user records in a specific collection of the FireStore.
+     * @param collectionRef the collection reference that the user information resides.
+     */
     private void deleteUserContents(CollectionReference collectionRef) {
 
         collectionRef.whereEqualTo("publisher", user.getUid())

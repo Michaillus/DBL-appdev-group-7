@@ -34,6 +34,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+/**
+ * The profile picture module. This class will add click listener to the profile picture such that
+ *  users can either choose the local picture or activating camera to take a picture as their profile
+ *  pictures and upload to the Firestore.
+ */
 public class ProfilePagePictureOperation {
     private static final int REQUEST_CAMERA = 100;
     private static final int REQUEST_STORAGE = 200;
@@ -54,6 +59,16 @@ public class ProfilePagePictureOperation {
     Uri imageUri = null;
     private String emailStr = "";
 
+    /**
+     * Constructor.
+     * @param context the context this class will be called.
+     * @param activity the activity this class will be called.
+     * @param fragment the fragment this class will be called
+     * @param view the view this class will be in.
+     * @param document the DocumentSnapshot storing the user information.
+     * @param db the reference of the database.
+     * @param user the reference of the user.
+     */
     public ProfilePagePictureOperation(Context context, Activity activity,  androidx.fragment.app.Fragment fragment,
                                        View view, DocumentSnapshot document, FirebaseFirestore db,
                                        FirebaseUser user) {
@@ -70,11 +85,17 @@ public class ProfilePagePictureOperation {
         }
     }
 
+    /**
+     * Parse the email address and existing image URL address.
+     */
     private void parseDocument() {
         emailStr = document.getString(General.EMAIL) == null ? "": document.getString(General.EMAIL);
         imageURL = document.getString(General.PROFILEPICTURE) == null ? "": document.getString(General.PROFILEPICTURE);
     }
 
+    /**
+     * Initialize image view for the profile picture and fetch the picture stored in the Firestorage.
+     */
     private void initProfileImageView() {
         profileIV = view.findViewById(R.id.profilePic);
 
@@ -90,6 +111,9 @@ public class ProfilePagePictureOperation {
         });
     }
 
+    /**
+     * Show a popup window to let user choose where to take the profile pictures.
+     */
     private void pictureOperation(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Add Image");
@@ -106,6 +130,9 @@ public class ProfilePagePictureOperation {
         builder.show();
     }
 
+    /**
+     * Choose picture from the local device. If the access right is not granted ask the user to grant.
+     */
     private void chooseLocalPicture() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -130,6 +157,9 @@ public class ProfilePagePictureOperation {
         }
     }
 
+    /**
+     * Access to the gallery of the local device.
+     */
     private void pickImageFromGallery() {
         //intent to pick image from gallery
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -137,6 +167,9 @@ public class ProfilePagePictureOperation {
         fragment.startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
+    /**
+     * Take profile picture from the camera. If the access right is not granted ask the user to grant.
+     */
     private void takePicture() {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -148,6 +181,9 @@ public class ProfilePagePictureOperation {
         }
     }
 
+    /**
+     * Activate the camera and take pictures.
+     */
     private void captureImageFromCamera() {
         //intent to pick image from camera
 //        Log.i(TAG_Profile, "captureImageFromCamera entered ");
@@ -161,6 +197,13 @@ public class ProfilePagePictureOperation {
         fragment.startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
     }
 
+    /**
+     * Get the picture result and load it into ImageView. Then call updateProfilePicture to upload
+     * pictures to the FireStorage.
+     * @param requestCode the code to identify if the result is from camera or the gallery.
+     * @param resultCode to show the operation succeed or failed.
+     * @param data Intent storing image uri.
+     */
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IMAGE_PICK_GALLERY_CODE) {
@@ -173,6 +216,9 @@ public class ProfilePagePictureOperation {
         }
     }
 
+    /**
+     * Delete the profile picture in the FireStorage and update the new profile picture.
+     */
     private void updateProfilePicture() {
         if (imageUri == null) {
             return;
@@ -226,6 +272,12 @@ public class ProfilePagePictureOperation {
         Log.i(TAG_Profile, "In updateProfilePicture, after upload");
     }
 
+    /**
+     * Get user grant result.
+     * @param requestCode to distinguish camera and gallery.
+     * @param permissions list of Strings.
+     * @param grantResults a list of grant result.
+     */
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
