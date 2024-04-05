@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test class for user model.
+ */
 public class UserTest {
 
     protected User user;
@@ -19,11 +22,17 @@ public class UserTest {
     String program = "BCSE";
     int role = 1;
 
+    /**
+     * Set up user instance.
+     */
     @Before
     public void setUp() {
         user = new User(id, firstName, lastName, isVerified, email, phoneNumber, profilePicUrl, program, role);
     }
 
+    /**
+     * Test id getter.
+     */
     @Test
     public void testGetId() {
         String result = user.getId();
@@ -31,6 +40,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test id setter.
+     */
     @Test
     public void testSetId() {
         String expected = "newId2954729572985";
@@ -39,6 +51,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test first name getter.
+     */
     @Test
     public void testGetFirstName() {
         String result = user.getFirstName();
@@ -46,6 +61,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test first name setter.
+     */
     @Test
     public void testSetFirstName() {
         String expected = "Alex";
@@ -54,6 +72,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test last name getter.
+     */
     @Test
     public void testGetLastName() {
         String result = user.getLastName();
@@ -61,6 +82,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test last name setter.
+     */
     @Test
     public void testSetLastName() {
         String expected = "Smith";
@@ -69,6 +93,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test full name getter.
+     */
     @Test
     public void getFullName() {
         String result = user.getFullName();
@@ -76,6 +103,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test is verified getter.
+     */
     @Test
     public void isVerified() {
         boolean result = user.isVerified();
@@ -83,6 +113,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test is verified setter.
+     */
     @Test
     public void setIsVerified() {
         boolean expected = false;
@@ -91,6 +124,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test email getter.
+     */
     @Test
     public void getEmail() {
         String result = user.getEmail();
@@ -98,6 +134,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test email setter.
+     */
     @Test
     public void setEmail() {
         String expected = "a@gmail.com";
@@ -106,6 +145,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test phone number getter.
+     */
     @Test
     public void getPhoneNumber() {
         String result = user.getPhoneNumber();
@@ -113,6 +155,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test phone number setter.
+     */
     @Test
     public void setPhoneNumber() {
         String expected = "+1563872976";
@@ -121,6 +166,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test profile picture url getter.
+     */
     @Test
     public void getProfilePicUrl() {
         String result = user.getProfilePicUrl();
@@ -128,6 +176,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test profile picture url setter.
+     */
     @Test
     public void setProfilePicUrl() {
         String expected = "url29579589527";
@@ -136,6 +187,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test program getter.
+     */
     @Test
     public void getProgram() {
         String result = user.getProgram();
@@ -143,6 +197,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test program setter.
+     */
     @Test
     public void setProgram() {
         String expected = "BAM";
@@ -151,6 +208,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test role getter.
+     */
     @Test
     public void getRole() {
         int result = user.getRole();
@@ -158,6 +218,9 @@ public class UserTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test role setter.
+     */
     @Test
     public void setRole() {
         int expected = 0;
