@@ -253,4 +253,20 @@ public class AdminReportedItemDataManager {
         loadReportedContents();
         fragment.resetData();
     }
+
+    /**
+     * To get the currentDocument
+     * @return currentDocument
+     */
+    public DocumentSnapshot getCurrentDoc() {
+        return currentDocument;
+    }
+
+    public DocumentReference getCurrentContentReference() {
+        return currentContentReference;
+    }
+
+    public DocumentReference getCurrentRequestReference() {
+        return currentRequestReference;
+    }
 }
