@@ -141,6 +141,12 @@ public class MaterialsFragment extends Fragment {
         return root;
     }
 
+    /**
+     * This helper function initialises the recycler view
+     * that displays the materials.
+     * @param materialList the list if materials to display
+     * @param materialRecyclerView the recycler
+     */
     private void initRecyclerView(List<Material> materialList, RecyclerView materialRecyclerView) {
         materialAdapter = new MaterialAdapter(materialList, fragmentManager);
         materialRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -148,6 +154,10 @@ public class MaterialsFragment extends Fragment {
         materialRecyclerView.setAdapter(materialAdapter);
     }
 
+    /**
+     * This helper method
+     * @param materialList
+     */
     private void loadMaterials(List<Material> materialList) {
         int materialsPerChunk = 8;
         materialManager.downloadRecent(course.getId(), materialsPerChunk, new ItemDownloadCallback<List<Material>>() {

@@ -33,16 +33,6 @@ public class PopularCoursesScrollingFragment extends Fragment {
      */
     private static final String TAG = "PopularCoursesScrollingFragment";
 
-    FirebaseFirestore db;
-
-    List<StudyUnit> courses;
-
-    Object courseName;
-
-    Object courseCode;
-
-    Object ratingObject;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,6 +43,7 @@ public class PopularCoursesScrollingFragment extends Fragment {
 
         StudyUnitManager courseManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
                 StudyUnit.COURSE_COLLECTION_NAME);
+        //Get all the courses from the database.
         courseManager.downloadAll(new ItemDownloadCallback<List<StudyUnit>>() {
             @Override
             public void onSuccess(List<StudyUnit> courses) {
@@ -71,11 +62,18 @@ public class PopularCoursesScrollingFragment extends Fragment {
                             250,
                             LinearLayout.LayoutParams.MATCH_PARENT
                     );
+
+                    //Set the title of each course card based on the retrieved
+                    //daa and set styles for clearer indication.
                     layoutParams.rightMargin = 35;
                     textView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                     textView.setText(course.getCode());
                     cardView.setLayoutParams(layoutParams);
 
+
+                    //set a listener for the card view.
+                    //When a card is clicked, direct to user to a new
+                    //course view activity.
                     cardView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
