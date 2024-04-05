@@ -55,8 +55,16 @@ public class ProfilePageSignoutDelete {
         this.activity = activity;
         this.db = db;
         this.user = user;
-        initComponent();
+        if (context != null) {
+            initComponent();
+        }
     }
+
+    public Context getContext() {return context;}
+    public Activity getActivity() {return activity;}
+    public View getView() {return view;}
+    public FirebaseFirestore getDataBase() {return db;}
+    public FirebaseUser getUser() {return user;}
 
     /**
      * The portal to initialize all components in this class.
