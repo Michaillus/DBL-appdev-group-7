@@ -204,6 +204,10 @@ public abstract class EntityManager<T> {
                 .addOnFailureListener(e -> callback.onFailure(e));
     }
 
+    protected void resetLastRetrieved() {
+        lastRetrieved = null;
+    }
+
     /**
      * Converts a FireBase document snapshot into the corresponding instance of model {@code T}.
      * @param document FireBase document snapshot to be converted.
