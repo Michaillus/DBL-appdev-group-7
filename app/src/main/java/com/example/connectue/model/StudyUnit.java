@@ -13,22 +13,22 @@ public class StudyUnit {
     /**
      * Name of study unit review collection in the database.
      */
-    private static final String COURSE_REVIEW_COLLECTION_NAME = "course-reviews";
+    public static final String COURSE_REVIEW_COLLECTION_NAME = "course-reviews";
 
     /**
      * Name of course review likes collection in the database.
      */
-    private static final String COURSE_REVIEW_LIKE_COLLECTION_NAME = "course-reviews-likes";
+    public static final String COURSE_REVIEW_LIKE_COLLECTION_NAME = "course-reviews-likes";
 
     /**
      * Name of course review dislikes collection in the database.
      */
-    private static final String COURSE_REVIEW_DISLIKE_COLLECTION_NAME = "course-reviews-dislikes";
+    public static final String COURSE_REVIEW_DISLIKE_COLLECTION_NAME = "course-reviews-dislikes";
 
     /**
      * Name of course review comments collection in the database.
      */
-    private static final String COURSE_REVIEW_COMMENT_COLLECTION_NAME = "course-reviews-comments";
+    public static final String COURSE_REVIEW_COMMENT_COLLECTION_NAME = "course-reviews-comments";
 
 
 
@@ -40,22 +40,22 @@ public class StudyUnit {
     /**
      * Name of major review collection in the database.
      */
-    private static final String MAJOR_REVIEW_COLLECTION_NAME = "major-reviews";
+    public static final String MAJOR_REVIEW_COLLECTION_NAME = "major-reviews";
 
     /**
      * Name of major review likes collection in the database.
      */
-    private static final String MAJOR_REVIEW_LIKE_COLLECTION_NAME = "major-reviews-likes";
+    public static final String MAJOR_REVIEW_LIKE_COLLECTION_NAME = "major-reviews-likes";
 
     /**
      * Name of major review dislikes collection in the database.
      */
-    private static final String MAJOR_REVIEW_DISLIKE_COLLECTION_NAME = "major-reviews-dislikes";
+    public static final String MAJOR_REVIEW_DISLIKE_COLLECTION_NAME = "major-reviews-dislikes";
 
     /**
      * Name of major review comments collection in the database.
      */
-    private static final String MAJOR_REVIEW_COMMENT_COLLECTION_NAME = "major-reviews-comments";
+    public static final String MAJOR_REVIEW_COMMENT_COLLECTION_NAME = "major-reviews-comments";
 
 
 
@@ -313,6 +313,71 @@ public class StudyUnit {
      * @return Name of collection of comments of the study unit.
      */
     public String getReviewCommentCollectionName() {
+        if (type == StudyUnitType.COURSE) {
+            return COURSE_REVIEW_COMMENT_COLLECTION_NAME;
+        } else {
+            return MAJOR_REVIEW_COMMENT_COLLECTION_NAME;
+        }
+    }
+
+    /**
+     * Returns study unit collection name depending on a type of study unit.
+     * @param type Type of a study unit.
+     * @return Collection name.
+     */
+    public static String getCollectionName(StudyUnitType type) {
+        if (type == StudyUnitType.COURSE) {
+            return COURSE_COLLECTION_NAME;
+        } else {
+            return MAJOR_COLLECTION_NAME;
+        }
+    }
+
+    /**
+     * Returns study unit review collection name depending on a type of study unit.
+     * @param type Type of a study unit.
+     * @return Collection name.
+     */
+    public static String getReviewCollectionName(StudyUnitType type) {
+        if (type == StudyUnitType.COURSE) {
+            return COURSE_REVIEW_COLLECTION_NAME;
+        } else {
+            return MAJOR_REVIEW_COLLECTION_NAME;
+        }
+    }
+
+    /**
+     * Returns study unit review like collection name depending on a type of study unit.
+     * @param type Type of a study unit.
+     * @return Collection name.
+     */
+    public static String getReviewLikeCollectionName(StudyUnitType type) {
+        if (type == StudyUnitType.COURSE) {
+            return COURSE_REVIEW_LIKE_COLLECTION_NAME;
+        } else {
+            return MAJOR_REVIEW_LIKE_COLLECTION_NAME;
+        }
+    }
+
+    /**
+     * Returns study unit review dislike collection name depending on a type of study unit.
+     * @param type Type of a study unit.
+     * @return Collection name.
+     */
+    public static String getReviewDislikeCollectionName(StudyUnitType type) {
+        if (type == StudyUnitType.COURSE) {
+            return COURSE_REVIEW_DISLIKE_COLLECTION_NAME;
+        } else {
+            return MAJOR_REVIEW_DISLIKE_COLLECTION_NAME;
+        }
+    }
+
+    /**
+     * Returns study unit review comment collection name depending on a type of study unit.
+     * @param type Type of a study unit.
+     * @return Collection name.
+     */
+    public static String getReviewCommentCollectionName(StudyUnitType type) {
         if (type == StudyUnitType.COURSE) {
             return COURSE_REVIEW_COMMENT_COLLECTION_NAME;
         } else {

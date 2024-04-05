@@ -45,12 +45,19 @@ import java.util.Locale;
 
 public class AddPostActivity extends AppCompatActivity {
 
+    // tag for testing
     private static final String TAG = "AddPostActivity class: ";
 
+    // Camera access request code
     private static final int REQUEST_CAMERA = 100;
+
+    // Gallery access request code
     private static final int REQUEST_STORAGE = 200;
 
+    // Camera access request result code
     private static final int IMAGE_PICK_CAMERA_CODE = 300;
+
+    // Gallery access request result code
     private static final int IMAGE_PICK_GALLERY_CODE = 400;
 
     // FireBase posts collection manager.
@@ -70,6 +77,13 @@ public class AddPostActivity extends AppCompatActivity {
     //image picked will be saved in this uri
     Uri imageUri = null;
 
+    /**
+     * Method is called when the activity is created.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +94,17 @@ public class AddPostActivity extends AppCompatActivity {
                 Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
                 Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
 
+        // Initialize views
         postDescription = findViewById(R.id.postDescription);
         publishPostBtn = findViewById(R.id.publishPostBtn);
         addImageBtn = findViewById(R.id.addPostImageBtn);
         postImage = findViewById(R.id.postImage);
         backBtn = findViewById(R.id.backBtn);
 
+        // Set add image button listener
         addImageBtn.setOnClickListener(v -> showImagePickDialog());
 
-
+        // Set publish button listener
         publishPostBtn.setOnClickListener(v -> {
             publishPostBtn.setEnabled(false);
             postDescription.setEnabled(false);
@@ -97,6 +113,7 @@ public class AddPostActivity extends AppCompatActivity {
             publishPost(description, imageUri);
         });
 
+        // Set back button listener
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +123,9 @@ public class AddPostActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Display image picking dialog for users to choose and pick an image.
+     */
     private void showImagePickDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Image");
@@ -181,6 +201,7 @@ public class AddPostActivity extends AppCompatActivity {
         }
     }
 
+    // Handle when user chooses to take a picture with camera.
     private void captureImageFromCamera() {
         //intent to pick image from camera
         ContentValues cv = new ContentValues();
@@ -194,6 +215,7 @@ public class AddPostActivity extends AppCompatActivity {
 
     }
 
+    // Handle when user chooses to pick a picture from gallery.
     private void pickImageFromGallery() {
         //intent to pick image from gallery
         Intent intent = new Intent(Intent.ACTION_PICK);

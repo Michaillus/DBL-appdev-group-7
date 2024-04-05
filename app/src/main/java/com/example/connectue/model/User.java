@@ -1,6 +1,6 @@
 package com.example.connectue.model;
 
-public class User2 {
+public class User {
 
     /**
      * Class tag for logs.
@@ -11,6 +11,21 @@ public class User2 {
      * Name of users collection in the database.
      */
     public static final String USER_COLLECTION_NAME = "users";
+
+    /**
+     * Guest user role number.
+     */
+    public static final int GUEST_USER_ROLE = 2;
+
+    /**
+     * Student user role number.
+     */
+    public static final int STUDENT_USER_ROLE = 1;
+
+    /**
+     * Admin user role number.
+     */
+    public static final int ADMIT_USER_ROLE = 0;
 
     protected String userId;
 
@@ -32,9 +47,9 @@ public class User2 {
 
     protected int role;
 
-    public User2(String userId, String firstName, String lastName, boolean isVerified,
-                 String email, String phoneNumber, String profilePicUrl,
-                 String program, int role) {
+    public User(String userId, String firstName, String lastName, boolean isVerified,
+                String email, String phoneNumber, String profilePicUrl,
+                String program, int role) {
         setId(userId);
         setFirstName(firstName);
         setLastName(lastName);

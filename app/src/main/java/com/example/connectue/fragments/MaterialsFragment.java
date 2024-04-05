@@ -5,6 +5,8 @@ import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.connectue.R;
 import com.example.connectue.activities.AddMaterialActivity;
 import com.example.connectue.activities.CourseViewActivity;
+import com.example.connectue.activities.StudyUnitViewActivity;
 import com.example.connectue.adapters.MaterialAdapter;
 import com.example.connectue.databinding.FragmentMaterialsBinding;
 import com.example.connectue.interfaces.ItemDownloadCallback;
@@ -23,7 +26,7 @@ import com.example.connectue.managers.MaterialManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.StudyUnit;
 import com.example.connectue.model.Material;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -72,6 +75,11 @@ public class MaterialsFragment extends Fragment {
      */
     StudyUnit course;
 
+    /**
+     * Activity result launcher for launching the reload method on finish add material activity.
+     */
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
     public MaterialsFragment() {
         // Default constructor
     }
@@ -83,10 +91,24 @@ public class MaterialsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         binding = FragmentMaterialsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        // Defines listener for reloading the study unit view activity when user returns from
+        // add material activity page.
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Log.e(TAG, "Does this work?");
+                    StudyUnitViewActivity studyUnitViewActivity = (StudyUnitViewActivity) getActivity();
+                    if (studyUnitViewActivity != null) {
+                        studyUnitViewActivity.reload();
+                    } else {
+                        Log.e(TAG, "Unable to get Study unit view activity");
+                    }
+
+                });
 
         // Define reviews recycler view.
         RecyclerView materialsRecyclerView = binding.recyclerViewMaterials;
@@ -119,6 +141,12 @@ public class MaterialsFragment extends Fragment {
         return root;
     }
 
+    /**
+     * This helper function initialises the recycler view
+     * that displays the materials.
+     * @param materialList the list if materials to display
+     * @param materialRecyclerView the recycler
+     */
     private void initRecyclerView(List<Material> materialList, RecyclerView materialRecyclerView) {
         materialAdapter = new MaterialAdapter(materialList, fragmentManager);
         materialRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -126,6 +154,10 @@ public class MaterialsFragment extends Fragment {
         materialRecyclerView.setAdapter(materialAdapter);
     }
 
+    /**
+     * This helper method
+     * @param materialList
+     */
     private void loadMaterials(List<Material> materialList) {
         int materialsPerChunk = 8;
         materialManager.downloadRecent(course.getId(), materialsPerChunk, new ItemDownloadCallback<List<Material>>() {
@@ -147,17 +179,21 @@ public class MaterialsFragment extends Fragment {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ExtendedFloatingActionButton addQuestionBtn = root.findViewById(R.id.addQuestionBtn);
-        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User2 data) {
-                if (data.isVerified()) {
+            public void onSuccess(User user) {
+                if (user.getRole() == User.STUDENT_USER_ROLE || user.getRole() == User.ADMIT_USER_ROLE) {
+                    Log.i(TAG, "User is allowed to add a material");
                     addQuestionBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddMaterialActivity.class);
                         intent.putExtra("course", course.studyUnitToString());
-                        startActivity(intent);
+
+                        activityResultLauncher.launch(intent);
                     });
+                    addQuestionBtn.setVisibility(View.VISIBLE);
                 } else {
-                    addQuestionBtn.setVisibility(View.GONE);
+                    Log.i(TAG, "User is not allowed to add a material");
+                    addQuestionBtn.setVisibility(View.INVISIBLE);
                 }
             }
 

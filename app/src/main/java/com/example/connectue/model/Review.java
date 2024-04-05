@@ -27,9 +27,15 @@ public class Review extends Interactable{
      */
     protected String parentId;
 
+    /**
+     * Constructor for a review that is not yet in the database.
+     * @param publisherId Id of the publisher.
+     * @param text Text of the review.
+     * @param stars Rating stars of the review.
+     * @param parentId Id of parent interactable.
+     */
     public Review(String publisherId, String text, Long stars, String parentId) {
         super(publisherId, text);
-
         this.setStars(stars);
         this.setParentId(parentId);
 
@@ -37,6 +43,19 @@ public class Review extends Interactable{
         tag = "Review model";
     }
 
+    /**
+     * Constructor for a review that is already in the database.
+     * @param reviewId Id of the review.
+     * @param publisherId Id of the publisher.
+     * @param text Text of the review.
+     * @param stars Rating stars of the review.
+     * @param likeNumber Number of likes got of the review.
+     * @param dislikeNumber Number of dislikes got of the review.
+     * @param commentNumber Number of comments(unused) of the review.
+     * @param datetime Date and time of creation.
+     * @param parentId Id of parent interactable.
+     * @throws IllegalArgumentException Thrown if any of the parameters are null.
+     */
     public Review(String reviewId, String publisherId, String text, Long stars,
                   Long likeNumber, Long dislikeNumber, Long commentNumber, Date datetime, String parentId)
             throws IllegalArgumentException {

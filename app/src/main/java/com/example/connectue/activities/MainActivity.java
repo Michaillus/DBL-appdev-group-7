@@ -13,8 +13,13 @@ import com.example.connectue.fragments.ProfileFragment;
 import com.example.connectue.R;
 import com.example.connectue.databinding.ActivityMainBinding;
 
+/**
+ * This activity holds the fragments for the
+ * main pages of the application.
+ */
 public class MainActivity extends AppCompatActivity {
 
+    //set attribute for binding of the activity
     ActivityMainBinding binding;
     private String pageIntent = "home";
 
@@ -25,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment(getSupportFragmentManager()));
 
+        /**
+         * get the intent of the fragment
+         * on which we want to open the main activity
+         */
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -36,13 +45,18 @@ public class MainActivity extends AppCompatActivity {
             pageIntent= (String) savedInstanceState.getSerializable("pageIntent");
         }
 
-        if (pageIntent == "channels") {
+        //Default fragment is home page.
+        if (pageIntent != null && pageIntent.equals("channels")) {
             replaceFragment(new ChannelsFragment());
         } else {
             replaceFragment(new HomeFragment(getSupportFragmentManager()));
         }
 
 
+        /**
+         * Get selected item data from bottom nav bar
+         * to navigate between fragments .
+         */
         binding.bottomNavigationView3.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
@@ -59,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Helper method to replace fragment visible in main activity
+     * @param fragment the fragment to replace with
+     */
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

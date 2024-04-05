@@ -39,21 +39,47 @@ public class Comment {
      */
     private String commentId;
 
+    /**
+     * FireBase id of name of publisher of a comment.
+     */
     private String publisherId;
 
+    /**
+     * Text of a comment.
+     */
     private String text;
 
+    /**
+     * Name of interactable to which comment is attached to.
+     */
     private String parentId;
 
-    private Date timestamp;
-    private String userProfilePicUrl;
+    /**
+     * Date and time of creation of a comment.
+     */
+    private Date datetime;
 
+    /**
+     * Constructor for a comment that is not yet in the database.
+     * @param publisherId Id of the publisher.
+     * @param text Text of the comment.
+     * @param parentId Id of parent interactable.
+     */
     public Comment(String publisherId, String text, String parentId) {
-        this(null, publisherId, text, parentId, new Date());
+        this("", publisherId, text, parentId, new Date());
     }
 
+    /**
+     * Constructor of a comment that is already in the database.
+     * @param commentId Id of the comment.
+     * @param publisherId Id of the publisher.
+     * @param text Text of the comment.
+     * @param parentId Id of parent interactable.
+     * @param datetime Date and time of creation.
+     * @throws IllegalArgumentException Thrown if any of the parameters are null.
+     */
     public Comment(String commentId, String publisherId, String text, String parentId,
-                   Date timestamp) throws IllegalArgumentException {
+                   Date datetime) throws IllegalArgumentException {
 
         // Handling documents with a null field
         if (publisherId == null) {
@@ -71,7 +97,7 @@ public class Comment {
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
         }
-        if (timestamp == null) {
+        if (datetime == null) {
             String m = "Timestamps of comment should not be null";
             Log.e(TAG, m);
             throw new IllegalArgumentException(m);
@@ -81,7 +107,7 @@ public class Comment {
         setPublisherId(publisherId);
         setText(text);
         setParentId(parentId);
-        setTimestamp(timestamp);
+        setDatetime(datetime);
         setCommentId(commentId);
     }
 
@@ -103,8 +129,6 @@ public class Comment {
         this.publisherId = publisherId;
     }
 
-    public String getUserProfilePicUrl() {return userProfilePicUrl;}
-
     // Getter and setter for the text of the comment
     public String getText() {
         return text;
@@ -124,13 +148,11 @@ public class Comment {
     }
 
     // Getter and setter for timestamps of the comment
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getDatetime() {
+        return datetime;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
-
-    public void setUserProfilePicUrl(String userProfilePicUrl) {this.userProfilePicUrl = userProfilePicUrl;}
 }

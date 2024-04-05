@@ -41,19 +41,9 @@ public class CourseViewActivity extends StudyUnitViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        int orientation = getResources().getConfiguration().orientation;
-        // Inflate layout based on orientation
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setTabListener();
-        } else {
-            setRailListener();
-        }
-
-
-
-
-
+        setTabListener();
+        // Set up UI elements
+        loadStudyUnitDetails();
         ImageView followIcon = findViewById(R.id.followIcon);
 
         setFollowButtonListener(followIcon);
@@ -62,14 +52,23 @@ public class CourseViewActivity extends StudyUnitViewActivity {
     }
 
 
-
+    /**
+     * method to inflate layout of course view
+     */
     protected void setBinding() {
         ActivityCourseViewBinding binding = ActivityCourseViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
 
+    /**
+     * method to set listener for tab layout.
+     */
     protected void setTabListener() {
         TabLayout tabLayout = findViewById(R.id.tablayout_course_menu);
+        /**
+         * switch tabs based on the selected item in the tab layout
+         * utilizing switch case here for modularity.
+         */
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -81,7 +80,7 @@ public class CourseViewActivity extends StudyUnitViewActivity {
                         break;
                     case "Questions":
                         Log.i(TAG, "Transferring to questions tag");
-                        replaceFragment(new QuestionsFragment());
+                        replaceFragment(new QuestionsFragment(getSupportFragmentManager()));
                         break;
                     case "Material":
                         Log.i(TAG, "Transferring to materials tab");
@@ -90,34 +89,35 @@ public class CourseViewActivity extends StudyUnitViewActivity {
                 }
             }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
-        });
-    }
+            public void onTabUnselected(TabLayout.Tab tab) {
+                /**
+                 * This method is empty because there is
+                 * no behaviour when the tab is unselected,
+                 * however, the tab selected listener requires these super
+                 * methods to be overridden.
+                 */
+            }
 
-    private void setRailListener() {
-        NavigationRailView navigationRailView = findViewById(R.id.navigation_rail);
-        navigationRailView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_reviews) {
-                replaceFragment(new ReviewsFragment());
-                return true;
-            } else if (item.getItemId() == R.id.nav_questions) {
-                replaceFragment(new QuestionsFragment());
-                return true;
-            } else if (item.getItemId() == R.id.nav_materials) {
-                replaceFragment(new MaterialsFragment());
-                return true;
-            } else {
-                replaceFragment(new ReviewsFragment());
-                return true;
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                /**
+                 * This method is empty because there is
+                 * no behaviour when the tab is reselected,
+                 * however, the tab selected listener requires these super
+                 * methods to be overridden.
+                 */
             }
         });
-
     }
 
+    /**
+     * method to set icon of follow button.
+     * This shows the user whether or not they
+     * are following a course
+     * @param followIcon the icon to set.
+     */
     protected void setFollowButtonListener(ImageView followIcon) {
 
         LinearLayout followButton = findViewById(R.id.followButton);
@@ -125,13 +125,18 @@ public class CourseViewActivity extends StudyUnitViewActivity {
             @Override
             public void onClick(View view) {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+                /**
+                 * get user details from database using primary key uid
+                 */
                 db.collection("users")
                     .document(firebaseUser.getUid())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            /**
+                             * if user successfully retrieved, get list of courses they follow.
+                             */
                             if (task.isSuccessful()) {
                                 DocumentSnapshot documentSnapshot = task.getResult();
                                 if (documentSnapshot.exists()) {
@@ -178,12 +183,25 @@ public class CourseViewActivity extends StudyUnitViewActivity {
             .document(firebaseUser.getUid())
             .get()
             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                /**
+                 * check for completion of data retrieval task.
+                 * @param task data retrieval task
+                 */
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    /**
+                     * if user is retrieved successfully, get list of courses they follow.
+                     */
                     if (task.isSuccessful()) {
+                        //if the user exists then get their followed courses.
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if (documentSnapshot.exists()) {
                             List<String> userCourses = (List<String>) documentSnapshot.get("userCourses");
+                            /**
+                             * if they follow the course, set the icon of the
+                             * follow button to a check mark,
+                             * otherwise set it to a plus button.
+                             */
                             if (userCourses.contains(studyUnit.getId())) {
                                 followIcon.setImageDrawable(getResources().getDrawable(R.drawable.baseline_check_circle_24));
                             } else {

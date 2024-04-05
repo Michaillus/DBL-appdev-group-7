@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:context=".fragments.ProfileFragment"
+    style="@style/background">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <TextView
+            android:id="@+id/profile_title"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="@string/profile_title"
+            style="@style/textColor"
+            android:layout_alignParentTop="true"
+            android:gravity="left|center"
+            android:textSize="80sp" />
+
+        <Button
+            style="@style/buttonStyle"
+            android:id="@+id/btn_logout"
+            android:layout_width="180dp"
+            android:layout_height="80dp"
+            android:layout_alignParentEnd="true"
+            android:text="@string/Log_out"
+            android:textSize="25dp"
+            android:drawableLeft="@drawable/baseline_exit_to_app_24"
+            android:drawableTint="@color/Design2"
+            android:drawablePadding="8dp"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        android:layout_marginTop="10dp"
+        style="@style/background">
+
+        <ImageView
+            style="@style/imageColor"
+            android:id="@+id/profilePic"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="30dp"
+            android:contentDescription="@string/profile"
+            android:src="@drawable/baseline_person_24" />
+
+        <EditText
+            style="@style/textColor"
+            android:id="@+id/text_firstName"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_below="@id/btn_edit"
+            android:layout_toEndOf="@id/profilePic"
+            android:autofillHints="name"
+            android:inputType=""
+            android:hint="@string/firstName"
+            android:textSize="40sp" />
+
+        <EditText
+            android:id="@+id/text_lastName"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_toEndOf="@id/text_firstName"
+            android:layout_below="@id/btn_edit"
+            android:autofillHints="name"
+            android:inputType=""
+            android:hint="@string/lastName"
+            style="@style/textColor"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/major_title"
+            android:layout_width="wrap_content"
+            style="@style/textColor"
+            android:layout_height="60dp"
+            android:layout_below="@id/text_firstName"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/profilePic"
+            android:gravity="center"
+            android:text="@string/major_text"
+            android:textSize="30sp" />
+
+
+        <TextView
+            android:id="@+id/email_title"
+            style="@style/textColor"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_below="@+id/profilePic"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="6dp"
+            android:drawableLeft="@drawable/baseline_email_24"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:text="@string/email_text"
+            android:textSize="35sp" />
+
+        <EditText
+            android:id="@+id/text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_below="@+id/profilePic"
+            android:layout_marginTop="18dp"
+            android:layout_toEndOf="@+id/email_title"
+            android:autofillHints=""
+            android:hint="@string/email_hint"
+            android:editable="false"
+            style="@style/textColor"
+            android:textSize="35sp" />
+
+        <TextView
+            android:id="@+id/phone_title"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_below="@+id/email_title"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
+            style="@style/textColor"
+            android:drawableLeft="@drawable/baseline_call_24"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:text="@string/phone_text"
+            android:textSize="35sp" />
+
+        <EditText
+            android:id="@+id/text_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_below="@+id/email_title"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/phone_title"
+            android:autofillHints="phone"
+            android:inputType="phone"
+            android:hint="@string/phone_hint"
+            style="@style/textColor"
+            android:textSize="35sp" />
+
+        <Button
+            android:id="@+id/btn_edit"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            style="@style/textColor"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/baseline_edit_24"
+            android:text="@string/Edit_button"
+            android:textSize="25sp"/>
+
+        <Spinner
+            android:id="@+id/majorSpinner"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:textAlignment="textStart"
+            style="@style/textColor"
+            android:layout_below="@id/text_firstName"
+            android:layout_toEndOf="@+id/major_title" />
+
+        <Spinner
+            android:id="@+id/majorSpinner2"
+            android:layout_width="140dp"
+            android:layout_height="60dp"
+            android:textAlignment="textStart"
+            style="@style/textColor"
+            android:layout_below="@id/majorSpinner"
+            android:layout_toEndOf="@+id/major_title"
+            />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_postHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/post_history"
+        style="@style/textColor"
+        android:textSize="35sp"
+        android:gravity="left"
+        android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
+        android:background="@android:color/transparent" />
+
+
+    <Button
+        android:id="@+id/btn_reviewHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/review_history"
+        style="@style/textColor"
+        android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
+        android:textSize="35sp"
+        android:gravity="left"
+        android:background="@android:color/transparent" />
+
+
+    <Button
+        android:layout_marginTop="50dp"
+        android:id="@+id/btn_deleteAccount"
+        android:layout_width="match_parent"
+        style="@style/buttonStyle"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_account"
+        android:textSize="35dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/buttonStyle"
+        android:text="Switch To admin mode"
+        android:layout_marginTop="20dp"
+        android:textSize="35dp"
+        android:id="@+id/btn_admmin"/>
+
+
+</LinearLayout>

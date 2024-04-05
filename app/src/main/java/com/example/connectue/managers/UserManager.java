@@ -1,6 +1,6 @@
 package com.example.connectue.managers;
 
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserManager extends EntityManager<User2> {
+public class UserManager extends EntityManager<User> {
 
     /**
      * Constructor for a manager of users.
@@ -31,8 +31,8 @@ public class UserManager extends EntityManager<User2> {
      * @return Instance of the user model.
      */
     @Override
-    public User2 deserialize(DocumentSnapshot document) {
-        return new User2(
+    public User deserialize(DocumentSnapshot document) {
+        return new User(
                 document.getId(),
                 document.getString("firstName"),
                 document.getString("lastName"),
@@ -53,7 +53,7 @@ public class UserManager extends EntityManager<User2> {
      * @return Map for uploading to user collection.
      */
     @Override
-    public Map<String, Object> serialize(User2 user) {
+    public Map<String, Object> serialize(User user) {
         Map<String, Object> userData = new HashMap<>();
 
         userData.put("timestamp", new Timestamp(new Date()));

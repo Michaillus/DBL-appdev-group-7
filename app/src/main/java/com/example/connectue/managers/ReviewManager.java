@@ -2,6 +2,7 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
+import com.example.connectue.interfaces.ItemDeleteCallback;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemExistsCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
@@ -56,16 +57,18 @@ public class ReviewManager extends InteractableManager<Review> {
      * Adds a study unit review to the database and changes the average rating of the study unit
      * respectively.
      * @param review Study unit review to upload.
+     * @param studyUnitType Type of the study unit of the review - course or major.
      * @param callback Callback that is called when the upload of review is finished or an
      *                 error occurred.
      */
-    public void addReview(Review review, StudyUnit studyUnit, ItemUploadCallback callback) {
+    public void addReview(Review review, StudyUnit.StudyUnitType studyUnitType, ItemUploadCallback callback) {
         upload(review, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
                 StudyUnitManager studyUnitManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
-                        studyUnit.getStudyUnitCollectionName());
-                studyUnitManager.addRating(studyUnit, review, new ItemUploadCallback() {
+                        StudyUnit.getCollectionName(studyUnitType));
+                studyUnitManager.changeRating(review.getParentId(), review.getStars(),
+                        1L, new ItemUploadCallback() {
                     @Override
                     public void onSuccess() {
                         callback.onSuccess();
@@ -83,6 +86,50 @@ public class ReviewManager extends InteractableManager<Review> {
             public void onFailure(Exception e) {
                 Log.e(tag, "Error while uploading studyUnit review");
                 callback.onFailure(e);
+            }
+        });
+    }
+
+
+
+    /**
+     * Deletes a study unit review from the database and changes the average rating of the study unit
+     * respectively.
+     * @param reviewId Id of study unit review to delete.
+     * @param studyUnitType Type of the study unit of the review - course or major.
+     * @param callback Callback that is called when the upload of review is finished or an
+     *                 error occurred.
+     */
+    public void deleteReview(String reviewId, StudyUnit.StudyUnitType studyUnitType, ItemDeleteCallback callback) {
+        downloadOne(reviewId, new ItemDownloadCallback<Review>() {
+            @Override
+            public void onSuccess(Review review) {
+                delete(review.getId(), new ItemDeleteCallback() {
+                    @Override
+                    public void onSuccess() {
+                        StudyUnitManager studyUnitManager = new StudyUnitManager(FirebaseFirestore.getInstance(),
+                                StudyUnit.getCollectionName(studyUnitType));
+                        studyUnitManager.changeRating(review.getParentId(), -review.getStars(),
+                                -1L, new ItemUploadCallback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        callback.onSuccess();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        Log.e(tag, "Error while updating studyUnit rating");
+                                        callback.onFailure(e);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(tag, "Error while deleting studyUnit review");
+                        callback.onFailure(e);
+                    }
+                });
             }
         });
     }

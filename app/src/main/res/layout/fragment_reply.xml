@@ -1,0 +1,104 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <!-- Publisher Name -->
+            <TextView
+                android:id="@+id/reply_questioner_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginTop="3dp"
+                android:text="Publisher Name"/>
+
+            <!-- Publish Time -->
+
+
+
+            <TextView
+                android:id="@+id/reply_question_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="66dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@id/reply_questioner_Name"
+                android:text="Publish Time" />
+
+
+            <!-- Back button -->
+
+            <ImageButton
+                android:id="@+id/backFromReplyBtn"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentEnd="true"
+                android:background="@null"
+                android:src="@drawable/baseline_close_24"
+                app:maxImageSize="45dp"
+                app:fabCustomSize="80dp"/>
+
+            <!-- Post Description -->
+            <TextView
+                android:id="@+id/reply_question_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_below="@id/reply_questioner_Name"
+                android:padding="8dp"
+                android:text="Question Description"
+                android:textSize="16sp"/>
+
+            <!-- Comments, Like Button, Comment Button -->
+            <LinearLayout
+                android:id="@+id/replyLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/reply_question_description"
+                android:padding="8dp">
+
+
+                <EditText
+                    android:id="@+id/addReplyET"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Add a reply"
+                    />
+
+                <ImageButton
+                    android:id="@+id/reply_send_Btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/send_button"
+                    android:background="@null"
+                    app:tint="@color/Design4" />
+
+            </LinearLayout>
+
+            <!-- Comments RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/replyRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/replyLinearLayout"
+                android:layout_marginTop="8dp"
+                android:padding="0dp"/>
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+</RelativeLayout>

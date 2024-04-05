@@ -102,7 +102,7 @@
                 android:layout_width="29dp"
                 android:layout_height="match_parent"
                 android:background="@null"
-                app:srcCompat="@drawable/dislike" />
+                app:srcCompat="@drawable/dislike_empty" />
 
             <TextView
                 android:layout_gravity="center"
@@ -114,11 +114,24 @@
                 android:text="0">
 
             </TextView>
+
+            <TextView
+                android:id="@+id/pCommentTv"
+                style="@style/textColor"
+                android:layout_width="257dp"
+                android:layout_height="match_parent" />
+
+
+
+            <ImageButton
+                style="@style/imageColor"
+                android:id="@+id/report_review_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:background="@null"
+                app:srcCompat="@drawable/outline_report_24"/>
         </LinearLayout>
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_below="@id/visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
 
 

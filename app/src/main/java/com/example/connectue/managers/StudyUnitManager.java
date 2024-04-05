@@ -2,8 +2,8 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
+import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
-import com.example.connectue.model.Review;
 import com.example.connectue.model.StudyUnit;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,29 +42,41 @@ public class StudyUnitManager extends EntityManager<StudyUnit> {
     }
 
     /**
-     * Adds impact of the rating of the review towards the average rating of the study unit in the
-     * database.
-     * @param studyUnit A study unit.
-     * @param studyUnitReview the review to given the study unit.
+     * Adds or deletes impact of a rating of the review towards the average rating
+     * of the study unit in the database.
+     * @param studyUnitId Id of a study unit.
+     * @param ratingSumChange By what number the sum of ratings should be changed.
+     * @param ratingNumberChange By what number the number of ratings should be changed.
      * @param callback Callback that is called when the method is finished - successfully or
      *                 with an error.
      */
-    public void addRating(StudyUnit studyUnit, Review studyUnitReview, ItemUploadCallback callback) {
+    public void changeRating(String studyUnitId, long ratingSumChange, long ratingNumberChange, ItemUploadCallback callback) {
 
-        studyUnit.setRatingSum(studyUnit.getRatingSum() + studyUnitReview.getStars());
-        studyUnit.setRatingNumber(studyUnit.getRatingNumber() + 1);
-        set(studyUnit, studyUnit.getId(), new ItemUploadCallback() {
+        downloadOne(studyUnitId, new ItemDownloadCallback<StudyUnit>() {
             @Override
-            public void onSuccess() {
-                callback.onSuccess();
+            public void onSuccess(StudyUnit studyUnit) {
+                studyUnit.setRatingSum(studyUnit.getRatingSum() + ratingSumChange);
+                studyUnit.setRatingNumber(studyUnit.getRatingNumber() + ratingNumberChange);
+                set(studyUnit, studyUnit.getId(), new ItemUploadCallback() {
+                    @Override
+                    public void onSuccess() {
+                        callback.onSuccess();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Log.e(TAG, "Error while changing rating of a study unit");
+                        callback.onFailure(e);
+                    }
+                });
             }
 
             @Override
             public void onFailure(Exception e) {
-                Log.e(TAG, "Error while changing rating of a study unit");
                 callback.onFailure(e);
             }
         });
+
     }
 
     /**

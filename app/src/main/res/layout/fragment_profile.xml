@@ -205,7 +205,7 @@
 
 
     <Button
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/btn_deleteAccount"
         android:layout_width="match_parent"
         style="@style/buttonStyle"
@@ -213,11 +213,10 @@
         android:text="@string/delete_account" />
 
     <Button
-        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/buttonStyle"
-        android:text="Switch To SUPERMAN mode(I am admin)"
+        android:text="Switch To ADMIN mode"
         android:id="@+id/btn_admmin"/>
 
 

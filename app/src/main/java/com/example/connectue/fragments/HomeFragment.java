@@ -22,7 +22,7 @@ import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Post;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.General;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,6 +36,7 @@ import java.util.List;
 
 /**
  * A fragment for the home page with the post feed and add a post button.
+ * Posts are displayed in a recyclerView. Post items are in PostAdapter class.
  */
 public class HomeFragment extends Fragment {
 
@@ -44,6 +45,9 @@ public class HomeFragment extends Fragment {
      */
     private static final String TAG = "HomeFragment";
 
+    /**
+     * Binding object to bind with the home fragment layout.
+     */
     private FragmentHomeBinding binding;
 
     /**
@@ -70,10 +74,27 @@ public class HomeFragment extends Fragment {
         // Default constructor
     }
 
+    /**
+     * Constructor of HomeFragment. A FragmentManager object is loaded for
+     * later fragment transaction process.
+     * @param fragmentManager the fragmentManager of Main activity.
+     */
     public HomeFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
 
+    /**
+     * Initialize the UIs of this fragment.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return root which is the view of this fragment.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,6 +129,11 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Initialize the recyclerView to dynamically display posts.
+     * @param postList the list of posts.
+     * @param postRecyclerView the recyclerView that contains the list of posts.
+     */
     private void initRecyclerView(List<Post> postList, RecyclerView postRecyclerView) {
         postAdapter = new PostAdapter(postList, fragmentManager);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -115,6 +141,10 @@ public class HomeFragment extends Fragment {
         postRecyclerView.setAdapter(postAdapter);
     }
 
+    /**
+     * Display posts
+     * @param postList the list of posts to be displayed
+     */
     private void loadPosts(List<Post> postList) {
         int postsPerChunk = 4;
         postManager.downloadRecent(postsPerChunk, new ItemDownloadCallback<List<Post>>() {
@@ -132,20 +162,26 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Initialize the add post button.
+     * Once the user clicks, the app will be redirected to AddPostActivity.
+     * @param root The view object of current fragment.
+     */
     private void displayAddPostButton(View root) {
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ImageButton addPostBtn = root.findViewById(R.id.addPostBtn);
-        userManager.downloadOne(currentUid, new ItemDownloadCallback<User2>() {
+        userManager.downloadOne(currentUid, new ItemDownloadCallback<User>() {
             @Override
-            public void onSuccess(User2 data) {
-                if (data.getRole() == General.STUDENT || data.getRole() == General.ADMIN) {
+            public void onSuccess(User user) {
+                if (user.getRole() == User.STUDENT_USER_ROLE || user.getRole() == User.ADMIT_USER_ROLE) {
                     addPostBtn.setOnClickListener(v -> {
                         Intent intent = new Intent(getActivity(), AddPostActivity.class);
                         startActivity(intent);
                     });
+                    addPostBtn.setVisibility(View.VISIBLE);
                 } else {
-                    addPostBtn.setVisibility(View.GONE);
+                    addPostBtn.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -156,6 +192,11 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Scroll down to the end of the page to load more posts.
+     * @param postList the list to hold posts
+     * @param postRecyclerView the recyclerView to display posts
+     */
     private void getPostsOnScroll(List<Post> postList, RecyclerView postRecyclerView) {
         postRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -179,6 +220,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * Destroy this fragment after switching to another page. Remove the binding.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -24,7 +24,7 @@ public class Question extends Interactable{
     /**
      * Name of question comments collection in the database.
      */
-    public static final String QUESTION_COMMENT_COLLECTION_NAME = "question-comments";
+    public static final String QUESTION_COMMENT_COLLECTION_NAME = "questions-replies";
 
     /**
      * Id of the course for which question is asked.
@@ -32,6 +32,12 @@ public class Question extends Interactable{
     protected String parentCourseId;
 
 
+    /**
+     * Constructor for a question that is not yet in the database.
+     * @param publisherId Id of the publisher.
+     * @param text Text of the question.
+     * @param parentCourseId Id of parent interactable.
+     */
     public Question(String publisherId, String text, String parentCourseId) {
         super(publisherId, text);
 
@@ -41,6 +47,18 @@ public class Question extends Interactable{
         tag = "Question Model";
     }
 
+    /**
+     * Constructor for a question that is already in the database.
+     * @param questionId Id of the question.
+     * @param publisherId Id of the publisher.
+     * @param text Text of the question.
+     * @param likeNumber Number of likes got of the question.
+     * @param dislikeNumber Number of dislikes got of the question.
+     * @param commentNumber Number of comments(unused) of the question.
+     * @param datetime Date and time of creation.
+     * @param parentCourseId Id of parent interactable.
+     * @throws IllegalArgumentException Thrown if any of the parameters are null.
+     */
     public Question(String questionId, String publisherId, String text, Long likeNumber,
                     Long dislikeNumber, Long commentNumber, Date datetime, String parentCourseId)
             throws IllegalArgumentException {

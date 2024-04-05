@@ -15,10 +15,10 @@ import java.util.List;
  * Database requests manager for model that is a subclass of interactable. Besides database requests
  * connected to the collection of the model documents, it supports database requests for liking,
  * disliking and commenting of objects of the model.
- * @param <T> Model class corresponding to the documents of the target collection, like, dislike
+ * @param <I> Model class corresponding to the documents of the target collection, like, dislike
  *           and comment collections.
  */
-public abstract class InteractableManager<T extends Interactable> extends EntityManager<T> {
+public abstract class InteractableManager<I extends Interactable> extends EntityManager<I> {
 
     /**
      * Like manager that supports database requests regarding liking an interactable
@@ -58,9 +58,9 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         likeManager = new LikeManager(db, likeCollectionName);
         dislikeManager = new LikeManager(db, dislikeCollectionName);
         commentManager = new CommentManager(db, commentCollectionName);
-
         tag = "InteractableManager class: ";
     }
+
 
     /**
      * Likes the interactable, if it was not liked or removes the like from the interactable,
@@ -68,7 +68,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param interactable Interactable to like or unlike.
      * @param userId Id of the user who likes or unlikes the interactable.
      */
-    public void likeOrUnlike(T interactable, String userId, ItemLikeCallback callback) {
+    public void likeOrUnlike(I interactable, String userId, ItemLikeCallback callback) {
         likeManager.likeOrUnlike(interactable.getId(), userId, new ItemLikeCallback() {
             @Override
             public void onSuccess(Boolean isLiked) {
@@ -109,7 +109,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param interactable Interactable to dislike or undislike.
      * @param userId Id of the user who likes or unlikes the interactable.
      */
-    public void dislikeOrUndislike(T interactable, String userId, ItemLikeCallback callback) {
+    public void dislikeOrUndislike(I interactable, String userId, ItemLikeCallback callback) {
         dislikeManager.likeOrUnlike(interactable.getId(), userId, new ItemLikeCallback() {
             @Override
             public void onSuccess(Boolean isDisliked) {
@@ -144,6 +144,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         dislikeManager.isLiked(interactableId, userId, callback);
     }
 
+
     /**
      * Retrieves {@code amount} of most recent comments of {@code parentId} interactable,
      * after the last uploaded one.
@@ -162,7 +163,20 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param comment Instance of a comment to publish.
      * @param callback Callback that is called when the upload process is finished.
      */
-    public void uploadComment(Comment comment, ItemUploadCallback callback) {
-        commentManager.upload(comment, callback);
+    public void uploadComment(Comment comment, I interactable, ItemUploadCallback callback) {
+        commentManager.upload(comment, new ItemUploadCallback() {
+            @Override
+            public void onSuccess() {
+                interactable.incrementCommentNumber();
+                update(interactable.getId(), Interactable.COMMENT_NUMBER_ATTRIBUTE,
+                        interactable.getCommentNumber(), callback);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(tag, "Error while uploading a comment.");
+                callback.onFailure(e);
+            }
+        });
     }
 }

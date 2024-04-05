@@ -38,6 +38,13 @@ public class AddQuestionActivity extends AppCompatActivity {
      */
     private StudyUnit course;
 
+    /**
+     * Method is called when the activity is created. Grab the view components.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,11 +65,17 @@ public class AddQuestionActivity extends AppCompatActivity {
         // Retrieve course model passed from the previous activity / fragment.
         course = ActivityUtils.getStudyUnit(this, savedInstanceState);
 
+        // Set click listener for publishing a question
         publishQuestionBtn.setOnClickListener(v -> publishQuestion());
+
+        // Set click listener for back button
         backBtn.setOnClickListener(v -> finish());
 
     }
 
+    /**
+     * Method to publish a question and it is called to upload to database with text.
+     */
     private void publishQuestion() {
         publishQuestionBtn.setEnabled(false);
         questionDescription.setEnabled(false);
@@ -70,10 +83,15 @@ public class AddQuestionActivity extends AppCompatActivity {
         uploadToFirestore(text);
     }
 
+    /**
+     * Method to publish a question and upload to database with text.
+     * @param text The content of the question.
+     */
     private void uploadToFirestore(String text) {
         String publisherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Question question = new Question(publisherId, text, course.getId());
 
+        // upload the question by the questionManager.
         questionManager.upload(question, new ItemUploadCallback() {
             @Override
             public void onSuccess() {

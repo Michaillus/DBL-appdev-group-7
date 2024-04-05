@@ -2,6 +2,7 @@ package com.example.connectue.managers;
 
 import android.util.Log;
 
+import com.example.connectue.interfaces.ItemDeleteCallback;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.google.firebase.firestore.CollectionReference;
@@ -201,6 +202,12 @@ public abstract class EntityManager<T> {
     protected void update(String documentId, String field, Object value,
                           ItemUploadCallback callback) {
         collection.document(documentId).update(field, value)
+                .addOnSuccessListener(unused -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onFailure(e));
+    }
+
+    protected void delete(String documentId, ItemDeleteCallback callback) {
+        collection.document(documentId).delete()
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onFailure(e));
     }

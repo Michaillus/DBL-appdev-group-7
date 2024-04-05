@@ -30,7 +30,7 @@ import com.example.connectue.managers.PostManager;
 import com.example.connectue.managers.UserManager;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Post;
-import com.example.connectue.model.User2;
+import com.example.connectue.model.User;
 import com.example.connectue.utils.General;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -127,6 +127,11 @@ public class PostFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Initialize postManger and userManager.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +141,18 @@ public class PostFragment extends Fragment {
         userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
     }
 
+    /**
+     * Initialize the UIs of this fragment.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return root which is the view of this fragment.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -166,6 +183,10 @@ public class PostFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Initialize the views in this fragment.
+     * @param view the view object of this fragment
+     */
     private void initView(View view) {
         publisherName = view.findViewById(R.id.publisherNameTextView);
         profilePic = view.findViewById(R.id.profilePicPostImageView);
@@ -180,12 +201,19 @@ public class PostFragment extends Fragment {
 
     }
 
+    /**
+     * Initialize the recyclerView to dynamically display comments.
+     * @param view the view object of this fragment
+     */
     private void initCommentRecyclerView(View view) {
         commentsRecyclerView = view.findViewById(R.id.commentsRecyclerView);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         commentsRecyclerView.setAdapter(commentAdapter);
     }
 
+    /**
+     * Display the post and its comments.
+     */
     private void loadContentsFromFirestore() {
         postManager.downloadOne(postId, new ItemDownloadCallback<Post>() {
             @Override
@@ -196,9 +224,9 @@ public class PostFragment extends Fragment {
                 currentPost = post;
                 publisherTime.setText(TimeUtils.getTimeAgo(post.getDatetime()));
 
-                userManager.downloadOne(post.getPublisherId(), new ItemDownloadCallback<User2>() {
+                userManager.downloadOne(post.getPublisherId(), new ItemDownloadCallback<User>() {
                     @Override
-                    public void onSuccess(User2 publisher) {
+                    public void onSuccess(User publisher) {
                         publisherName.setText(publisher.getFullName());
                         // Load user profile picture
                         String imageUrl = publisher.getProfilePicUrl();
@@ -274,6 +302,10 @@ public class PostFragment extends Fragment {
         });
     }
 
+    /**
+     * Display the comments of current post.
+     * @param postId the id of current post
+     */
     public void loadComments(String postId) {
         Log.e("test", "test");
         postManager.downloadRecentComments(postId, commentsPerChunk,
@@ -286,8 +318,6 @@ public class PostFragment extends Fragment {
                 commentAdapter.notifyDataSetChanged();
             }
 
-
-
             @Override
             public void onFailure(Exception e) {
                 Log.e(TAG, "Error while downloading comments", e);
@@ -295,6 +325,9 @@ public class PostFragment extends Fragment {
         });
     }
 
+    /**
+     * Setup the creating a comment function.
+     */
     private void initCreateComment() {
         sendCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,6 +348,10 @@ public class PostFragment extends Fragment {
         });
     }
 
+    /**
+     * Upload a comment to FireBase
+     * @param commentText the text of the comment
+     */
     private void uploadCommentToFirestore(String commentText) {
         postRef = db.collection("posts").document(postId);
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -331,9 +368,9 @@ public class PostFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         // Update the UI to reflect the new comment
-                        userManager.downloadOne(userId, new ItemDownloadCallback<User2>() {
+                        userManager.downloadOne(userId, new ItemDownloadCallback<User>() {
                             @Override
-                            public void onSuccess(User2 user) {
+                            public void onSuccess(User user) {
 
                                 commentList.add(0, comment);
                                 // Notify the RecyclerView adapter about the dataset change

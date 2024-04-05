@@ -23,6 +23,11 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.connectue.interfaces.ItemDeleteCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
+import com.example.connectue.managers.ReviewManager;
+import com.example.connectue.managers.StudyUnitManager;
+import com.example.connectue.model.StudyUnit;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ReportItemCallback;
@@ -45,6 +50,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * The workbench for administrator to see the reported content, and choose to delete or keep
+ *  the contents.
  * A simple {@link Fragment} subclass.
  * Use the {@link ManageReportHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -60,11 +67,8 @@ public class ManageReportHistoryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private FirebaseFirestore db;
-//    TODO: once other button is clicked, remember to clear/reinit reportIds
     private List<QueryDocumentSnapshot> reports;
-//    TODO: ODO: once other button is clicked, remember to switch channel names
     private String currentChannel = General.POSTCOLLECTION;
-//    todo: set to null once it is deleted or released, fetchable false, picture not clickbale, delete keep to unclickable
     private DocumentSnapshot currentDocument = null;
     private DocumentReference currentContentReference = null;
     private DocumentReference currentRequestReference = null;
@@ -86,6 +90,8 @@ public class ManageReportHistoryFragment extends Fragment {
     private static final String TAG_load_content = "loadContent";
     private static final String TAG_Load_report = "reportLoad";
     private static final String TAG_delete = "delete";
+     //Id of the content to delete.
+    String contentId;
 
     public ManageReportHistoryFragment() {
         // Required empty public constructor
@@ -100,7 +106,6 @@ public class ManageReportHistoryFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ManageReportHistoryFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ManageReportHistoryFragment newInstance(String param1, String param2) {
         ManageReportHistoryFragment fragment = new ManageReportHistoryFragment();
         Bundle args = new Bundle();
@@ -154,7 +159,6 @@ public class ManageReportHistoryFragment extends Fragment {
         CollectionReference collectionReference = FirebaseFirestore.getInstance().collection(General.REPORTEDCOLLECTION);
         Query targetQuery = collectionReference.whereEqualTo(General.REPORTFROMCOLLECTION, fromCollection)
                 .orderBy(General.REPORTCOUNTER, Query.Direction.DESCENDING);
-
         targetQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -183,7 +187,7 @@ public class ManageReportHistoryFragment extends Fragment {
     }
 
     private void loadContentToWorkBench(QueryDocumentSnapshot content) {
-        String contentId = content.getString(General.REPORTCONTENTID);
+        contentId = content.getString(General.REPORTCONTENTID);
         if (contentId == null || contentId.equals("")) {
             Log.i(TAG_load_content, "contentId is null ");
             return;
@@ -220,6 +224,10 @@ public class ManageReportHistoryFragment extends Fragment {
         });
     }
 
+    /**
+     * I
+     * @param view
+     */
     private void initComponents(View view) {
         db = FirebaseFirestore.getInstance();
         postChannelBtn = view.findViewById(R.id.report_load_post_btn);
@@ -235,7 +243,6 @@ public class ManageReportHistoryFragment extends Fragment {
         contentTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contentTextZoomIn();
             }
         });
         contentInfoTV.setText(DEFAULT_COUNT);
@@ -259,16 +266,6 @@ public class ManageReportHistoryFragment extends Fragment {
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 isImageFetchable = true;
-                contentIV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getContext(), "Can click",
-                            Toast.LENGTH_SHORT).show();
-                        contentImageZoomIn();
-                    }
-                });
-                Log.i(TAG_delete
-                        , "after fetch picture, : isImageFetchable: " + isImageFetchable);
                 return false;
             }
         }).into(contentIV);
@@ -298,7 +295,6 @@ public class ManageReportHistoryFragment extends Fragment {
         keepBtn.setOnClickListener(null);
     }
 
-
     private void deleteContent() {
         Log.i(TAG_delete, "before delete picture, picture fetchable: " + isImageFetchable);
         if (isImageFetchable) {
@@ -326,21 +322,56 @@ public class ManageReportHistoryFragment extends Fragment {
     }
 
     private void deleteFromCollection() {
-        currentContentReference.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        removeRequest();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext()
-                                , "Remove content from it collection failed, check log"
-                                , Toast.LENGTH_SHORT).show();
-                    }
-                });
+        if (currentChannel.equals(StudyUnit.COURSE_REVIEW_COLLECTION_NAME) ||
+                currentChannel.equals(StudyUnit.MAJOR_REVIEW_COLLECTION_NAME)) {
+            // Deleting course or major review through the study unit manager
+            StudyUnit.StudyUnitType studyUnitType;
+            // Finds the type of study unit of the content
+            if (currentChannel.equals(StudyUnit.COURSE_REVIEW_COLLECTION_NAME)) {
+                studyUnitType = StudyUnit.StudyUnitType.COURSE;
+            } else {
+                studyUnitType = StudyUnit.StudyUnitType.MAJOR;
+            }
+            // Initialize review manager for deletion
+            ReviewManager reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
+                    StudyUnit.getReviewCollectionName(studyUnitType),
+                    StudyUnit.getReviewLikeCollectionName(studyUnitType),
+                    StudyUnit.getReviewDislikeCollectionName(studyUnitType),
+                    StudyUnit.getReviewCommentCollectionName(studyUnitType));
+            // Delete the review
+            reviewManager.deleteReview(contentId, studyUnitType,
+                    new ItemDeleteCallback() {
+                @Override
+                public void onSuccess() {
+                    // Remove the report if review is deleted successfully
+                    removeRequest();
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(getContext(),
+                            "Remove content from it collection failed, check log",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            // Deleting post or comment directly
+            currentContentReference.delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            removeRequest();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),
+                                    "Remove content from it collection failed, check log",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     private void keepContent() {
@@ -378,14 +409,6 @@ public class ManageReportHistoryFragment extends Fragment {
         loadReportedContents(currentChannel);
     }
 
-    private void contentImageZoomIn() {
-
-    }
-
-    private void contentTextZoomIn() {
-
-    }
-
     private void initPostButton() {
         postChannelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -393,7 +416,6 @@ public class ManageReportHistoryFragment extends Fragment {
                 currentChannel = General.POSTCOLLECTION;
                 resetAfterDeleteKeep();
                 loadReportedContents(currentChannel);
-
             }
         });
 
@@ -418,6 +440,4 @@ public class ManageReportHistoryFragment extends Fragment {
             }
         });
     }
-
-
 }

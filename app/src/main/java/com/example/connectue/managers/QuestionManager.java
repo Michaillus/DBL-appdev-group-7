@@ -28,6 +28,7 @@ public class QuestionManager extends InteractableManager<Question> {
                        String commentCollectionName) {
         super(db, collectionName, likeCollectionName, dislikeCollectionName, commentCollectionName);
 
+
         tag = "QuestionManager";
     }
 
@@ -45,6 +46,11 @@ public class QuestionManager extends InteractableManager<Question> {
         Query basicQuery = collection.whereEqualTo("parentCourseId", courseId);
         super.downloadRecentWithQuery(basicQuery, amount, callback);
     }
+
+//    public void downloadRecentReplies(String parentId, int amount,
+//                                      ItemDownloadCallback<List<Reply>> callback) {
+//        replyManager.downloadRecent(parentId, amount, callback);
+//    }
 
     /**
      * Converts a FireBase document snapshot of a question collection into an instance
