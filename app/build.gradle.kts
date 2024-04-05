@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
+    id("jacoco")
 }
 
 android {
@@ -30,6 +31,10 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+    }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
     }
 }
 
