@@ -22,6 +22,18 @@ public class ReviewTest extends InteractableTest {
     }
 
     /**
+     * Test the second constructor.
+     */
+    @Test
+    public void testSecondConstructor() {
+        Review review1 = new Review(publisherId, text, stars, parentId);
+        assertEquals(publisherId, review1.getPublisherId());
+        assertEquals(text, review1.getText());
+        assertEquals(stars, review1.getStars());
+        assertEquals(parentId, review1.getParentId());
+    }
+
+    /**
      * Test stars getter.
      */
     @Test

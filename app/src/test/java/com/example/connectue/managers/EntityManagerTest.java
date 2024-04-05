@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.junit.Before;
@@ -48,18 +49,25 @@ public class EntityManagerTest {
     public void deserializeList() {
         mockQuerySnapshot = Mockito.mock(QuerySnapshot.class);
         Iterator iterator = new Iterator() {
+            Boolean itered = false;
             @Override
             public boolean hasNext() {
-                return false;
+                if (!itered) {
+                    itered = true;
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             @Override
             public Object next() {
-                return null;
+                QueryDocumentSnapshot mockDocument = Mockito.mock(QueryDocumentSnapshot.class);
+                return mockDocument;
             }
         };
         when(mockQuerySnapshot.iterator()).thenReturn(iterator);
 //        when(mockQuerySnapshot.iterator().hasNext()).thenReturn(false);
-        assertTrue(entityManager.deserializeList(mockQuerySnapshot).isEmpty());
+        assertTrue(entityManager.deserializeList(mockQuerySnapshot).size() == 1);
     }
 }
