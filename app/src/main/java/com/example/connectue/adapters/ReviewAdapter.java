@@ -110,14 +110,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.MyViewHold
      */
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        ReviewManager reviewManager;
         // grab the views from study_unit_review_row file
-        private ImageView reviewLike, reviewDislike;
-        private TextView reviewerName, description, date;
-        private TextView likeNumber, dislikeNumber;
-        private RatingBar ratingBar;
-        private ImageButton report;
+        ImageView reviewLike, reviewDislike;
+        TextView reviewerName;
+        TextView description;
+        TextView date;
+        TextView likeNumber, dislikeNumber;
+        RatingBar ratingBar;
+        ImageButton report;
         UserManager userManager;
-        private FirebaseFirestore db;
+        FirebaseFirestore db;
 
         /**
          * Constructor for the ViewHolder class, which represents each item in the RecyclerView.

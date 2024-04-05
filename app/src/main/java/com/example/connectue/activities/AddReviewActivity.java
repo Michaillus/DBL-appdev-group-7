@@ -86,7 +86,7 @@ public class AddReviewActivity extends AppCompatActivity {
     /**
      * Initialize the UI components of the adding review page.
      */
-    private void initializeViews() {
+    void initializeViews() {
         reviewDescription = findViewById(R.id.reviewDescription);
         publishReviewBtn = findViewById(R.id.publishReviewBtn);
         backBtn = findViewById(R.id.back_Btn);
