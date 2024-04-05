@@ -106,38 +106,74 @@ public class ProfilePageHistoryFunction {
         });
     }
 
+    /**
+     * getter to get the activity
+     * @return the activity
+     */
     public Activity getActivity() {
         return activity;
     }
 
+    /**
+     * getter for the view
+     * @return the view
+     */
     public View getView() {
         return view;
     }
 
+    /**
+     * getter for the document
+     * @return the document
+     */
     public DocumentSnapshot getDocument() {
         return document;
     }
 
+    /**
+     * getter for the role
+     * @return the role
+     */
     public long getRole() {
         return role;
     }
 
+    /**
+     * setter for the role
+     * @param role the role
+     */
     public void setRole(long role) {
         this.role = role;
     }
 
+    /**
+     * getter for the postHisButton
+     * @return the postHisBtn
+     */
     public Button getPostHisBtn() {
         return postHisBtn;
     }
 
+    /**
+     * setter for the postHisBtn
+     * @param postHisBtn the posHisBtn
+     */
     public void setPostHisBtn(Button postHisBtn) {
         this.postHisBtn = postHisBtn;
     }
 
+    /**
+     * getter for the ReviewHisBtn
+     * @return the ReviewHisBtn
+     */
     public Button getReviewHisBtn() {
         return reviewHisBtn;
     }
 
+    /**
+     * setter for the reviewHisBtn
+     * @param reviewHisBtn the reviewHisBtn
+     */
     public void setReviewHisBtn(Button reviewHisBtn) {
         this.reviewHisBtn = reviewHisBtn;
     }
