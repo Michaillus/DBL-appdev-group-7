@@ -3,29 +3,25 @@ package com.example.connectue.model;
 public class User {
 
     /**
-     * Class tag for logs.
-     */
-    private static final String TAG = "User model";
-
-    /**
      * Name of users collection in the database.
      */
     public static final String USER_COLLECTION_NAME = "users";
-
     /**
      * Guest user role number.
      */
     public static final int GUEST_USER_ROLE = 2;
-
     /**
      * Student user role number.
      */
     public static final int STUDENT_USER_ROLE = 1;
-
     /**
      * Admin user role number.
      */
     public static final int ADMIT_USER_ROLE = 0;
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "User model";
 
     protected String userId;
 
@@ -34,8 +30,6 @@ public class User {
     protected String lastName;
 
     protected boolean isVerified;
-
-    protected String password;
 
     protected String email;
 
@@ -62,26 +56,35 @@ public class User {
     }
 
 
-
-
-
     // Getters and setters for user ID.
 
-    public String getId() { return userId; }
+    public String getId() {
+        return userId;
+    }
 
-    public void setId(String userId) { this.userId = userId; }
+    public void setId(String userId) {
+        this.userId = userId;
+    }
 
     // Getters and setters for the first name.
 
-    public String getFirstName() { return firstName; }
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     // Getters and setters for the last name.
 
-    public String getLastName() { return lastName; }
+    public String getLastName() {
+        return lastName;
+    }
 
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     //Getter for the full name, which is first name + last name.
 
@@ -91,15 +94,13 @@ public class User {
 
     // Getters and setters for is verified.
 
-    public boolean isVerified() { return isVerified; }
+    public boolean isVerified() {
+        return isVerified;
+    }
 
-    public void setIsVerified(boolean isVerified) { this.isVerified = isVerified; }
-
-    // Getters and setters for password.
-
-    public String getPassword() { return password; }
-
-    public void setPassword(String password) { this.password = password; }
+    public void setIsVerified(boolean isVerified) {
+        this.isVerified = isVerified;
+    }
 
     //Getters and setters for email.
 
@@ -113,19 +114,29 @@ public class User {
 
     // Getters and setters for phone number.
 
-    public String getPhoneNumber() { return phoneNumber; }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     // Getters and setters for profile picture url.
 
-    public String getProfilePicUrl() { return profilePicUrl; }
+    public String getProfilePicUrl() {
+        return profilePicUrl;
+    }
 
-    public void setProfilePicUrl(String profilePicUrl) { this.profilePicUrl = profilePicUrl; }
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
+    }
 
     // Getters and setters for program.
 
-    public String getProgram() { return program; }
+    public String getProgram() {
+        return program;
+    }
 
     public void setProgram(String program) {
         this.program = program;
