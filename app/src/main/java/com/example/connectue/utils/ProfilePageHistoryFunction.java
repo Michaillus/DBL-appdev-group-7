@@ -105,4 +105,40 @@ public class ProfilePageHistoryFunction {
             }
         });
     }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public View getView() {
+        return view;
+    }
+
+    public DocumentSnapshot getDocument() {
+        return document;
+    }
+
+    public long getRole() {
+        return role;
+    }
+
+    public void setRole(long role) {
+        this.role = role;
+    }
+
+    public Button getPostHisBtn() {
+        return postHisBtn;
+    }
+
+    public void setPostHisBtn(Button postHisBtn) {
+        this.postHisBtn = postHisBtn;
+    }
+
+    public Button getReviewHisBtn() {
+        return reviewHisBtn;
+    }
+
+    public void setReviewHisBtn(Button reviewHisBtn) {
+        this.reviewHisBtn = reviewHisBtn;
+    }
 }
