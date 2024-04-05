@@ -40,6 +40,14 @@ public class ProfilePageSignoutDelete {
     private static final String LOGOUT = "Logout";
     private static final String DELTEBUTTON = "DELETE ACCOUNT";
 
+    /**
+     * The constructor of the sign out and delete account module.
+     * @param context the context where this module will run.
+     * @param activity the activity where this module will run.
+     * @param view the view where this module will run.
+     * @param db the database where this module is related to.
+     * @param user the user this module is associated to.
+     */
     public ProfilePageSignoutDelete(Context context, Activity activity, View view,
                                     FirebaseFirestore db, FirebaseUser user) {
         this.view = view;
@@ -52,6 +60,7 @@ public class ProfilePageSignoutDelete {
 
     /**
      * The portal to initialize all components in this class.
+     *  Includes log out button and delete account button.
      */
     private void initComponent() {
         logoutBtn = view.findViewById(R.id.btn_logout);
@@ -88,12 +97,15 @@ public class ProfilePageSignoutDelete {
     }
 
     /**
-     * The popup window when sign out button/delete button is clicked.
+     * The popup window when sign out button/delete button is clicked. Depends on the
+     *  different parameters this function received, it will show different alert dialog
+     *  and call different actions accordingly.
      * @param isSignout is this for signOut button or not.
      */
     private void signoutDeletePopup(boolean isSignout) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (isSignout) {
+//          create a alert dialog for log out function, and set the log out function.
             builder.setTitle("Logout");
             builder.setMessage("Do you want to sign out?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -105,13 +117,15 @@ public class ProfilePageSignoutDelete {
                 }
             });
         } else {
+//          create a delete the user account alert dialog window.
             builder.setTitle("Delete");
             builder.setMessage("ARE YOU SURE YOU WANT TO DELETE?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+//                  first delete the user record in all collections of the FireStore.
                     deleteUserContents();
-
+//                  delete the user record in the Firebase Authentication.
                     db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -119,6 +133,7 @@ public class ProfilePageSignoutDelete {
                                     user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
+//                                            after deleting all records, sign out the user and direct to the log in page.
                                             FirebaseAuth.getInstance().signOut();
                                             General.toOtherActivity(activity, LoadingActivity.class);
                                         }
@@ -135,6 +150,8 @@ public class ProfilePageSignoutDelete {
                 }
             });
         }
+
+//        do nothing for negative button.
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -151,8 +168,11 @@ public class ProfilePageSignoutDelete {
         CollectionReference reviewsRef = db.collection(General.COURSEREVIEWCOLLECTION);
         CollectionReference postsRef = db.collection(General.POSTCOLLECTION);
         CollectionReference commentsRef = db.collection(General.COMMENTCOLLECTION);
+//        delete the records in the course review collection.
         deleteUserContents(reviewsRef);
+//        delete the records in the post collection.
         deleteUserContents(postsRef);
+//        delete the records in the comment collection
         deleteUserContents(commentsRef);
     }
 
