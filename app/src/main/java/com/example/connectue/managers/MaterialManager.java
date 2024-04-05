@@ -47,7 +47,7 @@ public class MaterialManager extends InteractableManager<Material>{
                 document.getLong("likes"),
                 document.getLong("dislikes"),
                 document.getLong("comments"),
-                document.getTimestamp("timestamp").toDate(),
+                document.getTimestamp("timestamp").toDate() != null ? document.getTimestamp("timestamp").toDate() : null,
                 document.getString("parentCourseId"),
                 document.getString("docURL")
         );
@@ -67,7 +67,7 @@ public class MaterialManager extends InteractableManager<Material>{
         postData.put("publisher", material.getPublisherId());
         postData.put("text", material.getText());
         postData.put("likes", material.getLikeNumber());
-        postData.put("dislikes", material.getLikeNumber());
+        postData.put("dislikes", material.getDislikeNumber());
         postData.put("comments", material.getCommentNumber());
         postData.put("timestamp", new Timestamp(material.getDatetime()));
         postData.put("parentCourseId", material.getParentCourseId());
