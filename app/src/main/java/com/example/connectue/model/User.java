@@ -23,22 +23,49 @@ public class User {
      */
     private static final String TAG = "User model";
 
+    /**
+     * Id of a user.
+     */
     protected String userId;
 
+    /**
+     * First name of a user.
+     */
     protected String firstName;
 
+    /**
+     * Last name of a user.
+     */
     protected String lastName;
 
+    /**
+     * If user is verified
+     */
     protected boolean isVerified;
 
+    /**
+     * Email of a user
+     */
     protected String email;
 
+    /**
+     * Phone number of a user.
+     */
     protected String phoneNumber;
 
+    /**
+     * Url to profile picture of a user.
+     */
     protected String profilePicUrl;
 
+    /**
+     * Program of a user.
+     */
     protected String program;
 
+    /**
+     * Role of a user.
+     */
     protected int role;
 
     public User(String userId, String firstName, String lastName, boolean isVerified,
