@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Test class for review model.
+ */
 public class ReviewTest extends InteractableTest {
 
     Review review;
@@ -18,6 +21,9 @@ public class ReviewTest extends InteractableTest {
         interactable = review;
     }
 
+    /**
+     * Test stars getter.
+     */
     @Test
     public void getStars() {
         long result = review.getStars();
@@ -25,6 +31,9 @@ public class ReviewTest extends InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test stars setter.
+     */
     @Test
     public void setStars() {
         long expected = 1;
@@ -33,6 +42,9 @@ public class ReviewTest extends InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test parent id getter.
+     */
     @Test
     public void getParentId() {
         String result = review.getParentId();
@@ -40,6 +52,9 @@ public class ReviewTest extends InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test parent id setter.
+     */
     @Test
     public void setParentId() {
         String expected = "3674856484625444";
