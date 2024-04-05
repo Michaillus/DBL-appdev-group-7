@@ -59,6 +59,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
     }
 
     /**
+     * getter of postList
+     * @return the postList
+     */
+    public List<Post> getPostList() {
+        return postList;
+    }
+
+    /**
+     * getter of current user id.
+     * @return the current user id
+     */
+    public String getCurrentUid() {
+        return currentUid;
+    }
+
+    /**
+     * getter of fragmentManager
+     * @return the fragmentManager
+     */
+    public FragmentManager getFragmentManager() {
+        return fragmentManager;
+    }
+
+    /**
      * Automatically called method for recyclerView to communicate with the items of the recyclerView
      * @param parent   The ViewGroup into which the new View will be added after it is bound to
      *                 an adapter position.
@@ -69,9 +93,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflate layout row_post.xml
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater layoutInflater = inflateView(parent);
         RowPostsBinding binding = RowPostsBinding.inflate(layoutInflater, parent, false);
         return new MyHolder(binding);
+    }
+
+    protected LayoutInflater inflateView(ViewGroup parent) {
+        return LayoutInflater.from(parent.getContext());
     }
 
     /**
@@ -127,6 +155,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyHolder> {
             postManager = new PostManager(FirebaseFirestore.getInstance(),
                     Post.POST_COLLECTION_NAME, Post.POST_LIKE_COLLECTION_NAME,
                     Post.POST_DISLIKE_COLLECTION_NAME, Post.POST_COMMENT_COLLECTION_NAME);
+        }
+
+        /**
+         * getter of binding
+         * @return the RowPostsBinding binding
+         */
+        public RowPostsBinding getBinding() {
+            return binding;
         }
 
         /**
