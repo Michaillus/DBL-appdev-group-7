@@ -81,7 +81,7 @@ public class ProfilePageBasicInfo {
         }
     }
 
-    //get the context
+//    get the context
     public android.content.Context getContext() {return context;}
 //    get the view
     public View getView() {return view;}
