@@ -55,28 +55,28 @@ public class ProfilePagePictureOperation {
     private ImageView profileIV;
 
     /**
-     * Getter methods for the variables that are final.
+     * Getter methods for the the context this class will be called.
      */
     public Context getContext() {
         return context;
     }
 
     /**
-     * getter method.
+     * getter method for the activity.
      */
     public Activity getActivity() {
         return activity;
     }
 
     /**
-     * getter method.
+     * getter method for the fragment the class will be called.
      */
     public Fragment getFragment() {
         return fragment;
     }
 
     /**
-     * getter method.
+     * getter method for the view the class will be in.
      */
     public View getView() {
         return view;
@@ -90,77 +90,77 @@ public class ProfilePagePictureOperation {
     }
 
     /**
-     * setter method
+     * setter method for document snapshot.
      */
     public void setDocument(DocumentSnapshot document) {
         this.document = document;
     }
 
     /**
-     * getter method.
+     * getter method for profile.
      */
     public ImageView getProfileIV() {
         return profileIV;
     }
 
     /**
-     * setter method.
+     * setter method for profile.
      */
     public void setProfileIV(ImageView profileIV) {
         this.profileIV = profileIV;
     }
 
     /**
-     * getter method.
+     * getter method for database.
      */
     public FirebaseFirestore getDb() {
         return db;
     }
 
     /**
-     * getter method.
+     * getter method for user reference.
      */
     public FirebaseUser getUser() {
         return user;
     }
 
     /**
-     * getter method.
+     * getter method for the image URL.
      */
     public String getImageURL() {
         return imageURL;
     }
 
     /**
-     * setter method.
+     * setter method for the image URL.
      */
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
 
     /**
-     * getter method.
+     * getter method for the image Uri.
      */
     public Uri getImageUri() {
         return imageUri;
     }
 
     /**
-     * setter method.
+     * setter method for the image Uri.
      */
     public void setImageUri(Uri imageUri) {
         this.imageUri = imageUri;
     }
 
     /**
-     * getter method.
+     * getter method for Email that the user used.
      */
     public String getEmailStr() {
         return emailStr;
     }
 
     /**
-     * setter method.
+     * setter method for Email that the user used.
      */
     public void setEmailStr(String emailStr) {
         this.emailStr = emailStr;
