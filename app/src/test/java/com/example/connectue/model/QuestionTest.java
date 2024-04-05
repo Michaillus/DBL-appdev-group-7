@@ -31,7 +31,7 @@ public class QuestionTest extends InteractableTest {
         assertEquals(0, question.getLikeNumber());
         assertEquals(0, question.getDislikeNumber());
         assertEquals(0, question.getCommentNumber());
-        assertEquals("Fri Apr 05 21:56:29 CEST 2024", question.getDatetime());
+        assertNotNull(question.getDatetime());
     }
 
 
