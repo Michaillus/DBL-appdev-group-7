@@ -75,6 +75,11 @@ public class ReplyFragment extends Fragment{
      */
     private Boolean isLoading = false;
 
+    /**
+     * Called when the fragment is created. Initializes questionManager and userManager.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +89,20 @@ public class ReplyFragment extends Fragment{
         userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
     }
 
+    /**
+     * Inflates the layout for the fragment, initializes views, retrieves questionId from arguments,
+     * initializes RecyclerView and its adapter, loads question and user data, displays comments, and sets up
+     * functionality for uploading replies and downloading more comments on scrolling.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return The inflated view for the fragment.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -135,6 +154,11 @@ public class ReplyFragment extends Fragment{
         commentsRecyclerView.setAdapter(replyAdapter);
     }
 
+    /**
+     * Retrieves question information from the database based on the provided questionId,
+     * sets the question text, publication time, and publisher name in the UI, and adds a click
+     * listener to the back button to navigate back to the MainActivity.
+     */
     private void setQuestionInfo() {
         questionManager.downloadOne(questionId, new ItemDownloadCallback<Question>() {
             @Override
@@ -172,6 +196,12 @@ public class ReplyFragment extends Fragment{
         });
     }
 
+    /**
+     * Loads a chunk of comments associated with the current question from the database.
+     * This method downloads recent comments based on the provided questionId and adds them
+     * to the commentList. It also notifies the replyAdapter of the dataset change and sets
+     * isLoading to false upon successful download.
+     */
     public void loadComments() {
         questionManager.downloadRecentComments(questionId, repliesPerChunk,
                     new ItemDownloadCallback<List<Comment>>() {
@@ -179,6 +209,7 @@ public class ReplyFragment extends Fragment{
                 @Override
                 public void onSuccess(List<Comment> comments) {
                     commentList.addAll(comments);
+                    // Notify the adapter of the dataset change
                     replyAdapter.notifyDataSetChanged();
                     isLoading = false;
                 }
@@ -190,6 +221,9 @@ public class ReplyFragment extends Fragment{
                 });
     }
 
+    /**
+     * Initializes the functionality for creating replies.
+     */
     private void initCreateReplies() {
         sendReplyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,7 +244,11 @@ public class ReplyFragment extends Fragment{
         });
     }
 
-
+    /**
+     * Uploads a reply to Firestore.
+     *
+     * @param replyText The text of the reply to be uploaded to Firestore.
+     */
     private void uploadRepliesToFirestore(String replyText) {
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -233,6 +271,12 @@ public class ReplyFragment extends Fragment{
 
     }
 
+    /**
+     * Sets a scroll listener on the comments RecyclerView to trigger the loading of more comments
+     * when the end of the list is reached.
+     *
+     * @param commentsRecyclerView The RecyclerView containing the comments.
+     */
     private void setCommentOnScroll(RecyclerView commentsRecyclerView) {
         commentsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

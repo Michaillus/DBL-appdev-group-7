@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import java.util.Date;
 
+/**
+ * Test class for interactable model.
+ */
 public abstract class InteractableTest {
 
     protected Interactable interactable;
@@ -18,6 +21,9 @@ public abstract class InteractableTest {
     long commentNumber = 57392;
     Date dateTime = new Date();
 
+    /**
+     * Test id getter.
+     */
     @Test
     public void getId() {
         String result = interactable.getId();
@@ -25,6 +31,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test id setter.
+     */
     @Test
     public void setId() {
         String expected = "newId2954729572985";
@@ -33,6 +42,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test publisher id getter.
+     */
     @Test
     public void getPublisherId() {
         String result = interactable.getPublisherId();
@@ -40,6 +52,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test publisher id setter.
+     */
     @Test
     public void setPublisherId() {
         String expected = "2598275783579";
@@ -48,6 +63,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test text getter.
+     */
     @Test
     public void getText() {
         String result = interactable.getText();
@@ -55,6 +73,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test text setter.
+     */
     @Test
     public void setText() {
         String expected = "bye bye";
@@ -63,6 +84,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test like number getter.
+     */
     @Test
     public void getLikeNumber() {
         long result = interactable.getLikeNumber();
@@ -70,6 +94,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test like number setter.
+     */
     @Test
     public void setLikeNumber() {
         long expected = 41;
@@ -78,6 +105,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test incrementing like number.
+     */
     @Test
     public void incrementLikeNumber() {
         long expected = interactable.getLikeNumber() + 1;
@@ -86,6 +116,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test decrementing like number.
+     */
     @Test
     public void decrementLikeNumber() {
         long expected = interactable.getLikeNumber() - 1;
@@ -94,6 +127,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test dislike number getter.
+     */
     @Test
     public void getDislikeNumber() {
         long result = interactable.getDislikeNumber();
@@ -101,6 +137,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test dislike number setter.
+     */
     @Test
     public void setDislikeNumber() {
         long expected = 37;
@@ -109,6 +148,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test incrementing dislike number.
+     */
     @Test
     public void incrementDislikeNumber() {
         long expected = interactable.getDislikeNumber() + 1;
@@ -117,6 +159,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test decrementing dislike number.
+     */
     @Test
     public void decrementDislikeNumber() {
         long expected = interactable.getDislikeNumber() - 1;
@@ -125,6 +170,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test comment number getter.
+     */
     @Test
     public void getCommentNumber() {
         long result = interactable.getCommentNumber();
@@ -132,6 +180,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test comment number setter.
+     */
     @Test
     public void setCommentNumber() {
         long expected = 2957;
@@ -140,6 +191,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test incrementing comment number.
+     */
     @Test
     public void incrementCommentNumber() {
         long expected = interactable.getCommentNumber() + 1;
@@ -148,6 +202,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test decrementing comment number.
+     */
     @Test
     public void decrementCommentNumber() {
         long expected = interactable.getCommentNumber() - 1;
@@ -156,6 +213,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test date and time getter.
+     */
     @Test
     public void getDatetime() {
         Date result = interactable.getDatetime();
@@ -163,6 +223,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test date and time setter.
+     */
     @Test
     public void setDatetime() {
         Date expected = new Date();
@@ -171,6 +234,9 @@ public abstract class InteractableTest {
         assertEquals(result, expected);
     }
 
+    /**
+     * Test gives illegal argument exception when publisher id is null.
+     */
     @Test
     public void constructorPublisherIdNullExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> interactable =
@@ -178,6 +244,9 @@ public abstract class InteractableTest {
                 commentNumber, dateTime) {});
     }
 
+    /**
+     * Test gives illegal argument exception when text is null.
+     */
     @Test
     public void constructorTextNullExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> interactable =
@@ -185,6 +254,9 @@ public abstract class InteractableTest {
                         commentNumber, dateTime) {});
     }
 
+    /**
+     * Test gives illegal argument exception when like number is null.
+     */
     @Test
     public void constructorLikeNumberNullExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> interactable =
@@ -192,6 +264,9 @@ public abstract class InteractableTest {
                         commentNumber, dateTime) {});
     }
 
+    /**
+     * Test gives illegal argument exception when dislike number is null.
+     */
     @Test
     public void constructorDislikeNumberExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> interactable =
@@ -199,6 +274,9 @@ public abstract class InteractableTest {
                         commentNumber, dateTime) {});
     }
 
+    /**
+     * Test gives illegal argument exception when comment number is null.
+     */
     @Test
     public void constructorCommentNumberNullExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> interactable =

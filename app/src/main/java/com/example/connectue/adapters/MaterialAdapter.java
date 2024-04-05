@@ -23,6 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
+/**
+ * Adapter for displaying materials in a RecyclerView.
+ */
 public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MyViewHolder> {
 
     List<Material> materialList;
@@ -30,11 +33,23 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MyView
 
     private FragmentManager fragmentManager;
 
+    /**
+     * Constructor for MaterialAdapter.
+     * @param materialList List of materials to display.
+     * @param fragmentManager FragmentManager for handling fragment transactions.
+     */
     public MaterialAdapter(List<Material> materialList, FragmentManager fragmentManager) {
         this.materialList = materialList;
         this.fragmentManager = fragmentManager;
     }
 
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public MaterialAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,6 +61,12 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MyView
         return new MaterialAdapter.MyViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull MaterialAdapter.MyViewHolder holder, int position) {
         // assign values to the views we created in the course_review_row file
@@ -54,20 +75,31 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MyView
         holder.bind(material);
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     * @return The total number of items in the data set held by the adapter.
+     */
     @Override
     public int getItemCount() {
         // the recycler view just wants to know the number of items you want to display
         return materialList.size();
     }
 
+    /**
+     * ViewHolder for MaterialAdapter.
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         // grab the views from course_review_row file
-
         ImageView like, dislike;
         TextView publisherName, caption, date;
         TextView likeNumber, dislikeNumber;
         UserManager userManager;
+
+        /**
+         * Constructor for MyViewHolder.
+         * @param itemView The view associated with the ViewHolder.
+         */
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -82,6 +114,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MyView
             userManager = new UserManager(FirebaseFirestore.getInstance(), "users");
         }
 
+        /**
+         * Binds the material data to the views.
+         * @param material The material object to bind.
+         */
         public void bind(Material material) {
 
             // Set publisher name

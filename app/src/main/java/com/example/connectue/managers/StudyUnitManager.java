@@ -113,4 +113,12 @@ public class StudyUnitManager extends EntityManager<StudyUnit> {
 
         return majorData;
     }
+
+    public StudyUnit.StudyUnitType getType() {
+        return type;
+    }
+
+    public void setType(StudyUnit.StudyUnitType type) {
+        this.type = type;
+    }
 }
