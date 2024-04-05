@@ -28,9 +28,9 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class PostAdapterTest {
 
+    // Mock objects which postAdapter depends on
     @Mock
     ViewGroup mockParent;
-
     @Mock
     LayoutInflater mockLayoutInflater;
 
@@ -42,8 +42,12 @@ public class PostAdapterTest {
 
     PostAdapter postAdapter;
 
+    /**
+     * Initialize parameters to be tested with
+     */
     @Before
     public void setUp() {
+        // Create a postList with 3 mock posts
         postList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             String num = String.valueOf(i);
@@ -57,6 +61,9 @@ public class PostAdapterTest {
         postAdapter = new PostAdapter(postList, fragmentManager);
     }
 
+    /**
+     * Test the constructor of PostAdapter
+     */
     @Test
     public void constructorTest() {
         PostAdapter testPostAdapter = new PostAdapter(postList, fragmentManager);
@@ -64,12 +71,18 @@ public class PostAdapterTest {
         assertEquals(postAdapter.getFragmentManager(), testPostAdapter.getFragmentManager());
     }
 
+    /**
+     * Test the getters of PostAdapter
+     */
     @Test
     public void gettersTest() {
         assertEquals(postAdapter.getPostList(), postList);
         assertEquals(postAdapter.getFragmentManager(), fragmentManager);
     }
 
+    /**
+     * Test the onCreateViewHolder method which create connection with the post holder
+     */
     @Test
     public void onCreateViewHolder() {
 //        PostAdapter spyAdapter = Mockito.spy(postAdapter);
@@ -85,10 +98,16 @@ public class PostAdapterTest {
 //        assertNotNull(holder);
     }
 
+    /**
+     * Test the onBindViewHolder which creates binding with the post holder.
+     */
     @Test
     public void onBindViewHolder() {
     }
 
+    /**
+     * test the getItemCount method which return the number of elements in the postList.
+     */
     @Test
     public void getItemCount() {
         assertEquals(postAdapter.getItemCount(), 3);
