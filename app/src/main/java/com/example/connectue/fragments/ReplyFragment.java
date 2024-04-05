@@ -1,5 +1,7 @@
 package com.example.connectue.fragments;
 
+import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,52 +17,31 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.connectue.R;
 import com.example.connectue.activities.MainActivity;
 import com.example.connectue.adapters.ReplyAdapter;
-import com.example.connectue.activities.StudyUnitViewActivity;
-import com.example.connectue.adapters.QuestionAdapter;
 import com.example.connectue.databinding.FragmentQuestionsBinding;
-import com.example.connectue.adapters.CommentAdapter;
 import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.managers.QuestionManager;
-import com.example.connectue.managers.ReplyManager;
 import com.example.connectue.managers.UserManager;
+import com.example.connectue.model.Comment;
 import com.example.connectue.model.Question;
-import com.example.connectue.model.Reply;
 import com.example.connectue.model.User;
 import com.example.connectue.utils.TimeUtils;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A fragment for the question page with the question showed and add a reply button.
  */
 public class ReplyFragment extends Fragment{
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private TextView publisherName;
     private TextView publisherTime;
@@ -70,49 +51,29 @@ public class ReplyFragment extends Fragment{
     private ImageButton backBtn;
     private ReplyAdapter replyAdapter;
 
-    private RecyclerView repliesRecyclerView;
-    private CommentAdapter commentAdapter;
-    private List<Reply> replyList;
-    private List<Question> questionList;
+    private RecyclerView commentsRecyclerView;
+    private List<Comment> commentList;
 
-
-    private FirebaseFirestore db;
-    //DocumentReference postRef;
     private Question currentQuestion;
 
     private String questionId;
-    private String replyId;
 
-    private int repliesPerChunk = 50;
-    private DocumentReference questionRef;
-    private CollectionReference replyRef;
-    private String userId;
+    private int repliesPerChunk = 10;
 
     private QuestionManager questionManager;
-    private ReplyManager replyManager;
     private UserManager userManager;
 
-    private FragmentManager fragmentManager;
     /**
      * Class tag for logs.
      */
     private static final String TAG = "ReplyFragment";
+
     private FragmentQuestionsBinding binding;
 
     /**
-     * Adapter that is responsible for outputting posts to UI.
+     * Indicates if posts are currently loading from database.
      */
-    private QuestionAdapter questionAdapter;
-
-    public static QuestionsFragment newInstance(String param1, String param2) {
-
-        QuestionsFragment fragment = new QuestionsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private Boolean isLoading = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,26 +92,28 @@ public class ReplyFragment extends Fragment{
         // Setup views
         initView(view);
 
-        // Get current postId
+        // Get current questionId
         Bundle bundle = getArguments();
         assert bundle != null;
         questionId = bundle.getString("questionId");
 
-        //questionList = new ArrayList<>();
-        //questionAdapter = new QuestionAdapter(getContext(), questionList);
-        replyList = new ArrayList<>();
-        replyAdapter = new ReplyAdapter(getContext(), replyList);
-        db = FirebaseFirestore.getInstance();
-        replyRef = FirebaseFirestore.getInstance().collection("questions-replies");
+        commentList = new ArrayList<>();
+        replyAdapter = new ReplyAdapter(getContext(), commentList);
 
         // Initialize comments RecyclerView
-        initRepliesRecyclerView(view);
+        initRecyclerView(view);
 
-        // Load contents from Firestore
-        loadRepliesFromFirestore();
+        // Load question and user data from database, display in to UI.
+        setQuestionInfo();
+
+        // Load and display first chunk of comments
+        loadComments();
 
         // Upload comment function
         initCreateReplies();
+
+        // Sets on scroll listener to download more comments.
+        setCommentOnScroll(commentsRecyclerView);
 
         return view;
     }
@@ -165,13 +128,14 @@ public class ReplyFragment extends Fragment{
 
     }
 
-    private void initRepliesRecyclerView(View view) {
-        repliesRecyclerView = view.findViewById(R.id.replyRecyclerView);
-        repliesRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        repliesRecyclerView.setAdapter(replyAdapter);
+    private void initRecyclerView(View view) {
+        commentsRecyclerView = view.findViewById(R.id.replyRecyclerView);
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        commentsRecyclerView.setHasFixedSize(false);
+        commentsRecyclerView.setAdapter(replyAdapter);
     }
 
-    private void loadRepliesFromFirestore() {
+    private void setQuestionInfo() {
         questionManager.downloadOne(questionId, new ItemDownloadCallback<Question>() {
             @Override
             public void onSuccess(Question question) {
@@ -197,7 +161,6 @@ public class ReplyFragment extends Fragment{
                 Log.e(TAG, "Error getting post", e);
             }
         });
-        loadReplies(questionId);
 
         // Back to questionFragment
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -209,17 +172,15 @@ public class ReplyFragment extends Fragment{
         });
     }
 
-    public void loadReplies(String questionId) {
-        Log.e("test", "test");
-        Log.d(TAG, "loadReplies: " + questionId);
-        questionManager.downloadRecentReplies(questionId, repliesPerChunk,
-                    new ItemDownloadCallback<List<Reply>>() {
+    public void loadComments() {
+        questionManager.downloadRecentComments(questionId, repliesPerChunk,
+                    new ItemDownloadCallback<List<Comment>>() {
 
                 @Override
-                public void onSuccess(List<Reply> reply) {
-                    Log.e("test", String.valueOf(reply.size()));
-                    replyList.addAll(reply);
+                public void onSuccess(List<Comment> comments) {
+                    commentList.addAll(comments);
                     replyAdapter.notifyDataSetChanged();
+                    isLoading = false;
                 }
 
                 @Override
@@ -251,47 +212,49 @@ public class ReplyFragment extends Fragment{
 
 
     private void uploadRepliesToFirestore(String replyText) {
-        questionRef = db.collection("questions").document(questionId);
-        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Date date = new Date();
-        Reply reply = new Reply(replyId, userId, replyText, questionId, new Date());
-        Timestamp timestamp = new Timestamp(date);
-        Map<String, Object> replyData = new HashMap<>();
-        replyData.put("text", replyText);
-        replyData.put("parentId", questionId);
-        replyData.put("timestamp", timestamp);
-        replyData.put("userId", userId);
-        replyRef.add(replyData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // Update the UI to reflect the new reply
-                        userManager.downloadOne(userId, new ItemDownloadCallback<User>() {
-                            @Override
-                            public void onSuccess(User user) {
 
-                                replyList.add(0, reply);
-                                // Notify the RecyclerView adapter about the dataset change
-                                replyAdapter.notifyItemInserted(0);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Comment comment = new Comment(userId, replyText, questionId);
+        questionManager.uploadComment(comment, currentQuestion, new ItemUploadCallback() {
+            @Override
+            public void onSuccess() {
+                // Update the UI to reflect the new reply
 
-                                // Update comment number of current question.
-                                currentQuestion.incrementCommentNumber();
-                                questionRef.update("comments", currentQuestion.getCommentNumber());
-                            }
+                commentList.add(0, comment);
+                // Notify the RecyclerView adapter about the dataset change
+                replyAdapter.notifyItemInserted(0);
+            }
 
-                            @Override
-                            public void onFailure(Exception e) {
-                                Log.e(TAG, "Error getting user document", e);
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error adding question", e);
-                        // Handle the error
-                    }
-                });
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(TAG, "Error adding question", e);
+            }
+        });
+
+    }
+
+    private void setCommentOnScroll(RecyclerView commentsRecyclerView) {
+        commentsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) commentsRecyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                // Check if end of the list is reached
+                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= PAGE_SIZE) {
+                    Log.e(TAG, String.format("%d %d %d", visibleItemCount,
+                            firstVisibleItemPosition, totalItemCount));
+                    // Assuming PAGE_SIZE is the number of items to load per page
+                    // Load more items
+                    isLoading = true;
+                    loadComments();
+                }
+            }
+        });
     }
 }

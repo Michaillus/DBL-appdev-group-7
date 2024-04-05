@@ -1,7 +1,11 @@
 package com.example.connectue.managers;
 
+import android.util.Log;
+
 import com.example.connectue.interfaces.ItemDownloadCallback;
+import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Comment;
+import com.example.connectue.model.Interactable;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -12,6 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 public class CommentManager extends EntityManager<Comment> {
+
+    /**
+     * Class tag for logs.
+     */
+    private static final String TAG = "CommentManager";
 
     /**
      * Constructor for comment manager.

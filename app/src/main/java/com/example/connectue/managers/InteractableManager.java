@@ -7,7 +7,6 @@ import com.example.connectue.interfaces.ItemLikeCallback;
 import com.example.connectue.interfaces.ItemUploadCallback;
 import com.example.connectue.model.Comment;
 import com.example.connectue.model.Interactable;
-import com.example.connectue.model.Reply;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -16,10 +15,10 @@ import java.util.List;
  * Database requests manager for model that is a subclass of interactable. Besides database requests
  * connected to the collection of the model documents, it supports database requests for liking,
  * disliking and commenting of objects of the model.
- * @param <T> Model class corresponding to the documents of the target collection, like, dislike
+ * @param <I> Model class corresponding to the documents of the target collection, like, dislike
  *           and comment collections.
  */
-public abstract class InteractableManager<T extends Interactable> extends EntityManager<T> {
+public abstract class InteractableManager<I extends Interactable> extends EntityManager<I> {
 
     /**
      * Like manager that supports database requests regarding liking an interactable
@@ -38,9 +37,6 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * of model {@code T}.
      */
     protected CommentManager commentManager;
-
-
-    protected ReplyManager replyManager;
 
     /**
      * Constructor for manager of interactables.
@@ -61,11 +57,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         super(db, collectionName);
         likeManager = new LikeManager(db, likeCollectionName);
         dislikeManager = new LikeManager(db, dislikeCollectionName);
-        if (commentCollectionName.equals("post-comments")) {
-            commentManager = new CommentManager(db, commentCollectionName);
-        } else {
-            replyManager = new ReplyManager(db, commentCollectionName);
-        }
+        commentManager = new CommentManager(db, commentCollectionName);
         tag = "InteractableManager class: ";
     }
 
@@ -76,7 +68,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param interactable Interactable to like or unlike.
      * @param userId Id of the user who likes or unlikes the interactable.
      */
-    public void likeOrUnlike(T interactable, String userId, ItemLikeCallback callback) {
+    public void likeOrUnlike(I interactable, String userId, ItemLikeCallback callback) {
         likeManager.likeOrUnlike(interactable.getId(), userId, new ItemLikeCallback() {
             @Override
             public void onSuccess(Boolean isLiked) {
@@ -117,7 +109,7 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
      * @param interactable Interactable to dislike or undislike.
      * @param userId Id of the user who likes or unlikes the interactable.
      */
-    public void dislikeOrUndislike(T interactable, String userId, ItemLikeCallback callback) {
+    public void dislikeOrUndislike(I interactable, String userId, ItemLikeCallback callback) {
         dislikeManager.likeOrUnlike(interactable.getId(), userId, new ItemLikeCallback() {
             @Override
             public void onSuccess(Boolean isDisliked) {
@@ -166,18 +158,25 @@ public abstract class InteractableManager<T extends Interactable> extends Entity
         commentManager.downloadRecent(parentId, amount, callback);
     }
 
-
-    public void downloadRecentReplies(String parentId, int amount,
-                                      ItemDownloadCallback<List<Reply>> callback) {
-        replyManager.downloadRecent(parentId, amount, callback);
-    }
-
     /**
      * Uploads a comment for the interactable to the database.
      * @param comment Instance of a comment to publish.
      * @param callback Callback that is called when the upload process is finished.
      */
-    public void uploadComment(Comment comment, ItemUploadCallback callback) {
-        commentManager.upload(comment, callback);
+    public void uploadComment(Comment comment, I interactable, ItemUploadCallback callback) {
+        commentManager.upload(comment, new ItemUploadCallback() {
+            @Override
+            public void onSuccess() {
+                interactable.incrementCommentNumber();
+                update(interactable.getId(), Interactable.COMMENT_NUMBER_ATTRIBUTE,
+                        interactable.getCommentNumber(), callback);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e(tag, "Error while uploading a comment.");
+                callback.onFailure(e);
+            }
+        });
     }
 }

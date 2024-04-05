@@ -103,7 +103,6 @@ public class ReviewsFragment extends Fragment {
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    Log.e(TAG, "Does this work?");
                     StudyUnitViewActivity studyUnitViewActivity = (StudyUnitViewActivity) getActivity();
                     if (studyUnitViewActivity != null) {
                         studyUnitViewActivity.reload();
@@ -156,8 +155,8 @@ public class ReviewsFragment extends Fragment {
 
         reviewManager.downloadRecent(studyUnit.getId(), reviewsPerChunk, new ItemDownloadCallback<List<Review>>() {
             @Override
-            public void onSuccess(List<Review> data) {
-                reviewList.addAll(data);
+            public void onSuccess(List<Review> reviews) {
+                reviewList.addAll(reviews);
                 reviewAdapter.notifyDataSetChanged();
                 isLoading = false;
             }

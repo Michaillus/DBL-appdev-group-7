@@ -66,7 +66,7 @@ public class Comment {
      * @param parentId Id of parent interactable.
      */
     public Comment(String publisherId, String text, String parentId) {
-        this(null, publisherId, text, parentId, new Date());
+        this("", publisherId, text, parentId, new Date());
     }
 
     /**

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.managers.UserManager;
-import com.example.connectue.model.Reply;
+import com.example.connectue.model.Comment;
 import com.example.connectue.model.User;
 import com.example.connectue.utils.TimeUtils;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,12 +25,12 @@ import java.util.List;
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyHolder>{
 
     private Context context;
-    List<Reply> replyList;
+    List<Comment> commentList;
     private FirebaseFirestore db;
 
-    public ReplyAdapter(Context context, List<Reply> replyList) {
+    public ReplyAdapter(Context context, List<Comment> commentList) {
         this.context = context;
-        this.replyList = replyList;
+        this.commentList = commentList;
     }
 
     @NonNull
@@ -45,13 +43,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyHolder>
 
     @Override
     public void onBindViewHolder(@NonNull ReplyHolder holder, int position) {
-        Reply reply = replyList.get(position);
-        holder.bind(reply);
+        Comment comment = commentList.get(position);
+        holder.bind(comment);
     }
 
     @Override
     public int getItemCount() {
-        return replyList.size();
+        return commentList.size();
     }
 
     //view holder class
@@ -77,8 +75,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyHolder>
                     User.USER_COLLECTION_NAME);
         }
 
-        public void bind(Reply reply) {
-            userManager.downloadOne(reply.getPublisherId(), new ItemDownloadCallback<User>() {
+        public void bind(Comment comment) {
+            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override
                 public void onSuccess(User data) {
                     // Load user name
@@ -86,14 +84,14 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyHolder>
                 }
             });
 
-            replyTime.setText(TimeUtils.getTimeAgo(reply.getTimestamp()));
-            replyText.setText(reply.getText());
+            replyTime.setText(TimeUtils.getTimeAgo(comment.getDatetime()));
+            replyText.setText(comment.getText());
 
-            userManager.downloadOne(reply.getPublisherId(), new ItemDownloadCallback<User>() {
+            userManager.downloadOne(comment.getPublisherId(), new ItemDownloadCallback<User>() {
                 @Override
-                public void onSuccess(User data) {
+                public void onSuccess(User user) {
                     // Set comment user name
-                    replierName.setText(data.getFullName());
+                    replierName.setText(user.getFullName());
                 }
             });
 
