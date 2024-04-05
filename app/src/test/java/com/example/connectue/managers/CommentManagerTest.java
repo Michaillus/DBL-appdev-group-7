@@ -1,91 +1,89 @@
 package com.example.connectue.managers;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 import com.example.connectue.interfaces.ItemDownloadCallback;
 import com.example.connectue.model.Comment;
-import com.example.connectue.model.Post;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommentManagerTest {
-
-    // Mock objects that the CommentManager depends on
     @Mock
-    CommentManager commentManager;
-    @Mock
-    DocumentSnapshot mockDocument;
+    private FirebaseFirestore db;
 
-    /**
-     * Setup mock objects before the tests.
-     */
+    @InjectMocks
+    private CommentManager commentManager;
+
     @Before
     public void setUp() {
-        FirebaseFirestore db = Mockito.mock(FirebaseFirestore.class);
-        commentManager = new CommentManager(db, "comment");
+        commentManager = new CommentManager(db, "comments");
     }
 
-    /**
-     * Test for downloadRecent comments method. Check if the query is as expected.
-     */
     @Test
-    public void downloadRecent() {
-//        CollectionReference collection = Mockito.mock(CollectionReference.class);
-//        Query query = Mockito.mock(Query.class);
-//        when(collection.whereEqualTo(Comment.PARENT_ID, "")).thenReturn(query);
-//
-//        ItemDownloadCallback<List<Comment>> mockCallback = Mockito.mock(ItemDownloadCallback.class);
-//
-//        commentManager.downloadRecent("", 0, mockCallback);
-//        Mockito.verify(mockCallback).onFailure(any());
+    public void testDeserialize() {
+        // Define a mock DocumentSnapshot
+        DocumentSnapshot documentSnapshotMock = mock(DocumentSnapshot.class);
 
+        // Define test data for the mock DocumentSnapshot
+        String commentId = "comment123";
+        String publisherId = "user123";
+        String content = "Sample comment";
+        String parentId = "post123";
+        Date timestamp = new Date();
+
+        // Stub the behavior of the mock DocumentSnapshot to return test data when its methods are called
+        when(documentSnapshotMock.getId()).thenReturn(commentId);
+        when(documentSnapshotMock.getString(Comment.PUBLISHER_ID)).thenReturn(publisherId);
+        when(documentSnapshotMock.getString(Comment.CONTENT)).thenReturn(content);
+        when(documentSnapshotMock.getString(Comment.PARENT_ID)).thenReturn(parentId);
+        when(documentSnapshotMock.getTimestamp(Comment.TIMESTAMP)).thenReturn(new Timestamp(timestamp));
+
+        // Call the deserialize method
+        Comment comment = commentManager.deserialize(documentSnapshotMock);
+
+        // Verify that the Comment object was created with the correct attributes
+        assertEquals(comment.getCommentId(), commentId);
+        assertEquals(comment.getPublisherId(), publisherId);
+        assertEquals(comment.getText(), content);
+        assertEquals(comment.getParentId(), parentId);
+        assertEquals(comment.getDatetime(), timestamp);
     }
 
-    /**
-     * Test for deserialize method which convert database document into a comment.
-     */
     @Test
-    public void deserialize() {
-        Date date = new Date();
+    public void testSerialize() {
+        // Define test data for a Comment object
+        String commentId = "comment123";
+        String publisherId = "user123";
+        String content = "Sample comment";
+        String parentId = "post123";
+        Date timestamp = new Date();
 
-        // Mock timestamp
-        Timestamp timestamp = Mockito.mock(Timestamp.class);
+        Comment comment = new Comment(commentId, publisherId, content, parentId, timestamp);
 
-        // Mock document get methods so that it doesn't return null
-        when(mockDocument.getId()).thenReturn("");
-        when(mockDocument.getString("userId")).thenReturn("");
-        when(mockDocument.getString("text")).thenReturn("");
-        when(mockDocument.getString("parentId")).thenReturn("");
-        when(mockDocument.getTimestamp("timestamp")).thenReturn(timestamp);
-        when(timestamp.toDate()).thenReturn(date);
-        // Assert the new post return is not null.
-        assertNotNull(commentManager.deserialize(mockDocument));
-    }
+        // Call the serialize method
+        Map<String, Object> serializedData = commentManager.serialize(comment);
 
-    /**
-     * Test the serialize method which convert a comment to a map for uploading
-     * to the comment collection.
-     */
-    @Test
-    public void serialize() {
-        Comment comment = new Comment("commentId", "test",
-                "text", "", new Date());
-        assertNotNull(commentManager.serialize(comment));
+        // Verify that the serialized data contains the correct attributes
+        assertEquals(serializedData.get(Comment.PUBLISHER_ID), publisherId);
+        assertEquals(serializedData.get(Comment.CONTENT), content);
+        assertEquals(serializedData.get(Comment.PARENT_ID), parentId);
+        assertEquals(((Timestamp) serializedData.get(Comment.TIMESTAMP)).toDate(), timestamp);
     }
 }
