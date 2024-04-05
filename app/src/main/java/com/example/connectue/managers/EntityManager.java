@@ -140,14 +140,6 @@ public abstract class EntityManager<T> {
     }
 
     /**
-     * Resets the last retrieved post to the initial state. Recent post retrieval will start from
-     * the beginning.
-     */
-    public void resetLastRetrieved() {
-        lastRetrieved = null;
-    }
-
-    /**
      * Converts list of FireBase document snapshot to a list of corresponding objects
      * of model {@code T}.
      * @param snapshot list of FireBase document snapshots.
