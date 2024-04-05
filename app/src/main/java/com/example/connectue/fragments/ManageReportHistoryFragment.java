@@ -69,6 +69,9 @@ public class ManageReportHistoryFragment extends Fragment {
     //The data manager for administrator workbench.
     AdminReportedItemDataManager adminReportedItemDataManager;
 
+    /**
+     * Constructor.
+     */
     public ManageReportHistoryFragment() {
         // Required empty public constructor
         reports = new ArrayList<>();
@@ -91,6 +94,11 @@ public class ManageReportHistoryFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * This is the auto-generated functions.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +108,18 @@ public class ManageReportHistoryFragment extends Fragment {
         }
     }
 
+    /**
+     * The auto-generated function, where all components will be initialized.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,8 +140,9 @@ public class ManageReportHistoryFragment extends Fragment {
     }
 
     /**
-     * I
-     * @param view
+     * Initialize all components on this fragment, including all buttons, text fields,
+     *  and picture views.
+     * @param view the view where all components resides.
      */
     private void initComponents(View view) {
         db = FirebaseFirestore.getInstance();
@@ -141,6 +162,10 @@ public class ManageReportHistoryFragment extends Fragment {
         setDefaultContentIV();
     }
 
+    /**
+     * Initialize the recycler view for to do list.
+     * @param view the view where recycler view resides.
+     */
     private void initRecyclerReview(View view) {
         recyclerView = view.findViewById(R.id.admin_reported_RV);
         recyclerView.setHasFixedSize(true);
@@ -155,10 +180,22 @@ public class ManageReportHistoryFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Once the data in the list of the adapter changed, update contents in the
+     *  adapter.
+     */
     public void updateDataInAdapter(){
         mAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Once the clicked data has been fetched from the FireStore, this method will receive
+     *  changes and update related fields.
+     * @param currentDocument the DocumentSnapshot storing the information of the clicked item,
+     * @param imageURL the image URL of the reported contents.
+     * @param textContent the text content of the reported contents.
+     * @param count the number of reported times.
+     */
     public void updateWorkbench(DocumentSnapshot currentDocument
             , String imageURL, String textContent, String count){
         this.currentDocument = currentDocument;
@@ -170,11 +207,18 @@ public class ManageReportHistoryFragment extends Fragment {
         setDeleteKeepButton();
     }
 
+    /**
+     * set the image view to the default picture, and disable the click listener.
+     */
     private void setDefaultContentIV() {
         contentIV.setImageResource(R.drawable.baseline_person_24);
         contentIV.setOnClickListener(null);
     }
 
+    /**
+     * Fill in the picture into the image view using its URL.
+     * @param url the URL link of the picture.
+     */
     private void setContentIV(String url) {
         Glide.with(getContext()).load(url).listener(new RequestListener<Drawable>() {
             @Override
@@ -192,6 +236,10 @@ public class ManageReportHistoryFragment extends Fragment {
         }).into(contentIV);
     }
 
+    /**
+     * Add click listener to the keep and delete button. Activate the function of them.
+     *  But if the currentDocument is null or does not exist, activation will be skipped.
+     */
     private void setDeleteKeepButton() {
         if (currentDocument == null || !currentDocument.exists()) {
             disableDeleteKeepButton();
@@ -211,11 +259,17 @@ public class ManageReportHistoryFragment extends Fragment {
         });
     }
 
+    /**
+     * Deactivate the delete and keep buttons.
+     */
     private void disableDeleteKeepButton() {
         deleteBtn.setOnClickListener(null);
         keepBtn.setOnClickListener(null);
     }
 
+    /**
+     * reset all the variables.
+     */
     public void resetData() {
         currentDocument = null;
         isImageFetchable = false;
@@ -226,6 +280,9 @@ public class ManageReportHistoryFragment extends Fragment {
         disableDeleteKeepButton();
     }
 
+    /**
+     * Initialize the post button.
+     */
     private void initPostButton() {
         postChannelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,6 +291,10 @@ public class ManageReportHistoryFragment extends Fragment {
             }
         });
     }
+
+    /**
+     * Initialize the comment button.
+     */
     private void initCommentButton() {
         commentChannelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +303,10 @@ public class ManageReportHistoryFragment extends Fragment {
             }
         });
     }
+
+    /**
+     * Initialize the course review button.
+     */
     private void initCourseReviewButton() {
         courseReviewChannelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,6 +316,10 @@ public class ManageReportHistoryFragment extends Fragment {
         });
     }
 
+    /**
+     * Switch to other types of reported contents.
+     * @param channel the channel where the reported contents will be in.
+     */
     private void switchChannel(String channel) {
         currentChannel = channel;
         adminReportedItemDataManager.setCurrentChannel(currentChannel);
