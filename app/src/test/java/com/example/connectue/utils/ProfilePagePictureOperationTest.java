@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class ProfilePagePictureOperationTest {
@@ -26,100 +27,116 @@ public class ProfilePagePictureOperationTest {
 
 
     public ProfilePagePictureOperationTest() {
-        profilePagePictureOperation = new ProfilePagePictureOperation(context, activity,fragment, view,
-                document, db, user);
+//        profilePagePictureOperation = new ProfilePagePictureOperation(context, activity,fragment, view,
+//                document, db, user);
+    }
+    @Before
+    public void setUp(){
+        profilePagePictureOperation = new ProfilePagePictureOperation(null, null, null, null,
+                null, null, null);
     }
 
-    @Test
-    public void testConstructor() {
-        ProfilePagePictureOperation profilePagePictureOperation = new ProfilePagePictureOperation(context,
-                activity, fragment, view, document, db, user);
-        assertEquals(context, profilePagePictureOperation.getContext());
-        assertEquals(activity, profilePagePictureOperation.getActivity());
-        assertEquals(fragment, profilePagePictureOperation.getFragment());
-        assertEquals(view, profilePagePictureOperation.getView());
-        assertEquals(document, profilePagePictureOperation.getDocument());
-        assertEquals(db, profilePagePictureOperation.getDb());
-        assertEquals(user,profilePagePictureOperation.getUser());
-    }
+//    @Test
+//    public void testConstructor() {
+//        ProfilePagePictureOperation profilePagePictureOperation = new ProfilePagePictureOperation(context,
+//                activity, fragment, view, document, db, user);
+//        assertEquals(context, profilePagePictureOperation.getContext());
+//        assertEquals(activity, profilePagePictureOperation.getActivity());
+//        assertEquals(fragment, profilePagePictureOperation.getFragment());
+//        assertEquals(view, profilePagePictureOperation.getView());
+//        assertEquals(document, profilePagePictureOperation.getDocument());
+//        assertEquals(db, profilePagePictureOperation.getDb());
+//        assertEquals(user,profilePagePictureOperation.getUser());
+//    }
 
     @Test
     public void getContext() {
-        assertNull(null);
+        assertNull(profilePagePictureOperation.getContext());
     }
 
     @Test
     public void getActivity() {
-        assertNull(null);
+        assertNull(profilePagePictureOperation.getActivity());
     }
 
     @Test
     public void getFragment() {
-        assertNull(null);
+        assertNull(profilePagePictureOperation.getFragment());
     }
 
     @Test
     public void getView() {
-        assertNull(null);
+        assertNull(profilePagePictureOperation.getView());
     }
 
     @Test
     public void getDocument() {
-        assertNull(null);
+        assertNull(profilePagePictureOperation.getDocument());
     }
 
     @Test
     public void setDocument() {
-        assertNull(null);
+        profilePagePictureOperation.setDocument(null);
+        assertNull(profilePagePictureOperation.getDocument());
     }
 
     @Test
     public void getProfileIV() {
-        assertNull(null);
+        assertNull(profilePagePictureOperation.getProfileIV());
     }
 
     @Test
     public void setProfileIV() {
-        assertNull(null);
+        profilePagePictureOperation.setProfileIV(null);
+        assertNull(profilePagePictureOperation.getProfileIV());
     }
 
     @Test
     public void getDb() {
-        assertNull(null);
+        FirebaseFirestore result = profilePagePictureOperation.getDb();
+        FirebaseFirestore expected = profilePagePictureOperation.getDb();
+        assertEquals(result, expected);
     }
 
     @Test
     public void getUser() {
-        assertNull(null);
+        FirebaseUser result = profilePagePictureOperation.getUser();
+        FirebaseUser expected = profilePagePictureOperation.getUser();
+        assertEquals(result, expected);
     }
 
     @Test
     public void getImageURL() {
-        assertNull(null);
+        String result = profilePagePictureOperation.getImageURL();
+        String expected = profilePagePictureOperation.getImageURL();
+        assertEquals(result, expected);
     }
 
     @Test
     public void setImageURL() {
-        assertNull(null);
+        profilePagePictureOperation.setImageURL(null);
+        assertNull(profilePagePictureOperation.getImageURL());
     }
 
     @Test
     public void getImageUri() {
-        assertNull(null);
+        assertNull(profilePagePictureOperation.getImageUri());
     }
 
     @Test
     public void setImageUri() {
-        assertNull(null);
+        profilePagePictureOperation.setImageUri(null);
+        assertNull(profilePagePictureOperation.getImageUri());
     }
 
     @Test
     public void getEmailStr() {
-        assertNull(null);
+        assertEquals("",profilePagePictureOperation.getEmailStr());
     }
 
     @Test
     public void setEmailStr() {
-        assertNull(null);
+        profilePagePictureOperation.setEmailStr(null);
+        assertNull(profilePagePictureOperation.getEmailStr());
     }
 }

@@ -202,8 +202,10 @@ public class ProfilePagePictureOperation {
      * Parse the email address and existing image URL address.
      */
     private void parseDocument() {
-        emailStr = document.getString(General.EMAIL) == null ? "": document.getString(General.EMAIL);
-        imageURL = document.getString(General.PROFILEPICTURE) == null ? "": document.getString(General.PROFILEPICTURE);
+        if (document != null) {
+            emailStr = document.getString(General.EMAIL) == null ? "": document.getString(General.EMAIL);
+            imageURL = document.getString(General.PROFILEPICTURE) == null ? "": document.getString(General.PROFILEPICTURE);
+        }
     }
 
     /**
