@@ -44,6 +44,10 @@ import com.example.connectue.R;
 import com.example.connectue.activities.AdminActivity;
 import com.example.connectue.activities.LoadingActivity;
 import com.example.connectue.activities.PostHistoryActivity;
+import com.example.connectue.utils.ProfilePageBasicInfo;
+import com.example.connectue.utils.ProfilePageHistoryFunction;
+import com.example.connectue.utils.ProfilePagePictureOperation;
+import com.example.connectue.utils.ProfilePageSignoutDelete;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -80,48 +84,21 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private static final String TAG = "Profile";
     private static final String TAG_Profile = "ProfilePic";
-    private static final String EDITON = "Save";
-    private static final String EDITOFF = "Edit";
-    private static final String LOGOUT = "Logout";
-    private static final int REQUEST_CAMERA = 100;
-    private static final int REQUEST_STORAGE = 200;
-
-    private static final int IMAGE_PICK_CAMERA_CODE = 300;
-    private static final int IMAGE_PICK_GALLERY_CODE = 400;
-
     private FirebaseUser user;
     private FirebaseFirestore db;
     private DocumentSnapshot document;
-    private String firstNameStr = "";
-    private String lastNameStr = "";
-    private String emailStr = "";
-    private String phoneStr = "";
-    private String spinnerStr = "";
-    private String spinnerStr2 = "";
-    private String imageURL = "";
-    private Uri imageUri = null;
-    private boolean isEditing = false;
-    private boolean isAdmin = false;
+    // to store the role of the user such that profile page can display different contents based on different user roles.
     private long role = 2;
-    Button editBtn;
-    Button logoutBtn;
-    Button deleteBtn;
-    Button postHisBtn;
-    Button reviewHisBtn;
     Button adminBtn;
-    EditText firstName_fld;
-    EditText lastName_fld;
-    TextView majorTextView;
-    EditText email_fld;
-    EditText phone_fld;
-    ImageView profileIV;
-    Spinner majorSpinner;
-    Spinner majorSpinner2;
-
+    // user information display and interaction module.
+    private ProfilePageBasicInfo basicInfo;
+    // user sign out and delete account module.
+    private ProfilePageSignoutDelete signoutDeleteModule;
+    // user post history and course review function module.
+    private ProfilePageHistoryFunction profilePageHistoryFunction;
+    // user profile picture and the interaction on the picture module.
+    private ProfilePagePictureOperation profilePagePictureOperation;
     public ProfileFragment() {
-        // Required empty public constructor
-        isEditing = false;
-        isAdmin = false;
     }
 
     /**
@@ -151,20 +128,37 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Initialization all components on the profile page. It will first fetch the
+     *  data of the user, and then fill in each field, and display proper components
+     *  based on the user data.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view, a view with buttons and profile pictures on this page.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        Log.i(TAG, "start executing crete view");
-        Log.i(TAG, "before: " + firstNameStr);
         initData(view);
         return view;
     }
 
     /**
      * Fetch the user data from the Firebase Firestore, and then based on the data to initialize
-     *  all components on this page.
+     *  all components on this page. To initialize the user information related components, the
+     *  program crete an instance of BasicInfo; to initialize the signout and delete account button,
+     *  the program create an instance of SignoutDeleteModule; to initialize the post history and
+     *  course review history button, the instance of ProfilePageHistoryFunction will be created;
+     *  to initialize the profile picture and add click listener on it, the instance of
+     *  ProfilePagePictureOperation will be created.
      * @param view to fetch components on this page.
      */
     private void initData(View view) {
@@ -183,6 +177,10 @@ public class ProfileFragment extends Fragment {
                         Log.i(TAG, document.toString());
                         parseDocument();
                         if (getContext() != null) {
+                            basicInfo = new ProfilePageBasicInfo(getContext(), view, document, getResources(), db, user);
+                            signoutDeleteModule = new ProfilePageSignoutDelete(getContext(), getActivity(), view, db, user);
+                            profilePageHistoryFunction = new ProfilePageHistoryFunction(getContext(), getActivity(), view, document);
+                            profilePagePictureOperation = new ProfilePagePictureOperation(getContext(), getActivity(), ProfileFragment.this, view, document, db,user);
                             initComponents(view);
                         }
                     } else {
@@ -193,389 +191,29 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-        Log.i(TAG, "end executing onCreate, first name: " + firstNameStr);
     }
 
     /**
-     * The main function to initialize all function on this page.
+     * The portal to initialize all components and functions on the profile page, except user infomation
+     *  module, history module, sign out and delete account module, and the profile picture operation
+     *  module.
      * @param view to fetch components on this page.
      */
     private void initComponents(View view) {
-        firstName_fld = view.findViewById(R.id.text_firstName);
-        lastName_fld = view.findViewById(R.id.text_lastName);
-        email_fld = view.findViewById(R.id.text_email);
-        phone_fld = view.findViewById(R.id.text_phone);
-
-        editBtn= view.findViewById(R.id.btn_edit);
-        logoutBtn = view.findViewById(R.id.btn_logout);
-        deleteBtn = view.findViewById(R.id.btn_deleteAccount);
-        postHisBtn = view.findViewById(R.id.btn_postHistory);
-        reviewHisBtn  = view.findViewById(R.id.btn_reviewHistory);
         adminBtn  = view.findViewById(R.id.btn_admmin);
-        profileIV = view.findViewById(R.id.profilePic);
-        majorSpinner = view.findViewById(R.id.majorSpinner);
-        majorSpinner2 = view.findViewById(R.id.majorSpinner2);
-        majorTextView = view.findViewById(R.id.major_title);
-
-        majorSpinner.setEnabled(false);
-        majorSpinner2.setEnabled(false);
-
-        if (General.isGuest(role)) {
-            postHisBtn.setVisibility(View.GONE);
-            reviewHisBtn.setVisibility(View.INVISIBLE);
-            majorTextView.setVisibility(View.INVISIBLE);
-            majorSpinner.setVisibility(View.INVISIBLE);
-            majorSpinner2.setVisibility(View.INVISIBLE);
-        }
-
-        initSpinner();
-        initTextSection(view);
-        initEditButton();
-        initSignoutButton();
-        initDeleteButton();
-        initPostHisButton();
-        initReviewHisButton();
         initAdminButton();
-        initProfileImageView();
     }
 
     /**
-     * initialize 2 spinners for 2 majors.
+     * To parse the user role using the instance of DocumentSnapshot.
      */
-    private void initSpinner() {
-        if (getContext() != null) {
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                    getContext(),
-                    R.array.programs_array,
-                    android.R.layout.simple_spinner_item
-            );
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            majorSpinner.setAdapter(adapter);
-            majorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int deviceScreenSize = getResources().getConfiguration().screenLayout &
-                            Configuration.SCREENLAYOUT_SIZE_MASK;
-
-                    TextView textView = (TextView) parent.getChildAt(0);
-                    if (deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                            deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-                        // For tablets, set a larger font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-                    } else {
-                        // For phones, set a smaller font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                    }
-                    textView.setTextColor(Color.BLACK);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
-
-            majorSpinner2.setAdapter(adapter);
-            majorSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int deviceScreenSize = getResources().getConfiguration().screenLayout &
-                            Configuration.SCREENLAYOUT_SIZE_MASK;
-
-                    TextView textView = (TextView) parent.getChildAt(0);
-                    if (deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_LARGE ||
-                            deviceScreenSize == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-                        // For tablets, set a larger font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-                    } else {
-                        // For phones, set a smaller font size
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                    }
-                    textView.setTextColor(Color.BLACK);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
-        }
-    }
-
-    /**
-     * Initialize all textfieds in the profile page, like first name, the second name, phone number
-     *  , and majors. Also, set all textfields uneditable.
-     * @param view
-     */
-    private void initTextSection(View view) {
-        setTestFields();
-        switchTextFields(isEditing);
-    }
-
-    private void setTestFields() {
-        firstName_fld.setText(firstNameStr);
-        lastName_fld.setText(lastNameStr);
-        email_fld.setText(emailStr);
-        phone_fld.setText(phoneStr);
-
-        if (getContext() != null) {
-            String[] items = getResources().getStringArray(R.array.programs_array);
-            setSpinner(items, spinnerStr, majorSpinner);
-            setSpinner(items, spinnerStr2, majorSpinner2);
-        }
-    }
-
-    private void setSpinner(String[] items, String spinnerString, Spinner spinner) {
-        int position = -1;
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].equals(spinnerString)) {
-                position = i;
-                break;
-            }
-        }
-
-        if (position != -1) {
-            spinner.setSelection(position);
-        } else {}
-    }
-
-    private void switchTextFields(boolean onOff) {
-        firstName_fld.setEnabled(onOff);
-        lastName_fld.setEnabled(onOff);
-        email_fld.setEnabled(onOff);
-        phone_fld.setEnabled(onOff);
-    }
-
-    private void updateUIComponents() {
-        if (getContext() != null) {
-            setTestFields();
-            if (!isAdmin) {
-                adminBtn.setEnabled(false);
-                adminBtn.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
-    private void initEditButton() {
-        editBtn.setText(EDITOFF);
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isEditing) {
-                    editBtn.setText(EDITOFF);
-                    updateInfo();
-                } else {
-                    editBtn.setText(EDITON);
-                }
-
-                isEditing = !isEditing;
-                switchTextFields(isEditing);
-                setTestFields();
-
-                majorSpinner.setEnabled(!majorSpinner.isEnabled());
-                majorSpinner2.setEnabled(!majorSpinner2.isEnabled());
-            }
-        });
-    }
-
-    private void initDeleteButton() {
-        deleteBtn.setText("DELETE ACCOUNT");
-
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signoutDeletePopup(false);
-            }
-        });
-    }
-
-    private void deleteUserContents() {
-        CollectionReference reviewsRef = db.collection(General.COURSEREVIEWCOLLECTION);
-        CollectionReference postsRef = db.collection(General.POSTCOLLECTION);
-        CollectionReference commentsRef = db.collection(General.COMMENTCOLLECTION);
-        deleteUserContents(reviewsRef);
-        deleteUserContents(postsRef);
-        deleteUserContents(commentsRef);
-    }
-
-    private void deleteUserContents(CollectionReference collectionRef) {
-
-        collectionRef.whereEqualTo("publisher", user.getUid())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        // delete posts posted by this user
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            documentSnapshot.getReference().delete();
-
-                            // delete photos of the post that are still stored in storage
-                            String photoURL = documentSnapshot.getString("photoURL");
-                            if (photoURL != null){
-                                StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(photoURL);
-                                storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {}
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {}
-                                });
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {}
-                });
-    }
-
-    private void updateInfo() {
-        Map<String, Object> uploadInfo = new HashMap<>();
-        firstNameStr = firstName_fld.getText().toString().trim();
-        lastNameStr = lastName_fld.getText().toString().trim();
-        emailStr = email_fld.getText().toString().trim();
-        phoneStr = phone_fld.getText().toString().trim();
-        spinnerStr = (String) majorSpinner.getSelectedItem();
-        spinnerStr2 = (String) majorSpinner2.getSelectedItem();
-
-        uploadInfo.put(General.FIRSTNAME, firstNameStr);
-        uploadInfo.put(General.LASTNAME, lastNameStr);
-        uploadInfo.put(General.PROGRAM, spinnerStr + " " + spinnerStr2);
-        uploadInfo.put(General.EMAIL, emailStr);
-        uploadInfo.put(General.PHONE, phoneStr);
-
-        db.collection(General.USERCOLLECTION).document(user.getUid()).update(uploadInfo);
-    }
-
-    private void initSignoutButton() {
-        logoutBtn.setText(LOGOUT);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signoutDeletePopup(true);
-            }
-        });
-    }
-
-    private void signoutDeletePopup(boolean isSignout) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        if (isSignout) {
-            builder.setTitle("Logout");
-            builder.setMessage("Do you want to sign out?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    FirebaseAuth.getInstance().signOut();
-                    dialog.dismiss();
-                    toOtherActivity(LoadingActivity.class);
-                }
-            });
-        } else {
-            builder.setTitle("Delete");
-            builder.setMessage("ARE YOU SURE YOU WANT TO DELETE?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    deleteUserContents();
-
-                    db.collection(General.USERCOLLECTION).document(user.getUid()).delete()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            FirebaseAuth.getInstance().signOut();
-                                            toOtherActivity(LoadingActivity.class);
-                                        }
-                                    });
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getActivity(), "Delete failed",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-            });
-        }
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-
-    }
-
-    private void toOtherActivity(Class activity) {
-        Intent loading = new Intent(getActivity(), activity);
-        getActivity().startActivity(loading);
-//        getActivity().finish();
-    }
-
     private void parseDocument() {
-        if (document.get(General.FIRSTNAME) != null) {
-            Log.i(TAG, "document-first name not null");
-            Log.i(TAG, "before: " + firstNameStr);
-            firstNameStr = (String) document.get(General.FIRSTNAME);
-            Log.i(TAG,"after: " + firstNameStr);
-        }
-        if (document.get(General.LASTNAME) != null) {  lastNameStr = (String) document.get(General.LASTNAME);}
-        if (document.get(General.EMAIL) != null) { emailStr = (String) document.get(General.EMAIL);}
-
-        if (document.get(General.PROGRAM) != null) {
-            String programString = (String) document.get(General.PROGRAM);
-            String[] majors = programString.split(" ");
-
-//            Log.i("print", majors[0] + majors[1]);
-            if(majors == null || majors.length == 0) {
-                spinnerStr = " ";
-                spinnerStr2 = " ";
-            } else if (majors.length == 1) {
-                spinnerStr = majors[0];
-                spinnerStr2 = " ";
-            } else {
-                spinnerStr = majors[0];
-                spinnerStr2 = majors[1];
-            }
-        }
-
-        if (document.get(General.PHONE) != null) { phoneStr = (String) document.get(General.PHONE);}
-        if (document.get(General.LASTNAME) != null) {  lastNameStr = document.getString(General.LASTNAME);}
-        if (document.get(General.EMAIL) != null) { emailStr = document.getString(General.EMAIL);}
-        if (document.get(General.PHONE) != null) { phoneStr = document.getString(General.PHONE);}
         if (document.get(General.ROLE) != null) {role = document.getLong(General.ROLE);}
-        if (document.get(PROFILEPICTURE) != null) {imageURL = document.getString(PROFILEPICTURE);}
     }
 
-    private void initPostHisButton() {
-        postHisBtn.setText("Post History");
-        postHisBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
-                history.putExtra("collection", General.POSTCOLLECTION);
-//                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
-                getActivity().startActivity(history);
-            }
-        });
-    }
-
-    private void initReviewHisButton() {
-        reviewHisBtn.setText("Course Review History");
-        reviewHisBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent history = new Intent(getActivity(),PostHistoryActivity.class);
-                history.putExtra("collection", General.COURSEREVIEWCOLLECTION);
-                getActivity().startActivity(history);
-            }
-        });
-    }
-
+    /**
+     * Initialize the administrator mode button.
+     */
     private void initAdminButton() {
         if (!General.isAdmin(role)) {
             adminBtn.setEnabled(false);
@@ -585,189 +223,44 @@ public class ProfileFragment extends Fragment {
         adminBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toOtherActivity(AdminActivity.class);
+                if (getActivity() != null) {
+                    General.toOtherActivity(getActivity(), AdminActivity.class);
+                }
             }
         });
     }
 
-    private void initProfileImageView() {
-
-//        if (General.isGuest(role)) {
-//            return;
-//        }
-
-        if (imageURL != null && !imageURL.equals("")) {
-            Glide.with(getContext()).load(imageURL).into(profileIV);
-        }
-
-        profileIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pictureOperation();
-            }
-        });
-    }
-
-    private void pictureOperation(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Add Image");
-        builder.setItems(new CharSequence[]{"Pick from Gallery", "Capture from Camera"}, (dialog, which) -> {
-            switch (which) {
-                case 0:
-                    chooseLocalPicture();
-                    break;
-                case 1:
-                    takePicture();
-                    break;
-            }
-        });
-        builder.show();
-    }
-
-    private void chooseLocalPicture() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_MEDIA_IMAGES)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_MEDIA_IMAGES,
-                        Manifest.permission.READ_MEDIA_VIDEO}, REQUEST_STORAGE);
-            } else {
-                // Permission already granted, proceed with gallery operation
-                pickImageFromGallery();
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_STORAGE);
-                Log.d(TAG, "requestStoragePermission: requestStoragePermission");
-            } else {
-                // Permission already granted, proceed with gallery operation
-                pickImageFromGallery();
-            }
-        }
-    }
-
-    private void pickImageFromGallery() {
-        //intent to pick image from gallery
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
-    }
-
-    private void takePicture() {
-        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
-                    REQUEST_CAMERA);
-        } else {
-            // Permission already granted, proceed with camera operation
-            captureImageFromCamera();
-        }
-    }
-
-    private void captureImageFromCamera() {
-        //intent to pick image from camera
-        Log.i(TAG_Profile, "captureImageFromCamera entered ");
-        ContentValues cv = new ContentValues();
-        cv.put(MediaStore.Images.Media.TITLE, "Temp Pick");
-        cv.put(MediaStore.Images.Media.DESCRIPTION, "Temp Descr");
-        imageUri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, IMAGE_PICK_CAMERA_CODE);
-    }
-
+    /**
+     * Once the profile picture is updated, either through taking picture or choosing local pictures,
+     *  this method capture the result and pass the result to the instance profilePagePictureOperation.
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG_Profile, "activity result entered ");
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
-                //image picked from gallery
-                imageUri = data.getData();
-            }
-            profileIV.setImageURI(imageUri);
-            profileIV.setVisibility(View.VISIBLE);
-            updateProfilePicture();
-        }
+        profilePagePictureOperation.onActivityResult(requestCode,resultCode,data);
     }
 
+    /**
+     * When the first time updating the profile picture, this function will capture the user
+     *  choice, and pass the result to the instance of ProfilePagePictureOperation.
+     * @param requestCode The request code passed in {@link #requestPermissions(String[], int)}.
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Camera permission granted, proceed with camera operation
-                captureImageFromCamera();
-            } else {
-                // Camera permission denied, handle accordingly (e.g., show explanation, disable camera feature)
-                Toast.makeText(getContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == REQUEST_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Storage permission granted, proceed with gallery operation
-                pickImageFromGallery();
-            } else {
-                // Storage permission denied, handle accordingly (e.g., show explanation, disable gallery feature)
-                Toast.makeText(getContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void updateProfilePicture() {
-        Log.i(TAG_Profile, "updateProfilePicture entered");
-        if (imageUri == null) {
-            return;
-        }
-
-        if (imageURL != null && !imageURL.equals("")) {
-            StorageReference currentPicture = FirebaseStorage.getInstance().
-                    getReferenceFromUrl(imageURL);
-            currentPicture.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.i(TAG_Profile, "delete success");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i(TAG_Profile, "delete fail");
-                        }
-                    });
-        }
-
-        StorageReference filePath = FirebaseStorage.getInstance().getReference("profilePicture")
-                .child(emailStr + "." + General.getFileExtension(getContext(), imageUri));
-
-        filePath.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        //        TODO: update the profile URL in user data
-                                        String downLoadURL = uri.toString();
-                                        db.collection(General.USERCOLLECTION).document(user.getUid()).update(PROFILEPICTURE, downLoadURL);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getActivity(),
-                                                "Failed to upload", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG_Profile, "In updateProfilePicture, upload to storage failed");
-                    }
-                });
-        Log.i(TAG_Profile, "In updateProfilePicture, after upload");
+        profilePagePictureOperation.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
