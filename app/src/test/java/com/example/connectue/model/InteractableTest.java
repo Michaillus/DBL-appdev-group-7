@@ -170,4 +170,39 @@ public abstract class InteractableTest {
         Date result = interactable.getDatetime();
         assertEquals(result, expected);
     }
+
+    @Test
+    public void constructorPublisherIdNullExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> interactable =
+                new Interactable(id, null, text, likeNumber, dislikeNumber,
+                commentNumber, dateTime) {});
+    }
+
+    @Test
+    public void constructorTextNullExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> interactable =
+                new Interactable(id, publisherId, null, likeNumber, dislikeNumber,
+                        commentNumber, dateTime) {});
+    }
+
+    @Test
+    public void constructorLikeNumberNullExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> interactable =
+                new Interactable(id, publisherId, text, null, dislikeNumber,
+                        commentNumber, dateTime) {});
+    }
+
+    @Test
+    public void constructorDislikeNumberExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> interactable =
+                new Interactable(id, publisherId, text, likeNumber, null,
+                        commentNumber, dateTime) {});
+    }
+
+    @Test
+    public void constructorCommentNumberNullExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> interactable =
+                new Interactable(id, publisherId, text, likeNumber, dislikeNumber,
+                        null, dateTime) {});
+    }
 }
