@@ -61,7 +61,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.SearchActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".activities.LoadingActivity"
             android:exported="true">

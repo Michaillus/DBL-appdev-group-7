@@ -8,6 +8,11 @@ import com.example.connectue.databinding.ActivityMajorViewBinding;
  */
 public class MajorViewActivity extends StudyUnitViewActivity {
 
+    /**
+     * This method simply sets the content
+     * visible to the user by retrieving the layout data from\
+     * activity_major_view.
+     */
     protected void setBinding() {
         setContentView(R.layout.activity_major_view);
     }

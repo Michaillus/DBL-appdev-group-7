@@ -44,10 +44,21 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
      */
     protected FirebaseFirestore db;
 
+    /**
+     * Title of the study unit to
+     * display to user
+     */
     protected TextView title;
 
+    /**
+     * The element that contains the
+     * rating indication of the study unit
+     */
     protected RatingBar ratingBar;
 
+    /**
+     * Text that indicates numbered value of rating
+     */
     protected TextView ratingIndicator;
 
     protected LinearLayout followButton;
@@ -71,12 +82,22 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
         Log.d(TAG, courseCode + "DWI");
 //        studyUnit = ActivityUtils.getStudyUnit(this, savedInstanceState);
         Log.d(TAG, studyUnit.getCode());
+        /**
+         * The first fragment to display is the reviews fragment
+         */
         replaceFragment(new ReviewsFragment());
         setBinding();
 
+        /**
+         * find xml elements related to the relevant attributes.
+         */
         ratingBar = findViewById(R.id.studyUnitRating);
         ratingIndicator = findViewById(R.id.rating);
         followButton = findViewById(R.id.followButton);
+
+        /**
+         * initialize firestore connection.
+         */
         db = FirebaseFirestore.getInstance();
 
         title = findViewById(R.id.studyUnitTitle);
@@ -96,6 +117,12 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Always save the courseCode in the instance
+     * so that we can retrieve it even when the page is
+     * reloaded.
+     * @param outState
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -105,6 +132,10 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
     protected abstract void setBinding();
 
+    /**
+     * helper function that loads details to load
+     * into
+     */
     protected void loadStudyUnitDetails() {
         if (studyUnit.getId() == null || studyUnit.getId().equals("0")) {
             Log.e(TAG, "Null study unit");
@@ -121,6 +152,11 @@ public abstract class StudyUnitViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Helper function that replaces the active fragment
+     * by a new one
+     * @param fragment the new fragment to display
+     */
     protected void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

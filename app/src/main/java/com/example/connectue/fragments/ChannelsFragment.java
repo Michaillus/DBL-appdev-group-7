@@ -65,7 +65,7 @@ public class ChannelsFragment extends Fragment {
     private MyCoursesVerticalFragment myCoursesVerticalFragment;
 
     private Button searchBtn;
-    private EditText searchEt;
+    public EditText searchEt;
     private ListView searchListView;
 
     private String TAG = "ChannelsFragUtil: ";
@@ -120,6 +120,7 @@ public class ChannelsFragment extends Fragment {
 
         searchBtn = view.findViewById(R.id.search_button);
         searchEt = view.findViewById(R.id.searchEditText);
+
         searchListView = view.findViewById(R.id.searchListView);
 
         // Button to trigger to search activity
@@ -151,6 +152,13 @@ public class ChannelsFragment extends Fragment {
         return view;
     }
 
+
+    /**
+     * This helper functions sets a listener for the tab layout
+     * to know which tab is selected and therefore which fragment to
+     * display to the user,
+     * @param tabLayout
+     */
     private void setupTabLayout(TabLayout tabLayout) {
         // Setup tab layout for portrait orientation
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -167,13 +175,29 @@ public class ChannelsFragment extends Fragment {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+                /**
+                 * this method is empty because there is no behaviour when
+                 * a tab is unselected.
+                 */
+            }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {
+                /**
+                 * this method is empty because there is no behaviour when
+                 * a tab is reselected.
+                 */
+            }
         });
     }
 
+    /**
+     * This helper functions sets a listener for the navigation rail
+     * to know which tab is selected and therefore which fragment to
+     * display to the user,
+     * @param navigationRailView
+     */
     private void setupNavigationRail(NavigationRailView navigationRailView) {
         // Setup navigation rail for landscape orientation
         navigationRailView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -196,6 +220,10 @@ public class ChannelsFragment extends Fragment {
         });
     }
 
+    /**
+     * this helper function displays the
+     * courses fragment to users.
+     */
     private void showCoursesView() {
         // Set height of search bar to 50dp
         int searchEtHeight = (int) TypedValue.applyDimension(
@@ -221,6 +249,11 @@ public class ChannelsFragment extends Fragment {
         transaction.show(myCoursesVerticalFragment);
         transaction.commit();
     }
+
+    /**
+     * this helper function displays the
+     * majors fragment to users
+     */
     private void showMajorsView() {
         // Set height of search bar to 0
         ViewGroup.LayoutParams searchEtLayoutParams = searchEt.getLayoutParams();
@@ -241,12 +274,29 @@ public class ChannelsFragment extends Fragment {
         transaction.commit();
     }
 
-    private void showSearchListView() {
+    /**
+     * This helper method displays a list of suggested
+     * courses when a user types a query in the search bar
+     */
+    //Made public for test file access
+    public void showSearchListView() {
         searchEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                /**
+                 * this method is empty because there is
+                 * no behaviour prior to any text input.
+                 */
             }
 
+            /**
+             * When text input changes, make a new query
+             * and update the suggested courses.
+             * @param s the new input
+             * @param start
+             * @param before
+             * @param count
+             */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // get the text content from search edit text
@@ -265,8 +315,8 @@ public class ChannelsFragment extends Fragment {
 
                 Query query = FirebaseFirestore.getInstance()
                         .collection("courses")
-                        .whereGreaterThanOrEqualTo("courseCode", searchText)
-                        .whereLessThan("courseCode", searchText + "\uf8ff");
+                        .whereGreaterThanOrEqualTo("code", searchText)
+                        .whereLessThan("code", searchText + "\uf8ff");
 
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -275,7 +325,7 @@ public class ChannelsFragment extends Fragment {
                             List<String> courseCodes = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // get course code and add it into the list
-                                String courseCode = document.getString("courseCode");
+                                String courseCode = document.getString("code");
                                 courseCodes.add(courseCode);
                             }
 

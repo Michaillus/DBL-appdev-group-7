@@ -30,6 +30,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * The activity in which a user can register for a new account.
+ */
 public class RegisterActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
 
@@ -135,18 +138,35 @@ public class RegisterActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Helper method to register a user.
+     * @param email the email of the user
+     * @param password the password the user chose
+     * @param firstName the user's name
+     * @param lastName the user's last name
+     * @param program the academic program the user chose (if applicable)
+     * @param role the role of the user (guest, user, admin)
+     */
     private void registerUser(String email, String password, String firstName, String lastName,
                               String program, int role) {
         progressDialog.show();
+        //create an auth instance of of user
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    /**
+                     * when addition to auth queue completed,
+                     * send verification email
+                     * @param task authResult task
+                     */
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                //if auth is successful, send verification email
                 if (task.isSuccessful()) {
                     Log.d(TAG, "createUserWithEmail:success");
 
                     // Send verification email
                     sendVerificationEmail(email, password, firstName, lastName, program, role);
+                    //otherwise notify user of error
                 } else {
                     Log.d(TAG, "createUserWithEmail:failure", task.getException());
                     progressDialog.dismiss();
@@ -158,17 +178,29 @@ public class RegisterActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * helper method to send verification email to user.
+     * @param email the email of the user
+     * @param password the password the user chose
+     * @param firstName the user's name
+     * @param lastName the user's last name
+     * @param program the academic program the user chose (if applicable)
+     * @param role the role of the user (guest, user, admin)
+     */
     private void sendVerificationEmail(String email, String password, String firstName, String lastName, String program, int role) {
         FirebaseUser user = mAuth.getCurrentUser();
+        //if user of mAuth isn't null, send a verification email.
         if (user != null) {
             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+                    //if email send is sent successfully, add user to database
                     if (task.isSuccessful()) {
                         Log.d(TAG, "Email verification sent.");
                         Toast.makeText(RegisterActivity.this,
                                 "Verification email sent",
                                 Toast.LENGTH_SHORT).show();
+                        //add user to database
                         addUserToFirestore(user.getUid(), email, firstName, lastName, program, role);
 
                         final Handler handler = new Handler();
@@ -181,8 +213,7 @@ public class RegisterActivity extends AppCompatActivity
                             }
                         }, 3000);
 
-                        // Wait for the user to click the verification link before adding them to Firestore
-//                        waitForVerification(user, email, password, firstName, lastName, program);
+                        //Otherwise notify user of error
                     } else {
                         Log.e(TAG, "Failed to send verification email.", task.getException());
                         Toast.makeText(RegisterActivity.this,
@@ -195,12 +226,22 @@ public class RegisterActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * helper method to add user to database
+     * @param uid id of user
+     * @param email email of user
+     * @param firstName name of user
+     * @param lastName last name of user
+     * @param program program of user
+     * @param role role of user.
+     */
     private void addUserToFirestore(String uid, String email, String firstName, String lastName,
                                     String program, int role) {
         User user = new User(uid, firstName, lastName, false,
                 email, null, null, program, role);
         UserManager userManager = new UserManager(FirebaseFirestore.getInstance(),
                 User.USER_COLLECTION_NAME);
+        //add user to database.
         userManager.set(user, uid, new ItemUploadCallback() {
             @Override
             public void onSuccess() {
