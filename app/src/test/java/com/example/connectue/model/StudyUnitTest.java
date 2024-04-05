@@ -101,41 +101,76 @@ public class StudyUnitTest {
 
     @Test
     public void getStudyUnitCollectionName() {
+        String result = studyUnit.getStudyUnitCollectionName();
+        String expected = StudyUnit.COURSE_COLLECTION_NAME;
+        assertEquals(result, expected);
     }
 
     @Test
     public void getReviewCollectionName() {
+        String result = studyUnit.getReviewCollectionName();
+        String expected = StudyUnit.COURSE_REVIEW_COLLECTION_NAME;
+        assertEquals(result, expected);
     }
 
     @Test
     public void getReviewLikeCollectionName() {
+        String result = studyUnit.getReviewLikeCollectionName();
+        String expected = StudyUnit.COURSE_REVIEW_LIKE_COLLECTION_NAME;
+        assertEquals(result, expected);
     }
 
     @Test
     public void getReviewDislikeCollectionName() {
+        String result = studyUnit.getReviewDislikeCollectionName();
+        String expected = StudyUnit.COURSE_REVIEW_DISLIKE_COLLECTION_NAME;
+        assertEquals(result, expected);
     }
 
     @Test
     public void getReviewCommentCollectionName() {
+        String result = studyUnit.getReviewCommentCollectionName();
+        String expected = StudyUnit.COURSE_REVIEW_COMMENT_COLLECTION_NAME;
+        assertEquals(result, expected);
     }
 
     @Test
     public void getCollectionName() {
+        assertEquals(StudyUnit.getCollectionName(StudyUnit.StudyUnitType.COURSE),
+                StudyUnit.COURSE_COLLECTION_NAME);
+        assertEquals(StudyUnit.getCollectionName(StudyUnit.StudyUnitType.MAJOR),
+                StudyUnit.MAJOR_COLLECTION_NAME);
     }
 
     @Test
     public void testGetReviewCollectionName() {
+        assertEquals(StudyUnit.getReviewCollectionName(StudyUnit.StudyUnitType.COURSE),
+                StudyUnit.COURSE_REVIEW_COLLECTION_NAME);
+        assertEquals(StudyUnit.getReviewCollectionName(StudyUnit.StudyUnitType.MAJOR),
+                StudyUnit.MAJOR_REVIEW_COLLECTION_NAME);
     }
 
     @Test
     public void testGetReviewLikeCollectionName() {
+        assertEquals(StudyUnit.getReviewLikeCollectionName(StudyUnit.StudyUnitType.COURSE),
+                StudyUnit.COURSE_REVIEW_LIKE_COLLECTION_NAME);
+        assertEquals(StudyUnit.getReviewLikeCollectionName(StudyUnit.StudyUnitType.MAJOR),
+                StudyUnit.MAJOR_REVIEW_LIKE_COLLECTION_NAME);
     }
 
     @Test
     public void testGetReviewDislikeCollectionName() {
+        assertEquals(StudyUnit.getReviewDislikeCollectionName(StudyUnit.StudyUnitType.COURSE),
+                StudyUnit.COURSE_REVIEW_DISLIKE_COLLECTION_NAME);
+        assertEquals(StudyUnit.getReviewDislikeCollectionName(StudyUnit.StudyUnitType.MAJOR),
+                StudyUnit.MAJOR_REVIEW_DISLIKE_COLLECTION_NAME);
     }
 
     @Test
     public void testGetReviewCommentCollectionName() {
+        assertEquals(StudyUnit.getReviewCommentCollectionName(StudyUnit.StudyUnitType.COURSE),
+                StudyUnit.COURSE_REVIEW_COMMENT_COLLECTION_NAME);
+        assertEquals(StudyUnit.getReviewCommentCollectionName(StudyUnit.StudyUnitType.MAJOR),
+                StudyUnit.MAJOR_REVIEW_COMMENT_COLLECTION_NAME);
     }
 }
