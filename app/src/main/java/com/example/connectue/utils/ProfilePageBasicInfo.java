@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 
 import com.example.connectue.R;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -79,6 +80,19 @@ public class ProfilePageBasicInfo {
             initComponents();
         }
     }
+
+    //get the context
+    public android.content.Context getContext() {return context;}
+//    get the view
+    public View getView() {return view;}
+//    get the documentSnapshot
+    public DocumentSnapshot getDocument() {return document;}
+//    get the resources
+    public android.content.res.Resources getResources() {return resources;}
+//    get the firebase database
+    public FirebaseFirestore getDataBase() {return db;}
+//    get the user reference
+    public FirebaseUser getUser() {return user;}
 
     /**
      * Parses the document snapshot to extract user information.
