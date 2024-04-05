@@ -2,49 +2,30 @@ package com.example.connectue.fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.example.connectue.interfaces.ItemDeleteCallback;
-import com.example.connectue.interfaces.ItemUploadCallback;
-import com.example.connectue.managers.ReviewManager;
-import com.example.connectue.managers.StudyUnitManager;
-import com.example.connectue.model.StudyUnit;
+import com.example.connectue.utils.AdminReportedItemDataManager;
 import com.example.connectue.utils.General;
 import com.example.connectue.R;
 import com.example.connectue.interfaces.ReportItemCallback;
 import com.example.connectue.adapters.ReportedContentsAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +51,6 @@ public class ManageReportHistoryFragment extends Fragment {
     private List<QueryDocumentSnapshot> reports;
     private String currentChannel = General.POSTCOLLECTION;
     private DocumentSnapshot currentDocument = null;
-    private DocumentReference currentContentReference = null;
-    private DocumentReference currentRequestReference = null;
     private boolean isImageFetchable = false;
     private String imageURL = "";
     private static final String DEFAULT_CONTENT = "Content Here";
@@ -87,12 +66,12 @@ public class ManageReportHistoryFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private static final String TAG_load_content = "loadContent";
-    private static final String TAG_Load_report = "reportLoad";
-    private static final String TAG_delete = "delete";
-     //Id of the content to delete.
-    String contentId;
+    //The data manager for administrator workbench.
+    AdminReportedItemDataManager adminReportedItemDataManager;
 
+    /**
+     * Constructor.
+     */
     public ManageReportHistoryFragment() {
         // Required empty public constructor
         reports = new ArrayList<>();
@@ -115,6 +94,11 @@ public class ManageReportHistoryFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * This is the auto-generated functions.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +108,18 @@ public class ManageReportHistoryFragment extends Fragment {
         }
     }
 
+    /**
+     * The auto-generated function, where all components will be initialized.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -132,7 +128,9 @@ public class ManageReportHistoryFragment extends Fragment {
         initComponents(view);
         initRecyclerReview(view);
 
-        loadReportedContents(currentChannel);
+        adminReportedItemDataManager =
+                new AdminReportedItemDataManager(reports, db, currentChannel, this);
+        adminReportedItemDataManager.loadReportedContents();
 
         initPostButton();
         initCommentButton();
@@ -141,92 +139,10 @@ public class ManageReportHistoryFragment extends Fragment {
         return view;
     }
 
-    private void initRecyclerReview(View view) {
-        recyclerView = view.findViewById(R.id.admin_reported_RV);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ReportedContentsAdapter(reports, new ReportItemCallback() {
-            @Override
-            public void itemClicked(QueryDocumentSnapshot content) {
-                loadContentToWorkBench(content);
-            }
-        });
-        recyclerView.setAdapter(mAdapter);
-    }
-
-    private void loadReportedContents(String fromCollection) {
-        CollectionReference collectionReference = FirebaseFirestore.getInstance().collection(General.REPORTEDCOLLECTION);
-        Query targetQuery = collectionReference.whereEqualTo(General.REPORTFROMCOLLECTION, fromCollection)
-                .orderBy(General.REPORTCOUNTER, Query.Direction.DESCENDING);
-        targetQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot result = task.getResult();
-                    reports.clear();
-
-                    if (result != null) {
-//                        reports.clear();
-                        Log.i(TAG_Load_report, "" + result.size());
-                        for (QueryDocumentSnapshot document: result) {
-                            Log.i(TAG_Load_report, "" + document.getLong(General.REPORTCOUNTER));
-                            reports.add(document);
-                        }
-                        Log.i(TAG_Load_report, "reportIds size: " + reports.size());
-//                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.i(TAG_Load_report, "null querySnapShot");
-                    }
-                    mAdapter.notifyDataSetChanged();
-                } else {
-                    Log.i(TAG_Load_report, "query failed.");
-                }
-            }
-        });
-    }
-
-    private void loadContentToWorkBench(QueryDocumentSnapshot content) {
-        contentId = content.getString(General.REPORTCONTENTID);
-        if (contentId == null || contentId.equals("")) {
-            Log.i(TAG_load_content, "contentId is null ");
-            return;
-        }
-
-        String count = content.getLong(General.REPORTCOUNTER) != null
-                ? content.getLong(General.REPORTCOUNTER).toString() : "";
-        currentRequestReference = db.collection(General.REPORTEDCOLLECTION)
-                .document(content.getId());
-        currentContentReference = db.collection(currentChannel).document(contentId);
-
-        currentContentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    currentDocument = task.getResult();
-                    if (currentDocument.exists()) {
-                        imageURL = currentDocument.getString(General.POSTIMAGEURL) != null
-                                ? currentDocument.getString(General.POSTIMAGEURL) : "";
-                        String textContent = currentDocument.getString(General.POSTCONTENT) != null
-                                ? currentDocument.getString(General.POSTCONTENT) : "";
-                        setContentIV(imageURL);
-                        contentTV.setText(textContent);
-                        contentInfoTV.setText(DEFAULT_COUNT + count);
-                        setDeleteKeepButton();
-                    } else {
-                        Log.i(TAG_load_content
-                                , "the reported content dose not exist in the related collection");
-                    }
-                } else {
-                    Log.i(TAG_load_content, "fetch reported content failed");
-                }
-            }
-        });
-    }
-
     /**
-     * I
-     * @param view
+     * Initialize all components on this fragment, including all buttons, text fields,
+     *  and picture views.
+     * @param view the view where all components resides.
      */
     private void initComponents(View view) {
         db = FirebaseFirestore.getInstance();
@@ -240,26 +156,75 @@ public class ManageReportHistoryFragment extends Fragment {
         contentInfoTV = view.findViewById(R.id.report_basic_info_tv);
 
         contentTV.setText(DEFAULT_CONTENT);
-        contentTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
         contentInfoTV.setText(DEFAULT_COUNT);
 
         setDefaultContentIV();
     }
 
+    /**
+     * Initialize the recycler view for to do list.
+     * @param view the view where recycler view resides.
+     */
+    private void initRecyclerReview(View view) {
+        recyclerView = view.findViewById(R.id.admin_reported_RV);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter = new ReportedContentsAdapter(reports, new ReportItemCallback() {
+            @Override
+            public void itemClicked(QueryDocumentSnapshot content) {
+                adminReportedItemDataManager.loadContentToWorkBench(content);
+            }
+        });
+        recyclerView.setAdapter(mAdapter);
+    }
+
+    /**
+     * Once the data in the list of the adapter changed, update contents in the
+     *  adapter.
+     */
+    public void updateDataInAdapter(){
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Once the clicked data has been fetched from the FireStore, this method will receive
+     *  changes and update related fields.
+     * @param currentDocument the DocumentSnapshot storing the information of the clicked item,
+     * @param imageURL the image URL of the reported contents.
+     * @param textContent the text content of the reported contents.
+     * @param count the number of reported times.
+     */
+    public void updateWorkbench(DocumentSnapshot currentDocument
+            , String imageURL, String textContent, String count){
+        this.currentDocument = currentDocument;
+        this.imageURL = imageURL;
+
+        setContentIV(imageURL);
+        contentTV.setText(textContent);
+        contentInfoTV.setText(DEFAULT_COUNT + count);
+        setDeleteKeepButton();
+    }
+
+    /**
+     * set the image view to the default picture, and disable the click listener.
+     */
     private void setDefaultContentIV() {
         contentIV.setImageResource(R.drawable.baseline_person_24);
         contentIV.setOnClickListener(null);
     }
 
+    /**
+     * Fill in the picture into the image view using its URL.
+     * @param url the URL link of the picture.
+     */
     private void setContentIV(String url) {
         Glide.with(getContext()).load(url).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 setDefaultContentIV();
+                isImageFetchable = false;
                 return false;
             }
 
@@ -271,6 +236,10 @@ public class ManageReportHistoryFragment extends Fragment {
         }).into(contentIV);
     }
 
+    /**
+     * Add click listener to the keep and delete button. Activate the function of them.
+     *  But if the currentDocument is null or does not exist, activation will be skipped.
+     */
     private void setDeleteKeepButton() {
         if (currentDocument == null || !currentDocument.exists()) {
             disableDeleteKeepButton();
@@ -279,165 +248,82 @@ public class ManageReportHistoryFragment extends Fragment {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteContent();
+                adminReportedItemDataManager.deleteContent(isImageFetchable, imageURL);
             }
         });
         keepBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keepContent();
+                adminReportedItemDataManager.removeRequest();
             }
         });
     }
 
+    /**
+     * Deactivate the delete and keep buttons.
+     */
     private void disableDeleteKeepButton() {
         deleteBtn.setOnClickListener(null);
         keepBtn.setOnClickListener(null);
     }
 
-    private void deleteContent() {
-        Log.i(TAG_delete, "before delete picture, picture fetchable: " + isImageFetchable);
-        if (isImageFetchable) {
-            StorageReference reportedPicture = FirebaseStorage.getInstance().
-                    getReferenceFromUrl(imageURL);
-            reportedPicture.delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.i(TAG_delete, "successful deleted picture ");
-                            deleteFromCollection();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext()
-                                    , "Remove picture failed, check log"
-                                    , Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            deleteFromCollection();
-        }
-    }
-
-    private void deleteFromCollection() {
-        if (currentChannel.equals(StudyUnit.COURSE_REVIEW_COLLECTION_NAME) ||
-                currentChannel.equals(StudyUnit.MAJOR_REVIEW_COLLECTION_NAME)) {
-            // Deleting course or major review through the study unit manager
-            StudyUnit.StudyUnitType studyUnitType;
-            // Finds the type of study unit of the content
-            if (currentChannel.equals(StudyUnit.COURSE_REVIEW_COLLECTION_NAME)) {
-                studyUnitType = StudyUnit.StudyUnitType.COURSE;
-            } else {
-                studyUnitType = StudyUnit.StudyUnitType.MAJOR;
-            }
-            // Initialize review manager for deletion
-            ReviewManager reviewManager = new ReviewManager(FirebaseFirestore.getInstance(),
-                    StudyUnit.getReviewCollectionName(studyUnitType),
-                    StudyUnit.getReviewLikeCollectionName(studyUnitType),
-                    StudyUnit.getReviewDislikeCollectionName(studyUnitType),
-                    StudyUnit.getReviewCommentCollectionName(studyUnitType));
-            // Delete the review
-            reviewManager.deleteReview(contentId, studyUnitType,
-                    new ItemDeleteCallback() {
-                @Override
-                public void onSuccess() {
-                    // Remove the report if review is deleted successfully
-                    removeRequest();
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    Toast.makeText(getContext(),
-                            "Remove content from it collection failed, check log",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            // Deleting post or comment directly
-            currentContentReference.delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            removeRequest();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(),
-                                    "Remove content from it collection failed, check log",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-    }
-
-    private void keepContent() {
-        removeRequest();
-    }
-
-    private void removeRequest() {
-        currentRequestReference.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        resetAfterDeleteKeep();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Remove request failed, check log",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void resetAfterDeleteKeep() {
+    /**
+     * reset all the variables.
+     */
+    public void resetData() {
         currentDocument = null;
-        currentRequestReference = null;
-        currentContentReference = null;
         isImageFetchable = false;
         imageURL = "";
         setDefaultContentIV();
         contentTV.setText(DEFAULT_CONTENT);
         contentInfoTV.setText(DEFAULT_COUNT);
         disableDeleteKeepButton();
-        reports.clear();
-        loadReportedContents(currentChannel);
     }
 
+    /**
+     * Initialize the post button.
+     */
     private void initPostButton() {
         postChannelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentChannel = General.POSTCOLLECTION;
-                resetAfterDeleteKeep();
-                loadReportedContents(currentChannel);
+                switchChannel(General.POSTCOLLECTION);
             }
         });
-
     }
+
+    /**
+     * Initialize the comment button.
+     */
     private void initCommentButton() {
         commentChannelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentChannel = General.COMMENTCOLLECTION;
-                resetAfterDeleteKeep();
-                loadReportedContents(currentChannel);
+                switchChannel(General.COMMENTCOLLECTION);
             }
         });
     }
+
+    /**
+     * Initialize the course review button.
+     */
     private void initCourseReviewButton() {
         courseReviewChannelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentChannel = General.COURSEREVIEWCOLLECTION;
-                resetAfterDeleteKeep();
-                loadReportedContents(currentChannel);
+                switchChannel(General.COURSEREVIEWCOLLECTION);
             }
         });
+    }
+
+    /**
+     * Switch to other types of reported contents.
+     * @param channel the channel where the reported contents will be in.
+     */
+    private void switchChannel(String channel) {
+        currentChannel = channel;
+        adminReportedItemDataManager.setCurrentChannel(currentChannel);
+        adminReportedItemDataManager.resetAfterDeleteKeep();
+        resetData();
     }
 }
