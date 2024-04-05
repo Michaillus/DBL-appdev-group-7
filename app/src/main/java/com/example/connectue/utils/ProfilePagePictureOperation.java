@@ -4,7 +4,6 @@ import static com.example.connectue.utils.General.PROFILEPICTURE;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.connectue.R;
@@ -53,6 +53,119 @@ public class ProfilePagePictureOperation {
     private final View view;
     private DocumentSnapshot document;
     private ImageView profileIV;
+
+    /**
+     * Getter methods for the variables that are final.
+     */
+    public Context getContext() {
+        return context;
+    }
+
+    /**
+     * getter method.
+     */
+    public Activity getActivity() {
+        return activity;
+    }
+
+    /**
+     * getter method.
+     */
+    public Fragment getFragment() {
+        return fragment;
+    }
+
+    /**
+     * getter method.
+     */
+    public View getView() {
+        return view;
+    }
+
+    /**
+     * Getter and setter methods for variables that are not final.
+     */
+    public DocumentSnapshot getDocument() {
+        return document;
+    }
+
+    /**
+     * setter method
+     */
+    public void setDocument(DocumentSnapshot document) {
+        this.document = document;
+    }
+
+    /**
+     * getter method.
+     */
+    public ImageView getProfileIV() {
+        return profileIV;
+    }
+
+    /**
+     * setter method.
+     */
+    public void setProfileIV(ImageView profileIV) {
+        this.profileIV = profileIV;
+    }
+
+    /**
+     * getter method.
+     */
+    public FirebaseFirestore getDb() {
+        return db;
+    }
+
+    /**
+     * getter method.
+     */
+    public FirebaseUser getUser() {
+        return user;
+    }
+
+    /**
+     * getter method.
+     */
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    /**
+     * setter method.
+     */
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    /**
+     * getter method.
+     */
+    public Uri getImageUri() {
+        return imageUri;
+    }
+
+    /**
+     * setter method.
+     */
+    public void setImageUri(Uri imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    /**
+     * getter method.
+     */
+    public String getEmailStr() {
+        return emailStr;
+    }
+
+    /**
+     * setter method.
+     */
+    public void setEmailStr(String emailStr) {
+        this.emailStr = emailStr;
+    }
+
     private final FirebaseFirestore db;
     private final FirebaseUser user;
     private String imageURL = "";
