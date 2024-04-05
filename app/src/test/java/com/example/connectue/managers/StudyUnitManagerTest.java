@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Tests for StudyUnitManager class
@@ -25,6 +26,12 @@ public class StudyUnitManagerTest {
     StudyUnitManager studyUnitManager;
     @Mock
     DocumentSnapshot mockDocument;
+
+    String id = "92572847";
+    String name = "name387394";
+    String code = "22222";
+    long ratingNumber = 284;
+    long ratingSum = 433;
 
     /**
      * Setup mock objects before the tests.
@@ -50,13 +57,20 @@ public class StudyUnitManagerTest {
         mockDocument = Mockito.mock(DocumentSnapshot.class);
 
         // Mock document get methods so that it doesn't return null
-        when(mockDocument.getId()).thenReturn("");
-        when(mockDocument.getString(StudyUnit.NAME_ATTRIBUTE)).thenReturn("");
-        when(mockDocument.getString(StudyUnit.CODE_ATTRIBUTE)).thenReturn("");
-        when(mockDocument.getLong(StudyUnit.RATING_SUM_ATTRIBUTE)).thenReturn(num);
-        when(mockDocument.getLong(StudyUnit.RATING_NUMBER_ATTRIBUTE)).thenReturn(num);
+        when(mockDocument.getId()).thenReturn(id);
+        when(mockDocument.getString(StudyUnit.NAME_ATTRIBUTE)).thenReturn(name);
+        when(mockDocument.getString(StudyUnit.CODE_ATTRIBUTE)).thenReturn(code);
+        when(mockDocument.getLong(StudyUnit.RATING_SUM_ATTRIBUTE)).thenReturn(ratingSum);
+        when(mockDocument.getLong(StudyUnit.RATING_NUMBER_ATTRIBUTE)).thenReturn(ratingNumber);
         // Assert the new post return is not null.
-        assertNotNull(studyUnitManager.deserialize(mockDocument));
+
+        StudyUnit studyUnit = studyUnitManager.deserialize(mockDocument);
+
+        assertEquals(id, studyUnit.getId());
+        assertEquals(name, studyUnit.getName());
+        assertEquals(code, studyUnit.getCode());
+        assertEquals(ratingSum, studyUnit.getRatingSum());
+        assertEquals(ratingNumber, studyUnit.getRatingNumber());
 
     }
 
@@ -83,8 +97,14 @@ public class StudyUnitManagerTest {
      */
     @Test
     public void serialize() {
-        StudyUnit studyUnit = new StudyUnit("", "", "", 0L,
-                0L, StudyUnit.StudyUnitType.COURSE);
-        assertNotNull(studyUnitManager.serialize(studyUnit));
+
+        StudyUnit studyUnit = new StudyUnit(id, name, code, ratingSum,
+                ratingNumber, StudyUnit.StudyUnitType.COURSE);
+        Map<String, Object> map = studyUnitManager.serialize(studyUnit);
+
+        assertEquals(map.get(StudyUnit.CODE_ATTRIBUTE), code);
+        assertEquals(map.get(StudyUnit.NAME_ATTRIBUTE), name);
+        assertEquals(map.get(StudyUnit.RATING_NUMBER_ATTRIBUTE), ratingNumber);
+        assertEquals(map.get(StudyUnit.RATING_SUM_ATTRIBUTE), ratingSum);
     }
 }
